@@ -1,25 +1,30 @@
 cmake_minimum_required(VERSION 3.10)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
+
 # Set the project name and version
 project(DIGITAL_SIM VERSION 1.0 LANGUAGES CXX)
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# set(CMAKE_CXX_EXTENSIONS OFF) // not needed
 
-add_subdirectory(raylib )
-set( MAIN_SRC  src/main.cpp
-src/Map.cpp
-src/Controls.cpp
-src/LogicElements.cpp
-src/LogicElementsDraw.cpp)
+add_subdirectory(raylib)
 
-set( INCLUDE_FILES  include/Controls.h
-include/Map.h
-include/LogicElements.h
-include/LogicElementsDraw.h)
+# Automatically find all source (.cpp) and header (.h) files in their respective directories
+file(GLOB_RECURSE MAIN_SRC CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE INCLUDE_FILES CONFIGURE_DEPENDS include/*.h)
+# # Optionally display found files for debugging purposes
+# message(STATUS "Source files: ${MAIN_SRC}")
+# message(STATUS "Include files: ${INCLUDE_FILES}")
 
-add_executable(${PROJECT_NAME} ${MAIN_SRC} ${INCLUDE_FILES})
+# Create the executable
+add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
+# Link raylib to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 
+# Include directories for headers
 target_include_directories(${PROJECT_NAME} PUBLIC include)
