@@ -2,15 +2,15 @@
 #include "Controls.h"
 #include "LogicElements.h"
 #include "LogicElementsDraw.h"
-
+#include "raylibHelper.h"
 
 int main(void)
 {
     // Initialization
     const unsigned int screenWidth = 800;
-    const unsigned int  screenHeight = 450;
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - 2D camera drag with zoom");
-    Controls_set_camera(screenWidth, screenHeight);
+    const unsigned int targetFps = 60;
+    RaylibHelper::Init(screenWidth, screenHeight, targetFps,
+                       "raylib [core] example - 2D camera drag with zoom");
     auto gate1 = std::make_shared<AndGate>();
     auto gate2 = std::make_shared<AndGate>();
 
@@ -28,27 +28,28 @@ int main(void)
     SetTargetFPS(60);  // Set desired FPS
     
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         // Update
         Controls_update(circuit);
 
         // Draw
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
+        RaylibHelper::BeginFrame();
 
-        // Activate the camera's 2D mode so that all drawing inside is affected by the camera transform.
-        BeginMode2D(Controls_get_camera());
-
-        DrawCircuit(circuit);
-        // Draw a grid to visualize the 2D world.
-        DrawGrid(20, 50.0f);
-        // You can draw additional world elements here.
-        EndMode2D();
+        // Activate the camera's 2D mode so that all drawing inside is affected by the camera
+        // transform.
+        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                             [&circuit]()
+                             {
+                                 LogicElementsDraw::DrawCircuit(circuit);
+                                 // Draw a grid to visualize the 2D world.
+                                 DrawGrid(20, 50.0f);
+                                 // You can draw additional world elements here.
+                             });
 
         // Draw UI elements that remain in screen space
-        DrawText("Drag with the left mouse button and scroll to zoom", 10, 10, 20, DARKGRAY);
-        EndDrawing();
+        RaylibHelper::DrawTextOverlay("Drag with the left mouse button and scroll to zoom");
+        RaylibHelper::EndFrame();
     }
 
     // De-Initialization
