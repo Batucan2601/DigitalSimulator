@@ -1,1 +1,16 @@
-build/
+.vscode
+#build files
+/build
+/bin
+/scripts/*
+#chat gpt said to add this
+!/scripts/build.sh 
+!/scripts/clean_build.sh
+
+# make files
+*.lst
+*.o
+*.eep
+*.lss
+*.map
+*.sym
