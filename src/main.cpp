@@ -11,6 +11,7 @@ int main(void)
     const unsigned int targetFps = 60;
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
+    Controls::Controls_set_camera(screenWidth, screenHeight);
     auto gate1 = std::make_shared<AndGate>();
     auto gate2 = std::make_shared<AndGate>();
 
@@ -31,7 +32,7 @@ int main(void)
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         // Update
-        Controls_update(circuit);
+        Controls::Controls_update(circuit);
 
         // Draw
         RaylibHelper::BeginFrame();
