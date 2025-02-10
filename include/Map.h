@@ -1,7 +1,5 @@
-#ifndef  MAP_H 
+#ifndef MAP_H
 #define MAP_H
 void DrawMap();
 
-
-#endif // ! MAP_H 
-
+#endif  // ! MAP_H
