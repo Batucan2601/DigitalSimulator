@@ -16,13 +16,6 @@ enum class GateType
     NOT
 };
 
-enum class SignalName
-{
-    A,
-    B,
-    OUT
-};
-
 class LogicGate
 {
   public:
@@ -65,22 +58,25 @@ class OrGate : public LogicGate
     bool getOutput(const std::string& name) const override;
 };
 
+struct PhysicalConnection
+{
+    std::vector<Vector2> wires;
+};
+struct Connection
+{
+    std::shared_ptr<LogicGate> sourceGate;
+    std::string sourceLogic;
+    std::shared_ptr<LogicGate> targetGate;
+    std::string targetLogic;
+    PhysicalConnection physCon;
+};
+
 class Circuit
 {
   public:
     void addGate(std::shared_ptr<LogicGate> gate);
-
-    struct Connection
-    {
-        std::shared_ptr<LogicGate> sourceGate;
-        std::string sourceOutput;
-        std::shared_ptr<LogicGate> targetGate;
-        std::string targetInput;
-    };
-
     void addConnection(std::shared_ptr<LogicGate> sourceGate, const std::string& sourceOutput,
                        std::shared_ptr<LogicGate> targetGate, const std::string& targetInput);
-
     void evaluate();
 
     std::vector<std::shared_ptr<LogicGate>> gates;

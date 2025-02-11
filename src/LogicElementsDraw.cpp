@@ -159,28 +159,11 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     // 2 - Draw connections
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
-        // const auto& connection = circuit->connections[i]; // Access the connection
-
-        // // Get the source and target gates
-        // const auto& sourceGate = connection.sourceGate;
-        // const auto& targetGate = connection.targetGate;
-
-        // // Get the source and target positions
-        // Vector2 sourcePos = {
-        //     sourceGate->bd.x + sourceGate->bd.width,            // Right edge of the source gate
-        //     sourceGate->bd.y + sourceGate->bd.height / 2        // Vertically centered
-        // };
-        // Vector2 targetPos = {
-        //     targetGate->bd.x,                                   // Left edge of the target gate
-        //     targetGate->bd.y + targetGate->bd.height / 2        // Vertically centered
-        // };
-
-        // // Draw the connection line
-        // DrawLineEx(sourcePos, targetPos, 2.0f, DARKGRAY);
-
-        // // Optionally, draw the name of the signal being passed (e.g., "Out")
-        // DrawText(connection.sourceOutput.c_str(), (sourcePos.x + targetPos.x) / 2,
-        //          (sourcePos.y + targetPos.y) / 2, 10, DARKGRAY);
+        for (size_t j = 0; j < circuit->connections[i].physCon.wires.size()-1; j++)
+        {
+            DrawLine(circuit->connections[i].physCon.wires[j].x, circuit->connections[i].physCon.wires[j].x,
+                circuit->connections[i].physCon.wires[j+1].x, circuit->connections[i].physCon.wires[j+1].y , BLACK);
+        }
     }
 }
 

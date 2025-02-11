@@ -83,7 +83,7 @@ void Circuit::addGate(std::shared_ptr<LogicGate> gate)
 void Circuit::addConnection(std::shared_ptr<LogicGate> sourceGate, const std::string& sourceOutput,
                             std::shared_ptr<LogicGate> targetGate, const std::string& targetInput)
 {
-    connections.push_back({sourceGate, sourceOutput, targetGate, targetInput});
+    connections.push_back({sourceGate, sourceOutput, targetGate, targetInput });
 }
 
 void Circuit::evaluate()
@@ -108,8 +108,8 @@ void Circuit::evaluate()
         // Then, update the inputs based on the connections.
         for (auto& conn : connections)
         {
-            bool sourceValue = conn.sourceGate->getOutput(conn.sourceOutput);
-            conn.targetGate->setInput(conn.targetInput, sourceValue);
+            bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
+            conn.targetGate->setInput(conn.targetLogic, sourceValue);
         }
         iterations++;
     }

@@ -12,6 +12,8 @@ static auto selected_circuit = std::make_shared<Circuit>();
 std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
 static bool is_dragging = false;
+static bool is_logic_selected = false;
+Connection connection_for_wiring; 
 Vector2 offset;
 
 static Vector2 gate_initial_position;
@@ -52,12 +54,17 @@ void Controls_update(std::shared_ptr<Circuit> circuit)
 
     Controls_Mouse_click();
     Control_Keyboard_Event(selected_circuit);
+    Controls_HandleEvents();
 }
 Camera2D Controls_get_camera()
 {
     return camera;
 }
 
+void Controls_HandleEvents()
+{
+   
+}
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
     if (selected_logic_gate.empty() || !selected_logic_gate[0])
@@ -131,28 +138,44 @@ Vector2 SnapToNearestGrid(const Rectangle& rect)
     return nearest_grid_point;
 }
 
-void HandleMouseClick(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {
     bool gateSelected = false;
-
-    for (const auto& gate : circuit->gates)
+    if (!is_logic_selected)
     {
-        if (CheckCollisionPointRec(mousePosition, gate->bd))
+        for (const auto& gate : circuit->gates)
         {
-            HandleGateSelection(gate, mousePosition);
-            CheckGatePartClicked(gate, mousePosition);
-            gateSelected = true;
-            break;
+            if (CheckCollisionPointRec(mousePosition, gate->bd))
+            {
+                HandleGateSelection(gate, mousePosition);
+                CheckGatePartClicked(gate, mousePosition, is_logic_selected);
+                gateSelected = true;
+                break;
+            }
         }
     }
-
+    else // if logic selected and you are wiring
+    {
+        HandleLogicWiring(mousePosition);
+    }
     // TODO: Deselect the gate if no gate was clicked
-    // if (!gateSelected)
-    // {
-    //     selected_logic_gate[0] = nullptr;
-    // }
+    if (!gateSelected)
+    {
+        selected_logic_gate[0] = nullptr;
+    }
 }
-
+void HandleMouseRightClick(std::shared_ptr<Circuit>& circuit, const Vector2& mousePosition)
+{
+    is_logic_selected = false; // kills wiring process for sure
+    circuit->connections.push_back(connection_for_wiring);
+    connection_for_wiring = {};
+}
+void HandleLogicWiring(const Vector2& mousePosition)
+{
+    Rectangle mockRec = { mousePosition.x , mousePosition.y , 0 ,0 };
+    Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
+    connection_for_wiring.physCon.wires.push_back(nearest_grid_point);
+}
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
 {
     selected_logic_gate[0] = gate;
@@ -160,7 +183,7 @@ void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& 
     offset.x = mousePosition.x - gate->bd.x;
     offset.y = mousePosition.y - gate->bd.y;
 }
-void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
+void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected)
 {
     auto inputTopRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.2, 0.3);
     auto inputBottomRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.7, 0.8);
@@ -169,14 +192,30 @@ void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2&
     if (CheckCollisionPointRec(mousePosition, inputTopRegion))
     {
         std::cout << "Input Top clicked" << std::endl;
+        is_logic_selected = true;
+        connection_for_wiring.sourceGate = gate; 
+        connection_for_wiring.sourceLogic = "A";
+        Vector2 pos = { inputTopRegion.x , inputTopRegion.y };
+        connection_for_wiring.physCon.wires.push_back(pos);
     }
     else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
     {
         std::cout << "Input Bottom clicked" << std::endl;
+        is_logic_selected = true;
+        connection_for_wiring.sourceGate = gate;
+        connection_for_wiring.sourceLogic = "B";
+        Vector2 pos = { inputBottomRegion.x , inputBottomRegion.y };
+        connection_for_wiring.physCon.wires.push_back(pos);
+
     }
     else if (CheckCollisionPointRec(mousePosition, outputRegion))
     {
         std::cout << "Output clicked" << std::endl;
+        is_logic_selected = true;
+        connection_for_wiring.sourceGate = gate;
+        connection_for_wiring.sourceLogic = "Out";
+        Vector2 pos = { outputRegion.x , outputRegion.y };
+        connection_for_wiring.physCon.wires.push_back(pos);
     }
 }
 
@@ -218,7 +257,12 @@ void Controls_Mouse_click()
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseClick(selected_circuit, mousePosition);
+        HandleMouseLeftClick(selected_circuit, mousePosition);
+    }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+    {
+        HandleMouseRightClick(selected_circuit, mousePosition);
     }
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
