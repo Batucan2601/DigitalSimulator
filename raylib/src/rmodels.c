@@ -1089,11 +1089,11 @@ void DrawGrid(int slices, float spacing)
 }
 
 // Draw a grid centered at (0, 0)
-void DrawGrid2D(int slices, float spacing)
+void DrawGrid2D(int slices, float spacing , float pointSize)
 {
     int halfSlices = slices/2;
     rlBegin(RL_POINTS);
-    rlEnablePointSize(3);
+    rlEnablePointSize(pointSize);
         for (int x = -halfSlices; x <= halfSlices; x++)
         {
             for (int y = -halfSlices; y <= halfSlices; y++)
