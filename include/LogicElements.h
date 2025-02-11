@@ -37,7 +37,7 @@ class LogicGate
     const std::unordered_map<std::string, bool>& getInputs() const;
     const std::unordered_map<std::string, bool>& getOutputs() const;
 
-    Rectangle bd = {0, 0, 50, 50};  // bounding box
+    Rectangle bd = {0, 0, 100, 100};  // bounding box
     std::string type;
 
   protected:
@@ -53,9 +53,6 @@ class AndGate : public LogicGate
     void evaluate() override;
     void setInput(const std::string& name, bool value) override;
     bool getOutput(const std::string& name) const override;
-
-    std::unordered_map<std::string, bool> inputs{{"A", false}, {"B", false}};
-    std::unordered_map<std::string, bool> outputs{{"Out", false}};
 };
 
 class OrGate : public LogicGate
@@ -66,9 +63,6 @@ class OrGate : public LogicGate
     void evaluate() override;
     void setInput(const std::string& name, bool value) override;
     bool getOutput(const std::string& name) const override;
-
-    std::unordered_map<std::string, bool> inputs{{"A", false}, {"B", false}};
-    std::unordered_map<std::string, bool> outputs{{"Out", false}};
 };
 
 class Circuit

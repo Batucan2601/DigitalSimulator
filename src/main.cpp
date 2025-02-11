@@ -7,8 +7,8 @@
 int main(void)
 {
     // Initialization
-    const unsigned int screenWidth = 800;
-    const unsigned int screenHeight = 450;
+    const unsigned int screenWidth = 600;
+    const unsigned int screenHeight = 600;
     const unsigned int targetFps = 60;
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
@@ -23,16 +23,13 @@ int main(void)
 
     // Set an initial input for gate2 that is independent.
     gate2->setInput("B", false);
-    gate2->bd = {20, 20, 50, 50};
 
     gate3->setInput("A", true);
     gate3->setInput("B", false);
-    gate3->bd = {10, 20, 50, 50};
-
     // Create a circuit and add both gates.
     auto circuit = std::make_shared<Circuit>();
     circuit->addGate(gate1);
-    circuit->addGate(gate2);
+    // circuit->addGate(gate2);
     circuit->addGate(gate3);
     // Main game loop
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
@@ -53,7 +50,7 @@ int main(void)
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.
-                                 DrawGrid2D(100, 20 , 3 );
+                                 DrawGrid2D(100, 25, 3);
                                  // You can draw additional world elements here.
                              });
         // Draw UI elements that remain in screen space
