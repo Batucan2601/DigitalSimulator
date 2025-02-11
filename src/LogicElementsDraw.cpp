@@ -21,8 +21,8 @@ void DrawAnd(const std::shared_ptr<LogicGate> gate)
     };
     float leftMarginLowerX = 0.05f;
     float leftMarginUpperX = 0.15f;
-    float botLeftLineY = 0.35f;
-    float topLeftLineY = 0.65f;
+    float botLeftLineY = 0.25f;
+    float topLeftLineY = 0.75f;
 
     float topMarginUpperX = 0.5f;
     float topMarginLowerX = 0.15f;
@@ -84,8 +84,8 @@ void DrawOr(const std::shared_ptr<LogicGate> gate)
     };
     float leftMarginLowerX = 0.05f;
     float leftMarginUpperX = 0.15f;
-    float botLeftLineY = 0.35f;
-    float topLeftLineY = 0.65f;
+    float botLeftLineY = 0.25f;
+    float topLeftLineY = 0.75f;
 
     float topMarginUpperX = 0.5f;
     float topMarginLowerX = 0.15f;
@@ -192,7 +192,7 @@ void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
 
 void DrawClippedCircle(float cx, float cy, float radius, Color color)
 {
-    int segments = 20;  // Number of segments for smoothness
+    int segments = 720;  // Number of segments for smoothness
     float angleStep = 2 * PI / segments;
 
     for (int i = 0; i < segments; i++)
