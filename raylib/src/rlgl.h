@@ -266,6 +266,7 @@
 #define RL_TEXTURE                              0x1702      // GL_TEXTURE
 
 // Primitive assembly draw modes
+#define RL_POINTS                               0x0000      // GL_POINTS
 #define RL_LINES                                0x0001      // GL_LINES
 #define RL_TRIANGLES                            0x0004      // GL_TRIANGLES
 #define RL_QUADS                                0x0007      // GL_QUADS
@@ -695,6 +696,8 @@ RLAPI void rlDisableSmoothLines(void);                  // Disable line aliasing
 RLAPI void rlEnableStereoRender(void);                  // Enable stereo rendering
 RLAPI void rlDisableStereoRender(void);                 // Disable stereo rendering
 RLAPI bool rlIsStereoRenderEnabled(void);               // Check if stereo render is enabled
+RLAPI void rlEnablePointSize(unsigned int pointSize);                     // Enable point size
+RLAPI void rlDisablePointSize(void);                    // Disable point size
 
 RLAPI void rlClearColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a); // Clear color buffer with color
 RLAPI void rlClearScreenBuffers(void);                  // Clear used screen buffers (color and depth)
@@ -1911,6 +1914,9 @@ void rlActiveDrawBuffers(int count)
 //----------------------------------------------------------------------------------
 // General render state configuration
 //----------------------------------------------------------------------------------
+void rlEnablePointSize(unsigned int pointSize) { glEnable(GL_PROGRAM_POINT_SIZE); glPointSize(pointSize); }                     // Enable point size
+
+void rlDisablePointSize(void) { glDisable(GL_PROGRAM_POINT_SIZE);  }                     // Disable point size
 
 // Enable color blending
 void rlEnableColorBlend(void) { glEnable(GL_BLEND); }
@@ -3058,7 +3064,8 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
                 // Bind current draw call texture, activated as GL_TEXTURE0 and Bound to sampler2D texture0 by default
                 glBindTexture(GL_TEXTURE_2D, batch->draws[i].textureId);
 
-                if ((batch->draws[i].mode == RL_LINES) || (batch->draws[i].mode == RL_TRIANGLES)) glDrawArrays(batch->draws[i].mode, vertexOffset, batch->draws[i].vertexCount);
+                if ((batch->draws[i].mode == RL_LINES) || (batch->draws[i].mode == RL_TRIANGLES)
+                || (batch->draws[i].mode == RL_POINTS) ) glDrawArrays(batch->draws[i].mode, vertexOffset, batch->draws[i].vertexCount);
                 else
                 {
     #if defined(GRAPHICS_API_OPENGL_33)

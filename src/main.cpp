@@ -42,18 +42,20 @@ int main(void)
 
         // Draw
         RaylibHelper::BeginFrame();
-
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
-        // transform.
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
                              [&circuit]()
                              {
                                  LogicElementsDraw::DrawCircuit(circuit);
-                                 // Draw a grid to visualize the 2D world.
-                                 DrawGrid(20, 50.0f);
                                  // You can draw additional world elements here.
                              });
-
+        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                             []()
+                             {
+                                 // Draw a grid to visualize the 2D world.
+                                 DrawGrid2D(100, 20 , 3 );
+                                 // You can draw additional world elements here.
+                             });
         // Draw UI elements that remain in screen space
         RaylibHelper::DrawTextOverlay("Drag with the left mouse button and scroll to zoom");
         RaylibHelper::EndFrame();

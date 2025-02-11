@@ -1061,6 +1061,7 @@ void DrawRay(Ray ray, Color color)
     rlEnd();
 }
 
+
 // Draw a grid centered at (0, 0, 0)
 void DrawGrid(int slices, float spacing)
 {
@@ -1084,6 +1085,24 @@ void DrawGrid(int slices, float spacing)
             rlVertex3f((float)-halfSlices*spacing, 0.0f, (float)i*spacing);
             rlVertex3f((float)halfSlices*spacing, 0.0f, (float)i*spacing);
         }
+    rlEnd();
+}
+
+// Draw a grid centered at (0, 0)
+void DrawGrid2D(int slices, float spacing , float pointSize)
+{
+    int halfSlices = slices/2;
+    rlBegin(RL_POINTS);
+    rlEnablePointSize(pointSize);
+        for (int x = -halfSlices; x <= halfSlices; x++)
+        {
+            for (int y = -halfSlices; y <= halfSlices; y++)
+            {
+                rlColor3f(0.5f, 0.5f, 0.5f);
+                rlVertex2f((float)x * spacing, y * spacing);
+            }
+        }
+    rlDisablePointSize();
     rlEnd();
 }
 
