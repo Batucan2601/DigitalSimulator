@@ -1,0 +1,8 @@
+#ifndef COMMON_TYPES_H
+#define COMMON_TYPES_H
+
+#define SLICE_SIZE      100
+#define SPACING_SIZE    25
+#define GRID_POINT_SIZE 3
+
+#endif  // COMMON_TYPES_H

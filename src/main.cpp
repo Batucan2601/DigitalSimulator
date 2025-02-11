@@ -1,6 +1,7 @@
 #include "Controls.h"
 #include "LogicElements.h"
 #include "LogicElementsDraw.h"
+#include "common_types.h"
 #include "raylib.h"
 #include "raylibHelper.h"
 
@@ -28,6 +29,8 @@ int main(void)
     gate3->setInput("B", false);
     // Create a circuit and add both gates.
     auto circuit = std::make_shared<Circuit>();
+    gate1->setPosition(100, 100);
+    gate3->setPosition(-100, -100);
     circuit->addGate(gate1);
     // circuit->addGate(gate2);
     circuit->addGate(gate3);
@@ -50,11 +53,14 @@ int main(void)
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.
-                                 DrawGrid2D(100, 25, 3);
+                                 DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
                                  // You can draw additional world elements here.
                              });
         // Draw UI elements that remain in screen space
         RaylibHelper::DrawTextOverlay("Drag with the left mouse button and scroll to zoom");
+        RaylibHelper::DrawTextOverlay("Use the keyboard arrows after selecting a gate to move it",
+                                      10, 30, 20, RED);
+
         RaylibHelper::EndFrame();
     }
 
