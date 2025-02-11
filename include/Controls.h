@@ -1,17 +1,32 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 #include "LogicElements.h"
+#include "common_types.h"
 #include "raylib.h"
+
+#include <cmath>
 
 namespace Controls
 {
 void Controls_set_camera(unsigned int screen_width, unsigned int screen_height);
 void Controls_update(std::shared_ptr<Circuit> circuit);
+
+bool is_grid_occupied(std::shared_ptr<Circuit> circuit, Vector2 nearest_grid_point);
 Camera2D Controls_get_camera();
 
 // mouse
-
 void Controls_Mouse_click();
+void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition);
+void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition);
+Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,
+                          float yEndRatio);
+void HandleMouseDrag(const Vector2& mousePosition);
+Vector2 SnapToNearestGrid(const Rectangle& rect);
+void HandleMouseRelease(std::shared_ptr<Circuit> circuit);
+
+// keyboard
+void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit);
+
 }  // namespace Controls
 
 #endif

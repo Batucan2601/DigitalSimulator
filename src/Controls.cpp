@@ -11,6 +11,10 @@ namespace Controls
 static auto selected_circuit = std::make_shared<Circuit>();
 std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
+static bool is_dragging = false;
+Vector2 offset;
+
+static Vector2 gate_initial_position;
 
 void Controls_set_camera(unsigned int screen_width, unsigned int screen_height)
 {
@@ -47,54 +51,228 @@ void Controls_update(std::shared_ptr<Circuit> circuit)
     selected_circuit = circuit;
 
     Controls_Mouse_click();
+    Control_Keyboard_Event(selected_circuit);
 }
 Camera2D Controls_get_camera()
 {
     return camera;
 }
-static bool is_dragging = false;
-Vector2 offset;
-void Controls_Mouse_click()
+
+void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (selected_logic_gate.empty() || !selected_logic_gate[0])
     {
-        Vector2 mousePosition =
-            GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
-        for (size_t i = 0; i < selected_circuit->gates.size(); i++)
+        std::cerr << "Error: No selected logic gate!" << std::endl;
+        return;
+    }
+
+    // Store the current position of the selected logic gate
+    float current_x = selected_logic_gate[0]->bd.x;
+    float current_y = selected_logic_gate[0]->bd.y;
+    float gate_width = selected_logic_gate[0]->bd.width;
+    float gate_height = selected_logic_gate[0]->bd.height;
+
+    Vector2 new_position = {current_x, current_y};
+
+    // Adjust the position based on keyboard input
+    bool key_pressed = false;
+    if (IsKeyPressed(KEY_UP))
+    {
+        key_pressed = true;
+        new_position.y -= SPACING_SIZE;
+    }
+    if (IsKeyPressed(KEY_DOWN))
+    {
+        key_pressed = true;
+        new_position.y += SPACING_SIZE;
+    }
+    if (IsKeyPressed(KEY_LEFT))
+    {
+        key_pressed = true;
+        new_position.x -= SPACING_SIZE;
+    }
+    if (IsKeyPressed(KEY_RIGHT))
+    {
+        key_pressed = true;
+        new_position.x += SPACING_SIZE;
+    }
+
+    if (key_pressed)
+    {
+        // Check if the new position is occupied
+        if (!is_grid_occupied(circuit, new_position))
         {
-            if (CheckCollisionPointRec(mousePosition, selected_circuit->gates[i]->bd))
-            {
-                selected_logic_gate[0] = selected_circuit->gates[i];
-                offset.x = mousePosition.x - selected_logic_gate[0]->bd.x;
-                offset.y = mousePosition.y - selected_logic_gate[0]->bd.y;
-            }
+            // Update the position if the new grid is not occupied
+            selected_logic_gate[0]->bd.x = new_position.x;
+            selected_logic_gate[0]->bd.y = new_position.y;
+        }
+        else
+        {
+            std::cout << "Move blocked: grid is occupied!" << std::endl;
         }
     }
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+}
+
+Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,
+                          float yEndRatio)
+{
+    float xLower = rect.x + rect.width * xStartRatio;
+    float xUpper = rect.x + rect.width * xEndRatio;
+    float yLower = rect.y + rect.height * yStartRatio;
+    float yUpper = rect.y + rect.height * yEndRatio;
+    return {xLower, yLower, xUpper - xLower, yUpper - yLower};
+}
+Vector2 SnapToNearestGrid(const Rectangle& rect)
+{
+    Vector2 nearest_grid_point;
+    nearest_grid_point.x = std::round(rect.x / 25) * 25;
+    nearest_grid_point.y = std::round(rect.y / 25) * 25;
+    // TODO: Highlight the nearest grid point
+    return nearest_grid_point;
+}
+
+void HandleMouseClick(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+{
+    bool gateSelected = false;
+
+    for (const auto& gate : circuit->gates)
     {
-        Vector2 mousePosition =
-            GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
-        for (size_t i = 0; i < selected_circuit->gates.size(); i++)
+        if (CheckCollisionPointRec(mousePosition, gate->bd))
         {
-            if (CheckCollisionPointRec(mousePosition, selected_circuit->gates[i]->bd))
-            {
-                is_dragging = true;
-                selected_logic_gate[0] = selected_circuit->gates[i];
-            }
-        }
-        if (is_dragging)
-        {
-
-            selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
-            selected_logic_gate[0]->bd.y = mousePosition.y - offset.y;
-
-            std::cout << selected_logic_gate[0]->bd.x << std::endl;
+            HandleGateSelection(gate, mousePosition);
+            CheckGatePartClicked(gate, mousePosition);
+            gateSelected = true;
+            break;
         }
     }
-    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+
+    // TODO: Deselect the gate if no gate was clicked
+    // if (!gateSelected)
+    // {
+    //     selected_logic_gate[0] = nullptr;
+    // }
+}
+
+void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
+{
+    selected_logic_gate[0] = gate;
+    gate_initial_position = {gate->bd.x, gate->bd.y};
+    offset.x = mousePosition.x - gate->bd.x;
+    offset.y = mousePosition.y - gate->bd.y;
+}
+void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
+{
+    auto inputTopRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.2, 0.3);
+    auto inputBottomRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.7, 0.8);
+    auto outputRegion = CalculateRegion(gate->bd, 0.85, 0.95, 0.45, 0.55);
+
+    if (CheckCollisionPointRec(mousePosition, inputTopRegion))
     {
+        std::cout << "Input Top clicked" << std::endl;
+    }
+    else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
+    {
+        std::cout << "Input Bottom clicked" << std::endl;
+    }
+    else if (CheckCollisionPointRec(mousePosition, outputRegion))
+    {
+        std::cout << "Output clicked" << std::endl;
+    }
+}
+
+void HandleMouseDrag(const Vector2& mousePosition)
+{
+    if (selected_logic_gate[0])
+    {
+        is_dragging = true;
+        selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
+        selected_logic_gate[0]->bd.y = mousePosition.y - offset.y;
+    }
+}
+
+void HandleMouseRelease(std::shared_ptr<Circuit> circuit)
+{
+    if (selected_logic_gate[0])
+    {
+        Vector2 nearest_grid_point = SnapToNearestGrid(selected_logic_gate[0]->bd);
+
+        if (!is_grid_occupied(circuit, nearest_grid_point))
+        {
+            selected_logic_gate[0]->bd.x = nearest_grid_point.x;
+            selected_logic_gate[0]->bd.y = nearest_grid_point.y;
+        }
+        else
+        {
+            // Reset to initial position if grid is occupied
+            selected_logic_gate[0]->bd.x = gate_initial_position.x;
+            selected_logic_gate[0]->bd.y = gate_initial_position.y;
+        }
+
         is_dragging = false;
     }
+}
+
+void Controls_Mouse_click()
+{
+    Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        HandleMouseClick(selected_circuit, mousePosition);
+    }
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {
+        HandleMouseDrag(mousePosition);
+    }
+
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+    {
+        HandleMouseRelease(selected_circuit);
+    }
+}
+
+bool is_grid_occupied(std::shared_ptr<Circuit> circuit, Vector2 nearest_grid_point)
+{
+    // Check if the nearest grid point is occupied by any gate other than the selected gate.
+    if (selected_logic_gate.empty() || !selected_logic_gate[0])
+    {
+        std::cerr << "Error: selected_logic_gate is empty!" << std::endl;
+        return true;  // Assume grid is occupied if no gate is selected.
+    }
+
+    // Calculate the bounding box of the gate being placed
+    float new_gate_x_start = nearest_grid_point.x;
+    float new_gate_y_start = nearest_grid_point.y;
+    float new_gate_x_end = nearest_grid_point.x + selected_logic_gate[0]->bd.width;
+    float new_gate_y_end = nearest_grid_point.y + selected_logic_gate[0]->bd.height;
+
+    for (auto gate : circuit->gates)
+    {
+        // Skip the currently selected logic gate
+        if (gate == selected_logic_gate[0])
+        {
+            continue;
+        }
+        // Get the bounding box of the existing gate
+        float existing_gate_x_start = gate->bd.x;
+        float existing_gate_y_start = gate->bd.y;
+        float existing_gate_x_end = gate->bd.x + gate->bd.width;
+        float existing_gate_y_end = gate->bd.y + gate->bd.height;
+
+        // Check for overlap between the new gate's bounding box and the existing gate's bounding
+        // box
+        if (!(new_gate_x_end <=
+                  existing_gate_x_start ||  // New gate is to the left of the existing gate
+              new_gate_x_start >=
+                  existing_gate_x_end ||  // New gate is to the right of the existing gate
+              new_gate_y_end <= existing_gate_y_start ||  // New gate is above the existing gate
+              new_gate_y_start >= existing_gate_y_end))   // New gate is below the existing gate
+        {
+            return true;  // Overlap detected, grid is occupied
+        }
+    }
+    return false;  // No overlap detected, grid is not occupied
 }
 
 }  // namespace Controls
