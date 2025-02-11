@@ -50,7 +50,7 @@ int main(void)
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.
-                                 DrawGrid2D(100, 20 , 3 );
+                                 DrawGrid2D(100, 25, 3);
                                  // You can draw additional world elements here.
                              });
         // Draw UI elements that remain in screen space
