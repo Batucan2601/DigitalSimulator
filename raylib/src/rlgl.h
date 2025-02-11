@@ -696,6 +696,8 @@ RLAPI void rlDisableSmoothLines(void);                  // Disable line aliasing
 RLAPI void rlEnableStereoRender(void);                  // Enable stereo rendering
 RLAPI void rlDisableStereoRender(void);                 // Disable stereo rendering
 RLAPI bool rlIsStereoRenderEnabled(void);               // Check if stereo render is enabled
+RLAPI void rlEnablePointSize(unsigned int pointSize);                     // Enable point size
+RLAPI void rlDisablePointSize(void);                    // Disable point size
 
 RLAPI void rlClearColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a); // Clear color buffer with color
 RLAPI void rlClearScreenBuffers(void);                  // Clear used screen buffers (color and depth)
@@ -1912,6 +1914,9 @@ void rlActiveDrawBuffers(int count)
 //----------------------------------------------------------------------------------
 // General render state configuration
 //----------------------------------------------------------------------------------
+void rlEnablePointSize(unsigned int pointSize) { glEnable(GL_PROGRAM_POINT_SIZE); glPointSize(pointSize); }                     // Enable point size
+
+void rlDisablePointSize(void) { glDisable(GL_PROGRAM_POINT_SIZE);  }                     // Disable point size
 
 // Enable color blending
 void rlEnableColorBlend(void) { glEnable(GL_BLEND); }

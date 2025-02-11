@@ -1093,6 +1093,7 @@ void DrawGrid2D(int slices, float spacing)
 {
     int halfSlices = slices/2;
     rlBegin(RL_POINTS);
+    rlEnablePointSize(3);
         for (int x = -halfSlices; x <= halfSlices; x++)
         {
             for (int y = -halfSlices; y <= halfSlices; y++)
@@ -1101,6 +1102,7 @@ void DrawGrid2D(int slices, float spacing)
                 rlVertex2f((float)x * spacing, y * spacing);
             }
         }
+    rlDisablePointSize();
     rlEnd();
 }
 
