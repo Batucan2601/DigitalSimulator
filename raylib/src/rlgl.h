@@ -266,6 +266,7 @@
 #define RL_TEXTURE                              0x1702      // GL_TEXTURE
 
 // Primitive assembly draw modes
+#define RL_POINTS                               0x0000      // GL_POINTS
 #define RL_LINES                                0x0001      // GL_LINES
 #define RL_TRIANGLES                            0x0004      // GL_TRIANGLES
 #define RL_QUADS                                0x0007      // GL_QUADS
@@ -3058,7 +3059,8 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
                 // Bind current draw call texture, activated as GL_TEXTURE0 and Bound to sampler2D texture0 by default
                 glBindTexture(GL_TEXTURE_2D, batch->draws[i].textureId);
 
-                if ((batch->draws[i].mode == RL_LINES) || (batch->draws[i].mode == RL_TRIANGLES)) glDrawArrays(batch->draws[i].mode, vertexOffset, batch->draws[i].vertexCount);
+                if ((batch->draws[i].mode == RL_LINES) || (batch->draws[i].mode == RL_TRIANGLES)
+                || (batch->draws[i].mode == RL_POINTS) ) glDrawArrays(batch->draws[i].mode, vertexOffset, batch->draws[i].vertexCount);
                 else
                 {
     #if defined(GRAPHICS_API_OPENGL_33)
