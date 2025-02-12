@@ -141,11 +141,11 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
         DrawBoundaryBox(gate);
 #endif
 
-        if (gate->type == "and")
+        if (gate->type == GateType::AND)
         {
             DrawAnd(gate);
         }
-        else if (gate->type == "or")
+        else if (gate->type == GateType::OR)
         {
             DrawOr(gate);
         }
@@ -159,35 +159,31 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     // 2 - Draw connections
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
-        // const auto& connection = circuit->connections[i]; // Access the connection
-
-        // // Get the source and target gates
-        // const auto& sourceGate = connection.sourceGate;
-        // const auto& targetGate = connection.targetGate;
-
-        // // Get the source and target positions
-        // Vector2 sourcePos = {
-        //     sourceGate->bd.x + sourceGate->bd.width,            // Right edge of the source gate
-        //     sourceGate->bd.y + sourceGate->bd.height / 2        // Vertically centered
-        // };
-        // Vector2 targetPos = {
-        //     targetGate->bd.x,                                   // Left edge of the target gate
-        //     targetGate->bd.y + targetGate->bd.height / 2        // Vertically centered
-        // };
-
-        // // Draw the connection line
-        // DrawLineEx(sourcePos, targetPos, 2.0f, DARKGRAY);
-
-        // // Optionally, draw the name of the signal being passed (e.g., "Out")
-        // DrawText(connection.sourceOutput.c_str(), (sourcePos.x + targetPos.x) / 2,
-        //          (sourcePos.y + targetPos.y) / 2, 10, DARKGRAY);
+        for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+        {
+            Vector2 start = circuit->connections[i].physCon.wires[j];
+            Vector2 end = circuit->connections[i].physCon.wires[j+1];
+            //Vector2 straight_line  = Controls::Generate_straight_lines(start, end);
+            //DrawLine(start.x, start.y, straight_line.x, straight_line.y, circuit->connections[i].is_connected ? BLACK : RED);
+            //DrawLine(straight_line.x, straight_line.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
+            DrawLine(start.x, start.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
+        }
     }
+
+    // 3 - DrawActiveWire
+    if (circuit->active_wire.is_visible)
+    {
+        Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start, circuit->active_wire.end);
+        DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x, straight_line.y, GREEN);
+        DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x, circuit->active_wire.end.y, GREEN);
+    }
+ 
 }
 
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
 {
     DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,
-                       gate->type == "and" ? GREEN : BLUE);
+                       gate->type == GateType::AND ? GREEN : BLUE);
 }
 
 void DrawClippedCircle(float cx, float cy, float radius, Color color)

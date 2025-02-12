@@ -17,13 +17,6 @@ enum class GateType
     NOT
 };
 
-enum class SignalName
-{
-    A,
-    B,
-    OUT
-};
-
 class LogicGate
 {
   public:
@@ -40,7 +33,7 @@ class LogicGate
     const std::unordered_map<std::string, bool>& getOutputs() const;
 
     Rectangle bd = {0, 0, 100, 100};  // bounding box
-    std::string type;
+    GateType type;
 
   protected:
     std::unordered_map<std::string, bool> inputs;
@@ -68,27 +61,39 @@ class OrGate : public LogicGate
     bool getOutput(const std::string& name) const override;
 };
 
+struct PhysicalConnection
+{
+    std::vector<Vector2> wires;
+};
+struct Connection
+{
+    std::shared_ptr<LogicGate> sourceGate;
+    std::string sourceLogic;
+    std::shared_ptr<LogicGate> targetGate;
+    std::string targetLogic;
+    PhysicalConnection physCon;
+    bool is_connected = false;
+};
+struct ActiveWire
+{
+    Vector2 start;
+    Vector2 end;
+    bool is_visible;
+};
 class Circuit
 {
   public:
     Circuit(std::string& logger_name) : m_logger(logger_name) {}
     void addGate(std::shared_ptr<LogicGate> gate);
-
-    struct Connection
-    {
-        std::shared_ptr<LogicGate> sourceGate;
-        std::string sourceOutput;
-        std::shared_ptr<LogicGate> targetGate;
-        std::string targetInput;
-    };
-
     void addConnection(std::shared_ptr<LogicGate> sourceGate, const std::string& sourceOutput,
                        std::shared_ptr<LogicGate> targetGate, const std::string& targetInput);
-
     void evaluate();
     ClassLogger m_logger;
     std::vector<std::shared_ptr<LogicGate>> gates;
     std::vector<Connection> connections;
+    // TODO 
+    // this might be moved to a better data structure
+    ActiveWire active_wire;
 };
 
 #endif  // LOGIC_ELEMENTS_H

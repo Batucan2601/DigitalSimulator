@@ -5,7 +5,7 @@
 
 #include <math.h>
 
-#define IS_DRAWING_BOUNDARY_BOX true
+#define IS_DRAWING_BOUNDARY_BOX true // TODO this should be in userspace
 namespace LogicElementsDraw
 {
 void DrawCircuit(const std::shared_ptr<Circuit> circuit);

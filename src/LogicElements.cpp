@@ -26,8 +26,10 @@ AndGate::AndGate(std::string& logger_name) : LogicGate(logger_name)
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
-    type = "and";
+
+    type = GateType::AND;
     m_logger.debug("And Gate Created.");
+
 }
 
 void AndGate::evaluate()
@@ -54,7 +56,7 @@ OrGate::OrGate(std::string& logger_name) : LogicGate(logger_name)
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
-    type = "or";
+    type = GateType::OR;
     m_logger.debug("Or Gate Created.");
 }
 
@@ -112,8 +114,8 @@ void Circuit::evaluate()
         // Then, update the inputs based on the connections.
         for (auto& conn : connections)
         {
-            bool sourceValue = conn.sourceGate->getOutput(conn.sourceOutput);
-            conn.targetGate->setInput(conn.targetInput, sourceValue);
+            bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
+            conn.targetGate->setInput(conn.targetLogic, sourceValue);
         }
         iterations++;
     }
