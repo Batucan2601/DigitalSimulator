@@ -191,6 +191,7 @@ void HandleLogicWiring(std::shared_ptr<Circuit> circuit,const Vector2& mousePosi
             {
                 circuit->connections[circuit->connections.size() - 1].targetGate = connection_end.sourceGate;
                 circuit->connections[circuit->connections.size() - 1].targetLogic = connection_end.sourceLogic;
+                circuit->connections[circuit->connections.size() - 1].is_connected = true; 
                 is_logic_selected = false;
             }
             break;

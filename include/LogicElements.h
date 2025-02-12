@@ -69,6 +69,7 @@ struct Connection
     std::shared_ptr<LogicGate> targetGate;
     std::string targetLogic;
     PhysicalConnection physCon;
+    bool is_connected = false;
 };
 
 class Circuit
