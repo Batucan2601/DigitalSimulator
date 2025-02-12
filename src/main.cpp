@@ -14,9 +14,12 @@ int main(void)
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     Controls::Controls_set_camera(screenWidth, screenHeight);
-    auto gate1 = std::make_shared<AndGate>();
-    auto gate2 = std::make_shared<AndGate>();
-    auto gate3 = std::make_shared<OrGate>();
+    std::string and_gate_logger = "AndLogger1";
+    std::string and_gate2_logger = "AndLogger2";
+    std::string or_gate_logger = "OrLogger1";
+    auto gate1 = std::make_shared<AndGate>(and_gate_logger);
+    auto gate2 = std::make_shared<AndGate>(and_gate2_logger);
+    auto gate3 = std::make_shared<OrGate>(or_gate_logger);
 
     // Set initial inputs for gate1.
     gate1->setInput("A", true);
@@ -28,7 +31,8 @@ int main(void)
     gate3->setInput("A", true);
     gate3->setInput("B", false);
     // Create a circuit and add both gates.
-    auto circuit = std::make_shared<Circuit>();
+    std::string circuit_logger = "CircuitLogger";
+    auto circuit = std::make_shared<Circuit>(circuit_logger);
     gate1->setPosition(100, 100);
     gate3->setPosition(-100, -100);
     circuit->addGate(gate1);
