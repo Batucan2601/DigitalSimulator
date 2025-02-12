@@ -82,6 +82,9 @@ class Circuit
 
     std::vector<std::shared_ptr<LogicGate>> gates;
     std::vector<Connection> connections;
+    // TODO 
+    // this might be moved to a better data structure
+    std::pair<Vector2, Vector2> active_wire;
 };
 
 #endif  // LOGIC_ELEMENTS_H

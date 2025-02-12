@@ -16,7 +16,7 @@ Camera2D Controls_get_camera();
 
 // mouse
 void Controls_Mouse_click();
-void Controls_HandleEvents();
+void Controls_HandleEvents(std::shared_ptr<Circuit> circuit);
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition);
 void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition,
 Connection& connection);

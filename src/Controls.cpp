@@ -16,6 +16,7 @@ static bool is_logic_selected = false;
 Vector2 offset;
 static Vector2 gate_initial_position;
 
+
 void Controls_set_camera(unsigned int screen_width, unsigned int screen_height)
 {
     camera.target = {0.0f, 0.0f};  // Camera looks at the origin initially
@@ -52,16 +53,21 @@ void Controls_update(std::shared_ptr<Circuit> circuit)
 
     Controls_Mouse_click();
     Control_Keyboard_Event(selected_circuit);
-    Controls_HandleEvents();
+    Controls_HandleEvents(selected_circuit);
 }
 Camera2D Controls_get_camera()
 {
     return camera;
 }
 
-void Controls_HandleEvents()
+void Controls_HandleEvents(std::shared_ptr<Circuit> circuit)
 {
-   
+    if (is_logic_selected)
+    {
+        Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
+        Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+        circuit->active_wire.second = SnapToNearestGrid(pos);
+    }
 }
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
@@ -195,6 +201,11 @@ void HandleLogicWiring(std::shared_ptr<Circuit> circuit,const Vector2& mousePosi
             break;
         }
     }
+    if (is_logic_selected)
+    {
+        Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+        circuit->active_wire.first = SnapToNearestGrid(pos);
+    }
 
 }
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
@@ -265,7 +276,7 @@ void HandleMouseDrag(std::shared_ptr<Circuit> circuit, const Vector2& mousePosit
                 circuit->connections[i].physCon.wires[size].y = mousePosition.y - offset.y;
             }
         }
-
+       
     }
 }
 

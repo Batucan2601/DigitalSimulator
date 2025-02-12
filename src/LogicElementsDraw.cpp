@@ -130,6 +130,16 @@ void DrawOr(const std::shared_ptr<LogicGate> gate)
     DrawClippedCircle(centerX, centerY, radius, RED);
 }
 
+Vector2  Generate_straight_lines(const Vector2& start, const Vector2& end)
+{
+    Vector2 vec1 = { start.x,start.y };
+    if (start.x != end.x && start.y != end.y)
+    {
+        vec1 = { end.x , start.y };
+    }
+    return vec1;
+}
+
 void DrawCircuit(const std::shared_ptr<Circuit> circuit)
 {
     // 1 - Draw gates
@@ -159,12 +169,20 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     // 2 - Draw connections
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
-        for (size_t j = 0; j < circuit->connections[i].physCon.wires.size()-1; j++)
+        for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
         {
-            DrawLine(circuit->connections[i].physCon.wires[j].x, circuit->connections[i].physCon.wires[j].y,
-                circuit->connections[i].physCon.wires[j+1].x, circuit->connections[i].physCon.wires[j+1].y ,circuit->connections[i].is_connected ? BLACK : RED);
+            Vector2 start = circuit->connections[i].physCon.wires[j];
+            Vector2 end = circuit->connections[i].physCon.wires[j+1];
+            Vector2 straight_line  = Generate_straight_lines(start, end);
+            DrawLine(start.x, start.y, straight_line.x, straight_line.y, circuit->connections[i].is_connected ? BLACK : RED);
+            DrawLine(straight_line.x, straight_line.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
         }
     }
+
+    // 3 - DrawActiveWire
+    Vector2 straight_line = Generate_straight_lines(circuit->active_wire.first, circuit->active_wire.second);
+    DrawLine(circuit->active_wire.first.x, circuit->active_wire.first.y, straight_line.x, straight_line.y, GREEN);
+    DrawLine(straight_line.x, straight_line.y, circuit->active_wire.second.x, circuit->active_wire.second.y,GREEN);
 }
 
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
