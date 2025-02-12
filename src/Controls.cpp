@@ -143,13 +143,18 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
     bool gateSelected = false;
     if (!is_logic_selected)
     {
+        Connection connection_start = {};
         for (const auto& gate : circuit->gates)
         {
             if (CheckCollisionPointRec(mousePosition, gate->bd))
             {
                 HandleGateSelection(gate, mousePosition);
-                CheckGatePartClicked(circuit, gate, mousePosition, is_logic_selected);
+                CheckGatePartClicked(circuit, gate, mousePosition, connection_start);
                 gateSelected = true;
+                if (connection_start.sourceLogic != "") //not intitialized
+                {
+                    circuit->connections.push_back(connection_start);
+                }
                 break;
             }
         }
@@ -173,6 +178,25 @@ void HandleLogicWiring(std::shared_ptr<Circuit> circuit,const Vector2& mousePosi
     Rectangle mockRec = { mousePosition.x , mousePosition.y , 0 ,0 };
     Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
     circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(nearest_grid_point);
+
+    //finish if we hit logic gates
+    Connection connection_end;
+    for (const auto& gate : circuit->gates)
+    {
+        if (CheckCollisionPointRec(mousePosition, gate->bd))
+        {
+            HandleGateSelection(gate, mousePosition);
+            CheckGatePartClicked(circuit, gate, mousePosition, connection_end);
+            if (connection_end.sourceLogic != "") //not intitialized
+            {
+                circuit->connections[circuit->connections.size() - 1].targetGate = connection_end.sourceGate;
+                circuit->connections[circuit->connections.size() - 1].targetLogic = connection_end.sourceLogic;
+                is_logic_selected = false;
+            }
+            break;
+        }
+    }
+
 }
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
 {
@@ -182,7 +206,8 @@ void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& 
     offset.y = mousePosition.y - gate->bd.y;
 }
 void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
- const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected)
+ const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition,Connection
+&connection)
 {
     auto inputTopRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.2, 0.3);
     auto inputBottomRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.7, 0.8);
@@ -192,32 +217,28 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
     {
         std::cout << "Input Top clicked" << std::endl;
         is_logic_selected = true;
-        connection_for_wiring.sourceGate = gate; 
-        connection_for_wiring.sourceLogic = "A";
+        connection.sourceGate = gate;
+        connection.sourceLogic = "A";
         Vector2 pos = { inputTopRegion.x , inputTopRegion.y };
-        connection_for_wiring.physCon.wires.push_back(pos);
-        circuit->connections.push_back(connection_for_wiring);
+        connection.physCon.wires.push_back(pos);
     }
     else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
     {
         std::cout << "Input Bottom clicked" << std::endl;
         is_logic_selected = true;
-        connection_for_wiring.sourceGate = gate;
-        connection_for_wiring.sourceLogic = "B";
+        connection.sourceGate = gate;
+        connection.sourceLogic = "B";
         Vector2 pos = { inputBottomRegion.x , inputBottomRegion.y };
-        connection_for_wiring.physCon.wires.push_back(pos);
-        circuit->connections.push_back(connection_for_wiring);
-
+        connection.physCon.wires.push_back(pos);
     }
     else if (CheckCollisionPointRec(mousePosition, outputRegion))
     {
         std::cout << "Output clicked" << std::endl;
         is_logic_selected = true;
-        connection_for_wiring.sourceGate = gate;
-        connection_for_wiring.sourceLogic = "Out";
+        connection.sourceGate = gate;
+        connection.sourceLogic = "Out";
         Vector2 pos = { outputRegion.x , outputRegion.y };
-        connection_for_wiring.physCon.wires.push_back(pos);
-        circuit->connections.push_back(connection_for_wiring);
+        connection.physCon.wires.push_back(pos);
     }
 }
 
