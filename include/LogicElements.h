@@ -71,7 +71,12 @@ struct Connection
     PhysicalConnection physCon;
     bool is_connected = false;
 };
-
+struct ActiveWire
+{
+    Vector2 start;
+    Vector2 end;
+    bool is_visible;
+};
 class Circuit
 {
   public:
@@ -84,7 +89,7 @@ class Circuit
     std::vector<Connection> connections;
     // TODO 
     // this might be moved to a better data structure
-    std::pair<Vector2, Vector2> active_wire;
+    ActiveWire active_wire;
 };
 
 #endif  // LOGIC_ELEMENTS_H
