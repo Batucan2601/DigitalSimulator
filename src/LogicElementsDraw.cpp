@@ -141,11 +141,11 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
         DrawBoundaryBox(gate);
 #endif
 
-        if (gate->type == "and")
+        if (gate->type == GateType::AND)
         {
             DrawAnd(gate);
         }
-        else if (gate->type == "or")
+        else if (gate->type == GateType::OR)
         {
             DrawOr(gate);
         }
@@ -170,7 +170,7 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
 {
     DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,
-                       gate->type == "and" ? GREEN : BLUE);
+                       gate->type == GateType::AND ? GREEN : BLUE);
 }
 
 void DrawClippedCircle(float cx, float cy, float radius, Color color)

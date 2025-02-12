@@ -13,9 +13,7 @@ std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
 static bool is_dragging = false;
 static bool is_logic_selected = false;
-Connection connection_for_wiring; 
 Vector2 offset;
-
 static Vector2 gate_initial_position;
 
 void Controls_set_camera(unsigned int screen_width, unsigned int screen_height)
@@ -243,13 +241,31 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
     }
 }
 
-void HandleMouseDrag(const Vector2& mousePosition)
+void HandleMouseDrag(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {
     if (selected_logic_gate[0])
     {
         is_dragging = true;
         selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
         selected_logic_gate[0]->bd.y = mousePosition.y - offset.y;
+        //check the connections
+        for (size_t i = 0; i < circuit->connections.size(); i++)
+        {
+            // !!! for now this gives the same location as the BB, but when resolved it will allow us to move wires with gates
+            // TODO 
+            if (circuit->connections[i].sourceGate == selected_logic_gate[0])
+            {
+                circuit->connections[i].physCon.wires[0].x = mousePosition.x - offset.x;
+                circuit->connections[i].physCon.wires[0].y = mousePosition.y - offset.y;
+            }
+            if (circuit->connections[i].targetGate== selected_logic_gate[0])
+            {
+                int size = circuit->connections[i].physCon.wires.size() - 1;
+                circuit->connections[i].physCon.wires[size].x = mousePosition.x - offset.x;
+                circuit->connections[i].physCon.wires[size].y = mousePosition.y - offset.y;
+            }
+        }
+
     }
 }
 
@@ -291,7 +307,7 @@ void Controls_Mouse_click()
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseDrag(mousePosition);
+        HandleMouseDrag(selected_circuit , mousePosition);
     }
 
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))

@@ -26,7 +26,7 @@ AndGate::AndGate()
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
-    type = "and";
+    type = GateType::AND;
 }
 
 void AndGate::evaluate()
@@ -53,7 +53,7 @@ OrGate::OrGate()
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
-    type = "or";
+    type = GateType::OR;
 }
 
 void OrGate::evaluate()
