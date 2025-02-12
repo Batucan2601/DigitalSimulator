@@ -161,7 +161,7 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     {
         for (size_t j = 0; j < circuit->connections[i].physCon.wires.size()-1; j++)
         {
-            DrawLine(circuit->connections[i].physCon.wires[j].x, circuit->connections[i].physCon.wires[j].x,
+            DrawLine(circuit->connections[i].physCon.wires[j].x, circuit->connections[i].physCon.wires[j].y,
                 circuit->connections[i].physCon.wires[j+1].x, circuit->connections[i].physCon.wires[j+1].y , BLACK);
         }
     }

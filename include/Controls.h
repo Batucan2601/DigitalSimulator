@@ -18,13 +18,13 @@ Camera2D Controls_get_camera();
 void Controls_Mouse_click();
 void Controls_HandleEvents();
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition);
-void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected);
+void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected);
 Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,
                           float yEndRatio);
 void HandleMouseDrag(const Vector2& mousePosition);
 Vector2 SnapToNearestGrid(const Rectangle& rect);
 void HandleMouseRelease(std::shared_ptr<Circuit> circuit);
-void HandleLogicWiring(const Vector2& mousePosition);
+void HandleLogicWiring(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition);
 // keyboard
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit);
 

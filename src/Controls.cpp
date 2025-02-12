@@ -148,7 +148,7 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
             if (CheckCollisionPointRec(mousePosition, gate->bd))
             {
                 HandleGateSelection(gate, mousePosition);
-                CheckGatePartClicked(gate, mousePosition, is_logic_selected);
+                CheckGatePartClicked(circuit, gate, mousePosition, is_logic_selected);
                 gateSelected = true;
                 break;
             }
@@ -156,7 +156,7 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
     }
     else // if logic selected and you are wiring
     {
-        HandleLogicWiring(mousePosition);
+        HandleLogicWiring(circuit, mousePosition);
     }
     // TODO: Deselect the gate if no gate was clicked
     if (!gateSelected)
@@ -166,15 +166,13 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
 }
 void HandleMouseRightClick(std::shared_ptr<Circuit>& circuit, const Vector2& mousePosition)
 {
-    is_logic_selected = false; // kills wiring process for sure
-    circuit->connections.push_back(connection_for_wiring);
-    connection_for_wiring = {};
+    is_logic_selected = false; // kills wiring process for sure everytime
 }
-void HandleLogicWiring(const Vector2& mousePosition)
+void HandleLogicWiring(std::shared_ptr<Circuit> circuit,const Vector2& mousePosition)
 {
     Rectangle mockRec = { mousePosition.x , mousePosition.y , 0 ,0 };
     Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
-    connection_for_wiring.physCon.wires.push_back(nearest_grid_point);
+    circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(nearest_grid_point);
 }
 void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition)
 {
@@ -183,7 +181,8 @@ void HandleGateSelection(const std::shared_ptr<LogicGate>& gate, const Vector2& 
     offset.x = mousePosition.x - gate->bd.x;
     offset.y = mousePosition.y - gate->bd.y;
 }
-void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected)
+void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
+ const std::shared_ptr<LogicGate>& gate, const Vector2& mousePosition, bool& is_logic_selected)
 {
     auto inputTopRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.2, 0.3);
     auto inputBottomRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.7, 0.8);
@@ -197,6 +196,7 @@ void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2&
         connection_for_wiring.sourceLogic = "A";
         Vector2 pos = { inputTopRegion.x , inputTopRegion.y };
         connection_for_wiring.physCon.wires.push_back(pos);
+        circuit->connections.push_back(connection_for_wiring);
     }
     else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
     {
@@ -206,6 +206,7 @@ void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2&
         connection_for_wiring.sourceLogic = "B";
         Vector2 pos = { inputBottomRegion.x , inputBottomRegion.y };
         connection_for_wiring.physCon.wires.push_back(pos);
+        circuit->connections.push_back(connection_for_wiring);
 
     }
     else if (CheckCollisionPointRec(mousePosition, outputRegion))
@@ -216,6 +217,7 @@ void CheckGatePartClicked(const std::shared_ptr<LogicGate>& gate, const Vector2&
         connection_for_wiring.sourceLogic = "Out";
         Vector2 pos = { outputRegion.x , outputRegion.y };
         connection_for_wiring.physCon.wires.push_back(pos);
+        circuit->connections.push_back(connection_for_wiring);
     }
 }
 
