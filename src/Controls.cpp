@@ -8,7 +8,10 @@
 
 namespace Controls
 {
-static auto selected_circuit = std::make_shared<Circuit>();
+std::string control_logger_name = "ControlLogger";
+std::string gui_circuit_logger = "GUICircuitLogger";
+static ClassLogger control_logger(control_logger_name);
+static auto selected_circuit = std::make_shared<Circuit>(gui_circuit_logger);
 std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
 static bool is_dragging = false;
@@ -73,7 +76,8 @@ void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
     if (selected_logic_gate.empty() || !selected_logic_gate[0])
     {
-        std::cerr << "Error: No selected logic gate!" << std::endl;
+        // std::cerr << "Error: No selected logic gate!" << std::endl;
+        control_logger.info("Error: No selected logic gate!");
         return;
     }
 

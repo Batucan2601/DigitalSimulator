@@ -21,12 +21,15 @@ const std::unordered_map<std::string, bool>& LogicGate::getOutputs() const
     return outputs;
 }
 
-AndGate::AndGate()
+AndGate::AndGate(std::string& logger_name) : LogicGate(logger_name)
 {
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
+
     type = GateType::AND;
+    m_logger.debug("And Gate Created.");
+
 }
 
 void AndGate::evaluate()
@@ -48,12 +51,13 @@ bool AndGate::getOutput(const std::string& name) const
     return (it != outputs.end()) ? it->second : false;
 }
 
-OrGate::OrGate()
+OrGate::OrGate(std::string& logger_name) : LogicGate(logger_name)
 {
     inputs["A"] = false;
     inputs["B"] = false;
     outputs["Out"] = false;
     type = GateType::OR;
+    m_logger.debug("Or Gate Created.");
 }
 
 void OrGate::evaluate()
@@ -77,13 +81,15 @@ bool OrGate::getOutput(const std::string& name) const
 
 void Circuit::addGate(std::shared_ptr<LogicGate> gate)
 {
+    this->m_logger.info("Gate added to the circuit.");
     gates.push_back(gate);
 }
 
 void Circuit::addConnection(std::shared_ptr<LogicGate> sourceGate, const std::string& sourceOutput,
                             std::shared_ptr<LogicGate> targetGate, const std::string& targetInput)
 {
-    connections.push_back({sourceGate, sourceOutput, targetGate, targetInput });
+    this->m_logger.info("Connection added to the circuit.");
+    connections.push_back({sourceGate, sourceOutput, targetGate, targetInput});
 }
 
 void Circuit::evaluate()
