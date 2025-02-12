@@ -1,5 +1,6 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
+#include "ClassLogger.h"
 #include "LogicElements.h"
 #include "common_types.h"
 #include "raylib.h"

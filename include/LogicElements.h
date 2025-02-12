@@ -1,6 +1,7 @@
 #ifndef LOGIC_ELEMENTS_H
 #define LOGIC_ELEMENTS_H
 
+#include "ClassLogger.h"
 #include "raylib.h"
 
 #include <memory>
@@ -26,6 +27,7 @@ enum class SignalName
 class LogicGate
 {
   public:
+    explicit LogicGate(std::string& logger_name) : m_logger(logger_name) {}
     void setPosition(float x, float y);
     Vector2 getPosition() const;
 
@@ -43,12 +45,13 @@ class LogicGate
   protected:
     std::unordered_map<std::string, bool> inputs;
     std::unordered_map<std::string, bool> outputs;
+    ClassLogger m_logger;
 };
 
 class AndGate : public LogicGate
 {
   public:
-    AndGate();
+    AndGate(std::string& logger_name);
 
     void evaluate() override;
     void setInput(const std::string& name, bool value) override;
@@ -58,7 +61,7 @@ class AndGate : public LogicGate
 class OrGate : public LogicGate
 {
   public:
-    OrGate();
+    OrGate(std::string& logger_name);
 
     void evaluate() override;
     void setInput(const std::string& name, bool value) override;
@@ -68,6 +71,7 @@ class OrGate : public LogicGate
 class Circuit
 {
   public:
+    Circuit(std::string& logger_name) : m_logger(logger_name) {}
     void addGate(std::shared_ptr<LogicGate> gate);
 
     struct Connection
@@ -82,7 +86,7 @@ class Circuit
                        std::shared_ptr<LogicGate> targetGate, const std::string& targetInput);
 
     void evaluate();
-
+    ClassLogger m_logger;
     std::vector<std::shared_ptr<LogicGate>> gates;
     std::vector<Connection> connections;
 };
