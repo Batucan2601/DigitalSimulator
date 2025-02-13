@@ -168,12 +168,16 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
             //DrawLine(straight_line.x, straight_line.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
             DrawLine(start.x, start.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
             // draw their interactable points
-            DrawInteractables(start, end);
-            
-         
+            DrawInteractableWirePoints(start, end, BLUE);
         }
     }
-
+    
+    // color green the selected wires
+    for (size_t i = 0; i < circuit->selected_wires.pos.size(); i++)
+    {
+        Vector2 pos = circuit->selected_wires.pos[i];
+        DrawInteractableWirePoints(pos , pos , GREEN);
+    }
     // 3 - DrawActiveWire
     if (circuit->active_wire.is_visible)
     {
@@ -183,9 +187,9 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     }
  
 }
-void DrawInteractables(Vector2 start, Vector2 end)
+void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
 {
-    DrawPointAcross(start, end , GRID_POINT_SIZE + 5, SPACING_SIZE , BLUE);
+    DrawPointAcross(start, end , WIRE_INTERACT_POINT_SIZE, SPACING_SIZE , color);
     
 }
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)

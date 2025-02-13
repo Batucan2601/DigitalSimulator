@@ -4,5 +4,6 @@
 #define SLICE_SIZE      100
 #define SPACING_SIZE    25
 #define GRID_POINT_SIZE 3
+#define WIRE_INTERACT_POINT_SIZE 8
 
 #endif  // COMMON_TYPES_H

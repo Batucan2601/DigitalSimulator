@@ -65,12 +65,24 @@ Camera2D Controls_get_camera()
 
 void Controls_Handle_Continous(std::shared_ptr<Circuit> circuit)
 {
+    Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
     if (is_logic_selected)
     {
         Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
         Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
         circuit->active_wire.end = SnapToNearestGrid(pos);
     }
+   
+    circuit->selected_wires.pos.clear();
+    bool is_near_wire = CheckWireClicked(circuit, mousePosition);
+    if (is_near_wire)
+    {
+        Rectangle rec = {mousePosition.x , mousePosition.y , 0 ,0};
+        Vector2 pos = SnapToNearestGrid(rec);
+        circuit->selected_wires.pos.push_back(pos);
+        circuit->m_logger.info("catched new ");
+    }
+
 }
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
@@ -272,7 +284,7 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
         connection.physCon.wires.push_back(pos);
     }
 }
-void CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+bool CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
@@ -291,12 +303,11 @@ void CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosi
             }
             if (CheckCollisionPointRec(mousePosition, col))
             {
-                std::cout << " touched line " << std::endl; 
-                //TODO implement what happens when we click a wire ? 
-                //discuss with your bro 
+                return true; 
             }
         }
     }
+    return false; 
 }
 void HandleMouseDrag(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {

@@ -80,6 +80,10 @@ struct ActiveWire
     Vector2 end;
     bool is_visible;
 };
+struct SelectedWires
+{
+    std::vector<Vector2> pos; 
+};
 class Circuit
 {
   public:
@@ -94,6 +98,7 @@ class Circuit
     // TODO 
     // this might be moved to a better data structure
     ActiveWire active_wire;
+    SelectedWires selected_wires; 
 };
 
 #endif  // LOGIC_ELEMENTS_H
