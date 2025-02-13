@@ -163,7 +163,8 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
         {
             Vector2 start = circuit->connections[i].physCon.wires[j];
             Vector2 end = circuit->connections[i].physCon.wires[j+1];
-            DrawLine(start.x, start.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
+            //DrawLine();
+            DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
             // draw their interactable points
             DrawInteractableWirePoints(start, end, BLUE);
         }
