@@ -167,6 +167,10 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
             //DrawLine(start.x, start.y, straight_line.x, straight_line.y, circuit->connections[i].is_connected ? BLACK : RED);
             //DrawLine(straight_line.x, straight_line.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
             DrawLine(start.x, start.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
+            // draw their interactable points
+            DrawInteractables(start, end);
+            
+         
         }
     }
 
@@ -179,7 +183,11 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     }
  
 }
-
+void DrawInteractables(Vector2 start, Vector2 end)
+{
+    DrawPointAcross(start, end , GRID_POINT_SIZE + 5, SPACING_SIZE , BLUE);
+    
+}
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
 {
     DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,

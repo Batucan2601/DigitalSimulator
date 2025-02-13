@@ -140,8 +140,8 @@ Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, fl
 Vector2 SnapToNearestGrid(const Rectangle& rect)
 {
     Vector2 nearest_grid_point;
-    nearest_grid_point.x = std::round(rect.x / 25) * 25;
-    nearest_grid_point.y = std::round(rect.y / 25) * 25;
+    nearest_grid_point.x = std::round(rect.x / SPACING_SIZE) * SPACING_SIZE;
+    nearest_grid_point.y = std::round(rect.y / SPACING_SIZE) * SPACING_SIZE;
     // TODO: Highlight the nearest grid point
     return nearest_grid_point;
 }
@@ -281,13 +281,13 @@ void CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosi
             Vector2 start = circuit->connections[i].physCon.wires[j];
             Vector2 end = circuit->connections[i].physCon.wires[j + 1];
             Rectangle col = { 0,0,0,0 };
-            if (std::abs(end.x - start.x) < 25)
+            if (std::abs(end.x - start.x) < SPACING_SIZE)
             {
-                col = { start.x , start.y , 25, end.y - start.y};
+                col = { start.x , start.y , SPACING_SIZE, end.y - start.y};
             }
-            else if (std::abs(end.y - start.y) < 25)
+            else if (std::abs(end.y - start.y) < SPACING_SIZE)
             {
-                col = { start.x , start.y , end.x - start.x, 25};
+                col = { start.x , start.y , end.x - start.x, SPACING_SIZE };
             }
             if (CheckCollisionPointRec(mousePosition, col))
             {

@@ -1087,7 +1087,29 @@ void DrawGrid(int slices, float spacing)
         }
     rlEnd();
 }
+void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, Color color)
+{
+    rlBegin(RL_POINTS);
+    rlEnablePointSize(pointSize);
 
+    float color_norm[3] = { color.r / 255.0f,color.g / 255.0f,color.b / 255.0f };
+    float min_x = start.x > end.x ? end.x : start.x;
+    float max_x = start.x > end.x ? start.x : end.x;
+    float min_y = start.y > end.y ? end.y : start.y;
+    float max_y = start.y > end.y ? start.y : end.y;
+    for (int i = min_x; i <= max_x; i += spacing)
+    {
+        rlColor3f(color_norm[0], color_norm[1], color_norm[2]);
+        rlVertex2f( i ,start.y);
+    }
+    for (int i = min_y; i <= max_y; i += spacing)
+    {
+        rlColor3f(color_norm[0], color_norm[1], color_norm[2]);
+        rlVertex2f(start.x,i);
+    }
+    rlDisablePointSize();
+    rlEnd();
+}
 // Draw a grid centered at (0, 0)
 void DrawGrid2D(int slices, float spacing , float pointSize)
 {
