@@ -4,6 +4,9 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#ifdef _WIN32
+    #include <array>
+#endif 
 namespace utils
 {
 class Logger
