@@ -1,0 +1,92 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set Up Dependencies (Linux Only)
+      - name: Install Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            build-essential \
+            cmake
+
+      # Step 3: Set Up Dependencies (Windows Only)
+      - name: Install vcpkg
+        if: runner.os == 'Windows'
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.bat
+          ./vcpkg/vcpkg install glfw3:x64-windows opengl:x64-windows
+
+      # Step 3: Cache CMake and Build Artifacts
+      - name: Cache CMake
+        uses: actions/cache@v3
+        with:
+          path: |
+            build
+            ~/.cache/CMake
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
+      # Step 4: Build Project
+      - name: Build Project (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make -j12
+
+      - name: Build Project (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..
+          cmake --build . --config Debug
+
+      # # Step 5: Run Tests
+      # - name: Run Tests
+      #   run: |
+      #     ./scripts/run_tests.sh
+
+      # Step 5: Upload Build Artifacts
+      - name: Upload Build Artifacts (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-linux-${{ github.run_id }}
+          path: build
+
+      - name: Upload Build Artifacts (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-windows-${{ github.run_id }}
+          path: build
