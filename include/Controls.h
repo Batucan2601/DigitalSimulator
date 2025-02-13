@@ -31,8 +31,7 @@ void HandleLogicWiring(std::shared_ptr<Circuit> circuit, const Vector2& mousePos
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit);
 Vector2  Generate_straight_lines(const Vector2& start, const Vector2& end);
 // TODO this does not belong here 
-bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition);
-
+bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition, Connection& con);
 }  // namespace Controls
 
 #endif

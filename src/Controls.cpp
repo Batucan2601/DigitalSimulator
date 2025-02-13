@@ -74,7 +74,8 @@ void Controls_Handle_Continous(std::shared_ptr<Circuit> circuit)
     }
     
     //hovering coloring
-    bool is_near_wire = CheckNearWire(circuit, mousePosition);
+    Connection temp; 
+    bool is_near_wire = CheckNearWire(circuit, mousePosition, temp);
     if (is_near_wire)
     {
         Rectangle rec = { mousePosition.x , mousePosition.y , 0 ,0 };
@@ -188,12 +189,19 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
         // if still not wiring
         if (!is_logic_selected)
         {
-            is_logic_selected = CheckNearWire(circuit, mousePosition);
+            Connection con;
+            is_logic_selected = CheckNearWire(circuit, mousePosition,con);
             if (is_logic_selected) //this section checks what happens when you touch a wire
             {
                 Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
                 circuit->active_wire.start = SnapToNearestGrid(pos);
                 circuit->active_wire.is_visible = true;
+                // get which line it belongs to
+                Connection new_connection;
+                new_connection.sourceGate = con.sourceGate;
+                new_connection.sourceLogic = con.sourceLogic;
+                new_connection.physCon.wires.push_back(mousePosition);
+                circuit->connections.push_back(new_connection);
             }
         }
     }
@@ -291,7 +299,7 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
         connection.physCon.wires.push_back(pos);
     }
 }
-bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition, Connection& con)
 {
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
@@ -311,6 +319,7 @@ bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePositio
             if (CheckCollisionPointRec(mousePosition, col))
             {
                 return true; 
+                con = circuit->connections[i];
             }
         }
     }
