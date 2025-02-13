@@ -26,6 +26,7 @@ int main(void)
     gate1->setInput("B", true);
 
     // Set an initial input for gate2 that is independent.
+    gate2->setInput("A", false);
     gate2->setInput("B", false);
 
     gate3->setInput("A", true);
@@ -36,7 +37,7 @@ int main(void)
     gate1->setPosition(100, 100);
     gate3->setPosition(-100, -100);
     circuit->addGate(gate1);
-    // circuit->addGate(gate2);
+    circuit->addGate(gate2);
     circuit->addGate(gate3);
     // Main game loop
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key

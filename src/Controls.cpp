@@ -72,16 +72,17 @@ void Controls_Handle_Continous(std::shared_ptr<Circuit> circuit)
         Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
         circuit->active_wire.end = SnapToNearestGrid(pos);
     }
-   
-    circuit->selected_wires.pos.clear();
-    bool is_near_wire = CheckWireClicked(circuit, mousePosition);
+    
+    //hovering coloring
+    bool is_near_wire = CheckNearWire(circuit, mousePosition);
     if (is_near_wire)
     {
-        Rectangle rec = {mousePosition.x , mousePosition.y , 0 ,0};
+        Rectangle rec = { mousePosition.x , mousePosition.y , 0 ,0 };
         Vector2 pos = SnapToNearestGrid(rec);
-        circuit->selected_wires.pos.push_back(pos);
+        circuit->selected_wires.wire_hovering = pos;
         circuit->m_logger.info("catched new ");
     }
+   
 
 }
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
@@ -187,7 +188,11 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
         // if still not wiring
         if (!is_logic_selected)
         {
-            CheckWireClicked(circuit, mousePosition);
+            is_logic_selected = CheckNearWire(circuit, mousePosition);
+            if (is_logic_selected)
+            {
+
+            }
         }
     }
     else
@@ -284,7 +289,7 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
         connection.physCon.wires.push_back(pos);
     }
 }
-bool CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
@@ -295,11 +300,11 @@ bool CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosi
             Rectangle col = { 0,0,0,0 };
             if (std::abs(end.x - start.x) < SPACING_SIZE)
             {
-                col = { start.x , start.y , SPACING_SIZE, end.y - start.y};
+                col = { start.x - MOUSE_SELECTION_OFFSET, start.y  , SPACING_SIZE + MOUSE_SELECTION_OFFSET, std::abs(end.y - start.y)};
             }
             else if (std::abs(end.y - start.y) < SPACING_SIZE)
             {
-                col = { start.x , start.y , end.x - start.x, SPACING_SIZE };
+                col = { start.x , start.y + -MOUSE_SELECTION_OFFSET, std::abs(end.x - start.x), SPACING_SIZE + MOUSE_SELECTION_OFFSET };
             }
             if (CheckCollisionPointRec(mousePosition, col))
             {

@@ -82,7 +82,8 @@ struct ActiveWire
 };
 struct SelectedWires
 {
-    std::vector<Vector2> pos; 
+    std::vector<Vector2> selected_wires;
+    Vector2 wire_hovering; 
 };
 class Circuit
 {

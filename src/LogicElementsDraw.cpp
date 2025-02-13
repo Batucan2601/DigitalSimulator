@@ -163,9 +163,6 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
         {
             Vector2 start = circuit->connections[i].physCon.wires[j];
             Vector2 end = circuit->connections[i].physCon.wires[j+1];
-            //Vector2 straight_line  = Controls::Generate_straight_lines(start, end);
-            //DrawLine(start.x, start.y, straight_line.x, straight_line.y, circuit->connections[i].is_connected ? BLACK : RED);
-            //DrawLine(straight_line.x, straight_line.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
             DrawLine(start.x, start.y, end.x, end.y, circuit->connections[i].is_connected ? BLACK : RED);
             // draw their interactable points
             DrawInteractableWirePoints(start, end, BLUE);
@@ -173,18 +170,25 @@ void DrawCircuit(const std::shared_ptr<Circuit> circuit)
     }
     
     // color green the selected wires
-    for (size_t i = 0; i < circuit->selected_wires.pos.size(); i++)
+    for (size_t i = 0; i < circuit->selected_wires.selected_wires.size(); i++)
     {
-        Vector2 pos = circuit->selected_wires.pos[i];
+        Vector2 pos = circuit->selected_wires.selected_wires[i];
         DrawInteractableWirePoints(pos , pos , GREEN);
     }
+    DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
+
     // 3 - DrawActiveWire
     if (circuit->active_wire.is_visible)
     {
         Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start, circuit->active_wire.end);
         DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x, straight_line.y, GREEN);
         DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x, circuit->active_wire.end.y, GREEN);
+        
+        DrawInteractableWirePoints(circuit->active_wire.start, straight_line , GREEN );
+        DrawInteractableWirePoints(straight_line , circuit->active_wire.end, GREEN );
+    
     }
+
  
 }
 void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
