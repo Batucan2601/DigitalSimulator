@@ -16,6 +16,7 @@ std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
 static bool is_dragging = false;
 static bool is_logic_selected = false;
+static Vector2 mouse_pos;
 Vector2 offset;
 static Vector2 gate_initial_position;
 
@@ -65,20 +66,19 @@ Camera2D Controls_get_camera()
 
 void Controls_Handle_Continous(std::shared_ptr<Circuit> circuit)
 {
-    Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
+    mouse_pos = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
     if (is_logic_selected)
     {
-        Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
-        Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+        Rectangle pos = { mouse_pos.x, mouse_pos.y, 0, 0 };
         circuit->active_wire.end = SnapToNearestGrid(pos);
     }
     
     //hovering coloring
     Connection temp; 
-    bool is_near_wire = CheckNearWire(circuit, mousePosition, temp);
+    bool is_near_wire = CheckNearWire(circuit, mouse_pos, temp);
     if (is_near_wire)
     {
-        Rectangle rec = { mousePosition.x , mousePosition.y , 0 ,0 };
+        Rectangle rec = { mouse_pos.x , mouse_pos.y , 0 ,0 };
         Vector2 pos = SnapToNearestGrid(rec);
         circuit->selected_wires.wire_hovering = pos;
         circuit->m_logger.info("catched new ");
@@ -377,21 +377,20 @@ void HandleMouseRelease(std::shared_ptr<Circuit> circuit)
 
 void Controls_Mouse_click()
 {
-    Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseLeftClick(selected_circuit, mousePosition);
+        HandleMouseLeftClick(selected_circuit, mouse_pos);
     }
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
     {
-        HandleMouseRightClick(selected_circuit, mousePosition);
+        HandleMouseRightClick(selected_circuit, mouse_pos);
     }
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseDrag(selected_circuit , mousePosition);
+        HandleMouseDrag(selected_circuit , mouse_pos);
     }
 
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
