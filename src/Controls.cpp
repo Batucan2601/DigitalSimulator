@@ -189,9 +189,11 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
         if (!is_logic_selected)
         {
             is_logic_selected = CheckNearWire(circuit, mousePosition);
-            if (is_logic_selected)
+            if (is_logic_selected) //this section checks what happens when you touch a wire
             {
-
+                Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+                circuit->active_wire.start = SnapToNearestGrid(pos);
+                circuit->active_wire.is_visible = true;
             }
         }
     }
