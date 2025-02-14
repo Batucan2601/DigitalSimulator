@@ -41,10 +41,16 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
     EndMode2D();
     
     // this should be removed
-    /*rlImGuiBegin();
+    rlImGuiBegin();
+    ImGui::Begin("win1");
     float d;
 	ImGui::InputFloat("test", &d);
-    rlImGuiEnd();*/
+    ImGui::End();
+
+    ImGui::Begin("win2");
+	ImGui::InputFloat("test", &d);
+    ImGui::End();
+    rlImGuiEnd();
 }
 
 void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)
