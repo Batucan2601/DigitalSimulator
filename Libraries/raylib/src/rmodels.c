@@ -1087,6 +1087,7 @@ void DrawGrid(int slices, float spacing)
         }
     rlEnd();
 }
+
 void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, Color color)
 {
     rlBegin(RL_POINTS);
@@ -1110,6 +1111,7 @@ void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, C
     rlDisablePointSize();
     rlEnd();
 }
+
 // Draw a grid centered at (0, 0)
 void DrawGrid2D(int slices, float spacing , float pointSize)
 {

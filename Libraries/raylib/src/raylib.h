@@ -1553,6 +1553,7 @@ RLAPI void DrawGrid(int slices, float spacing);                                 
 RLAPI void DrawGrid2D(int slices, float spacing, float pointSize);                                       // Draw a 2D grid (centered at (0, 0))
 RLAPI void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, Color color);
 
+
 //------------------------------------------------------------------------------------
 // Model 3d Loading and Drawing Functions (Module: models)
 //------------------------------------------------------------------------------------
