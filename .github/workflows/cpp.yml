@@ -66,10 +66,18 @@ jobs:
       - name: Build Project (Windows)
         if: runner.os == 'Windows'
         run: |
+          if (Test-Path -Path "build") {
+            if ((Get-Item "build").PSIsContainer) {
+              Remove-Item -Recurse -Force "build"
+            } else {
+              Remove-Item -Force "build"
+            }
+          }
           mkdir build
           cd build
           cmake -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..
           cmake --build . --config Debug
+        shell: pwsh
 
       # # Step 5: Run Tests
       # - name: Run Tests
