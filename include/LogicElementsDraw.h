@@ -15,6 +15,7 @@ void DrawOr(const std::shared_ptr<LogicGate> gate);
 // Helper drawing functions
 void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate);
 void DrawClippedCircle(float cx, float cy, float radius, Color color = BLACK);
+void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color);
 }  // namespace LogicElementsDraw
 
 #endif

@@ -16,6 +16,7 @@ std::vector<std::shared_ptr<LogicGate>> selected_logic_gate(1);
 static Camera2D camera = {};
 static bool is_dragging = false;
 static bool is_logic_selected = false;
+static Vector2 mouse_pos;
 Vector2 offset;
 static Vector2 gate_initial_position;
 
@@ -65,12 +66,25 @@ Camera2D Controls_get_camera()
 
 void Controls_Handle_Continous(std::shared_ptr<Circuit> circuit)
 {
+    mouse_pos = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
     if (is_logic_selected)
     {
-        Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
-        Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+        Rectangle pos = { mouse_pos.x, mouse_pos.y, 0, 0 };
         circuit->active_wire.end = SnapToNearestGrid(pos);
     }
+    
+    //hovering coloring
+    Connection temp; 
+    bool is_near_wire = CheckNearWire(circuit, mouse_pos, temp);
+    if (is_near_wire)
+    {
+        Rectangle rec = { mouse_pos.x , mouse_pos.y , 0 ,0 };
+        Vector2 pos = SnapToNearestGrid(rec);
+        circuit->selected_wires.wire_hovering = pos;
+        circuit->m_logger.info("catched new ");
+    }
+   
+
 }
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit)
 {
@@ -140,8 +154,8 @@ Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, fl
 Vector2 SnapToNearestGrid(const Rectangle& rect)
 {
     Vector2 nearest_grid_point;
-    nearest_grid_point.x = std::round(rect.x / 25) * 25;
-    nearest_grid_point.y = std::round(rect.y / 25) * 25;
+    nearest_grid_point.x = std::round(rect.x / SPACING_SIZE) * SPACING_SIZE;
+    nearest_grid_point.y = std::round(rect.y / SPACING_SIZE) * SPACING_SIZE;
     // TODO: Highlight the nearest grid point
     return nearest_grid_point;
 }
@@ -175,7 +189,20 @@ void HandleMouseLeftClick(std::shared_ptr<Circuit> circuit, const Vector2& mouse
         // if still not wiring
         if (!is_logic_selected)
         {
-            CheckWireClicked(circuit, mousePosition);
+            Connection con;
+            is_logic_selected = CheckNearWire(circuit, mousePosition,con);
+            if (is_logic_selected) //this section checks what happens when you touch a wire
+            {
+                Rectangle pos = { mousePosition.x, mousePosition.y, 0, 0 };
+                circuit->active_wire.start = SnapToNearestGrid(pos);
+                circuit->active_wire.is_visible = true;
+                // get which line it belongs to
+                Connection new_connection;
+                new_connection.sourceGate = con.sourceGate;
+                new_connection.sourceLogic = con.sourceLogic;
+                new_connection.physCon.wires.push_back(mousePosition);
+                circuit->connections.push_back(new_connection);
+            }
         }
     }
     else
@@ -272,7 +299,7 @@ void CheckGatePartClicked(std::shared_ptr<Circuit> circuit,
         connection.physCon.wires.push_back(pos);
     }
 }
-void CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
+bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition, Connection& con)
 {
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
@@ -281,22 +308,22 @@ void CheckWireClicked(std::shared_ptr<Circuit> circuit, const Vector2& mousePosi
             Vector2 start = circuit->connections[i].physCon.wires[j];
             Vector2 end = circuit->connections[i].physCon.wires[j + 1];
             Rectangle col = { 0,0,0,0 };
-            if (std::abs(end.x - start.x) < 25)
+            if (std::abs(end.x - start.x) < SPACING_SIZE)
             {
-                col = { start.x , start.y , 25, end.y - start.y};
+                col = { start.x - MOUSE_SELECTION_OFFSET, start.y  , SPACING_SIZE + MOUSE_SELECTION_OFFSET, std::abs(end.y - start.y)};
             }
-            else if (std::abs(end.y - start.y) < 25)
+            else if (std::abs(end.y - start.y) < SPACING_SIZE)
             {
-                col = { start.x , start.y , end.x - start.x, 25};
+                col = { start.x , start.y + -MOUSE_SELECTION_OFFSET, std::abs(end.x - start.x), SPACING_SIZE + MOUSE_SELECTION_OFFSET };
             }
             if (CheckCollisionPointRec(mousePosition, col))
             {
-                std::cout << " touched line " << std::endl; 
-                //TODO implement what happens when we click a wire ? 
-                //discuss with your bro 
+                return true; 
+                con = circuit->connections[i];
             }
         }
     }
+    return false; 
 }
 void HandleMouseDrag(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition)
 {
@@ -350,21 +377,20 @@ void HandleMouseRelease(std::shared_ptr<Circuit> circuit)
 
 void Controls_Mouse_click()
 {
-    Vector2 mousePosition = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseLeftClick(selected_circuit, mousePosition);
+        HandleMouseLeftClick(selected_circuit, mouse_pos);
     }
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
     {
-        HandleMouseRightClick(selected_circuit, mousePosition);
+        HandleMouseRightClick(selected_circuit, mouse_pos);
     }
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        HandleMouseDrag(selected_circuit , mousePosition);
+        HandleMouseDrag(selected_circuit , mouse_pos);
     }
 
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
