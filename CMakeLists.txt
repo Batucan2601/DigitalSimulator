@@ -9,6 +9,9 @@ project(DIGITAL_SIM VERSION 1.0 LANGUAGES CXX)
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Set the project root directory (the directory where CMakeLists.txt is located)
+set(PROJECT_ROOT_DIR ${CMAKE_SOURCE_DIR})
+
 # set(CMAKE_CXX_EXTENSIONS OFF) // not needed
 set( IMGUI_FILES Libraries/imgui/imgui.cpp 
 Libraries/imgui/imgui_draw.cpp
@@ -16,14 +19,17 @@ Libraries/imgui/imgui_tables.cpp
 Libraries/imgui/imgui_widgets.cpp 
 #support for rlimgui 
 Libraries/rlImGui/rlImGui.cpp
-
 )
+
 add_library( ImGuiLib  ${IMGUI_FILES})
 target_include_directories(ImGuiLib PUBLIC Libraries/raylib/src)
 target_include_directories(ImGuiLib PUBLIC Libraries/imgui)
 target_include_directories(ImGuiLib PUBLIC Libraries/rlImGui)
 
 add_subdirectory(Libraries/raylib)
+
+# Define PROJECT_ROOT_DIR as a preprocessor macro for C++ code
+add_definitions(-DPROJECT_ROOT_DIR="${PROJECT_ROOT_DIR}")
 
 # Automatically find all source (.cpp) and header (.h) files in their respective directories
 file(GLOB_RECURSE MAIN_SRC CONFIGURE_DEPENDS src/*.cpp)
