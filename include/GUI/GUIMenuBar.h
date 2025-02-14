@@ -10,7 +10,6 @@ class MenuBase
 public:
 	virtual ~MenuBase() = default;
 	virtual void display() = 0;
-	// func_ptr action; this will be a function pointer but not sure how to handle
 };
 class MenuBarItem : public MenuBase
 {

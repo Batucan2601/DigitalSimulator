@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include "GUI/GUIStyle.h"
 #include "GUI/GUIMenuBar.h"
+#include <GUI/GUILogic.h>
 
 void RaylibHelper::Init(int screenWidth, int screenHeight, int targetFps, const char* title)
 {
@@ -47,6 +48,7 @@ void RaylibHelper::DrawGUI()
 {
     rlImGuiBegin();
     menuBar.draw();
+    GUILogic_draw();
     rlImGuiEnd();
 }
 void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)

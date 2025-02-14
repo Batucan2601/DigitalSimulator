@@ -9,8 +9,11 @@ MenuBar::MenuBar()
 	Menu fileMenu;
 	fileMenu.title = "File";
 
-	auto barItem = std::make_unique<MenuBarItem>();
-	barItem->title = "Open";
+	auto barItem = std::make_unique<MenuBarItem>("Open", []() {
+		//std::cout << "Open Clicked!" << std::endl;
+		;
+		});
+
 
 	fileMenu.items.push_back(std::move(barItem)); // FIX: Move unique_ptr
 

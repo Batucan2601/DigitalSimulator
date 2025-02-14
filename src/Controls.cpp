@@ -453,4 +453,9 @@ Vector2  Generate_straight_lines(const Vector2& start, const Vector2& end)
     return vec1;
 }
 
+std::vector<std::shared_ptr<LogicGate>> Controls_get_selected_logic()
+{
+    return selected_logic_gate;
+}
+
 }  // namespace Controls

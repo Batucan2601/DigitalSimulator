@@ -29,9 +29,9 @@ void HandleMouseRelease(std::shared_ptr<Circuit> circuit);
 void HandleLogicWiring(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition);
 // keyboard
 void Control_Keyboard_Event(std::shared_ptr<Circuit> circuit);
-Vector2  Generate_straight_lines(const Vector2& start, const Vector2& end);
-// TODO this does not belong here 
+Vector2  Generate_straight_lines(const Vector2& start, const Vector2& end); // TODO this does not belong here 
 bool CheckNearWire(std::shared_ptr<Circuit> circuit, const Vector2& mousePosition, Connection& con);
+std::vector<std::shared_ptr<LogicGate>> Controls_get_selected_logic();
 }  // namespace Controls
 
 #endif

@@ -34,7 +34,7 @@ class LogicGate
 
     Rectangle bd = {0, 0, 100, 100};  // bounding box
     GateType type;
-
+    std::string name;
   protected:
     std::unordered_map<std::string, bool> inputs;
     std::unordered_map<std::string, bool> outputs;
