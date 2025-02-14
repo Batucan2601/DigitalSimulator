@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:svg="http://www.w3.org/2000/svg"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="650.03778"
+   height="305.28732"
+   viewBox="0 0 609.41042 286.20687"
+   xml:space="preserve"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="logic_gates.svg">
+
+  <path
+     sodipodi:type="star"
+     style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="path1083"
+     sodipodi:sides="3"
+     sodipodi:cx="356.95129"
+     sodipodi:cy="46.528757"
+     sodipodi:r1="36.480579"
+     sodipodi:r2="18.24029"
+     sodipodi:arg1="2.0943951"
+     sodipodi:arg2="3.1415927"
+     inkscape:flatsided="false"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     d="m 338.711,78.121864 0,-31.59311 0,-31.593107 27.36044,15.796554 27.36043,15.796554 -27.36043,15.796555 z"
+     inkscape:transform-center-x="-9.1201436" />
+
+
+  <g
+     aria-label="XNOR"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="text2014">
+    <path
+       d="m 492.33038,261.96719 h 2.11914 l 3.62305,5.41993 3.64258,-5.41993 h 2.11914 l -4.6875,7.00196 5,7.57812 h -2.11914 l -4.10156,-6.20117 -4.13086,6.20117 h -2.12891 l 5.20508,-7.7832 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.9375px"
+       id="path1442" />
+    <path
+       d="m 506.74445,261.96719 h 2.65625 l 6.46484,12.19727 v -12.19727 h 1.91406 v 14.58008 h -2.65625 l -6.46484,-12.19726 v 12.19726 h -1.91406 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.9375px"
+       id="path1444" />
+    <path
+       d="m 527.62335,263.30508 q -2.14844,0 -3.41797,1.60157 -1.25976,1.60156 -1.25976,4.36523 0,2.75391 1.25976,4.35547 1.26953,1.60156 3.41797,1.60156 2.14844,0 3.39844,-1.60156 1.25977,-1.60156 1.25977,-4.35547 0,-2.76367 -1.25977,-4.36523 -1.25,-1.60157 -3.39844,-1.60157 z m 0,-1.60156 q 3.06641,0 4.90235,2.06055 1.83593,2.05078 1.83593,5.50781 0,3.44727 -1.83593,5.50781 -1.83594,2.05078 -4.90235,2.05078 -3.07617,0 -4.92187,-2.05078 -1.83594,-2.05078 -1.83594,-5.50781 0,-3.45703 1.83594,-5.50781 1.8457,-2.06055 4.92187,-2.06055 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.9375px"
+       id="path1446" />
+    <path
+       d="m 544.36163,269.71133 q 0.63477,0.21485 1.23047,0.91797 0.60547,0.70313 1.21094,1.9336 l 2.00195,3.98437 h -2.11914 l -1.86523,-3.74023 q -0.72266,-1.46485 -1.40625,-1.94336 -0.67383,-0.47852 -1.84571,-0.47852 h -2.14843 v 6.16211 h -1.97266 v -14.58008 h 4.45313 q 2.5,0 3.73046,1.04493 1.23047,1.04492 1.23047,3.15429 0,1.37696 -0.64453,2.28516 -0.63476,0.9082 -1.85547,1.25976 z m -4.9414,-6.12304 v 5.17578 h 2.48047 q 1.42578,0 2.14843,-0.6543 0.73243,-0.66406 0.73243,-1.94336 0,-1.27929 -0.73243,-1.92383 -0.72265,-0.65429 -2.14843,-0.65429 z"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.9375px"
+       id="path1448" />
+  </g>
+</svg>
