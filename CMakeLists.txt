@@ -10,8 +10,20 @@ project(DIGITAL_SIM VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set(CMAKE_CXX_EXTENSIONS OFF) // not needed
+set( IMGUI_FILES Libraries/imgui/imgui.cpp 
+Libraries/imgui/imgui_draw.cpp
+Libraries/imgui/imgui_tables.cpp 
+Libraries/imgui/imgui_widgets.cpp 
+#support for rlimgui 
+Libraries/rlImGui/rlImGui.cpp
 
-add_subdirectory(raylib)
+)
+add_library( ImGuiLib  ${IMGUI_FILES})
+target_include_directories(ImGuiLib PUBLIC Libraries/raylib/src)
+target_include_directories(ImGuiLib PUBLIC Libraries/imgui)
+target_include_directories(ImGuiLib PUBLIC Libraries/rlImGui)
+
+add_subdirectory(Libraries/raylib)
 
 # Automatically find all source (.cpp) and header (.h) files in their respective directories
 file(GLOB_RECURSE MAIN_SRC CONFIGURE_DEPENDS src/*.cpp)
@@ -25,6 +37,11 @@ add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
 # Link raylib to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ImGuiLib)
+
 
 # Include directories for headers
 target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC Libraries/imgui)
+target_include_directories(${PROJECT_NAME} PUBLIC Libraries/rlImGui)
+
