@@ -44,9 +44,6 @@ namespace LogicElements
             std::string file_path = "assets/gates/test_and.png"; // Use relative path
             std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
 
-            m_logger.info("PROJECT_ROOT_DIR: ", PROJECT_ROOT_DIR);
-            m_logger.info("Resolved full path: ", full_path);
-
             // Check if the file exists
             if (!std::filesystem::exists(full_path))
             {
@@ -103,9 +100,6 @@ namespace LogicElements
             std::string file_path = "assets/gates/test_or.png"; // Use relative path
             std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
 
-            m_logger.info("PROJECT_ROOT_DIR: ", PROJECT_ROOT_DIR);
-            m_logger.info("Resolved full path: ", full_path);
-
             // Check if the file exists
             if (!std::filesystem::exists(full_path))
             {
@@ -159,9 +153,6 @@ namespace LogicElements
             // Construct the full path for the image
             std::string file_path = "assets/gates/test_not.png"; // Use relative path
             std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            m_logger.info("PROJECT_ROOT_DIR: ", PROJECT_ROOT_DIR);
-            m_logger.info("Resolved full path: ", full_path);
 
             // Check if the file exists
             if (!std::filesystem::exists(full_path))
@@ -218,9 +209,6 @@ namespace LogicElements
             std::string file_path = "assets/gates/test_xor.png"; // Use relative path
             std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
 
-            m_logger.info("PROJECT_ROOT_DIR: ", PROJECT_ROOT_DIR);
-            m_logger.info("Resolved full path: ", full_path);
-
             // Check if the file exists
             if (!std::filesystem::exists(full_path))
             {
@@ -275,9 +263,6 @@ namespace LogicElements
             // Construct the full path for the image
             std::string file_path = "assets/gates/test_xand.png"; // Use relative path
             std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            m_logger.info("PROJECT_ROOT_DIR: ", PROJECT_ROOT_DIR);
-            m_logger.info("Resolved full path: ", full_path);
 
             // Check if the file exists
             if (!std::filesystem::exists(full_path))
