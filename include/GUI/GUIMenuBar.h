@@ -5,34 +5,34 @@
 #include <memory>
 #include <functional>
 
-class MenuBase
+class GUIBaseMenu
 {
 public:
-	virtual ~MenuBase() = default;
+	virtual ~GUIBaseMenu() = default;
 	virtual void display() = 0;
 };
-class MenuBarItem : public MenuBase
+class GUIBarItem : public GUIBaseMenu
 {
 public:
 	std::string title;
 	std::function<void()> action;
-	MenuBarItem(const std::string& title, std::function<void()> action = nullptr)
-	: title(title), action(action){}
+	GUIBarItem(const std::string &title, std::function<void()> action = nullptr)
+		: title(title), action(action) {}
 	void display() override;
 };
-class Menu : public MenuBase
+class GUIMenu : public GUIBaseMenu
 {
 public:
 	std::string title;
-	std::vector<std::unique_ptr<MenuBase>> items;
+	std::vector<std::unique_ptr<GUIBaseMenu>> items;
 	void display() override;
 };
-class MenuBar
+class GUIMenuBar
 {
 public:
-	MenuBar();
-	std::vector<Menu> menuList; 
-	void draw();
+	GUIMenuBar();
+	std::vector<GUIMenu> menuList;
+	void Draw();
 };
-extern MenuBar menuBar;
+extern GUIMenuBar guiMenuBar;
 #endif // GUIMENUBAR_H
