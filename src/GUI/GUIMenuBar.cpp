@@ -1,25 +1,23 @@
 #include "GUI/GUIMenuBar.h"
 #include <imgui.h>
 
-MenuBar menuBar;
+GUIMenuBar guiMenuBar;
 
-
-MenuBar::MenuBar()
+GUIMenuBar::GUIMenuBar()
 {
-	Menu fileMenu;
+	GUIMenu fileMenu;
 	fileMenu.title = "File";
 
-	auto barItem = std::make_unique<MenuBarItem>("Open", []() {
+	auto barItem = std::make_unique<GUIBarItem>("Open", []()
+												{
 		//std::cout << "Open Clicked!" << std::endl;
-		;
-		});
-
+		; });
 
 	fileMenu.items.push_back(std::move(barItem)); // FIX: Move unique_ptr
 
 	this->menuList.push_back(std::move(fileMenu));
 }
-void Menu::display()
+void GUIMenu::display()
 {
 	if (ImGui::BeginMenu(this->title.c_str()))
 	{
@@ -29,16 +27,15 @@ void Menu::display()
 		}
 		ImGui::EndMenu();
 	}
-	
 }
-void MenuBarItem::display()
+void GUIBarItem::display()
 {
 	if (ImGui::MenuItem(this->title.c_str()))
 	{
-		//call func
+		// call func
 	}
 }
-void MenuBar::draw()
+void GUIMenuBar::Draw()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -48,5 +45,4 @@ void MenuBar::draw()
 		}
 		ImGui::EndMainMenuBar();
 	}
-	
 }
