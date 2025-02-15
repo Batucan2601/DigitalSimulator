@@ -7,11 +7,14 @@ namespace LogicElementsDraw
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
         Rectangle bd = gate->bd; // Bounding box of the gate
-        float width = bd.width;
-        float height = bd.height;
+        float bd_width = bd.width;
+        float bd_height = bd.height;
 
-        Rectangle source = {0, 0, gate->m_texture.width, gate->m_texture.height};
-        Rectangle dest = {bd.x, bd.y, width, height};
+        float texture_width = gate->m_texture.width;
+        float texture_height = gate->m_texture.height;
+
+        Rectangle source = {0, 0, texture_width, texture_height};
+        Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
         Vector2 origin = {0, 0}; // Top-left corner as origin
 
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
