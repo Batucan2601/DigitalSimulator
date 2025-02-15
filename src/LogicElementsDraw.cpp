@@ -4,227 +4,126 @@
 namespace LogicElementsDraw
 {
 
-void DrawAnd(const std::shared_ptr<LogicGate> gate)
-{
-    Rectangle bd = gate->bd;
-    float width = bd.width;
-    float height = bd.height;
-
-    // Normalize the bounding box (bd.x, bd.y is the origin of the rectangle)
-    auto NormalizeX = [&](float x)
+    void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
-        return bd.x + x * width;
-    };
-    auto NormalizeY = [&](float y)
+        Rectangle bd = gate->bd; // Bounding box of the gate
+        float bd_width = bd.width;
+        float bd_height = bd.height;
+
+        float texture_width = gate->m_texture.width;
+        float texture_height = gate->m_texture.height;
+
+        Rectangle source = {0, 0, texture_width, texture_height};
+        Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
+        Vector2 origin = {0, 0}; // Top-left corner as origin
+
+        DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
+    }
+
+    void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit)
     {
-        return bd.y + y * height;
-    };
-    float leftMarginLowerX = 0.05f;
-    float leftMarginUpperX = 0.15f;
-    float botLeftLineY = 0.25f;
-    float topLeftLineY = 0.75f;
-
-    float topMarginUpperX = 0.5f;
-    float topMarginLowerX = 0.15f;
-    float topMarginY = 0.85f;
-    float botMarginY = 0.15f;
-
-    float rightMarginLowerX = 0.85f;
-    float rightMarginUpperX = 0.95f;
-    float topRightMarginY = 0.5f;
-
-    // Line 1: y = 0.35 {0.05 < x < 0.25}
-    // Bot Input Line
-    DrawLine(NormalizeX(leftMarginLowerX), NormalizeY(botLeftLineY), NormalizeX(leftMarginUpperX),
-             NormalizeY(botLeftLineY), BLACK);
-
-    // Line 2: y = 0.65 {0.05 < x < 0.25}
-    // Top Input Line
-    DrawLine(NormalizeX(leftMarginLowerX), NormalizeY(topLeftLineY), NormalizeX(leftMarginUpperX),
-             NormalizeY(topLeftLineY), BLACK);
-
-    // Line 3: x = 0.25 {0.15 < y < 0.85}
-    DrawLine(NormalizeX(leftMarginUpperX), NormalizeY(botMarginY), NormalizeX(leftMarginUpperX),
-             NormalizeY(topMarginY), BLACK);
-
-    // Line 4: y = 0.15 {0.25 < x < 0.6}
-    DrawLine(NormalizeX(topMarginLowerX), NormalizeY(botMarginY), NormalizeX(topMarginUpperX),
-             NormalizeY(botMarginY), BLACK);
-
-    // Line 5: y = 0.85 {0.25 < x < 0.6}
-    DrawLine(NormalizeX(topMarginLowerX), NormalizeY(topMarginY), NormalizeX(topMarginUpperX),
-             NormalizeY(topMarginY), BLACK);
-
-    // Line 5: y = 0.5 {0.85 < x < 0.95}
-    DrawLine(NormalizeX(rightMarginLowerX), NormalizeY(topRightMarginY),
-             NormalizeX(rightMarginUpperX), NormalizeY(topRightMarginY), BLACK);
-
-    // Circle 1: (x - 0.6)^2 + (y - 0.5)^2 = (0.35)^2 {x > 0.6}
-    // Normalize the circle's center and radius
-    float centerX = NormalizeX(0.5f);
-    float centerY = NormalizeY(0.5f);
-    float radius = 0.35f * width;  // Radius is scaled only by width
-    DrawClippedCircle(centerX, centerY, radius, BLACK);
-}
-
-void DrawOr(const std::shared_ptr<LogicGate> gate)
-{
-    Rectangle bd = gate->bd;
-    float width = bd.width;
-    float height = bd.height;
-
-    // Normalize the bounding box (bd.x, bd.y is the origin of the rectangle)
-    auto NormalizeX = [&](float x)
-    {
-        return bd.x + x * width;
-    };
-    auto NormalizeY = [&](float y)
-    {
-        return bd.y + y * height;
-    };
-    float leftMarginLowerX = 0.05f;
-    float leftMarginUpperX = 0.15f;
-    float botLeftLineY = 0.25f;
-    float topLeftLineY = 0.75f;
-
-    float topMarginUpperX = 0.5f;
-    float topMarginLowerX = 0.15f;
-    float topMarginY = 0.85f;
-    float botMarginY = 0.15f;
-
-    float rightMarginLowerX = 0.85f;
-    float rightMarginUpperX = 0.95f;
-    float topRightMarginY = 0.5f;
-
-    // Line 1: y = 0.35 {0.05 < x < 0.25}
-    // Bot Input Line
-    DrawLine(NormalizeX(leftMarginLowerX), NormalizeY(botLeftLineY), NormalizeX(leftMarginUpperX),
-             NormalizeY(botLeftLineY), RED);
-
-    // Line 2: y = 0.65 {0.05 < x < 0.25}
-    // Top Input Line
-    DrawLine(NormalizeX(leftMarginLowerX), NormalizeY(topLeftLineY), NormalizeX(leftMarginUpperX),
-             NormalizeY(topLeftLineY), RED);
-
-    // Line 3: x = 0.25 {0.15 < y < 0.85}
-    DrawLine(NormalizeX(leftMarginUpperX), NormalizeY(botMarginY), NormalizeX(leftMarginUpperX),
-             NormalizeY(topMarginY), RED);
-
-    // Line 4: y = 0.15 {0.25 < x < 0.6}
-    DrawLine(NormalizeX(topMarginLowerX), NormalizeY(botMarginY), NormalizeX(topMarginUpperX),
-             NormalizeY(botMarginY), RED);
-
-    // Line 5: y = 0.85 {0.25 < x < 0.6}
-    DrawLine(NormalizeX(topMarginLowerX), NormalizeY(topMarginY), NormalizeX(topMarginUpperX),
-             NormalizeY(topMarginY), RED);
-
-    // Line 5: y = 0.5 {0.85 < x < 0.95}
-    DrawLine(NormalizeX(rightMarginLowerX), NormalizeY(topRightMarginY),
-             NormalizeX(rightMarginUpperX), NormalizeY(topRightMarginY), BLACK);
-
-    // Circle 1: (x - 0.6)^2 + (y - 0.5)^2 = (0.35)^2 {x > 0.6}
-    // Normalize the circle's center and radius
-    float centerX = NormalizeX(0.5f);
-    float centerY = NormalizeY(0.5f);
-    float radius = 0.35f * width;  // Radius is scaled only by width
-    DrawClippedCircle(centerX, centerY, radius, RED);
-}
-
-void DrawCircuit(const std::shared_ptr<Circuit> circuit)
-{
-    // 1 - Draw gates
-    for (size_t i = 0; i < circuit->gates.size(); i++)
-    {
-        const auto& gate = circuit->gates[i];  // Access the gate
+        // 1 - Draw gates
+        for (size_t i = 0; i < circuit->gates.size(); i++)
+        {
+            const auto &gate = circuit->gates[i]; // Access the gate
 
 #ifdef IS_DRAWING_BOUNDARY_BOX
-        DrawBoundaryBox(gate);
+            DrawBoundaryBox(gate);
 #endif
 
-        if (gate->type == GateType::AND)
-        {
-            DrawAnd(gate);
+            DrawGateElement(gate);
         }
-        else if (gate->type == GateType::OR)
+
+        // 2 - Draw connections
+        for (size_t i = 0; i < circuit->connections.size(); i++)
         {
-            DrawOr(gate);
+            for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+            {
+                Vector2 start = circuit->connections[i].physCon.wires[j];
+                Vector2 end = circuit->connections[i].physCon.wires[j + 1];
+                // DrawLine();
+                DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
+                // draw their interactable points
+                DrawInteractableWirePoints(start, end, BLUE);
+            }
+        }
+
+        // color green the selected wires
+        for (size_t i = 0; i < circuit->selected_wires.selected_wires.size(); i++)
+        {
+            Vector2 pos = circuit->selected_wires.selected_wires[i];
+            DrawInteractableWirePoints(pos, pos, GREEN);
+        }
+        DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
+
+        // 3 - DrawActiveWire
+        if (circuit->active_wire.is_visible)
+        {
+            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start, circuit->active_wire.end);
+            DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x, straight_line.y, GREEN);
+            DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x, circuit->active_wire.end.y, GREEN);
+
+            DrawInteractableWirePoints(circuit->active_wire.start, straight_line, GREEN);
+            DrawInteractableWirePoints(straight_line, circuit->active_wire.end, GREEN);
+        }
+    }
+    void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
+    {
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, SPACING_SIZE, color);
+    }
+    void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
+    {
+        Color color;
+        if (gate->type == LogicElements::GateType::AND)
+        {
+            color = GREEN;
+        }
+        else if (gate->type == LogicElements::GateType::OR)
+        {
+            color = BLUE;
+        }
+        else if (gate->type == LogicElements::GateType::NOT)
+        {
+            color = RED;
+        }
+        else if (gate->type == LogicElements::GateType::XOR)
+        {
+            color = YELLOW;
+        }
+        else if (gate->type == LogicElements::GateType::XOR)
+        {
+            color = ORANGE;
         }
         else
         {
-            // Log runtime error
-            DrawText("Error: unknown gate type", 10, 10 + (int)i * 20, 20, RED);
+            color = BLACK;
         }
-    }
 
-    // 2 - Draw connections
-    for (size_t i = 0; i < circuit->connections.size(); i++)
+        DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,
+                           color);
+    }
+    void DrawClippedCircle(float cx, float cy, float radius, Color color)
     {
-        for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+        int segments = 720; // Number of segments for smoothness
+        float angleStep = 2 * PI / segments;
+
+        for (int i = 0; i < segments; i++)
         {
-            Vector2 start = circuit->connections[i].physCon.wires[j];
-            Vector2 end = circuit->connections[i].physCon.wires[j+1];
-            //DrawLine();
-            DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
-            // draw their interactable points
-            DrawInteractableWirePoints(start, end, BLUE);
+            float angle1 = i * angleStep;
+            float angle2 = (i + 1) * angleStep;
+
+            // Circle points
+            float x1 = cx + cos(angle1) * radius;
+            float y1 = cy + sin(angle1) * radius;
+            float x2 = cx + cos(angle2) * radius;
+            float y2 = cy + sin(angle2) * radius;
+
+            // Clip the circle to x > centerX (0.6 normalized)
+            if (x1 >= cx && x2 >= cx)
+            {
+                DrawLineV(Vector2{x1, y1}, Vector2{x2, y2}, color);
+            }
         }
     }
-    
-    // color green the selected wires
-    for (size_t i = 0; i < circuit->selected_wires.selected_wires.size(); i++)
-    {
-        Vector2 pos = circuit->selected_wires.selected_wires[i];
-        DrawInteractableWirePoints(pos , pos , GREEN);
-    }
-    DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
 
-    // 3 - DrawActiveWire
-    if (circuit->active_wire.is_visible)
-    {
-        Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start, circuit->active_wire.end);
-        DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x, straight_line.y, GREEN);
-        DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x, circuit->active_wire.end.y, GREEN);
-        
-        DrawInteractableWirePoints(circuit->active_wire.start, straight_line , GREEN );
-        DrawInteractableWirePoints(straight_line , circuit->active_wire.end, GREEN );
-    
-    }
-
- 
-}
-void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
-{
-    DrawPointAcross(start, end , WIRE_INTERACT_POINT_SIZE, SPACING_SIZE , color);
-    
-}
-void DrawBoundaryBox(const std::shared_ptr<LogicGate> gate)
-{
-    DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,
-                       gate->type == GateType::AND ? GREEN : BLUE);
-}
-
-void DrawClippedCircle(float cx, float cy, float radius, Color color)
-{
-    int segments = 720;  // Number of segments for smoothness
-    float angleStep = 2 * PI / segments;
-
-    for (int i = 0; i < segments; i++)
-    {
-        float angle1 = i * angleStep;
-        float angle2 = (i + 1) * angleStep;
-
-        // Circle points
-        float x1 = cx + cos(angle1) * radius;
-        float y1 = cy + sin(angle1) * radius;
-        float x2 = cx + cos(angle2) * radius;
-        float y2 = cy + sin(angle2) * radius;
-
-        // Clip the circle to x > centerX (0.6 normalized)
-        if (x1 >= cx && x2 >= cx)
-        {
-            DrawLineV(Vector2{x1, y1}, Vector2{x2, y2}, color);
-        }
-    }
-}
-
-}  // namespace LogicElementsDraw
+} // namespace LogicElementsDraw
