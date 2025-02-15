@@ -3,7 +3,8 @@
 #include <imgui.h>
 void GUILogic_draw()
 {
-	std::vector<std::shared_ptr<LogicGate>> selected_logics = Controls::Controls_get_selected_logic();
+	/*
+	std::vector<std::shared_ptr<LogicElements::LogicGate>> selected_logics = Controls::Controls_get_selected_logic();
 	for (size_t i = 0; i <selected_logics.size() ; i++)
 	{
 		if (selected_logics[i])
@@ -19,5 +20,5 @@ void GUILogic_draw()
 			ImGui::End();
 		}
 
-	}
+	} */
 }

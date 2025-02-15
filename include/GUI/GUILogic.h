@@ -6,7 +6,7 @@
 //not used yet early prototype
 struct GUILogicWindow
 {
-	std::shared_ptr<LogicGate> selected;
+	std::shared_ptr<LogicElements::LogicGate> selected;
 	int no_of_output; 
 	int no_of_input; 
 };
