@@ -7,6 +7,7 @@
 
 int main(void)
 {
+    SetTraceLogLevel(LOG_NONE); // Disable raylib logging
     // Initialization
     const unsigned int screenWidth = 600;
     const unsigned int screenHeight = 600;
