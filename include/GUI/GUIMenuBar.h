@@ -11,7 +11,7 @@ class GUIBaseMenu
 public:
 	virtual ~GUIBaseMenu() = default;
 	virtual void display() = 0;
-	std::map<std::string, std::unique_ptr<GUIBaseMenu>> items;
+	std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> items;
 	bool is_menu;
 	std::string title;
 };
@@ -36,7 +36,7 @@ class GUIMenuBar
 {
 public:
 	GUIMenuBar();
-	std::map< std::string,std::unique_ptr<GUIBaseMenu>> menuList;
+	std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> menuList;
 	void Draw();
 };
 extern GUIMenuBar guiMenuBar;

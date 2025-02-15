@@ -4,60 +4,54 @@
 
 GUIMenuBar guiMenuBar;
 
-static void createMenuItem(std::string name, bool is_menu , std::function<void()> action)
+static void createMenuItem(std::string path, bool is_menu , std::function<void()> action)
 {
-	if( name.find("/") == std::string::npos ) // at root
-	{
-		auto menu = std::make_unique<GUIMenu>(); 
-		menu->title = name;
-		guiMenuBar.menuList[name] = std::move(menu);
-		return; 
-	}
-	//else
-	std::vector<std::string> tokens;
-	std::stringstream ss(name);
-	std::string token;
-	// Split string by '/' delimiter.
-	while (std::getline(ss, token, '/')) {
-		tokens.push_back(token);
-	}
-	std::map<std::string, std::unique_ptr<GUIBaseMenu>>* currentMap = &guiMenuBar.menuList;
-	// Iterate through tokens.
-	// For each token except the last, ensure a GUIMenu exists.
-	for (size_t i = 0; i < tokens.size(); ++i) {
-		const std::string& name = tokens[i];
-		// Last token: create the final item.
-		if (i == tokens.size() - 1) {
-			// If an item with this name does not already exist, create it.
-			if (currentMap->find(name) == currentMap->end()) {
-				if (!is_menu) {
-					// Create a GUIBarItem.
-					auto barItem = std::make_unique<GUIBarItem>(name);
-					barItem->action = action;
-					(*currentMap)[name] = std::move(barItem);
-				}
-				else {
-					// Create a GUIMenu.
-					(*currentMap)[name] = std::make_unique<GUIMenu>(name);
-				}
-			}
-			else {
-				// Optionally update the existing item if needed.
-				// For this example, we do nothing.
-			}
-		}
-		else {
-			// For intermediate tokens, we need to ensure there's a GUIMenu.
-			if (currentMap->find(name) == currentMap->end()) {
-				// Create a new submenu (GUIMenu) if it doesn't exist.
-				(*currentMap)[name] = std::make_unique<GUIMenu>(name);
-			}
-			// Move the current map pointer to the items of the submenu.
-			GUIBaseMenu* base = (*currentMap)[name].get();
-			// Make sure that base is actually a menu (it should be).
-			currentMap = &(base->items);
-		}
-	}
+    std::vector<std::string> tokens;
+    std::stringstream ss(path);
+    std::string token;
+    while (std::getline(ss, token, '/')) {
+        if (!token.empty())
+            tokens.push_back(token);
+    }
+
+    if (tokens.empty()) return;
+
+    // Start with the top-level menu bar.
+    auto* currentItems = &guiMenuBar.menuList;
+
+    for (size_t i = 0; i < tokens.size(); ++i) {
+        const std::string& name = tokens[i];
+        // Find the item in the current vector.
+        auto it = std::find_if(currentItems->begin(), currentItems->end(),
+            [&name](const auto& pair) { return pair.first == name; });
+
+        // Last token: create the final item.
+        if (i == tokens.size() - 1) {
+            if (it == currentItems->end()) {
+                if (!is_menu) {
+                    auto barItem = std::make_unique<GUIBarItem>(name, action);
+                    currentItems->push_back({ name, std::move(barItem) });
+                }
+                else {
+                    currentItems->push_back({ name, std::make_unique<GUIMenu>(name) });
+                }
+            }
+            // Optionally, update an existing item if needed.
+        }
+        else {
+            // For intermediate tokens, ensure there's a GUIMenu.
+            if (it == currentItems->end()) {
+                // Create a new submenu if it doesn't exist.
+                currentItems->push_back({ name, std::make_unique<GUIMenu>(name) });
+                // Now find it.
+                it = std::find_if(currentItems->begin(), currentItems->end(),
+                    [&name](const auto& pair) { return pair.first == name; });
+            }
+            // Move currentItems pointer to the submenu's items.
+            GUIBaseMenu* base = it->second.get();
+            currentItems = &(base->items);
+        }
+    }
 }
 static void createBarItem(std::string name)
 {
@@ -75,6 +69,9 @@ GUIMenuBar::GUIMenuBar()
 	createMenuItem("File/Open" , false , []()
 		{
 	; });
+	createMenuItem("File/Save", false, []()
+		{
+			; });
 	createMenuItem("File/Exit", false, []()
 		{
 			exit(1);
