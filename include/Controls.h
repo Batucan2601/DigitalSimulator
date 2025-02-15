@@ -18,6 +18,7 @@ namespace Controls
     // mouse
     void Controls_Mouse_click();
     void Controls_Handle_Continous(std::shared_ptr<CircuitElements::Circuit> circuit);
+
     void HandleGateSelection(const std::shared_ptr<LogicElements::LogicGate> &gate, const Vector2 &mousePosition);
     void CheckGatePartClicked(std::shared_ptr<CircuitElements::Circuit> circuit, const std::shared_ptr<LogicElements::LogicGate> &gate, const Vector2 &mousePosition,
                               CircuitElements::Connection &connection);

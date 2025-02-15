@@ -4,6 +4,7 @@
 #include "raylib.h"
 
 #include <functional>
+#include "GUI/GUIManager.h"
 
 class RaylibHelper
 {
@@ -13,9 +14,13 @@ class RaylibHelper
     static void BeginFrame();
     static void EndFrame();
     static void Draw2D(const Camera2D& camera, const std::function<void()>& drawFn);
+    static void DrawGUI();
     static void DrawTextOverlay(const char* text, int x = 10, int y = 10, int fontSize = 20,
                                 Color color = DARKGRAY);
     static void Close();
+    private:
+  static GUIManager imguiManager; // Manages ImGui logic
+
 };
 
 #endif  // RAYLIBHELPER_H

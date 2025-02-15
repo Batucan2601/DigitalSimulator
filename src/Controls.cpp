@@ -141,12 +141,13 @@ namespace Controls
     }
 
     Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,
-                              float yEndRatio)
+     float yEndRatio)
     {
         float xLower = rect.x + rect.width * xStartRatio;
         float xUpper = rect.x + rect.width * xEndRatio;
         float yLower = rect.y + rect.height * yStartRatio;
         float yUpper = rect.y + rect.height * yEndRatio;
+
         return {xLower, yLower, xUpper - xLower, yUpper - yLower};
     }
     Vector2 SnapToNearestGrid(const Rectangle &rect)
@@ -436,7 +437,6 @@ namespace Controls
         }
         return false; // No overlap detected, grid is not occupied
     }
-
     Vector2 Generate_straight_lines(const Vector2 &start, const Vector2 &end)
     {
         Vector2 vec1 = {start.x, start.y};
@@ -446,5 +446,4 @@ namespace Controls
         }
         return vec1;
     }
-
 } // namespace Controls

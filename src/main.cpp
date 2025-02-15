@@ -62,11 +62,8 @@ int main(void)
                                  DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
                                  // You can draw additional world elements here.
                              });
-        // Draw UI elements that remain in screen space
-        RaylibHelper::DrawTextOverlay("Drag with the left mouse button and scroll to zoom");
-        RaylibHelper::DrawTextOverlay("Use the keyboard arrows after selecting a gate to move it",
-                                      10, 30, 20, RED);
 
+        RaylibHelper::DrawGUI();
         RaylibHelper::EndFrame();
     }
 

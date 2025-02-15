@@ -13,6 +13,7 @@
 
 namespace LogicElements
 {
+
   enum class GateType
   {
     AND,
@@ -100,10 +101,12 @@ namespace LogicElements
     };
 
   }
+
 }
 
 namespace CircuitElements
 {
+
   struct PhysicalConnection
   {
     std::vector<Vector2> wires;
@@ -148,3 +151,4 @@ namespace CircuitElements
 }
 
 #endif // LOGIC_ELEMENTS_H
+
