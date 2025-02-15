@@ -9,8 +9,7 @@ void RaylibHelper::Init(int screenWidth, int screenHeight, int targetFps, const 
 {
     InitWindow(screenWidth, screenHeight, title);
     SetTargetFPS(targetFps);
-    rlImGuiSetup(true); 	// sets up ImGui with ether a dark or light default theme
-    GUIStyle_init();
+    imguiManager.Init();
 }
 /* TODO combine imgui drawing 
 void RaylibHelper::BeginFrame()
@@ -46,10 +45,7 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
 
 void RaylibHelper::DrawGUI()
 {
-    rlImGuiBegin();
-    menuBar.draw();
-    GUILogic_draw();
-    rlImGuiEnd();
+    imguiManager.Draw();
 }
 void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)
 {
@@ -58,5 +54,6 @@ void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize,
 
 void RaylibHelper::Close()
 {
+    imguiManager.Cleanup();
     CloseWindow();
 }
