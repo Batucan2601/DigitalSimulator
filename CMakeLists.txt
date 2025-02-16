@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PROJECT_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
 # set(CMAKE_CXX_EXTENSIONS OFF) // not needed
-set( IMGUI_FILES Libraries/imgui/imgui.cpp 
+set(IMGUI_FILES Libraries/imgui/imgui.cpp 
 Libraries/imgui/imgui_draw.cpp
 Libraries/imgui/imgui_tables.cpp 
 Libraries/imgui/imgui_widgets.cpp 
@@ -48,6 +48,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ImGuiLib)
 
 # Include directories for headers
 target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC include/LogicElements)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/imgui)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/rlImGui)
 
