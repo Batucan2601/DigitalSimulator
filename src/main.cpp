@@ -4,7 +4,7 @@
 #include "common_types.h"
 #include "raylib.h"
 #include "raylibHelper.h"
-
+#include <LogicElements/include.h>
 int main(void)
 {
     SetTraceLogLevel(LOG_NONE); // Disable raylib logging
