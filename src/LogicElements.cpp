@@ -2,6 +2,26 @@
 
 namespace LogicElements
 {
+    std::map<GateType, Texture> logicElementTextures;
+    void init_logicTextures()
+    {
+        
+        std::string file_path = "assets/gates/test_and.png"; // Use relative path
+        std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::AND] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_or.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::OR] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_not.png"; // Use relative paths
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::NOT] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_xand.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XOR] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_xor.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XAND] = LoadTexture(full_path.c_str());
+    }
     LogicGate::~LogicGate()
     {
         m_logger.info("LogicGate destroyed.");

@@ -10,10 +10,10 @@
 #include <unordered_map>
 #include <vector>
 #include <filesystem>
+#include <map>
 
 namespace LogicElements
 {
-
   enum class GateType
   {
     AND,
@@ -22,7 +22,8 @@ namespace LogicElements
     XOR,
     XAND
   };
-
+  extern std::map<GateType, Texture> logicElementTextures;
+  void init_logicTextures();
   class LogicGate
   {
   public:
