@@ -50,7 +50,6 @@ namespace LogicElements
                 m_logger.error("File does not exist: ", full_path);
                 throw std::runtime_error("Failed to find file: " + full_path);
             }
-
             // Load image and texture
             Image image = LoadImage(full_path.c_str());
             if (!image.data)

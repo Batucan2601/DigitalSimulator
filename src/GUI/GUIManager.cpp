@@ -4,6 +4,7 @@
 #include "GUI/GUILogic.h"
 #include <rlImGui.h>
 #include <imgui.h>
+#include <GUI/GUITools.h>
 
 void GUIManager::Init()
 {
@@ -18,6 +19,7 @@ void GUIManager::Draw()
     // Draw individual components
     // GUIMenuBar::Draw();
     guiMenuBar.Draw();
+    GUITools_Display();
     // GUILogic::Draw();
 
     rlImGuiEnd();

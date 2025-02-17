@@ -1,4 +1,5 @@
 #include "GUI/GUIMenuBar.h"
+#include "GUI/GUITools.h"
 #include <imgui.h>
 #include <sstream>
 
@@ -76,7 +77,12 @@ GUIMenuBar::GUIMenuBar()
 		{
 			exit(1);
 	; });
-	
+    createMenuItem("Tools", true, nullptr);
+    createMenuItem("Tools/BasicLogic", false, []()
+    {
+            GUITools_BasicLogicDisplay();
+    });
+
 }
 void GUIMenu::display()
 {

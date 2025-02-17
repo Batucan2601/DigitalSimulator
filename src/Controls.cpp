@@ -315,8 +315,8 @@ namespace Controls
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {
-                    return true;
                     con = circuit->connections[i];
+                    return true;
                 }
             }
         }

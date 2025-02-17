@@ -141,6 +141,7 @@ namespace CircuitElements
     void evaluate();
     ClassLogger m_logger;
     std::vector<std::shared_ptr<LogicElements::LogicGate>> gates;
+    //std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
     std::vector<Connection> connections;
     // TODO
     // this might be moved to a better data structure
