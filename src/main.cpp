@@ -50,6 +50,7 @@ int main(void)
         // Draw
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
+        circuit->evaluate();
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
                              [&circuit]()
                              {

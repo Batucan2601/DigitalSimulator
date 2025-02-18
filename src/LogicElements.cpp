@@ -205,6 +205,7 @@ namespace LogicElements
         InputGate::InputGate(std::string& logger_name) : LogicGate(logger_name)
         {
             m_texture = logicElementTextures[LogicElements::GateType::NOT];
+            InputGate::setInput("Out", 1);
         }
         void InputGate::evaluate()
         {
@@ -213,11 +214,11 @@ namespace LogicElements
 
         void InputGate::setInput(const std::string& name, bool value) 
         {
-            outputs["OUT"] = value;
+            outputs["Out"] = value;
         }
         bool InputGate::getOutput(const std::string& name) const
         {
-            return outputs.at("OUT");
+            return outputs.at("Out");
         }
     }
 }
@@ -259,7 +260,10 @@ namespace CircuitElements
             for (auto &conn : connections)
             {
                 bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
-                conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                if (conn.targetLogic != "")
+                {
+                    conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                }
             }
             iterations++;
         }
@@ -268,6 +272,8 @@ namespace CircuitElements
             // Handle infinite loop case
             throw std::runtime_error("Circuit evaluation did not stabilize.");
         }
-    }
+    } 
 
+
+    
 }

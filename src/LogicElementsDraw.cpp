@@ -42,7 +42,15 @@ namespace LogicElementsDraw
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 // DrawLine();
-                DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
+                if (circuit->connections[i].sourceGate->getOutput("Out"))
+                {
+                    DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? GREEN: RED);
+                }
+                else
+                {
+                    DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
+                }
+
                 // draw their interactable points
                 DrawInteractableWirePoints(start, end, BLUE);
             }
