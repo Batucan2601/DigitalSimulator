@@ -100,7 +100,7 @@ namespace Controls
             circuit->is_GUIdragdragging = false;
 
             //add the new circuit
-            std::string new_gate = "and_gate_logger";
+            std::string new_gate = "or_gate_logger";
             switch (GUITools::dragDrop.gateType)
             {
             case(LogicElements::GateType::AND): circuit->addGate(std::make_shared<LogicElements::Gates::AndGate>(new_gate)); break;

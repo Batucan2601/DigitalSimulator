@@ -38,19 +38,13 @@ namespace GUITools
             dragDrop.gateType = type;
             dragDrop.state = DragDropState::DRAGGING;
         }
-        if (ImGui::IsMouseDragging(0))  // Only draw when the mouse is dragging.
-        {
-           
-        }
         if (dragDrop.state == DragDropState::DROPPED)
         {
             dragDrop.state == DragDropState::IDLE;
-            //dragDrop.gateType = LogicElements::GateType::NONE;
         }
         if (!ImGui::IsMouseDragging(0) && dragDrop.state == DragDropState::DRAGGING)
         {
             dragDrop.state = DragDropState::DROPPED;
-            dragDrop.gateType = type;
         }
     }
     void GUITools_Display()
