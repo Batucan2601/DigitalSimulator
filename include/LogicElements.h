@@ -16,6 +16,7 @@ namespace LogicElements
 {
   enum class GateType
   {
+    NONE,
     AND,
     OR,
     NOT,
@@ -148,6 +149,9 @@ namespace CircuitElements
     // this might be moved to a better data structure
     ActiveWire active_wire;
     SelectedWires selected_wires;
+
+    bool is_GUIdragdropped = false; 
+    bool is_GUIdragdragging = false; 
   };
 
 }

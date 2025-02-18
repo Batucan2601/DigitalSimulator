@@ -80,7 +80,7 @@ GUIMenuBar::GUIMenuBar()
     createMenuItem("Tools", true, nullptr);
     createMenuItem("Tools/BasicLogic", false, []()
     {
-            GUITools_BasicLogicDisplay();
+            GUITools::GUITools_BasicLogicDisplay();
     });
 
 }

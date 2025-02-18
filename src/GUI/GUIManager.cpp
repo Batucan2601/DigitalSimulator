@@ -19,7 +19,7 @@ void GUIManager::Draw()
     // Draw individual components
     // GUIMenuBar::Draw();
     guiMenuBar.Draw();
-    GUITools_Display();
+    GUITools::GUITools_Display();
     // GUILogic::Draw();
 
     rlImGuiEnd();

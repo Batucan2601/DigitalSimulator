@@ -66,6 +66,16 @@ namespace LogicElementsDraw
             DrawInteractableWirePoints(circuit->active_wire.start, straight_line, GREEN);
             DrawInteractableWirePoints(straight_line, circuit->active_wire.end, GREEN);
         }
+
+        if (circuit->is_GUIdragdragging)
+        {
+            DrawRectangleLines(circuit->selected_wires.wire_hovering.x , circuit->selected_wires.wire_hovering.y ,
+            SLICE_SIZE , SLICE_SIZE , BLUE);
+        }
+        if (circuit->is_GUIdragdropped)
+        {
+            circuit->is_GUIdragdropped = false;
+        }
     }
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {

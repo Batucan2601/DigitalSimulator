@@ -3,74 +3,82 @@
 #include <imgui.h>
 #include <raylib.h>
 
-// Global or static variables for the UI state and texture.
-bool is_BLD_shown = false; // Basic Logic Display flag.
-static Texture image = { 0 };  // Initialize to zero.
-static bool textureLoaded = false;
-
-// UI state variables (persistent across frames).
-static bool enableFeature = false;
-static float parameter = 0.0f;
-
-static void GUITools_BasicLogicDisplay_draw();
-
-void GUITools_BasicLogicDisplay()
+namespace GUITools
 {
-    is_BLD_shown = true;
-}
-void GUITools_DragDrop(LogicElements::GateType type, std::string type_name)
-{
+    // Global or static variables for the UI state and texture.
+    bool is_BLD_shown = false; // Basic Logic Display flag.
+    // UI state variables (persistent across frames).
+    static void GUITools_BasicLogicDisplay_draw();
+    GUIToolsDragDrop dragDrop = { DragDropState::IDLE , LogicElements::GateType::NONE };
+    void GUITools_BasicLogicDisplay()
+    {
+        is_BLD_shown = true;
+    }
+    void GUITools_DragDrop(LogicElements::GateType type, std::string type_name)
+    {
         // Make sure the texture is loaded before using it.
         // Properly cast the texture ID for ImGui.
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+
         if (ImGui::Button(type_name.c_str()))
         {
             // Button action.
         }
-        // Begin the drag source from the image.
+        
         if (ImGui::BeginDragDropSource())
         {
-            ImGui::SetDragDropPayload("IMAGE_DRAG", nullptr, 0);
+            const char* payload = "Hello, ImGui!";
+            ImGui::SetDragDropPayload("IMAGE_DRAG", payload, strlen(payload) + 1);
 
             // Show the image as a preview while dragging.
             ImGui::Image((ImTextureID)&LogicElements::logicElementTextures[type], ImVec2(100, 100));
             ImGui::Text("Dragging Image");
             ImGui::EndDragDropSource();
+
+            dragDrop.gateType = type;
+            dragDrop.state = DragDropState::DRAGGING;
         }
-        // Drop target: This area will accept the dragged item.
-        ImGui::Text("Drop Here to create something:");
-        ImGui::BeginChild("DropArea", ImVec2(200, 100), true);
+        if (ImGui::IsMouseDragging(0))  // Only draw when the mouse is dragging.
         {
-            if (ImGui::BeginDragDropTarget())
-            {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("IMAGE_DRAG"))
-                {
-                    ImGui::Text("Dragging 'Drag Me'");
-                }
-                ImGui::EndDragDropTarget();
-            }
+           
         }
-        ImGui::EndChild();
-
-}
-void GUITools_Display()
-{
-    GUITools_BasicLogicDisplay_draw();
-}
-static void GUITools_BasicLogicDisplay_draw()
-{
-    if (!is_BLD_shown)
+        if (dragDrop.state == DragDropState::DROPPED)
+        {
+            dragDrop.state == DragDropState::IDLE;
+            //dragDrop.gateType = LogicElements::GateType::NONE;
+        }
+        if (!ImGui::IsMouseDragging(0) && dragDrop.state == DragDropState::DRAGGING)
+        {
+            dragDrop.state = DragDropState::DROPPED;
+            dragDrop.gateType = type;
+        }
+    }
+    void GUITools_Display()
     {
-        return;
+        GUITools_BasicLogicDisplay_draw();
+    }
+    static void GUITools_BasicLogicDisplay_draw()
+    {
+        if (!is_BLD_shown)
+        {
+            return;
+        }
+        // Then, draw the drop area overlay on top if needed (and only during a drag operation).
+
+
+        // Draw interactive windows first.
+        ImGui::Begin("Basic Logics", &is_BLD_shown);
+        if (ImGui::CollapsingHeader("Basic Gates"))
+        {
+            GUITools_DragDrop(LogicElements::GateType::AND, "AND Gate");
+            GUITools_DragDrop(LogicElements::GateType::OR, "OR Gate");
+            GUITools_DragDrop(LogicElements::GateType::NOT, "NOT Gate");
+            GUITools_DragDrop(LogicElements::GateType::XAND, "XAND Gate");
+            GUITools_DragDrop(LogicElements::GateType::XOR, "XOR Gate");
+        }
+        ImGui::End();
+
+
     }
 
-    ImGui::Begin("Basic Logics", &is_BLD_shown);
-    if (ImGui::CollapsingHeader("Basic Gates"))
-    {
-        GUITools_DragDrop(LogicElements::GateType::AND , "AND Gate");
-        GUITools_DragDrop(LogicElements::GateType::OR , "OR Gate");
-        GUITools_DragDrop(LogicElements::GateType::NOT , "NOT Gate");
-        GUITools_DragDrop(LogicElements::GateType::XAND , "XAND Gate");
-        GUITools_DragDrop(LogicElements::GateType::XOR, "XOR Gate");
-    }
-    ImGui::End();
 }
