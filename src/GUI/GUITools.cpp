@@ -69,7 +69,9 @@ namespace GUITools
             GUITools_DragDrop(LogicElements::GateType::NOT, "NOT Gate");
             GUITools_DragDrop(LogicElements::GateType::XAND, "XAND Gate");
             GUITools_DragDrop(LogicElements::GateType::XOR, "XOR Gate");
+            GUITools_DragDrop(LogicElements::GateType::INPUT, "INPUT Gate");
         }
+
         ImGui::End();
 
 

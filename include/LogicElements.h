@@ -21,7 +21,8 @@ namespace LogicElements
     OR,
     NOT,
     XOR,
-    XAND
+    XAND,
+    INPUT
   };
   extern std::map<GateType, Texture> logicElementTextures;
   void init_logicTextures();
@@ -100,6 +101,13 @@ namespace LogicElements
       void evaluate() override;
       void setInput(const std::string &name, bool value) override;
       bool getOutput(const std::string &name) const override;
+    };
+    class InputGate : public LogicGate {
+    public:
+        InputGate(std::string& logger_name);
+        void evaluate() override;
+        void setInput(const std::string& name, bool value) override;
+        bool getOutput(const std::string& name) const override;
     };
 
   }

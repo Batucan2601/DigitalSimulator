@@ -108,6 +108,7 @@ namespace Controls
                 case(LogicElements::GateType::XOR): circuit->addGate(std::make_shared<LogicElements::Gates::XorGate>(new_gate)); break;
                 case(LogicElements::GateType::XAND): circuit->addGate(std::make_shared<LogicElements::Gates::XandGate>(new_gate)); break;
                 case(LogicElements::GateType::NOT): circuit->addGate(std::make_shared<LogicElements::Gates::NotGate>(new_gate)); break;
+                case(LogicElements::GateType::INPUT): circuit->addGate(std::make_shared<LogicElements::Gates::InputGate>(new_gate)); break;
                 default:
                     break; 
             }
