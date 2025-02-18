@@ -67,7 +67,12 @@ namespace LogicElements
 
         void AndGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] && inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if (!out) break;
+                out = out && val;
+            }
         }
 
         void AndGate::setInput(const std::string &name, bool value)
@@ -96,7 +101,12 @@ namespace LogicElements
 
         void OrGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] || inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if(out) break; 
+                out = out || val;
+            }
         }
 
         void OrGate::setInput(const std::string &name, bool value)
@@ -155,7 +165,12 @@ namespace LogicElements
 
         void XorGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] ^ inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if (!out) break;
+                out = out ^ val;
+            }
         }
 
         void XorGate::setInput(const std::string &name, bool value)
@@ -185,7 +200,16 @@ namespace LogicElements
 
         void XandGate::evaluate()
         {
-            outputs["Out"] = !(inputs["A"] && inputs["B"]);
+            //thi is NAND logic
+            auto& out = outputs["Out"];
+            bool allTrue = true;  // Assume all inputs are true initially.
+            for (auto const& [name, value] : inputs) {
+                if (!value) {    // As soon as one input is false...
+                    allTrue = false;
+                    break;       // ...we can stop checking.
+                }
+            }
+            out = !allTrue;  // NAND: output is true if any input is false.
         }
 
         void XandGate::setInput(const std::string &name, bool value)
