@@ -65,7 +65,7 @@ int main(void)
                                  // You can draw additional world elements here.
                              });
 
-        RaylibHelper::DrawGUI();
+        RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }
 

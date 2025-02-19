@@ -45,7 +45,7 @@ namespace LogicElements
     GateType type;
     Texture2D m_texture;
 
-  protected:
+    //protected:
     std::unordered_map<std::string, bool> inputs;
     std::unordered_map<std::string, bool> outputs;
     ClassLogger m_logger;

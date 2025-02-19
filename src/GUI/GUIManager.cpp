@@ -2,6 +2,7 @@
 #include "GUI/GUIStyle.h"
 #include "GUI/GUIMenuBar.h"
 #include "GUI/GUILogic.h"
+#include "GUI/GUISaveSystem.h"
 #include <rlImGui.h>
 #include <imgui.h>
 #include <GUI/GUITools.h>
@@ -38,14 +39,16 @@ static void draw_parent_screen()
 
     ImGui::End();
 }
-void GUIManager::Draw()
+; // this is acutally needed for save and load purposes 
+void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
     rlImGuiBegin();
     draw_parent_screen();
     // Draw individual components
     // GUIMenuBar::Draw();
-    guiMenuBar.Draw();
+    guiMenuBar.Draw(circuit);
     GUITools::GUITools_Display();
+    GUISaveSystem::draw();
     // GUILogic::Draw();
 
     rlImGuiEnd();
