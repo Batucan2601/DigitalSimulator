@@ -6,9 +6,11 @@
 
 #include <GatePosition.h>
 #include <filesystem>
+#include <functional>
 #include <gateObserver.h>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace LogicElements
 {
@@ -31,7 +33,7 @@ namespace LogicElements
         LogicGate(GateType gateType, std::string& logger_name);
         ~LogicGate();
 
-        virtual void evaluate() = 0;
+        void evaluate();
 
         void setInput(const std::string& name, bool value);
         bool getOutput(const std::string& name) const;
@@ -45,6 +47,8 @@ namespace LogicElements
 
         GateType m_type;
         Texture2D m_texture;
+
+        void setEvaluationFunction(std::function<void(LogicGate&)> evalFunc);
 
         Rectangle bd = {0, 0, 100, 100};  // bounding box
         void setPosition(float x, float y);
@@ -64,6 +68,7 @@ namespace LogicElements
 
       protected:
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
+        std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
     };
 }  // namespace LogicElements
 

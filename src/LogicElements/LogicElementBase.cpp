@@ -79,6 +79,20 @@ namespace LogicElements
         auto it = outputs.find(name);
         return (it != outputs.end()) ? it->second : false;
     }
+
+    void LogicGate::setEvaluationFunction(std::function<void(LogicGate&)> evalFunc)
+    {
+        evaluateFunction = evalFunc;
+    }
+
+    void LogicGate::evaluate()
+    {
+        if (evaluateFunction)
+        {
+            evaluateFunction(*this);
+        }
+    }
+
     GateType LogicGate::getType() const
     {
         return m_type;
