@@ -10,7 +10,7 @@
 void GUIManager::Init()
 {
     rlImGuiSetup(true); // Initialize ImGui
-    GUIStyle_init();    // Set up custom ImGui styles
+    GUIStyle::init();    // Set up custom ImGui styles
 }
 static void draw_parent_screen()
 {
@@ -50,7 +50,6 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
     GUITools::GUITools_Display();
     GUISaveSystem::draw();
     // GUILogic::Draw();
-
     rlImGuiEnd();
 }
 

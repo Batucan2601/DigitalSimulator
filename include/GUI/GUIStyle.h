@@ -1,4 +1,9 @@
 #ifndef GUI_STYLE_H
 #define GUI_STYLE_H
-void GUIStyle_init();
+#include <imgui.h>
+namespace GUIStyle
+{
+	void init();
+	extern ImFont* font;
+}
 #endif 
