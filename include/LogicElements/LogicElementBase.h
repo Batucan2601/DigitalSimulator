@@ -28,7 +28,7 @@ namespace LogicElements
     class LogicGate : public GateObserver  // Inherit observer to get updates
     {
       public:
-        explicit LogicGate(std::string& logger_name) : m_logger(logger_name) {}
+        LogicGate(GateType gateType, std::string& logger_name);
         ~LogicGate();
 
         virtual void evaluate() = 0;
