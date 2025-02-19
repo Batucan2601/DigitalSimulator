@@ -6,7 +6,7 @@ namespace LogicElementsDraw
 
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
-        Rectangle bd = gate->bd; // Bounding box of the gate
+        Rectangle bd = gate->bd;  // Bounding box of the gate
         float bd_width = bd.width;
         float bd_height = bd.height;
 
@@ -15,7 +15,7 @@ namespace LogicElementsDraw
 
         Rectangle source = {0, 0, texture_width, texture_height};
         Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
-        Vector2 origin = {0, 0}; // Top-left corner as origin
+        Vector2 origin = {0, 0};  // Top-left corner as origin
 
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
     }
@@ -25,7 +25,7 @@ namespace LogicElementsDraw
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)
         {
-            const auto &gate = circuit->gates[i]; // Access the gate
+            const auto& gate = circuit->gates[i];  // Access the gate
 
 #ifdef IS_DRAWING_BOUNDARY_BOX
             DrawBoundaryBox(gate);
@@ -44,11 +44,13 @@ namespace LogicElementsDraw
                 // DrawLine();
                 if (circuit->connections[i].sourceGate->getOutput("Out"))
                 {
-                    DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? GREEN: RED);
+                    DrawLineEx(start, end, LINE_THICKNESS,
+                               circuit->connections[i].is_connected ? GREEN : RED);
                 }
                 else
                 {
-                    DrawLineEx(start, end, LINE_THICKNESS, circuit->connections[i].is_connected ? BLACK : RED);
+                    DrawLineEx(start, end, LINE_THICKNESS,
+                               circuit->connections[i].is_connected ? BLACK : RED);
                 }
 
                 // draw their interactable points
@@ -62,14 +64,18 @@ namespace LogicElementsDraw
             Vector2 pos = circuit->selected_wires.selected_wires[i];
             DrawInteractableWirePoints(pos, pos, GREEN);
         }
-        DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
+        DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
+                                   circuit->selected_wires.wire_hovering, GREEN);
 
         // 3 - DrawActiveWire
         if (circuit->active_wire.is_visible)
         {
-            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start, circuit->active_wire.end);
-            DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x, straight_line.y, GREEN);
-            DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x, circuit->active_wire.end.y, GREEN);
+            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
+                                                                      circuit->active_wire.end);
+            DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x,
+                     straight_line.y, GREEN);
+            DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x,
+                     circuit->active_wire.end.y, GREEN);
 
             DrawInteractableWirePoints(circuit->active_wire.start, straight_line, GREEN);
             DrawInteractableWirePoints(straight_line, circuit->active_wire.end, GREEN);
@@ -77,8 +83,9 @@ namespace LogicElementsDraw
 
         if (circuit->is_GUIdragdragging)
         {
-            DrawRectangleLines(circuit->selected_wires.wire_hovering.x , circuit->selected_wires.wire_hovering.y ,
-            SLICE_SIZE , SLICE_SIZE , BLUE);
+            DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
+                               circuit->selected_wires.wire_hovering.y, SLICE_SIZE, SLICE_SIZE,
+                               BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
@@ -117,12 +124,11 @@ namespace LogicElementsDraw
             color = BLACK;
         }
 
-        DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height,
-                           color);
+        DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height, color);
     }
     void DrawClippedCircle(float cx, float cy, float radius, Color color)
     {
-        int segments = 720; // Number of segments for smoothness
+        int segments = 720;  // Number of segments for smoothness
         float angleStep = 2 * PI / segments;
 
         for (int i = 0; i < segments; i++)
@@ -144,4 +150,4 @@ namespace LogicElementsDraw
         }
     }
 
-} // namespace LogicElementsDraw
+}  // namespace LogicElementsDraw

@@ -9,9 +9,9 @@ namespace LogicElements::Gates
         outputs["Out"] = false;
 
         type = LogicElements::GateType::INPUT;
-        m_logger.info("And Gate Created.");
+        m_logger.info("Input Gate Created.");
 
-        logicElementTextures[GateType::INPUT] = LoadTexture("assets/gates/test_input.png");
+        m_texture = LogicElements::logicElementTextures[GateType::INPUT];
     }
 
     void InputGate::evaluate()

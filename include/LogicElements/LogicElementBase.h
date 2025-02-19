@@ -11,7 +11,6 @@
 
 namespace LogicElements
 {
-
     enum class GateType
     {
         NONE,
@@ -29,7 +28,7 @@ namespace LogicElements
     {
       public:
         explicit LogicGate(std::string& logger_name) : m_logger(logger_name) {}
-        virtual ~LogicGate();
+        ~LogicGate();
 
         virtual void evaluate() = 0;
 

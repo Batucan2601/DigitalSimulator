@@ -6,13 +6,14 @@
 
 namespace LogicElements::Gates
 {
+
     class AndGate : public LogicGate
     {
-    public:
-        AndGate(std::string &logger_name);
+      public:
+        AndGate(std::string& logger_name);
 
         void evaluate() override;
     };
-}
+}  // namespace LogicElements::Gates
 
-#endif // AND_GATE_H
+#endif  // AND_GATE_H

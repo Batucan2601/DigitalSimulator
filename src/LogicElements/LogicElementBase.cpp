@@ -34,7 +34,7 @@ namespace LogicElements
     LogicGate::~LogicGate()
     {
         m_logger.info("LogicGate destroyed.");
-        UnloadTexture(m_texture);
+        // UnloadTexture(m_texture);
     }
 
     void LogicGate::setPosition(float x, float y)

@@ -11,33 +11,7 @@ namespace LogicElements::Gates
         type = GateType::AND;
         m_logger.info("And Gate Created.");
 
-        // Construct the full path for the image
-        std::string file_path = "assets/gates/test_and.png";  // Use relative path
-        std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-        // Check if the file exists
-        if (!std::filesystem::exists(full_path))
-        {
-            m_logger.error("File does not exist: ", full_path);
-            throw std::runtime_error("Failed to find file: " + full_path);
-        }
-
-        // Load image and texture
-        Image image = LoadImage(full_path.c_str());
-        if (!image.data)
-        {
-            m_logger.error("Failed to load image: ", full_path);
-            throw std::runtime_error("Failed to load image: " + full_path);
-        }
-
-        m_texture = LoadTextureFromImage(image);
-        if (!m_texture.id)
-        {
-            m_logger.error("Failed to load texture from image: ", full_path);
-            UnloadImage(image);  // Free resources if texture loading fails
-            throw std::runtime_error("Failed to load texture from image: " + full_path);
-        }
-        UnloadImage(image);  // Free the image from RAM after loading into VRAM
+        m_texture = LogicElements::logicElementTextures[GateType::AND];
     }
 
     void AndGate::evaluate()
