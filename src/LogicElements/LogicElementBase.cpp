@@ -71,6 +71,7 @@ namespace LogicElements
         if (inputs.find(name) != inputs.end())
         {
             inputs[name] = value;
+            notifyObservers();
         }
     }
 
