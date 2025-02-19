@@ -2,10 +2,10 @@
 #include "LogicElements.h"
 #include "LogicElementsDraw.h"
 #include "common_types.h"
+#include "logicElementFactory.h"
 #include "raylib.h"
 #include "raylibHelper.h"
 
-#include <LogicElements/include.h>
 int main(void)
 {
     SetTraceLogLevel(LOG_NONE);  // Disable raylib logging
@@ -22,11 +22,16 @@ int main(void)
     std::string not_gate_logger = "NotLogger1";
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
-    auto gate1 = std::make_shared<LogicElements::Gates::AndGate>(and_gate_logger);
-    auto gate2 = std::make_shared<LogicElements::Gates::OrGate>(or_gate_logger);
-    auto gate3 = std::make_shared<LogicElements::Gates::NotGate>(not_gate_logger);
-    auto gate4 = std::make_shared<LogicElements::Gates::XandGate>(xand_gate_logger);
-    auto gate5 = std::make_shared<LogicElements::Gates::XorGate>(xor_gate_logger);
+    auto gate1 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::AND,
+                                                                and_gate_logger);
+    auto gate2 =
+        LogicElements::LogicElementFactory::createGate(LogicElements::GateType::OR, or_gate_logger);
+    auto gate3 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::NOT,
+                                                                not_gate_logger);
+    auto gate4 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XAND,
+                                                                xand_gate_logger);
+    auto gate5 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XOR,
+                                                                xor_gate_logger);
 
     // Create a circuit and add both gates.
     std::string circuit_logger = "CircuitLogger";

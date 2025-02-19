@@ -3,7 +3,7 @@
 #include "GUI/GUITools.h"
 #include "LogicElementBase.h"
 #include "LogicElements.h"
-#include "LogicElements/include.h"
+#include "logicElementFactory.h"
 #include "raylib.h"
 
 #include <iostream>
@@ -84,7 +84,7 @@ namespace Controls
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
             Vector2 pos = SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
-            circuit->m_logger.info("catched new ");
+            // circuit->m_logger.info("catched new ");
         }
 
         // check dragging
@@ -93,7 +93,7 @@ namespace Controls
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
             Vector2 pos = SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
-            circuit->m_logger.info("catched new ");
+            // circuit->m_logger.info("catched new ");
             circuit->is_GUIdragdragging = true;
         }
         else if (GUITools::dragDrop.state == GUITools::DragDropState::DROPPED)
@@ -103,25 +103,38 @@ namespace Controls
 
             // add the new circuit
             std::string new_gate = "or_gate_logger";
+            std::shared_ptr<LogicElements::LogicGate> gate;
             switch (GUITools::dragDrop.gateType)
             {
                 case (LogicElements::GateType::AND):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::AndGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::AND, new_gate);
+                    circuit->addGate(gate);
                     break;
                 case (LogicElements::GateType::OR):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::OrGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::OR, new_gate);
+                    circuit->addGate(gate);
                     break;
                 case (LogicElements::GateType::XOR):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::XorGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::XOR, new_gate);
+                    circuit->addGate(gate);
                     break;
                 case (LogicElements::GateType::XAND):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::XandGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::XAND, new_gate);
+                    circuit->addGate(gate);
                     break;
                 case (LogicElements::GateType::NOT):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::NotGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::NOT, new_gate);
+                    circuit->addGate(gate);
                     break;
                 case (LogicElements::GateType::INPUT):
-                    circuit->addGate(std::make_shared<LogicElements::Gates::InputGate>(new_gate));
+                    gate = LogicElements::LogicElementFactory::createGate(
+                        LogicElements::GateType::INPUT, new_gate);
+                    circuit->addGate(gate);
                     break;
                 default:
                     break;
