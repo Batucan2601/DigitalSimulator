@@ -77,4 +77,27 @@ namespace LogicElements
     //     return m_position;
     // }
 
+    void LogicGate::addObserver(GateObserver* observer)
+    {
+        observers.insert(observer);
+    }
+
+    void LogicGate::removeObserver(GateObserver* observer)
+    {
+        observers.erase(observer);
+    }
+
+    void LogicGate::notifyObservers()
+    {
+        for (auto observer : observers)
+        {
+            observer->onInputChanged();
+        }
+    }
+
+    void LogicGate::onInputChanged()
+    {
+        evaluate();  // Automatically reevaluate when input changes
+    }
+
 }  // namespace LogicElements

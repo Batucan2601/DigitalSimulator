@@ -6,6 +6,7 @@
 
 #include <GatePosition.h>
 #include <filesystem>
+#include <gateObserver.h>
 #include <map>
 #include <unordered_map>
 
@@ -24,7 +25,7 @@ namespace LogicElements
 
     extern std::map<LogicElements::GateType, Texture> logicElementTextures;
     void init_logicTextures();
-    class LogicGate
+    class LogicGate : public GateObserver  // Inherit observer to get updates
     {
       public:
         explicit LogicGate(std::string& logger_name) : m_logger(logger_name) {}
@@ -47,11 +48,20 @@ namespace LogicElements
         void setPosition(float x, float y);
         Vector2 getPosition() const;
 
+        void addObserver(GateObserver* observer);
+        void removeObserver(GateObserver* observer);
+        void notifyObservers();
+
+        void onInputChanged() override;  // Override observer function
+
         // protected:
         std::unordered_map<std::string, bool> inputs;
         std::unordered_map<std::string, bool> outputs;
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
+
+      protected:
+        std::unordered_set<GateObserver*> observers;       // Stores registered observers
     };
 }  // namespace LogicElements
 
