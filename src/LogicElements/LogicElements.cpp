@@ -8,8 +8,10 @@ namespace CircuitElements
         gates.push_back(gate);
     }
 
-    void Circuit::addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate, const std::string &sourceOutput,
-                                std::shared_ptr<LogicElements::LogicGate> targetGate, const std::string &targetInput)
+    void Circuit::addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
+                                const std::string& sourceOutput,
+                                std::shared_ptr<LogicElements::LogicGate> targetGate,
+                                const std::string& targetInput)
     {
         this->m_logger.info("Connection added to the circuit.");
         connections.push_back({sourceGate, sourceOutput, targetGate, targetInput});
@@ -19,12 +21,12 @@ namespace CircuitElements
     {
         bool stabilized = false;
         int iterations = 0;
-        const int maxIterations = 100; // Prevent infinite loops
+        const int maxIterations = 100;  // Prevent infinite loops
 
         while (!stabilized && iterations < maxIterations)
         {
             stabilized = true;
-            for (auto &gate : gates)
+            for (auto& gate : gates)
             {
                 gate->evaluate();
                 auto previousOutputs = gate->getOutputs();
@@ -35,10 +37,13 @@ namespace CircuitElements
                 }
             }
             // Then, update the inputs based on the connections.
-            for (auto &conn : connections)
+            for (auto& conn : connections)
             {
                 bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
-                conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                if (conn.targetLogic != "")
+                {
+                    conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                }
             }
             iterations++;
         }
@@ -49,4 +54,4 @@ namespace CircuitElements
         }
     }
 
-}
+}  // namespace CircuitElements

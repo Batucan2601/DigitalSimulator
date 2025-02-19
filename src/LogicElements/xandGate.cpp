@@ -2,7 +2,7 @@
 
 namespace LogicElements::Gates
 {
-    XandGate::XandGate(std::string &logger_name) : LogicGate(logger_name)
+    XandGate::XandGate(std::string& logger_name) : LogicGate(logger_name)
     {
         inputs["A"] = false;
         inputs["B"] = false;
@@ -11,7 +11,7 @@ namespace LogicElements::Gates
         m_logger.info("Xand Gate Created.");
 
         // Construct the full path for the image
-        std::string file_path = "assets/gates/test_xand.png"; // Use relative path
+        std::string file_path = "assets/gates/test_xand.png";  // Use relative path
         std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
 
         // Check if the file exists
@@ -33,14 +33,24 @@ namespace LogicElements::Gates
         if (!m_texture.id)
         {
             m_logger.error("Failed to load texture from image: ", full_path);
-            UnloadImage(image); // Free resources if texture loading fails
+            UnloadImage(image);  // Free resources if texture loading fails
             throw std::runtime_error("Failed to load texture from image: " + full_path);
         }
     }
 
     void XandGate::evaluate()
     {
-        outputs["Out"] = !(inputs["A"] && inputs["B"]);
+        // thi is NAND logic
+        auto& out = outputs["Out"];
+        bool allTrue = true;  // Assume all inputs are true initially.
+        for (auto const& [name, value] : inputs)
+        {
+            if (!value)
+            {  // As soon as one input is false...
+                allTrue = false;
+                break;  // ...we can stop checking.
+            }
+        }
+        out = !allTrue;  // NAND: output is true if any input is false.    }
     }
-
-}
+}  // namespace LogicElements::Gates

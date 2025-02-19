@@ -1,17 +1,21 @@
 #include "raylibHelper.h"
-#include <rlImGui.h>
-#include <imgui.h>
-#include "GUI/GUIStyle.h"
+
 #include "GUI/GUIMenuBar.h"
+#include "GUI/GUIStyle.h"
+
 #include <GUI/GUILogic.h>
+#include <imgui.h>
+#include <rlImGui.h>
 
 void RaylibHelper::Init(int screenWidth, int screenHeight, int targetFps, const char* title)
 {
     InitWindow(screenWidth, screenHeight, title);
+    // set exit key to 'q'
+    SetExitKey(KEY_Q);
     SetTargetFPS(targetFps);
     imguiManager.Init();
 }
-/* TODO combine imgui drawing 
+/* TODO combine imgui drawing
 void RaylibHelper::BeginFrame()
 {
 // inside your game loop, between BeginDrawing() and EndDrawing()
@@ -43,9 +47,9 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
     EndMode2D();
 }
 
-void RaylibHelper::DrawGUI()
+void RaylibHelper::DrawGUI(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
-    imguiManager.Draw();
+    imguiManager.Draw(circuit);
 }
 void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)
 {

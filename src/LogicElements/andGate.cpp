@@ -2,7 +2,7 @@
 
 namespace LogicElements::Gates
 {
-    AndGate::AndGate(std::string &logger_name) : LogicGate(logger_name)
+    AndGate::AndGate(std::string& logger_name) : LogicGate(logger_name)
     {
         inputs["A"] = false;
         inputs["B"] = false;
@@ -12,7 +12,7 @@ namespace LogicElements::Gates
         m_logger.info("And Gate Created.");
 
         // Construct the full path for the image
-        std::string file_path = "assets/gates/test_and.png"; // Use relative path
+        std::string file_path = "assets/gates/test_and.png";  // Use relative path
         std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
 
         // Check if the file exists
@@ -34,15 +34,21 @@ namespace LogicElements::Gates
         if (!m_texture.id)
         {
             m_logger.error("Failed to load texture from image: ", full_path);
-            UnloadImage(image); // Free resources if texture loading fails
+            UnloadImage(image);  // Free resources if texture loading fails
             throw std::runtime_error("Failed to load texture from image: " + full_path);
         }
-        UnloadImage(image); // Free the image from RAM after loading into VRAM
+        UnloadImage(image);  // Free the image from RAM after loading into VRAM
     }
 
     void AndGate::evaluate()
     {
-        outputs["Out"] = inputs["A"] && inputs["B"];
+        auto& out = outputs["Out"];
+        for (auto const& [key, val] : inputs)
+        {
+            if (!out)
+                break;
+            out = out && val;
+        }
     }
 
-}
+}  // namespace LogicElements::Gates

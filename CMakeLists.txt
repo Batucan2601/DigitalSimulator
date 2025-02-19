@@ -19,14 +19,18 @@ Libraries/imgui/imgui_tables.cpp
 Libraries/imgui/imgui_widgets.cpp 
 #support for rlimgui 
 Libraries/rlImGui/rlImGui.cpp
+Libraries/ImGuiFileDialog/ImGuiFileDialog.cpp
 )
 
 add_library( ImGuiLib  ${IMGUI_FILES})
 target_include_directories(ImGuiLib PUBLIC Libraries/raylib/src)
 target_include_directories(ImGuiLib PUBLIC Libraries/imgui)
 target_include_directories(ImGuiLib PUBLIC Libraries/rlImGui)
+target_include_directories(ImGuiLib PUBLIC Libraries/ImGuiFileDialog)
 
 add_subdirectory(Libraries/raylib)
+
+
 
 # Define PROJECT_ROOT_DIR as a preprocessor macro for C++ code
 add_definitions(-DPROJECT_ROOT_DIR="${PROJECT_ROOT_DIR}")
@@ -44,6 +48,7 @@ add_executable(${PROJECT_NAME} ${MAIN_SRC})
 # Link raylib to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 target_link_libraries(${PROJECT_NAME} PUBLIC ImGuiLib)
+
 
 
 # Include directories for headers

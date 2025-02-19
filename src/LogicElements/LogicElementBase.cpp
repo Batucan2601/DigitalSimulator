@@ -2,6 +2,35 @@
 
 namespace LogicElements
 {
+    std::map<GateType, Texture> logicElementTextures;
+
+    void init_logicTextures()
+    {
+        std::string file_path = "assets/gates/test_and.png";  // Use relative path
+        std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::AND] = LoadTexture(full_path.c_str());
+
+        file_path = "assets/gates/test_or.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::OR] = LoadTexture(full_path.c_str());
+
+        file_path = "assets/gates/test_not.png";  // Use relative paths
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::NOT] = LoadTexture(full_path.c_str());
+
+        file_path = "assets/gates/test_xand.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XOR] = LoadTexture(full_path.c_str());
+
+        file_path = "assets/gates/test_xor.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XAND] = LoadTexture(full_path.c_str());
+
+        file_path = "assets/gates/test_not.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::INPUT] = LoadTexture(full_path.c_str());
+    }
+
     LogicGate::~LogicGate()
     {
         m_logger.info("LogicGate destroyed.");
@@ -19,17 +48,17 @@ namespace LogicElements
         return {bd.x, bd.y};
     }
 
-    const std::unordered_map<std::string, bool> &LogicGate::getInputs() const
+    const std::unordered_map<std::string, bool>& LogicGate::getInputs() const
     {
         return inputs;
     }
 
-    const std::unordered_map<std::string, bool> &LogicGate::getOutputs() const
+    const std::unordered_map<std::string, bool>& LogicGate::getOutputs() const
     {
         return outputs;
     }
 
-    void LogicGate::setInput(const std::string &name, bool value)
+    void LogicGate::setInput(const std::string& name, bool value)
     {
         if (inputs.find(name) != inputs.end())
         {
@@ -37,7 +66,7 @@ namespace LogicElements
         }
     }
 
-    bool LogicGate::getOutput(const std::string &name) const
+    bool LogicGate::getOutput(const std::string& name) const
     {
         auto it = outputs.find(name);
         return (it != outputs.end()) ? it->second : false;
@@ -48,4 +77,4 @@ namespace LogicElements
     //     return m_position;
     // }
 
-} // namespace LogicElements
+}  // namespace LogicElements
