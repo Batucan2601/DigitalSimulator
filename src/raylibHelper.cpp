@@ -43,9 +43,9 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
     EndMode2D();
 }
 
-void RaylibHelper::DrawGUI()
+void RaylibHelper::DrawGUI(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
-    imguiManager.Draw();
+    imguiManager.Draw(circuit);
 }
 void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)
 {

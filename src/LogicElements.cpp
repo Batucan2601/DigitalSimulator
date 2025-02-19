@@ -2,6 +2,29 @@
 
 namespace LogicElements
 {
+    std::map<GateType, Texture> logicElementTextures;
+    void init_logicTextures()
+    {
+        
+        std::string file_path = "assets/gates/test_and.png"; // Use relative path
+        std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::AND] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_or.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::OR] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_not.png"; // Use relative paths
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::NOT] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_xand.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XOR] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_xor.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::XAND] = LoadTexture(full_path.c_str());
+        file_path = "assets/gates/test_not.png"; // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::INPUT] = LoadTexture(full_path.c_str());
+    }
     LogicGate::~LogicGate()
     {
         m_logger.info("LogicGate destroyed.");
@@ -39,39 +62,17 @@ namespace LogicElements
 
             type = GateType::AND;
             m_logger.info("And Gate Created.");
-
-            // Construct the full path for the image
-            std::string file_path = "assets/gates/test_and.png"; // Use relative path
-            std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            // Check if the file exists
-            if (!std::filesystem::exists(full_path))
-            {
-                m_logger.error("File does not exist: ", full_path);
-                throw std::runtime_error("Failed to find file: " + full_path);
-            }
-
-            // Load image and texture
-            Image image = LoadImage(full_path.c_str());
-            if (!image.data)
-            {
-                m_logger.error("Failed to load image: ", full_path);
-                throw std::runtime_error("Failed to load image: " + full_path);
-            }
-
-            m_texture = LoadTextureFromImage(image);
-            if (!m_texture.id)
-            {
-                m_logger.error("Failed to load texture from image: ", full_path);
-                UnloadImage(image); // Free resources if texture loading fails
-                throw std::runtime_error("Failed to load texture from image: " + full_path);
-            }
-            UnloadImage(image); // Free the image from RAM after loading into VRAM
+            m_texture = logicElementTextures[LogicElements::GateType::AND];
         }
 
         void AndGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] && inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if (!out) break;
+                out = out && val;
+            }
         }
 
         void AndGate::setInput(const std::string &name, bool value)
@@ -95,38 +96,17 @@ namespace LogicElements
             outputs["Out"] = false;
             type = GateType::OR;
             m_logger.info("Or Gate Created.");
-
-            // Construct the full path for the image
-            std::string file_path = "assets/gates/test_or.png"; // Use relative path
-            std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            // Check if the file exists
-            if (!std::filesystem::exists(full_path))
-            {
-                m_logger.error("File does not exist: ", full_path);
-                throw std::runtime_error("Failed to find file: " + full_path);
-            }
-
-            // Load image and texture
-            Image image = LoadImage(full_path.c_str());
-            if (!image.data)
-            {
-                m_logger.error("Failed to load image: ", full_path);
-                throw std::runtime_error("Failed to load image: " + full_path);
-            }
-
-            m_texture = LoadTextureFromImage(image);
-            if (!m_texture.id)
-            {
-                m_logger.error("Failed to load texture from image: ", full_path);
-                UnloadImage(image); // Free resources if texture loading fails
-                throw std::runtime_error("Failed to load texture from image: " + full_path);
-            }
+            m_texture = logicElementTextures[LogicElements::GateType::OR];
         }
 
         void OrGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] || inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if(out) break; 
+                out = out || val;
+            }
         }
 
         void OrGate::setInput(const std::string &name, bool value)
@@ -149,33 +129,8 @@ namespace LogicElements
             outputs["Out"] = false;
             type = GateType::NOT;
             m_logger.info("Not Gate Created.");
+            m_texture = logicElementTextures[LogicElements::GateType::NOT];
 
-            // Construct the full path for the image
-            std::string file_path = "assets/gates/test_not.png"; // Use relative path
-            std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            // Check if the file exists
-            if (!std::filesystem::exists(full_path))
-            {
-                m_logger.error("File does not exist: ", full_path);
-                throw std::runtime_error("Failed to find file: " + full_path);
-            }
-
-            // Load image and texture
-            Image image = LoadImage(full_path.c_str());
-            if (!image.data)
-            {
-                m_logger.error("Failed to load image: ", full_path);
-                throw std::runtime_error("Failed to load image: " + full_path);
-            }
-
-            m_texture = LoadTextureFromImage(image);
-            if (!m_texture.id)
-            {
-                m_logger.error("Failed to load texture from image: ", full_path);
-                UnloadImage(image); // Free resources if texture loading fails
-                throw std::runtime_error("Failed to load texture from image: " + full_path);
-            }
         }
 
         void NotGate::evaluate()
@@ -204,38 +159,18 @@ namespace LogicElements
             outputs["Out"] = false;
             type = GateType::XOR;
             m_logger.info("Xor Gate Created.");
+            m_texture = logicElementTextures[LogicElements::GateType::XOR];
 
-            // Construct the full path for the image
-            std::string file_path = "assets/gates/test_xor.png"; // Use relative path
-            std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            // Check if the file exists
-            if (!std::filesystem::exists(full_path))
-            {
-                m_logger.error("File does not exist: ", full_path);
-                throw std::runtime_error("Failed to find file: " + full_path);
-            }
-
-            // Load image and texture
-            Image image = LoadImage(full_path.c_str());
-            if (!image.data)
-            {
-                m_logger.error("Failed to load image: ", full_path);
-                throw std::runtime_error("Failed to load image: " + full_path);
-            }
-
-            m_texture = LoadTextureFromImage(image);
-            if (!m_texture.id)
-            {
-                m_logger.error("Failed to load texture from image: ", full_path);
-                UnloadImage(image); // Free resources if texture loading fails
-                throw std::runtime_error("Failed to load texture from image: " + full_path);
-            }
         }
 
         void XorGate::evaluate()
         {
-            outputs["Out"] = inputs["A"] ^ inputs["B"];
+            auto& out = outputs["Out"];
+            for (auto const& [key, val] : inputs)
+            {
+                if (!out) break;
+                out = out ^ val;
+            }
         }
 
         void XorGate::setInput(const std::string &name, bool value)
@@ -259,38 +194,22 @@ namespace LogicElements
             outputs["Out"] = false;
             type = GateType::XAND;
             m_logger.info("Xand Gate Created.");
+            m_texture = logicElementTextures[LogicElements::GateType::XAND];
 
-            // Construct the full path for the image
-            std::string file_path = "assets/gates/test_xand.png"; // Use relative path
-            std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-
-            // Check if the file exists
-            if (!std::filesystem::exists(full_path))
-            {
-                m_logger.error("File does not exist: ", full_path);
-                throw std::runtime_error("Failed to find file: " + full_path);
-            }
-
-            // Load image and texture
-            Image image = LoadImage(full_path.c_str());
-            if (!image.data)
-            {
-                m_logger.error("Failed to load image: ", full_path);
-                throw std::runtime_error("Failed to load image: " + full_path);
-            }
-
-            m_texture = LoadTextureFromImage(image);
-            if (!m_texture.id)
-            {
-                m_logger.error("Failed to load texture from image: ", full_path);
-                UnloadImage(image); // Free resources if texture loading fails
-                throw std::runtime_error("Failed to load texture from image: " + full_path);
-            }
         }
 
         void XandGate::evaluate()
         {
-            outputs["Out"] = !(inputs["A"] && inputs["B"]);
+            //thi is NAND logic
+            auto& out = outputs["Out"];
+            bool allTrue = true;  // Assume all inputs are true initially.
+            for (auto const& [name, value] : inputs) {
+                if (!value) {    // As soon as one input is false...
+                    allTrue = false;
+                    break;       // ...we can stop checking.
+                }
+            }
+            out = !allTrue;  // NAND: output is true if any input is false.
         }
 
         void XandGate::setInput(const std::string &name, bool value)
@@ -307,6 +226,24 @@ namespace LogicElements
             return (it != outputs.end()) ? it->second : false;
         }
 
+        InputGate::InputGate(std::string& logger_name) : LogicGate(logger_name)
+        {
+            m_texture = logicElementTextures[LogicElements::GateType::NOT];
+            InputGate::setInput("Out", 1);
+        }
+        void InputGate::evaluate()
+        {
+            return; 
+        }
+
+        void InputGate::setInput(const std::string& name, bool value) 
+        {
+            outputs["Out"] = value;
+        }
+        bool InputGate::getOutput(const std::string& name) const
+        {
+            return outputs.at("Out");
+        }
     }
 }
 namespace CircuitElements
@@ -347,7 +284,10 @@ namespace CircuitElements
             for (auto &conn : connections)
             {
                 bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
-                conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                if (conn.targetLogic != "")
+                {
+                    conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                }
             }
             iterations++;
         }
@@ -356,6 +296,8 @@ namespace CircuitElements
             // Handle infinite loop case
             throw std::runtime_error("Circuit evaluation did not stabilize.");
         }
-    }
+    } 
 
+
+    
 }

@@ -5,7 +5,7 @@
 #include <memory>
 #include <functional>
 #include <map>
-
+#include "LogicElements.h"
 class GUIBaseMenu
 {
 public:
@@ -37,7 +37,8 @@ class GUIMenuBar
 public:
 	GUIMenuBar();
 	std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> menuList;
-	void Draw();
+	void Draw(std::shared_ptr<CircuitElements::Circuit> circuit);
+	std::shared_ptr<CircuitElements::Circuit> circuit;
 };
 extern GUIMenuBar guiMenuBar;
 #endif // GUIMENUBAR_H

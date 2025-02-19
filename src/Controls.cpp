@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <memory>
+#include "GUI/GUITools.h"
 
 namespace Controls
 {
@@ -83,6 +84,41 @@ namespace Controls
             circuit->selected_wires.wire_hovering = pos;
             circuit->m_logger.info("catched new ");
         }
+
+        //check dragging
+        if (GUITools::dragDrop.state == GUITools::DragDropState::DRAGGING)
+        {
+            Rectangle rec = { mouse_pos.x, mouse_pos.y, 0, 0 };
+            Vector2 pos = SnapToNearestGrid(rec);
+            circuit->selected_wires.wire_hovering = pos;
+            circuit->m_logger.info("catched new ");
+            circuit->is_GUIdragdragging = true; 
+        }
+        else if (GUITools::dragDrop.state == GUITools::DragDropState::DROPPED)
+        {
+            circuit->is_GUIdragdropped = true;
+            circuit->is_GUIdragdragging = false;
+
+            //add the new circuit
+            std::string new_gate = "or_gate_logger";
+            switch (GUITools::dragDrop.gateType)
+            {
+            case(LogicElements::GateType::AND): circuit->addGate(std::make_shared<LogicElements::Gates::AndGate>(new_gate)); break;
+                case(LogicElements::GateType::OR): circuit->addGate(std::make_shared<LogicElements::Gates::OrGate>(new_gate)); break;
+                case(LogicElements::GateType::XOR): circuit->addGate(std::make_shared<LogicElements::Gates::XorGate>(new_gate)); break;
+                case(LogicElements::GateType::XAND): circuit->addGate(std::make_shared<LogicElements::Gates::XandGate>(new_gate)); break;
+                case(LogicElements::GateType::NOT): circuit->addGate(std::make_shared<LogicElements::Gates::NotGate>(new_gate)); break;
+                case(LogicElements::GateType::INPUT): circuit->addGate(std::make_shared<LogicElements::Gates::InputGate>(new_gate)); break;
+                default:
+                    break; 
+            }
+            if (GUITools::dragDrop.gateType != LogicElements::GateType::NONE)
+            {
+                circuit->gates[circuit->gates.size() - 1]->setPosition(mouse_pos.x, mouse_pos.y);
+                GUITools::dragDrop.gateType = LogicElements::GateType::NONE;
+            }
+        }
+       
     }
     void Control_Keyboard_Event(std::shared_ptr<CircuitElements::Circuit> circuit)
     {
@@ -315,8 +351,8 @@ namespace Controls
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {
-                    return true;
                     con = circuit->connections[i];
+                    return true;
                 }
             }
         }

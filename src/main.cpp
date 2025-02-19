@@ -14,6 +14,7 @@ int main(void)
     const unsigned int targetFps = 60;
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
+    LogicElements::init_logicTextures(); // this should also be wrapped
     Controls::Controls_set_camera(screenWidth, screenHeight);
     std::string and_gate_logger = "AndLogger1";
     std::string or_gate_logger = "OrLogger1";
@@ -49,6 +50,7 @@ int main(void)
         // Draw
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
+        circuit->evaluate();
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
                              [&circuit]()
                              {
@@ -63,7 +65,7 @@ int main(void)
                                  // You can draw additional world elements here.
                              });
 
-        RaylibHelper::DrawGUI();
+        RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }
 

@@ -10,19 +10,22 @@
 #include <unordered_map>
 #include <vector>
 #include <filesystem>
+#include <map>
 
 namespace LogicElements
 {
-
   enum class GateType
   {
+    NONE,
     AND,
     OR,
     NOT,
     XOR,
-    XAND
+    XAND,
+    INPUT
   };
-
+  extern std::map<GateType, Texture> logicElementTextures;
+  void init_logicTextures();
   class LogicGate
   {
   public:
@@ -42,7 +45,7 @@ namespace LogicElements
     GateType type;
     Texture2D m_texture;
 
-  protected:
+    //protected:
     std::unordered_map<std::string, bool> inputs;
     std::unordered_map<std::string, bool> outputs;
     ClassLogger m_logger;
@@ -99,6 +102,13 @@ namespace LogicElements
       void setInput(const std::string &name, bool value) override;
       bool getOutput(const std::string &name) const override;
     };
+    class InputGate : public LogicGate {
+    public:
+        InputGate(std::string& logger_name);
+        void evaluate() override;
+        void setInput(const std::string& name, bool value) override;
+        bool getOutput(const std::string& name) const override;
+    };
 
   }
 
@@ -141,11 +151,15 @@ namespace CircuitElements
     void evaluate();
     ClassLogger m_logger;
     std::vector<std::shared_ptr<LogicElements::LogicGate>> gates;
+    //std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
     std::vector<Connection> connections;
     // TODO
     // this might be moved to a better data structure
     ActiveWire active_wire;
     SelectedWires selected_wires;
+
+    bool is_GUIdragdropped = false; 
+    bool is_GUIdragdragging = false; 
   };
 
 }

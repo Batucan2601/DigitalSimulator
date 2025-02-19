@@ -1,4 +1,6 @@
 #include "GUI/GUIMenuBar.h"
+#include "GUI/GUITools.h"
+#include "GUI/GUISaveSystem.h"
 #include <imgui.h>
 #include <sstream>
 
@@ -68,15 +70,26 @@ GUIMenuBar::GUIMenuBar()
 	createMenuItem("File" , true , nullptr);
 	createMenuItem("File/Open" , false , []()
 		{
+
 	; });
-	createMenuItem("File/Save", false, []()
-		{
-			; });
+    createMenuItem("File/Save", false, [this]()  // Capture 'this' here
+        {
+            GUISaveSystem::saveFile(this->circuit);
+        });
+    createMenuItem("File/Load", false, [this]()  // Capture 'this' here
+        {
+            GUISaveSystem::loadFile(this->circuit);
+        });
 	createMenuItem("File/Exit", false, []()
 		{
 			exit(1);
 	; });
-	
+    createMenuItem("Tools", true, nullptr);
+    createMenuItem("Tools/BasicLogic", false, []()
+    {
+            GUITools::GUITools_BasicLogicDisplay();
+    });
+
 }
 void GUIMenu::display()
 {
@@ -96,7 +109,7 @@ void GUIBarItem::display()
 		this->action();
 	}
 }
-void GUIMenuBar::Draw()
+void GUIMenuBar::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -106,4 +119,5 @@ void GUIMenuBar::Draw()
 		}
 		ImGui::EndMainMenuBar();
 	}
+    this->circuit = circuit;
 }
