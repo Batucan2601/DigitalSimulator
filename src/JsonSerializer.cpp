@@ -35,7 +35,7 @@ inline void to_json(json& j, const Rectangle& rect) {
 inline void to_json(json& j, const LogicElements::LogicGate& gate) {
     j = json{
         {"bounding_box", gate.bd}, // Automatic conversion via to_json for Rectangle
-        {"type", gateTypeToString(gate.type)},
+        {"type", gateTypeToString(gate.m_type)},
         {"inputs", gate.inputs},
         {"outputs", gate.outputs}
         // You can add more fields here if needed.

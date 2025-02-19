@@ -99,23 +99,23 @@ namespace LogicElementsDraw
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
         Color color;
-        if (gate->type == LogicElements::GateType::AND)
+        if (gate->m_type == LogicElements::GateType::AND)
         {
             color = GREEN;
         }
-        else if (gate->type == LogicElements::GateType::OR)
+        else if (gate->m_type == LogicElements::GateType::OR)
         {
             color = BLUE;
         }
-        else if (gate->type == LogicElements::GateType::NOT)
+        else if (gate->m_type == LogicElements::GateType::NOT)
         {
             color = RED;
         }
-        else if (gate->type == LogicElements::GateType::XOR)
+        else if (gate->m_type == LogicElements::GateType::XOR)
         {
             color = YELLOW;
         }
-        else if (gate->type == LogicElements::GateType::XOR)
+        else if (gate->m_type == LogicElements::GateType::XOR)
         {
             color = ORANGE;
         }

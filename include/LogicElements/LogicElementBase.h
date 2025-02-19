@@ -40,8 +40,10 @@ namespace LogicElements
         const std::unordered_map<std::string, bool>& getOutputs() const;
 
         GatePosition& getPositionManager();  // Access GatePosition
+        GateType getType() const;
+        const Texture2D& getTexture() const;
 
-        GateType type;
+        GateType m_type;
         Texture2D m_texture;
 
         Rectangle bd = {0, 0, 100, 100};  // bounding box

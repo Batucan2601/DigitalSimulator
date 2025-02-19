@@ -71,6 +71,15 @@ namespace LogicElements
         auto it = outputs.find(name);
         return (it != outputs.end()) ? it->second : false;
     }
+    GateType LogicGate::getType() const
+    {
+        return m_type;
+    }
+
+    const Texture2D& LogicGate::getTexture() const
+    {
+        return m_texture;
+    }
 
     // GatePosition &LogicGate::getPositionManager()
     // {
