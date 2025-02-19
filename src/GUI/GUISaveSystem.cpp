@@ -88,6 +88,6 @@ namespace GUISaveSystem
 
 	static bool saveCircuit(std::string fileName)
 	{
-		
+		return true; 
 	}
 }
