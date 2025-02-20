@@ -48,6 +48,7 @@ int main(void)
     circuit->addGate(gate4);
     circuit->addGate(gate5);
     // Main game loop
+    RenderTexture2D renderTexture = LoadRenderTexture(screenWidth, screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         // Update
@@ -57,21 +58,23 @@ int main(void)
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         circuit->evaluate();
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                             [&circuit]()
-                             {
-                                 LogicElementsDraw::DrawCircuit(circuit);
-                                 // You can draw additional world elements here.
-                             });
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                             []()
-                             {
-                                 // Draw a grid to visualize the 2D world.
-                                 DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
-                                 // You can draw additional world elements here.
-                             });
-
-        RaylibHelper::DrawGUI(circuit);
+        BeginTextureMode(renderTexture);
+        ClearBackground(WHITE);
+            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                                 [&circuit]()
+                                 {
+                                     LogicElementsDraw::DrawCircuit(circuit);
+                                     // You can draw additional world elements here.
+                                 });
+            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                                 []()
+                                 {
+                                     // Draw a grid to visualize the 2D world.
+                                     DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
+                                     // You can draw additional world elements here.
+                                 });
+         EndTextureMode();
+            RaylibHelper::DrawGUI(circuit , renderTexture);
         RaylibHelper::EndFrame();
     }
 
