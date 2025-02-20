@@ -61,7 +61,13 @@ namespace GUITools
 
 
         // Draw interactive windows first.
-        ImGui::Begin("Basic Logics", &is_BLD_shown);
+        ImGui::Begin("Basic Logics", &is_BLD_shown, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+
+        // Prevent interactions behind the window
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+        {
+            ImGui::SetNextFrameWantCaptureMouse(true);
+        }
         if (ImGui::CollapsingHeader("Basic Gates"))
         {
             GUITools_DragDrop(LogicElements::GateType::AND, "AND Gate");
