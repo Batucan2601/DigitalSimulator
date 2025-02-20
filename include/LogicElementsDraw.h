@@ -6,7 +6,7 @@
 
 #include <math.h>
 
-#define IS_DRAWING_BOUNDARY_BOX true // TODO this should be in userspace
+#define IS_DRAWING_BOUNDARY_BOX true  // TODO: this should be in userspace
 namespace LogicElementsDraw
 {
     void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit);
@@ -14,8 +14,7 @@ namespace LogicElementsDraw
 
     // Helper drawing functions
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate);
-    void DrawClippedCircle(float cx, float cy, float radius, Color color = BLACK);
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color);
-} // namespace LogicElementsDraw
+}  // namespace LogicElementsDraw
 
 #endif

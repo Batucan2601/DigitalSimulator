@@ -126,28 +126,5 @@ namespace LogicElementsDraw
 
         DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height, color);
     }
-    void DrawClippedCircle(float cx, float cy, float radius, Color color)
-    {
-        int segments = 720;  // Number of segments for smoothness
-        float angleStep = 2 * PI / segments;
-
-        for (int i = 0; i < segments; i++)
-        {
-            float angle1 = i * angleStep;
-            float angle2 = (i + 1) * angleStep;
-
-            // Circle points
-            float x1 = cx + cos(angle1) * radius;
-            float y1 = cy + sin(angle1) * radius;
-            float x2 = cx + cos(angle2) * radius;
-            float y2 = cy + sin(angle2) * radius;
-
-            // Clip the circle to x > centerX (0.6 normalized)
-            if (x1 >= cx && x2 >= cx)
-            {
-                DrawLineV(Vector2{x1, y1}, Vector2{x2, y2}, color);
-            }
-        }
-    }
 
 }  // namespace LogicElementsDraw
