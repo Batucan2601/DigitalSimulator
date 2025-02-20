@@ -5,6 +5,7 @@
 #include "logicElementFactory.h"
 #include "raylib.h"
 #include "raylibHelper.h"
+#include "GUI/GUIEditor.h"
 
 int main(void)
 {
@@ -48,7 +49,7 @@ int main(void)
     circuit->addGate(gate4);
     circuit->addGate(gate5);
     // Main game loop
-    RenderTexture2D renderTexture = LoadRenderTexture(screenWidth, screenHeight);
+    GUIEditor::Init(screenWidth, screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         // Update
@@ -58,8 +59,7 @@ int main(void)
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         circuit->evaluate();
-        BeginTextureMode(renderTexture);
-        ClearBackground(WHITE);
+        GUIEditor::BeginOffscreenDraw();
             RaylibHelper::Draw2D(Controls::Controls_get_camera(),
                                  [&circuit]()
                                  {
@@ -73,8 +73,8 @@ int main(void)
                                      DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
                                      // You can draw additional world elements here.
                                  });
-         EndTextureMode();
-            RaylibHelper::DrawGUI(circuit , renderTexture);
+        GUIEditor::EndOffscreenDraw();
+        RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }
 

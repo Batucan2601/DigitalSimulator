@@ -6,6 +6,7 @@
 #include <rlImGui.h>
 #include <imgui.h>
 #include <GUI/GUITools.h>
+#include <GUI/GUIEditor.h>
 
 void GUIManager::Init()
 {
@@ -40,17 +41,11 @@ static void draw_parent_screen()
     ImGui::End();
 }
 ; // this is acutally needed for save and load purposes 
-void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit, RenderTexture& renderTexture)
+void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
     rlImGuiBegin();
     draw_parent_screen();
-    if (ImGui::Begin("Raylib Scene"))
-    {
-        ImGui::Image((ImTextureID)&renderTexture.texture,
-        ImVec2((float)renderTexture.texture.width, (float)renderTexture.texture.height),
-        ImVec2(0, 0), ImVec2(1, 1));  // Adjust UVs if necessary
-        ImGui::End();
-     }
+    GUIEditor::Draw();
     // Draw individual components
     // GUIMenuBar::Draw();
     guiMenuBar.Draw(circuit);
