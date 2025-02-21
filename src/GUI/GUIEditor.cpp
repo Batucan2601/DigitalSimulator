@@ -27,6 +27,16 @@ namespace GUIEditor
 	}
 	void Draw()
 	{
+		if (IsWindowResized())
+		{
+			// Unload the old framebuffer
+			UnloadRenderTexture(editor.renderTexture);
+
+			// Get the new window size and recreate the framebuffer accordingly
+			unsigned int fbWidth = GetScreenWidth();
+			unsigned int fbHeight = GetScreenHeight();
+			editor.renderTexture = LoadRenderTexture(fbWidth, fbHeight);
+		}
 		if (ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoScrollbar))
 		{
 			ImGui::Image((ImTextureID)&editor.renderTexture.texture,
