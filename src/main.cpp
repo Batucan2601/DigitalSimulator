@@ -14,6 +14,7 @@ int main(void)
     const unsigned int screenWidth = 600;
     const unsigned int screenHeight = 600;
     const unsigned int targetFps = 60;
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     LogicElements::init_logicTextures();  // this should also be wrapped
