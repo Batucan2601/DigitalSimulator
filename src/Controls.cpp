@@ -1,6 +1,7 @@
 #include "Controls.h"
 
 #include "GUI/GUITools.h"
+#include "GUI/GUIEditor.h"
 #include "LogicElementBase.h"
 #include "LogicElements.h"
 #include "logicElementFactory.h"
@@ -11,12 +12,22 @@
 
 namespace Controls
 {
+    static Camera2D camera = {};
+    // since we draw raylib inside a texture and pass it to imgui we need a transform. 
+    static void ConvertMouseCoord(Vector2& mouse_pos)
+    {
+        GUIEditor::EditorWindow editor_window = GUIEditor::Window();
+        Vector2 virtualMouse;
+        virtualMouse.x = (mouse_pos.x - editor_window.ImageMin.x);
+        virtualMouse.y = (mouse_pos.y - editor_window.ImageMin.y);
+
+        mouse_pos = GetScreenToWorld2D(virtualMouse, camera);
+    }
     std::string control_logger_name = "ControlLogger";
     std::string gui_circuit_logger = "GUICircuitLogger";
     static ClassLogger control_logger(control_logger_name);
     static auto selected_circuit = std::make_shared<CircuitElements::Circuit>(gui_circuit_logger);
     std::vector<std::shared_ptr<LogicElements::LogicGate>> selected_logic_gate(1);
-    static Camera2D camera = {};
     static bool is_dragging = false;
     static bool is_logic_selected = false;
     static Vector2 mouse_pos;
@@ -54,6 +65,9 @@ namespace Controls
                 camera.zoom = 0.1f;  // Prevent zoom from becoming too small (or negative)
         }
 
+        mouse_pos = GetMousePosition();
+        ConvertMouseCoord(mouse_pos);
+
         // get data
         selected_circuit = circuit;
 
@@ -69,7 +83,7 @@ namespace Controls
 
     void Controls_Handle_Continous(std::shared_ptr<CircuitElements::Circuit> circuit)
     {
-        mouse_pos = GetScreenToWorld2D(GetMousePosition(), camera);  // Get mouse position
+          // Get mouse position
         if (is_logic_selected)
         {
             Rectangle pos = {mouse_pos.x, mouse_pos.y, 0, 0};
