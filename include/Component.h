@@ -1,5 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+#include <queue>
+#include <vector>
 
 // Enum to identify the type of input event.
 enum class InputType {
@@ -43,6 +45,11 @@ struct InputEvent {
     int keyCode = 0;
 };
 
+static class InputResolver
+{
+    static std::queue<InputEvent> queue;
+    void resolve();
+};
 // Unified input handler interface.
 class IInputHandler {
 public:
@@ -50,5 +57,6 @@ public:
 
     // Handles any input event, whether mouse or keyboard.
     virtual void OnInputEvent(const InputEvent& event) = 0;
+   
 };
 #endif

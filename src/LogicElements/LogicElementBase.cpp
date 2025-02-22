@@ -132,27 +132,6 @@ namespace LogicElements
         evaluate();  // Automatically reevaluate when input changes
     }
 
-    void OnInputEvent(const InputEvent& event) override {
-        if (event.type == InputType::Mouse) {
-            // Process mouse events
-            switch (event.mouseState) {
-            case MouseEventState::LeftClick:
-                std::cout << "DigitalLogicComponent: Left Click at ("
-                    << event.pos.x << ", " << event.pos.y << ")\n";
-                break;
-            case MouseEventState::RightClick:
-                std::cout << "DigitalLogicComponent: Right Click at ("
-                    << event.pos.x << ", " << event.pos.y << ")\n";
-                break;
-            case MouseEventState::Move:
-                std::cout << "DigitalLogicComponent: Mouse Move at ("
-                    << event.pos.x << ", " << event.pos.y << ")\n";
-                break;
-            default:
-                std::cout << "DigitalLogicComponent: Other Mouse Event\n";
-                break;
-            }
-        }
-    }
+  
 
 }  // namespace LogicElements
