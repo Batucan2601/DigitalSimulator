@@ -87,7 +87,6 @@ namespace Controls
             // circuit->m_logger.info("catched new ");
         }
 
-        // check dragging
         if (GUITools::dragDrop.state == GUITools::DragDropState::DRAGGING)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
@@ -96,7 +95,8 @@ namespace Controls
             // circuit->m_logger.info("catched new ");
             circuit->is_GUIdragdragging = true;
         }
-        else if (GUITools::dragDrop.state == GUITools::DragDropState::DROPPED)
+        if (circuit->is_GUIdragdragging &&
+            GUITools::dragDrop.state == GUITools::DragDropState::IDLE)
         {
             circuit->is_GUIdragdropped = true;
             circuit->is_GUIdragdragging = false;
@@ -104,44 +104,15 @@ namespace Controls
             // add the new circuit
             std::string new_gate = "or_gate_logger";
             std::shared_ptr<LogicElements::LogicGate> gate;
-            switch (GUITools::dragDrop.gateType)
-            {
-                case (LogicElements::GateType::AND):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::AND, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                case (LogicElements::GateType::OR):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::OR, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                case (LogicElements::GateType::XOR):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::XOR, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                case (LogicElements::GateType::XAND):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::XAND, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                case (LogicElements::GateType::NOT):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::NOT, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                case (LogicElements::GateType::INPUT):
-                    gate = LogicElements::LogicElementFactory::createGate(
-                        LogicElements::GateType::INPUT, new_gate);
-                    circuit->addGate(gate);
-                    break;
-                default:
-                    break;
-            }
+            gate = LogicElements::LogicElementFactory::createGate(GUITools::dragDrop.gateType,
+                                                                  new_gate);
+            circuit->addGate(gate);
+
             if (GUITools::dragDrop.gateType != LogicElements::GateType::NONE)
             {
-                circuit->gates[circuit->gates.size() - 1]->setPosition(mouse_pos.x, mouse_pos.y);
+                circuit->gates[circuit->gates.size() - 1]->setPosition(
+                    circuit->selected_wires.wire_hovering.x,
+                    circuit->selected_wires.wire_hovering.y);
                 GUITools::dragDrop.gateType = LogicElements::GateType::NONE;
             }
         }
