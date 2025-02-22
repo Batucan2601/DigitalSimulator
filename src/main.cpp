@@ -5,6 +5,7 @@
 #include "logicElementFactory.h"
 #include "raylib.h"
 #include "raylibHelper.h"
+#include "GUI/GUIEditor.h"
 
 int main(void)
 {
@@ -13,6 +14,7 @@ int main(void)
     const unsigned int screenWidth = 600;
     const unsigned int screenHeight = 600;
     const unsigned int targetFps = 60;
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     RaylibHelper::Init(screenWidth, screenHeight, targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     LogicElements::init_logicTextures();  // this should also be wrapped
@@ -48,6 +50,7 @@ int main(void)
     circuit->addGate(gate4);
     circuit->addGate(gate5);
     // Main game loop
+    GUIEditor::Init(screenWidth, screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         // Update
@@ -57,20 +60,21 @@ int main(void)
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         circuit->evaluate();
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                             [&circuit]()
-                             {
-                                 LogicElementsDraw::DrawCircuit(circuit);
-                                 // You can draw additional world elements here.
-                             });
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                             []()
-                             {
-                                 // Draw a grid to visualize the 2D world.
-                                 DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
-                                 // You can draw additional world elements here.
-                             });
-
+        GUIEditor::BeginOffscreenDraw();
+            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                                 [&circuit]()
+                                 {
+                                     LogicElementsDraw::DrawCircuit(circuit);
+                                     // You can draw additional world elements here.
+                                 });
+            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                                 []()
+                                 {
+                                     // Draw a grid to visualize the 2D world.
+                                     DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
+                                     // You can draw additional world elements here.
+                                 });
+        GUIEditor::EndOffscreenDraw();
         RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }

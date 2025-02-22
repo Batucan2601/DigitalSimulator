@@ -3,6 +3,7 @@
 
 #include "ClassLogger.h"
 #include "raylib.h"
+#include "Component.h"
 
 #include <GatePosition.h>
 #include <filesystem>
@@ -52,6 +53,7 @@ namespace LogicElements
     void init_OutlinedLogicTextures();
     void init_FilledLogicTextures();
     class LogicGate : public GateObserver  // Inherit observer to get updates
+
     {
       public:
         LogicGate(GateType gateType, std::string& logger_name);

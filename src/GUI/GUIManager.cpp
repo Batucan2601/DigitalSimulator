@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include <rlImGui.h>
 
+
 void GUIManager::Init()
 {
     rlImGuiSetup(true);  // Initialize ImGui
@@ -43,6 +44,7 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
     rlImGuiBegin();
     draw_parent_screen();
+    GUIEditor::Draw();
     // Draw individual components
     // GUIMenuBar::Draw();
     guiMenuBar.Draw(circuit);

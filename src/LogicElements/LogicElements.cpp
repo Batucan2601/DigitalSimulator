@@ -1,6 +1,6 @@
 #include "LogicElements.h"
 
-namespace CircuitElements
+namespace CircuitElements 
 {
     void Circuit::addGate(std::shared_ptr<LogicElements::LogicGate> gate)
     {
