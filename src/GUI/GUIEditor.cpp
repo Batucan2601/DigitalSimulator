@@ -37,7 +37,7 @@ namespace GUIEditor
 			unsigned int fbHeight = GetScreenHeight();
 			editor.renderTexture = LoadRenderTexture(fbWidth, fbHeight);
 		}
-		if (ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoScrollbar))
+		ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoScrollbar);
 		{
 			ImGui::Image((ImTextureID)&editor.renderTexture.texture,
 				ImVec2((float)editor.renderTexture.texture.width, (float)editor.renderTexture.texture.height),
@@ -51,8 +51,9 @@ namespace GUIEditor
 			editor.window.borderWidth = ImGui::GetStyle().WindowBorderSize;
 			editor.window.ImageMin = { imageMin.x ,imageMin.y};
 			editor.window.ImageMax = { imageMax.x ,imageMax.y};
-			ImGui::End();
 		}
+		ImGui::End();
+
 	}
 	EditorWindow Window()
 	{
