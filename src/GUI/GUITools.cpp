@@ -1,56 +1,31 @@
 #include "GUI/GUITools.h"
+
 #include "LogicElements.h"
+
 #include <imgui.h>
 #include <raylib.h>
 
 namespace GUITools
 {
+
     // Global or static variables for the UI state and texture.
-    bool is_BLD_shown = false; // Basic Logic Display flag.
+    bool is_BLD_shown = false;  // Basic Logic Display flag.
     // UI state variables (persistent across frames).
     static void GUITools_BasicLogicDisplay_draw();
-    GUIToolsDragDrop dragDrop = { DragDropState::IDLE , LogicElements::GateType::NONE };
+
+    GUIToolsDragDrop dragDrop = {DragDropState::IDLE, LogicElements::GateType::NONE};
+    static void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
+
     void GUITools_BasicLogicDisplay()
     {
-        is_BLD_shown = true;
+        is_BLD_shown = !is_BLD_shown;
     }
-    void GUITools_DragDrop(LogicElements::GateType type, std::string type_name)
-    {
-        // Make sure the texture is loaded before using it.
-        // Properly cast the texture ID for ImGui.
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-        if (ImGui::Button(type_name.c_str()))
-        {
-            // Button action.
-        }
-        
-        if (ImGui::BeginDragDropSource())
-        {
-            const char* payload = "Hello, ImGui!";
-            ImGui::SetDragDropPayload("IMAGE_DRAG", payload, strlen(payload) + 1);
-
-            // Show the image as a preview while dragging.
-            ImGui::Image((ImTextureID)&LogicElements::logicElementTextures[type], ImVec2(100, 100));
-            ImGui::Text("Dragging Image");
-            ImGui::EndDragDropSource();
-
-            dragDrop.gateType = type;
-            dragDrop.state = DragDropState::DRAGGING;
-        }
-        if (dragDrop.state == DragDropState::DROPPED)
-        {
-            dragDrop.state == DragDropState::IDLE;
-        }
-        if (!ImGui::IsMouseDragging(0) && dragDrop.state == DragDropState::DRAGGING)
-        {
-            dragDrop.state = DragDropState::DROPPED;
-        }
-    }
     void GUITools_Display()
     {
         GUITools_BasicLogicDisplay_draw();
     }
+
     static void GUITools_BasicLogicDisplay_draw()
     {
         if (!is_BLD_shown)
@@ -59,22 +34,91 @@ namespace GUITools
         }
         // Then, draw the drop area overlay on top if needed (and only during a drag operation).
 
-
         // Draw interactive windows first.
-        ImGui::Begin("Basic Logics", &is_BLD_shown);
-        if (ImGui::CollapsingHeader("Basic Gates"))
+        ImGui::Begin("Components", &is_BLD_shown);
         {
-            GUITools_DragDrop(LogicElements::GateType::AND, "AND Gate");
-            GUITools_DragDrop(LogicElements::GateType::OR, "OR Gate");
-            GUITools_DragDrop(LogicElements::GateType::NOT, "NOT Gate");
-            GUITools_DragDrop(LogicElements::GateType::XAND, "XAND Gate");
-            GUITools_DragDrop(LogicElements::GateType::XOR, "XOR Gate");
-            GUITools_DragDrop(LogicElements::GateType::INPUT, "INPUT Gate");
+            static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow |
+                                                   ImGuiTreeNodeFlags_OpenOnDoubleClick |
+                                                   ImGuiTreeNodeFlags_SpanAvailWidth;
+
+            ImGuiTreeNodeFlags node_flags = base_flags;
+
+            if (ImGui::TreeNodeEx("Logic Gates", node_flags))
+            {
+                for (const auto& gateInfo : *LogicElements::gateInfoList)
+                {
+                    RenderGateButton(gateInfo.name, gateInfo);
+                }
+                ImGui::TreePop();
+            }
+
+            if (ImGui::TreeNodeEx("Input/Output", node_flags))
+            {
+                // Get the gate info where GateType is INPUT
+                auto it = std::find_if(LogicElements::gateInfoList->begin(),
+                                       LogicElements::gateInfoList->end(),
+                                       [](const LogicElements::GateInfo& gate)
+                                       {
+                                           return gate.type == LogicElements::GateType::INPUT;
+                                       });
+
+                if (it != LogicElements::gateInfoList->end())  // If found, render the button
+                {
+                    RenderGateButton(it->name, *it);
+                }
+                ImGui::TreePop();  // ✅ Correctly closing this node
+            }
         }
-
         ImGui::End();
-
-
     }
 
-}
+    static void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
+    {
+        float icon_size = 50.0f;
+
+        // Get vertical alignment offsets
+        float text_height = ImGui::GetTextLineHeight();
+        float button_height = icon_size;
+        float vertical_offset = (button_height - text_height) * 0.5f;
+
+        // Align Text
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + vertical_offset);
+        ImGui::Text("%s", gateName.c_str());
+
+        // Keep on the same line
+        ImGui::SameLine();
+
+        // Reset Y position for ImageButton to maintain alignment
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() - vertical_offset);
+
+        ImTextureID textureID = (ImTextureID)gateInfo.filledTexture;
+
+        // ✅ Fix: Generate unique button ID
+        std::string button_id = "##button_" + gateName;
+        if (ImGui::ImageButton(button_id.c_str(), textureID, ImVec2(icon_size, icon_size))) {}
+
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload("IMAGE_DRAG", &gateInfo.type,
+                                      sizeof(LogicElements::GateType));
+
+            // Show the image as a preview while dragging.
+            ImGui::Image(textureID, ImVec2(100, 100));
+            ImGui::Text("Dragging: %s", gateName.c_str());
+            ImGui::EndDragDropSource();
+
+            dragDrop.gateType = gateInfo.type;
+            dragDrop.state = DragDropState::DRAGGING;
+        }
+        // Handle Drag State
+        if (dragDrop.state == DragDropState::DROPPED)
+        {
+            dragDrop.state = DragDropState::IDLE;
+        }
+        if (!ImGui::IsMouseDragging(0) && dragDrop.state == DragDropState::DRAGGING)
+        {
+            dragDrop.state = DragDropState::DROPPED;
+        }
+    }
+
+}  // namespace GUITools
