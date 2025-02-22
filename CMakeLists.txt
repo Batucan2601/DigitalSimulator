@@ -17,6 +17,7 @@ set(IMGUI_FILES Libraries/imgui/imgui.cpp
 Libraries/imgui/imgui_draw.cpp
 Libraries/imgui/imgui_tables.cpp 
 Libraries/imgui/imgui_widgets.cpp 
+Libraries/imgui/imgui_demo.cpp 
 #support for rlimgui 
 Libraries/rlImGui/rlImGui.cpp
 Libraries/ImGuiFileDialog/ImGuiFileDialog.cpp
@@ -52,6 +53,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ImGuiLib)
 
 
 # Include directories for headers
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PUBLIC include/LogicElements)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/imgui)
