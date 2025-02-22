@@ -94,9 +94,17 @@ class Logger
         std::string black_color = "\033[31m";
         std::string white_color = "\033[37m";
 
-        std::cout << bold << black_color << "[" << className << "]" << color_code_reset
-                  << color_code << " [" << logLevelToString(level) << "]" << color_code_reset
-                  << "\t-\t" << bold << white_color << message << color_code_reset << std::endl;
+        // get the current time
+        time_t now = time(0);
+        tm* ltm = localtime(&now);
+        std::string time = std::to_string(1 + ltm->tm_hour) + ":" +
+                            std::to_string(1 + ltm->tm_min) + ":" +
+                            std::to_string(1 + ltm->tm_sec);
+
+        std::cout << bold << black_color << "[" << className << "]\t[" << time << "]"
+                    << color_code_reset << color_code << " [" << logLevelToString(level) << "]"
+                    << color_code_reset << "\t-\t" << bold << white_color << message
+                    << color_code_reset << std::endl;
     }
 
   private:
