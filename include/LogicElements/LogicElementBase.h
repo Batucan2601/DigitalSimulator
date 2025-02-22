@@ -18,15 +18,39 @@ namespace LogicElements
     {
         NONE,
         AND,
+        AND_FILLED,
         OR,
+        OR_FILLED,
         NOT,
+        NOT_FILLED,
         XOR,
+        XOR_FILLED,
         XAND,
-        INPUT
+        XAND_FILLED,
+        INPUT,
+        INPUT_FILLED,
     };
 
+    struct GateInfo
+    {
+        std::string name;
+        GateType type;             // Name of the gate (e.g., "AND Gate")
+        Texture* outlinedTexture;  // Default texture
+        Texture* filledTexture;    // Alternative texture (e.g., highlighted version)
+
+        GateInfo(std::string name, GateType type, Texture* outlinedText, Texture* filledTex)
+            : name(name), type(std::move(type)), outlinedTexture(outlinedText),
+              filledTexture(filledTex)
+        {
+        }
+    };
+
+    extern std::shared_ptr<std::vector<GateInfo>> gateInfoList;
     extern std::map<LogicElements::GateType, Texture> logicElementTextures;
+
     void init_logicTextures();
+    void init_OutlinedLogicTextures();
+    void init_FilledLogicTextures();
     class LogicGate : public GateObserver  // Inherit observer to get updates
     {
       public:
