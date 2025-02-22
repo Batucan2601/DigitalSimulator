@@ -45,7 +45,7 @@ struct InputEvent {
     int keyCode = 0;
 };
 
-static class InputResolver
+class InputResolver
 {
     static std::queue<InputEvent> queue;
     void resolve();
