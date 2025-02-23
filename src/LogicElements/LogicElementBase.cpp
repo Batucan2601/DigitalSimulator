@@ -97,6 +97,8 @@ namespace LogicElements
         // type = gateType;
         m_texture = logicElementTextures[gateType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
+
+        InputResolver::RegisterHandler(this);
     }
 
     LogicGate::~LogicGate()
@@ -193,5 +195,10 @@ namespace LogicElements
     }
 
   
-
+    void LogicGate::OnInputEvent(const InputEvent& event)
+    {
+        if (event.type == InputType::Mouse) {
+        
+        }
+    }
 }  // namespace LogicElements

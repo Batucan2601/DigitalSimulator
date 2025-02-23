@@ -52,7 +52,7 @@ namespace LogicElements
     void init_logicTextures();
     void init_OutlinedLogicTextures();
     void init_FilledLogicTextures();
-    class LogicGate : public GateObserver  // Inherit observer to get updates
+    class LogicGate : public GateObserver , public IInputHandler  // Inherit observer to get updates
     {
       public:
         LogicGate(GateType gateType, std::string& logger_name);
@@ -91,6 +91,7 @@ namespace LogicElements
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
 
+        void OnInputEvent(const InputEvent& event) override;
       protected:
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic

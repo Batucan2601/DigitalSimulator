@@ -45,11 +45,7 @@ struct InputEvent {
     int keyCode = 0;
 };
 
-class InputResolver
-{
-    static std::queue<InputEvent> queue;
-    void resolve();
-};
+
 // Unified input handler interface.
 class IInputHandler {
 public:
@@ -58,5 +54,26 @@ public:
     // Handles any input event, whether mouse or keyboard.
     virtual void OnInputEvent(const InputEvent& event) = 0;
    
+};
+
+class InputResolver {
+public:
+    // Add a new event to the queue.
+    static void PushEvent(const InputEvent& event);
+
+    // Register an input handler.
+    static void RegisterHandler(IInputHandler* handler);
+
+    // Unregister an input handler (optional but useful).
+    static void UnregisterHandler(IInputHandler* handler);
+
+    // Process all queued events.
+    static void resolve();
+
+private:
+    static std::queue<InputEvent> queue;
+    static std::vector<IInputHandler*> handlers; // Collection of input handlers.
+    InputEvent eventOngoing;
+    // You can keep additional helper functions if needed.
 };
 #endif

@@ -6,7 +6,7 @@
 #include "LogicElements.h"
 #include "logicElementFactory.h"
 #include "raylib.h"
-
+#include "Component.h"
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -77,6 +77,8 @@ namespace Controls
         Controls_Mouse_click();
         Control_Keyboard_Event(selected_circuit);
         Controls_Handle_Continous(selected_circuit);
+        
+        InputResolver::resolve();
     }
 
     Camera2D Controls_get_camera()
@@ -241,6 +243,12 @@ namespace Controls
     void HandleMouseLeftClick(std::shared_ptr<CircuitElements::Circuit> circuit,
                               const Vector2& mousePosition)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::LeftClick;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+
         bool gateSelected = false;
         if (!is_logic_selected)  // the default system goes when not doing wiring
         {
