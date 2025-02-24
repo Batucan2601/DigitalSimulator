@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+
 namespace LogicElements
 {
     enum class GateType
@@ -52,7 +53,7 @@ namespace LogicElements
     void init_logicTextures();
     void init_OutlinedLogicTextures();
     void init_FilledLogicTextures();
-    class LogicGate : public GateObserver , public IInputHandler  // Inherit observer to get updates
+    class LogicGate : public GateObserver , public IInputHandler ,public std::enable_shared_from_this<LogicGate>  // Inherit observer to get updates
     {
       public:
         LogicGate(GateType gateType, std::string& logger_name);
@@ -90,11 +91,18 @@ namespace LogicElements
         std::unordered_map<std::string, bool> outputs;
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
+        CircuitElements::Circuit* cisrcuit;
 
         void OnInputEvent(const InputEvent& event) override;
+        void LogicGate::CheckGatePartClicked(
+            const Vector2& mousePosition, CircuitElements::Connection& connection);
       protected:
+        void OnLeftClick(const InputEvent& event);
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
+      private:
+          bool LogicGate::is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
+
     };
 }  // namespace LogicElements
 

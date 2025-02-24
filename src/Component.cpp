@@ -3,7 +3,7 @@
 // Define static members.
 std::queue<InputEvent> InputResolver::queue;
 std::vector<IInputHandler*> InputResolver::handlers;
-
+IInputHandler* InputResolver::selectedHandler = nullptr;
 void InputResolver::PushEvent(const InputEvent& event) {
     queue.push(event);
 }

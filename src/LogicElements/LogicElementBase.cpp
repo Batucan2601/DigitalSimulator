@@ -1,8 +1,10 @@
 #include "LogicElementBase.h"
+#include "Component.h"
 
 #ifndef PROJECT_ROOT_DIR
 #define PROJECT_ROOT_DIR "/path/to/project/root"  // Replace with the actual project root directory
 #endif
+#include <Controls.h>
 
 namespace LogicElements
 {
@@ -198,7 +200,98 @@ namespace LogicElements
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
         if (event.type == InputType::Mouse) {
+            if (event.mouseState == MouseEventState::LeftClick)
+            {
+                OnLeftClick(event);
+           }
+        }
+    }
+
+    bool LogicGate::is_connection_clicked(const Vector2& mousePos , CircuitElements::Connection& possibleConnection)
+    {
+        this->CheckGatePartClicked(mousePos, possibleConnection);
+        if (possibleConnection.sourceLogic == "")  // not intitialized
+        {
+            return false;
+        }
+
+    }
+    void LogicGate::OnLeftClick(const InputEvent& event)
+    {
+        //check bb
+        Vector2 pos = { event.pos.x , event.pos.y };
+        bool isCol = CheckCollisionPointRec(pos, this->bd);
+        if (!isCol)
+        {
+            return;
+        }
+        //ok first look at the selected handler, check if it is a logic gate
+        CircuitElements::Connection possibleConnection;
+        if (InputResolver::getSelectedHandler() == nullptr)
+        {
+            // it cannot be a connection end
+            // it can be a connection start, or gate select
+            if (this->is_connection_clicked(pos, possibleConnection))
+            {
+                // if hits select it 
+                circuit->connections.push_back(possibleConnection);
+                InputResolver::RegisterHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+                circuit->active_wire.is_visible = true; 
+                circuit->active_wire.start = pos; 
+            }
+            else // select the gate 
+            {
+                InputResolver::setSelectedHandler((IInputHandler*)this);
+            }
+            return; 
+        }
+        // check if a connection already selected.
+        if (auto handler = dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()))
+        {
+            if (this->is_connection_clicked(pos, possibleConnection))
+            {
+                handler->targetGate = possibleConnection.sourceGate;
+                handler->targetLogic = possibleConnection.sourceLogic;
+                circuit->active_wire.is_visible = false;
+                InputResolver::setSelectedHandler(nullptr);
+            }
+        }
+        // connection logic
         
+        
+        
+        //select the handler.
+        InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+    }
+    void LogicGate::CheckGatePartClicked(
+        const Vector2& mousePosition, CircuitElements::Connection& connection)
+    {
+        auto inputTopRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.2, 0.3);
+        auto inputBottomRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.7, 0.8);
+        auto outputRegion = Controls::CalculateRegion(this->bd, 0.85, 0.95, 0.45, 0.55);
+
+        std::shared_ptr<LogicGate> itself = shared_from_this();
+        // TODO after dynamic input this should change
+        if (CheckCollisionPointRec(mousePosition, inputTopRegion))
+        {
+            connection.sourceGate = itself;
+            connection.sourceLogic = "A";
+            Vector2 pos = { inputTopRegion.x, inputTopRegion.y };
+            connection.physCon.wires.push_back(pos);
+        }
+        else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
+        {
+            connection.sourceGate = itself;
+            connection.sourceLogic = "B";
+            Vector2 pos = { inputBottomRegion.x, inputBottomRegion.y };
+            connection.physCon.wires.push_back(pos);
+        }
+        else if (CheckCollisionPointRec(mousePosition, outputRegion))
+        {
+            connection.sourceGate = itself;
+            connection.sourceLogic = "Out";
+            Vector2 pos = { outputRegion.x, outputRegion.y };
+            connection.physCon.wires.push_back(pos);
         }
     }
 }  // namespace LogicElements

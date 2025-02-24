@@ -15,18 +15,21 @@
 namespace CircuitElements
 {
 
-    struct PhysicalConnection
+    struct PhysicalConnection 
     {
         std::vector<Vector2> wires;
     };
-    struct Connection
+    class Connection : public IInputHandler
     {
+    public:
         std::shared_ptr<LogicElements::LogicGate> sourceGate;
         std::string sourceLogic;
         std::shared_ptr<LogicElements::LogicGate> targetGate;
         std::string targetLogic;
         PhysicalConnection physCon;
         bool is_connected = false;
+        void OnInputEvent(const InputEvent& event) override;
+        void Connection::OnLeftClick(const InputEvent& event);
     };
     struct ActiveWire
     {

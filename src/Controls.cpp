@@ -305,6 +305,12 @@ namespace Controls
     void HandleMouseRightClick(std::shared_ptr<CircuitElements::Circuit>& circuit,
                                const Vector2& mousePosition)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::RightClick;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+
         is_logic_selected = false;  // kills wiring process for sure everytime
         circuit->active_wire.is_visible = false;
     }

@@ -70,10 +70,12 @@ public:
     // Process all queued events.
     static void resolve();
 
+    static IInputHandler* getSelectedHandler() { return selectedHandler; }
+    static void setSelectedHandler(IInputHandler* handler) { selectedHandler = handler; }
 private:
     static std::queue<InputEvent> queue;
     static std::vector<IInputHandler*> handlers; // Collection of input handlers.
-    InputEvent eventOngoing;
+    static IInputHandler* selectedHandler;
     // You can keep additional helper functions if needed.
 };
 #endif

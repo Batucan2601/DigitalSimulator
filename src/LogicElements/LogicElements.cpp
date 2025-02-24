@@ -5,6 +5,7 @@ namespace CircuitElements
     void Circuit::addGate(std::shared_ptr<LogicElements::LogicGate> gate)
     {
         this->m_logger.info("Gate added to the circuit.");
+        gate->circuit = this;
         gates.push_back(gate);
     }
 
@@ -14,7 +15,12 @@ namespace CircuitElements
                                 const std::string& targetInput)
     {
         this->m_logger.info("Connection added to the circuit.");
-        connections.push_back({sourceGate, sourceOutput, targetGate, targetInput});
+        Connection c;
+        c.sourceGate = sourceGate;
+        c.sourceLogic = sourceOutput;
+        c.targetGate = targetGate;
+        c.targetLogic = targetInput;
+        connections.push_back(c);
     }
 
     void Circuit::evaluate()
@@ -54,4 +60,18 @@ namespace CircuitElements
         }
     }
 
+
+    void Connection::OnInputEvent(const InputEvent& event)
+    {
+        if (event.type == InputType::Mouse) {
+            if (event.mouseState == MouseEventState::LeftClick)
+            {
+                OnLeftClick(event);
+            }
+        }
+    }
+    void Connection::OnLeftClick(const InputEvent& event)
+    {
+
+    }
 }  // namespace CircuitElements
