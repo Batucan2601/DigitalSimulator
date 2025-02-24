@@ -1,6 +1,6 @@
 #include "LogicElements.h"
 
-namespace CircuitElements 
+namespace CircuitElements
 {
     void Circuit::addGate(std::shared_ptr<LogicElements::LogicGate> gate)
     {
@@ -17,7 +17,7 @@ namespace CircuitElements
         connections.push_back({sourceGate, sourceOutput, targetGate, targetInput});
     }
 
-    void Circuit::evaluate()
+        void Circuit::evaluate()
     {
         bool stabilized = false;
         int iterations = 0;
