@@ -76,7 +76,7 @@ namespace Controls
 
         Controls_Mouse_click();
         Control_Keyboard_Event(selected_circuit);
-        Controls_Handle_Continous(selected_circuit);
+        //Controls_Handle_Continous(selected_circuit);
         
         InputResolver::resolve();
     }
@@ -195,8 +195,8 @@ namespace Controls
             // delete the connections
             for (size_t i = 0; i < circuit->connections.size(); i++)
             {
-                if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
-                    circuit->connections[i].targetGate == selected_logic_gate[0])
+                //if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
+                //    circuit->connections[i].targetGate == selected_logic_gate[0])
                 {
                     circuit->connections.erase(circuit->connections.begin() + i);
                     i--;
@@ -248,7 +248,7 @@ namespace Controls
         event.mouseState = MouseEventState::LeftClick;
         event.pos = { (int)mousePosition.x , (int)mousePosition.y };
         InputResolver::PushEvent(event);
-
+        return; 
         bool gateSelected = false;
         if (!is_logic_selected)  // the default system goes when not doing wiring
         {
@@ -262,7 +262,7 @@ namespace Controls
                     gateSelected = true;
                     if (connection_start.sourceLogic != "")  // not intitialized
                     {
-                        circuit->connections.push_back(connection_start);
+                        //circuit->connections.push_back(connection_start);
                     }
                     if (is_logic_selected)
                     {
@@ -288,7 +288,7 @@ namespace Controls
                     new_connection.sourceGate = con.sourceGate;
                     new_connection.sourceLogic = con.sourceLogic;
                     new_connection.physCon.wires.push_back(mousePosition);
-                    circuit->connections.push_back(new_connection);
+                   // circuit->connectionspush_back(new_connection);
                 }
             }
         }
@@ -403,7 +403,7 @@ namespace Controls
     bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit,
                        const Vector2& mousePosition, CircuitElements::Connection& con)
     {
-        for (size_t i = 0; i < circuit->connections.size(); i++)
+    /*   for (size_t i = 0; i < circuit->connections.size(); i++)
         {
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
@@ -426,13 +426,13 @@ namespace Controls
                     return true;
                 }
             }
-        }
+        } */
         return false;
     }
     void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,
                          const Vector2& mousePosition)
     {
-        if (selected_logic_gate[0])
+        /*if (selected_logic_gate[0])
         {
             is_dragging = true;
             selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
@@ -455,7 +455,7 @@ namespace Controls
                     circuit->connections[i].physCon.wires[size].y = mousePosition.y - offset.y;
                 }
             }
-        }
+        } */
     }
 
     void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit)
@@ -482,6 +482,12 @@ namespace Controls
 
     void Controls_Mouse_click()
     {
+        //mouse always moves 
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Move;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {

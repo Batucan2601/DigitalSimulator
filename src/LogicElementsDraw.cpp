@@ -37,6 +37,10 @@ namespace LogicElementsDraw
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)
         {
+            if (circuit->connections[i].physCon.wires.size() == 0)
+            {
+                continue;
+            }
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];

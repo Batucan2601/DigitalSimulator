@@ -214,6 +214,7 @@ namespace LogicElements
         {
             return false;
         }
+        return true; 
 
     }
     void LogicGate::OnLeftClick(const InputEvent& event)
@@ -234,10 +235,13 @@ namespace LogicElements
             if (this->is_connection_clicked(pos, possibleConnection))
             {
                 // if hits select it 
-                circuit->connections.push_back(possibleConnection);
-                InputResolver::RegisterHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+                circuit->addConnection(possibleConnection.sourceGate, possibleConnection.sourceLogic, possibleConnection.targetGate, possibleConnection.targetLogic);
+                //InputResolver::RegisterHandler(static_cast<IInputHandler*>(&circuit->connections[circuit->connections.size() - 1]));
                 circuit->active_wire.is_visible = true; 
                 circuit->active_wire.start = pos; 
+                circuit->active_wire.end = pos; 
+                InputResolver::RegisterHandler(static_cast<IInputHandler*>(&(circuit->active_wire)));
+                InputResolver::setSelectedHandler((IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
             }
             else // select the gate 
             {
@@ -253,6 +257,7 @@ namespace LogicElements
                 handler->targetGate = possibleConnection.sourceGate;
                 handler->targetLogic = possibleConnection.sourceLogic;
                 circuit->active_wire.is_visible = false;
+                InputResolver::UnregisterHandler((IInputHandler*)(&circuit->active_wire));
                 InputResolver::setSelectedHandler(nullptr);
             }
         }
@@ -261,7 +266,7 @@ namespace LogicElements
         
         
         //select the handler.
-        InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+        //InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
     }
     void LogicGate::CheckGatePartClicked(
         const Vector2& mousePosition, CircuitElements::Connection& connection)

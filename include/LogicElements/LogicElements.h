@@ -31,11 +31,16 @@ namespace CircuitElements
         void OnInputEvent(const InputEvent& event) override;
         void Connection::OnLeftClick(const InputEvent& event);
     };
-    struct ActiveWire
+    class ActiveWire : public IInputHandler
     {
+    public:
         Vector2 start;
         Vector2 end;
         bool is_visible;
+        void OnInputEvent(const InputEvent& event) override;
+    private:
+        void OnMove(const InputEvent& event);
+        void ActiveWire::OnLeftClick(const InputEvent& event);
     };
     struct SelectedWires
     {
@@ -45,7 +50,10 @@ namespace CircuitElements
     class Circuit
     {
       public:
-        Circuit(std::string& logger_name) : m_logger(logger_name) {}
+        Circuit(std::string& logger_name) : m_logger(logger_name)
+        {
+            this->connections.reserve(1000);
+        }
         void addGate(std::shared_ptr<LogicElements::LogicGate> gate);
         void addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
                            const std::string& sourceOutput,
@@ -59,7 +67,7 @@ namespace CircuitElements
         std::vector<Connection> connections;
         // TODO
         // this might be moved to a better data structure
-        ActiveWire active_wire;
+        ActiveWire active_wire = {};
         SelectedWires selected_wires;
 
         bool is_GUIdragdropped = false;

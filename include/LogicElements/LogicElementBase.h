@@ -13,9 +13,14 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
+namespace CircuitElements
+{
+    class Circuit;
+    class Connection;
+}
 namespace LogicElements
 {
+    class Circuit; 
     enum class GateType
     {
         NONE,
@@ -91,7 +96,7 @@ namespace LogicElements
         std::unordered_map<std::string, bool> outputs;
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
-        CircuitElements::Circuit* cisrcuit;
+        CircuitElements::Circuit* circuit;
 
         void OnInputEvent(const InputEvent& event) override;
         void LogicGate::CheckGatePartClicked(

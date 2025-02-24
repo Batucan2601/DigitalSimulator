@@ -2,7 +2,7 @@
 #define COMPONENT_H
 #include <queue>
 #include <vector>
-
+#include <list>
 // Enum to identify the type of input event.
 enum class InputType {
     None,
@@ -74,7 +74,7 @@ public:
     static void setSelectedHandler(IInputHandler* handler) { selectedHandler = handler; }
 private:
     static std::queue<InputEvent> queue;
-    static std::vector<IInputHandler*> handlers; // Collection of input handlers.
+    static std::list<IInputHandler*> handlers; // Collection of input handlers.
     static IInputHandler* selectedHandler;
     // You can keep additional helper functions if needed.
 };

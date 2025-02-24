@@ -1,8 +1,7 @@
 #include "Component.h"
-
 // Define static members.
 std::queue<InputEvent> InputResolver::queue;
-std::vector<IInputHandler*> InputResolver::handlers;
+std::list<IInputHandler*> InputResolver::handlers; // I do not really know what thefuck that is about
 IInputHandler* InputResolver::selectedHandler = nullptr;
 void InputResolver::PushEvent(const InputEvent& event) {
     queue.push(event);
@@ -23,6 +22,7 @@ void InputResolver::resolve() {
         InputEvent event = queue.front();
         queue.pop();
         // Dispatch the event to all registered handlers.
+        int i = 0;
         for (auto handler : handlers) {
             if (handler) {
                 handler->OnInputEvent(event);

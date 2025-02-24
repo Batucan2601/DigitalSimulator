@@ -55,7 +55,6 @@ int main(void)
     {
         // Update
         Controls::Controls_update(circuit);
-        InputResolver::resolve();
         // Draw
         RaylibHelper::BeginFrame();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera

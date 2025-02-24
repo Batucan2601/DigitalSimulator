@@ -20,7 +20,8 @@ namespace CircuitElements
         c.sourceLogic = sourceOutput;
         c.targetGate = targetGate;
         c.targetLogic = targetInput;
-        connections.push_back(c);
+
+        this->connections.push_back(c);
     }
 
     void Circuit::evaluate()
@@ -71,6 +72,30 @@ namespace CircuitElements
         }
     }
     void Connection::OnLeftClick(const InputEvent& event)
+    {
+
+    }
+
+
+    void ActiveWire::OnInputEvent(const InputEvent& event)
+    {
+        if (event.type == InputType::Mouse) {
+            if (event.mouseState == MouseEventState::Move)
+            {
+                OnMove(event);
+            }
+            if (event.mouseState == MouseEventState::LeftClick)
+            {
+                OnLeftClick(event);
+            }
+        }
+    }
+    void ActiveWire::OnMove(const InputEvent& event)
+    {
+        this->end = {(float)event.pos.x ,(float)event.pos.y };
+    }
+
+    void ActiveWire::OnLeftClick(const InputEvent& event)
     {
 
     }
