@@ -30,6 +30,7 @@ namespace CircuitElements
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
+
     };
     class ActiveWire : public IInputHandler
     {
@@ -41,6 +42,7 @@ namespace CircuitElements
     private:
         void OnMove(const InputEvent& event);
         void OnLeftClick(const InputEvent& event);
+        void OnRightClick(const InputEvent& event);
     };
     struct SelectedWires
     {

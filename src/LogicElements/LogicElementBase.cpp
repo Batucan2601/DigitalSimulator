@@ -256,9 +256,7 @@ namespace LogicElements
             {
                 handler->targetGate = possibleConnection.sourceGate;
                 handler->targetLogic = possibleConnection.sourceLogic;
-                circuit->active_wire.is_visible = false;
-                InputResolver::UnregisterHandler((IInputHandler*)(&circuit->active_wire));
-                InputResolver::setSelectedHandler(nullptr);
+                handler->is_connected = true; 
             }
         }
         // connection logic

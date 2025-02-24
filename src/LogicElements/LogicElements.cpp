@@ -77,7 +77,6 @@ namespace CircuitElements
         
     }
 
-
     void ActiveWire::OnInputEvent(const InputEvent& event)
     {
         if (event.type == InputType::Mouse) {
@@ -89,20 +88,20 @@ namespace CircuitElements
             {
                 OnLeftClick(event);
             }
+            if (event.mouseState == MouseEventState::RightClick)
+            {
+                OnRightClick(event);
+            }
         }
     }
     void ActiveWire::OnMove(const InputEvent& event)
     {
         Rectangle pos_rec = { event.pos.x , event.pos.y , 0, 0 };
         this->end  = Controls::SnapToNearestGrid(pos_rec);
-        
     }
 
     void ActiveWire::OnLeftClick(const InputEvent& event)
     {
-        Vector2 pos = { event.pos.x , event.pos.y};
-        Rectangle pos_rec = { event.pos.x , event.pos.y , 0, 0};
-        pos = Controls::SnapToNearestGrid(pos_rec);
         if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler())) {
             d1->physCon.wires.push_back({ this->start.x, this->start.y });
             Vector2 straight_line = Controls::Generate_straight_lines(this->start,
@@ -111,6 +110,20 @@ namespace CircuitElements
             d1->physCon.wires.push_back({ this->end.x, this->end.y });
             Rectangle pos_rec = { this->end.x , this->end.y, 0, 0 };
             this->start = Controls::SnapToNearestGrid(pos_rec);
+
+            if (d1->is_connected)
+            {
+                this->is_visible = false;
+                InputResolver::setSelectedHandler(nullptr);
+            }
         }
+    }
+    void ActiveWire::OnRightClick(const InputEvent& event)
+    {
+        if (this == (InputResolver::getSelectedHandler()))
+        {
+            InputResolver::UnregisterHandler(this);
+        }
+
     }
 }  // namespace CircuitElements
