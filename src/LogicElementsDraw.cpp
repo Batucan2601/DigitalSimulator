@@ -74,6 +74,11 @@ namespace LogicElementsDraw
         // 3 - DrawActiveWire
         if (circuit->active_wire.is_visible)
         {
+            Rectangle rec = { circuit->active_wire.start.x , circuit->active_wire.start.y , 0,0 };
+            circuit->active_wire.start = Controls::SnapToNearestGrid(rec);
+            rec = { circuit->active_wire.end.x , circuit->active_wire.end.y , 0,0 };
+            circuit->active_wire.end = Controls::SnapToNearestGrid(rec);
+
             Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
                                                                       circuit->active_wire.end);
             DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x,

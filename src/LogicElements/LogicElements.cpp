@@ -1,4 +1,5 @@
 #include "LogicElements.h"
+#include "Controls.h"
 
 namespace CircuitElements 
 {
@@ -73,7 +74,7 @@ namespace CircuitElements
     }
     void Connection::OnLeftClick(const InputEvent& event)
     {
-
+        
     }
 
 
@@ -92,11 +93,24 @@ namespace CircuitElements
     }
     void ActiveWire::OnMove(const InputEvent& event)
     {
-        this->end = {(float)event.pos.x ,(float)event.pos.y };
+        Rectangle pos_rec = { event.pos.x , event.pos.y , 0, 0 };
+        this->end  = Controls::SnapToNearestGrid(pos_rec);
+        
     }
 
     void ActiveWire::OnLeftClick(const InputEvent& event)
     {
-
+        Vector2 pos = { event.pos.x , event.pos.y};
+        Rectangle pos_rec = { event.pos.x , event.pos.y , 0, 0};
+        pos = Controls::SnapToNearestGrid(pos_rec);
+        if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler())) {
+            d1->physCon.wires.push_back({ this->start.x, this->start.y });
+            Vector2 straight_line = Controls::Generate_straight_lines(this->start,
+                this->end);
+            d1->physCon.wires.push_back(straight_line);
+            d1->physCon.wires.push_back({ this->end.x, this->end.y });
+            Rectangle pos_rec = { this->end.x , this->end.y, 0, 0 };
+            this->start = Controls::SnapToNearestGrid(pos_rec);
+        }
     }
 }  // namespace CircuitElements

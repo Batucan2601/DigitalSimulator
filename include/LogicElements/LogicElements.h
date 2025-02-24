@@ -29,7 +29,7 @@ namespace CircuitElements
         PhysicalConnection physCon;
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
-        void Connection::OnLeftClick(const InputEvent& event);
+        void OnLeftClick(const InputEvent& event);
     };
     class ActiveWire : public IInputHandler
     {
@@ -40,7 +40,7 @@ namespace CircuitElements
         void OnInputEvent(const InputEvent& event) override;
     private:
         void OnMove(const InputEvent& event);
-        void ActiveWire::OnLeftClick(const InputEvent& event);
+        void OnLeftClick(const InputEvent& event);
     };
     struct SelectedWires
     {
