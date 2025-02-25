@@ -14,9 +14,8 @@ namespace GUISaveSystem
         state = State::STATE_SAVE;
     }
 
-    void ShowLoadWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit)
+    void ShowLoadWindow()
     {
-        localCircuit = globalCircuit;
         ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
         state = State::STATE_LOAD;
     }

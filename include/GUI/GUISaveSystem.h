@@ -23,7 +23,7 @@ namespace GUISaveSystem
 
     extern State state;
     void ShowSaveWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit);
-    void ShowLoadWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit);
+    void ShowLoadWindow();
 
     void draw();
     void drawSaveWindow();

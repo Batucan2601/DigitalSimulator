@@ -96,7 +96,7 @@ GUIMenuBar::GUIMenuBar()
     createMenuItem("File/Load", false,
                    [this]()  // Capture 'this' here
                    {
-                       GUISaveSystem::ShowLoadWindow(this->circuit);
+                       GUISaveSystem::ShowLoadWindow();
                        //    GUISaveSystem::loadFile(&this->circuit);
                    });
     createMenuItem("File/Exit", false,
