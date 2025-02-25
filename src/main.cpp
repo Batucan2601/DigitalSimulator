@@ -57,7 +57,7 @@ int main(void)
         circuit->evaluate();
         GUIEditor::BeginOffscreenDraw();
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                             [&circuit]()
+                             []()
                              {
                                  LogicElementsDraw::DrawCircuit(circuit);
                                  // You can draw additional world elements here.
