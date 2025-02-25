@@ -228,7 +228,7 @@ namespace LogicElements
     void LogicGate::OnLeftClick(const InputEvent& event)
     {
         //check bb
-        Vector2 pos = { event.pos.x , event.pos.y };
+        Vector2 pos = { (float)event.pos.x , (float)event.pos.y };
         bool isCol = CheckCollisionPointRec(pos, this->bd);
         if (!isCol)
         {
