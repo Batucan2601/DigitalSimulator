@@ -243,10 +243,17 @@ namespace LogicElements
             {
                 OnDown(event);
             }
-            
             if (event.mouseState == MouseEventState::Move)
             {
                 OnMove(event);
+            }
+            if(event.mouseState == MouseEventState::Enter)
+            {
+                OnEnter(event); 
+            }
+            if(event.mouseState == MouseEventState::Leave)
+            {
+                OnExit(event); 
             }
         }
     }
@@ -391,6 +398,22 @@ namespace LogicElements
         {
             // this should change the input color
         }
+    }
+
+    void LogicGate::OnEnter(const InputEvent& event)
+    {
+       // update the circuit->hoveredGate with this object 
+       
+        m_logger.info("Mouse entered the gate");
+       if(this == InputResolver::getSelectedHandler())
+       {
+            circuit->hoveredGate = shared_from_this();    
+       }
+    }
+    void LogicGate::OnExit(const InputEvent& event)
+    {
+        // update the circuit->hoveredGate with nullptr
+
     }
 
     bool LogicGate::CheckMouseOnInOut(

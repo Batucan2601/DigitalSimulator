@@ -109,6 +109,8 @@ namespace LogicElements
         ClassLogger m_logger;
         CircuitElements::Circuit* circuit;
 
+        bool is_hovered = false; 
+
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
@@ -118,6 +120,8 @@ namespace LogicElements
         void OnRelease(const InputEvent& event);
         void OnMove(const InputEvent& event);
         void OnRightClick(const InputEvent& event);
+        void OnEnter(const InputEvent& event);
+        void OnExit(const InputEvent& event);
 
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic

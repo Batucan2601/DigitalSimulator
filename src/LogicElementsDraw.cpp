@@ -147,11 +147,15 @@ namespace LogicElementsDraw
             Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH /2, pos.y - IN_OUT_RECT_WIDTH /2,IN_OUT_RECT_WIDTH };
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
-        for (size_t i = 0; i < gate->inputs.size(); i++)
+        if(gate->is_hovered)
         {
-            Vector2 pos = gate->inputs[i].pos;
-            Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH / 2, pos.y - IN_OUT_RECT_WIDTH / 2,IN_OUT_RECT_WIDTH };
-            DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+            for (size_t i = 0; i < gate->inputs.size(); i++)
+            {
+                Vector2 pos = gate->inputs[i].pos;
+                Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH / 2, pos.y - IN_OUT_RECT_WIDTH / 2,IN_OUT_RECT_WIDTH };
+                DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+            }
         }
+
     }
 }  // namespace LogicElementsDraw

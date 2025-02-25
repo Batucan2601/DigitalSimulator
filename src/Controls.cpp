@@ -75,6 +75,7 @@ namespace Controls
         selected_circuit = circuit;
 
         Controls_Mouse_click();
+        Controls_Mouse_Movements();
         Control_Keyboard_Event(selected_circuit);
         //Controls_Handle_Continous(selected_circuit);
         
@@ -302,6 +303,27 @@ namespace Controls
             selected_logic_gate[0] = nullptr;
         }
     }
+
+    void HandleMouseEnter(std::shared_ptr<CircuitElements::Circuit> circuit,
+                          const Vector2& mousePosition)
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Enter;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+    }
+
+    void HandleMouseExit(std::shared_ptr<CircuitElements::Circuit> circuit,
+                         const Vector2& mousePosition)
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Leave;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+    }
+
     void HandleMouseRightClick(std::shared_ptr<CircuitElements::Circuit>& circuit,
                                const Vector2& mousePosition)
     {
@@ -480,6 +502,32 @@ namespace Controls
             is_dragging = false;
         }
     }
+
+    void Controls_Mouse_Movements()
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Move;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
+        for(auto gate : selected_circuit->gates)
+        {
+            bool currently_hovered = CheckCollisionPointRec(mouse_pos, gate->bd);
+    
+            if (currently_hovered && !gate->is_hovered)
+            {
+                std::cout << "Mouse entered the gate" << std::endl;
+                gate->is_hovered = true;
+            }
+            else if (!currently_hovered && gate->is_hovered)
+            {
+                std::cout << "Mouse left the gate" << std::endl;
+                gate->is_hovered = false;
+            }
+        }
+        
+    }
+
 
     void Controls_Mouse_click()
     {

@@ -61,6 +61,7 @@ namespace CircuitElements
       public:
         Circuit(std::string& logger_name) : m_logger(logger_name)
         {
+            this->hoveredGate = nullptr;
             this->connections.reserve(1000);
         }
         void addGate(std::shared_ptr<LogicElements::LogicGate> gate);
@@ -81,6 +82,7 @@ namespace CircuitElements
 
         bool is_GUIdragdropped = false;
         bool is_GUIdragdragging = false;
+        std::shared_ptr<LogicElements::LogicGate> hoveredGate;
     };
 
 }  // namespace CircuitElements
