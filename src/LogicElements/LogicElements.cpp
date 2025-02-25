@@ -97,7 +97,7 @@ namespace CircuitElements
     }
     void ActiveWire::OnMove(const InputEvent& event)
     {
-        Rectangle pos_rec = { event.pos.x , event.pos.y , 0, 0 };
+        Rectangle pos_rec = { (float)event.pos.x , (float)event.pos.y , 0, 0 };
         this->end  = Controls::SnapToNearestGrid(pos_rec);
     }
 
