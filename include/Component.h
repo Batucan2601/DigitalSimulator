@@ -18,7 +18,9 @@ enum class MouseEventState {
     Move,
     Enter,
     Leave,
-    Hover
+    Hover,
+    Down,
+    Release
 };
 
 enum class KeyboardEvent {
@@ -72,9 +74,10 @@ public:
 
     static IInputHandler* getSelectedHandler() { return selectedHandler; }
     static void setSelectedHandler(IInputHandler* handler) { selectedHandler = handler; }
+
+    static std::list<IInputHandler*> handlers; // Collection of input handlers.
 private:
     static std::queue<InputEvent> queue;
-    static std::list<IInputHandler*> handlers; // Collection of input handlers.
     static IInputHandler* selectedHandler;
     // You can keep additional helper functions if needed.
 };

@@ -432,6 +432,11 @@ namespace Controls
     void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,
                          const Vector2& mousePosition)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Down;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
         /*if (selected_logic_gate[0])
         {
             is_dragging = true;
@@ -460,21 +465,17 @@ namespace Controls
 
     void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Release;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
+        return; 
         if (selected_logic_gate[0])
         {
             Vector2 nearest_grid_point = SnapToNearestGrid(selected_logic_gate[0]->bd);
 
-            if (!is_grid_occupied(circuit, nearest_grid_point))
-            {
-                selected_logic_gate[0]->bd.x = nearest_grid_point.x;
-                selected_logic_gate[0]->bd.y = nearest_grid_point.y;
-            }
-            else
-            {
-                // Reset to initial position if grid is occupied
-                selected_logic_gate[0]->bd.x = gate_initial_position.x;
-                selected_logic_gate[0]->bd.y = gate_initial_position.y;
-            }
+            
 
             is_dragging = false;
         }

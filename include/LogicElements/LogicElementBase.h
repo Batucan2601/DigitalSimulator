@@ -103,6 +103,8 @@ namespace LogicElements
             const Vector2& mousePosition, CircuitElements::Connection& connection);
       protected:
         void OnLeftClick(const InputEvent& event);
+        void OnDown(const InputEvent& event);
+        void OnRelease(const InputEvent& event);
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
       private:

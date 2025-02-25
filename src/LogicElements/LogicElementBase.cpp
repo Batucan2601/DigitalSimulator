@@ -203,7 +203,15 @@ namespace LogicElements
             if (event.mouseState == MouseEventState::LeftClick)
             {
                 OnLeftClick(event);
-           }
+            }
+            if (event.mouseState == MouseEventState::Down)
+            {
+                OnDown(event);
+            }
+            if (event.mouseState == MouseEventState::Release)
+            {
+                OnRelease(event);
+            }
         }
     }
 
@@ -265,6 +273,77 @@ namespace LogicElements
         
         //select the handler.
         //InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+    }
+    static Vector2 posBeforeDrag;
+    static bool isFirst = true;
+    void LogicGate::OnDown(const InputEvent& event)
+    {
+        if (this == InputResolver::getSelectedHandler())
+        {
+            this->bd.x = event.pos.x;
+            this->bd.y = event.pos.y;
+            Rectangle rec = { this->bd.x , this->bd.y , 0 ,0 };
+            Vector2 v = Controls::SnapToNearestGrid(rec);
+            this->bd.x = v.x;
+            this->bd.y = v.y;
+            if (isFirst)
+            {
+                posBeforeDrag = { v.x,v.y };
+                isFirst = false;
+            }
+        }
+    }
+    void LogicGate::OnRelease(const InputEvent& event)
+    {
+        if (this == InputResolver::getSelectedHandler())
+        {
+            InputResolver::setSelectedHandler(nullptr);
+            this->bd.x = event.pos.x;
+            this->bd.y = event.pos.y;
+            Rectangle rec = { this->bd.x , this->bd.y , 0 ,0 };
+            Vector2 v = Controls::SnapToNearestGrid(rec);
+            bool is_other_gate_exist = false;
+
+            float new_gate_x_start = this->bd.x;
+            float new_gate_y_start = this->bd.y;
+            float new_gate_x_end = this->bd.x + this->bd.width;
+            float new_gate_y_end = this->bd.y + this->bd.height;
+
+            for (auto val : InputResolver::handlers)
+            {
+                if (auto handler = dynamic_cast<LogicGate*>(val))
+                {
+                    if (handler == this)
+                    {
+                        continue; 
+                    }
+                    // Get the bounding box of the existing gate
+                    float existing_gate_x_start = handler->bd.x;
+                    float existing_gate_y_start = handler->bd.y;
+                    float existing_gate_x_end = handler->bd.x + handler->bd.width;
+                    float existing_gate_y_end = handler->bd.y + handler->bd.height;
+
+                    // Check for overlap between the new gate's bounding box and the existing gate's
+                    // bounding box
+                    if (!(new_gate_x_end <=
+                        existing_gate_x_start ||  // New gate is to the left of the existing gate
+                        new_gate_x_start >=
+                        existing_gate_x_end ||  // New gate is to the right of the existing gate
+                        new_gate_y_end <= existing_gate_y_start ||  // New gate is above the existing gate
+                        new_gate_y_start >= existing_gate_y_end))
+                    {
+                        is_other_gate_exist = true;  // Overlap detected, grid is occupied
+                        break;
+                    }
+                }
+            }
+            if (is_other_gate_exist)
+            {
+                this->bd.x = posBeforeDrag.x;
+                this->bd.y = posBeforeDrag.y;
+            }
+            isFirst = true;
+        }
     }
     void LogicGate::CheckGatePartClicked(
         const Vector2& mousePosition, CircuitElements::Connection& connection)

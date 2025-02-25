@@ -92,6 +92,7 @@ namespace CircuitElements
             {
                 OnRightClick(event);
             }
+            
         }
     }
     void ActiveWire::OnMove(const InputEvent& event)
