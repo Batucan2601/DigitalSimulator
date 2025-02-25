@@ -1,11 +1,9 @@
-#include "Controls.h"
-#include "LogicElements.h"
-#include "LogicElementsDraw.h"
-#include "common_types.h"
-#include "logicElementFactory.h"
-#include "raylib.h"
-#include "raylibHelper.h"
-#include "GUI/GUIEditor.h"
+#include "main.h"
+
+// Create a circuit and add both gates.
+std::string circuit_logger = "CircuitLogger";
+std::shared_ptr<CircuitElements::Circuit> circuit =
+    std::make_shared<CircuitElements::Circuit>(circuit_logger);
 
 int main(void)
 {
@@ -35,9 +33,6 @@ int main(void)
     auto gate5 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XOR,
                                                                 xor_gate_logger);
 
-    // Create a circuit and add both gates.
-    std::string circuit_logger = "CircuitLogger";
-    auto circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
     gate1->setPosition(0, 100 - 250);
     gate2->setPosition(0, 200 - 250);
     gate3->setPosition(0, 300 - 250);
@@ -61,19 +56,19 @@ int main(void)
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         circuit->evaluate();
         GUIEditor::BeginOffscreenDraw();
-            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                                 [&circuit]()
-                                 {
-                                     LogicElementsDraw::DrawCircuit(circuit);
-                                     // You can draw additional world elements here.
-                                 });
-            RaylibHelper::Draw2D(Controls::Controls_get_camera(),
-                                 []()
-                                 {
-                                     // Draw a grid to visualize the 2D world.
-                                     DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
-                                     // You can draw additional world elements here.
-                                 });
+        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                             [&circuit]()
+                             {
+                                 LogicElementsDraw::DrawCircuit(circuit);
+                                 // You can draw additional world elements here.
+                             });
+        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+                             []()
+                             {
+                                 // Draw a grid to visualize the 2D world.
+                                 DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE);
+                                 // You can draw additional world elements here.
+                             });
         GUIEditor::EndOffscreenDraw();
         RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
@@ -82,4 +77,9 @@ int main(void)
     // De-Initialization
     CloseWindow();
     return 0;
+}
+
+void setLoadedCircuit(std::shared_ptr<CircuitElements::Circuit> loadedCircuit)
+{
+    circuit = loadedCircuit;
 }

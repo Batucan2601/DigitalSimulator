@@ -13,6 +13,8 @@
 
 #include <iostream>
 // Function declarations
-std::shared_ptr<CircuitElements::Circuit> circuit;
+extern std::shared_ptr<CircuitElements::Circuit> circuit;
+
+void setLoadedCircuit(std::shared_ptr<CircuitElements::Circuit> loadedCircuit);
 
 #endif  // MAIN_H
