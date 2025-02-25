@@ -41,7 +41,7 @@ namespace GUISaveSystem
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
-        config.path = std::filesystem::path(PROJECT_ROOT_DIR);
+        config.path = std::filesystem::path(PROJECT_ROOT_DIR).string();
 
         ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlgKey", "Save Circuit", ".dr", config);
 
@@ -62,7 +62,7 @@ namespace GUISaveSystem
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
-        config.path = std::filesystem::path(PROJECT_ROOT_DIR);
+        config.path = std::filesystem::path(PROJECT_ROOT_DIR).string();
         ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlgKey", "Load Circuit", ".dr", config);
         // In your rendering loop, display and handle the dialog:
         if (ImGuiFileDialog::Instance()->Display("LoadFileDlgKey"))
