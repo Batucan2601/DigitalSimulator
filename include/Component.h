@@ -3,6 +3,7 @@
 #include <queue>
 #include <vector>
 #include <list>
+#include <algorithm>
 // Enum to identify the type of input event.
 enum class InputType {
     None,
