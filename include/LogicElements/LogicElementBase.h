@@ -52,6 +52,17 @@ namespace LogicElements
         }
     };
 
+
+    struct Signal {
+        std::string name;    // Optional: if you want to name each signal
+        bool val;    // The state of the signal
+        Vector2 pos; 
+        Signal(const std::string& n = "", bool l = false)
+            : name(n), val(l) {}
+    };
+    inline bool operator==(const Signal& lhs, const Signal& rhs) {
+        return lhs.name == rhs.name && lhs.val == rhs.val;
+    }
     extern std::shared_ptr<std::vector<GateInfo>> gateInfoList;
     extern std::map<LogicElements::GateType, Texture> logicElementTextures;
 
@@ -69,8 +80,8 @@ namespace LogicElements
         void setInput(const std::string& name, bool value);
         bool getOutput(const std::string& name) const;
 
-        const std::unordered_map<std::string, bool>& getInputs() const;
-        const std::unordered_map<std::string, bool>& getOutputs() const;
+        const std::vector<Signal>& getInputs() const;
+        const std::vector<Signal>& getOutputs() const;
 
         GatePosition& getPositionManager();  // Access GatePosition
         GateType getType() const;
@@ -92,8 +103,8 @@ namespace LogicElements
         void onInputChanged() override;  // Override observer function
 
         // protected:
-        std::unordered_map<std::string, bool> inputs;
-        std::unordered_map<std::string, bool> outputs;
+        std::vector<Signal> inputs;
+        std::vector<Signal> outputs;
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
         CircuitElements::Circuit* circuit;
@@ -112,6 +123,8 @@ namespace LogicElements
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
+          void setInOutPositions(float x, float y);
+
 
     };
 }  // namespace LogicElements

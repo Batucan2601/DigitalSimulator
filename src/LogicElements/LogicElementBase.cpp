@@ -99,7 +99,6 @@ namespace LogicElements
         // type = gateType;
         m_texture = logicElementTextures[gateType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
-
         InputResolver::RegisterHandler(this);
     }
 
@@ -109,10 +108,29 @@ namespace LogicElements
         // UnloadTexture(m_texture);
     }
 
+    void LogicGate::setInOutPositions(float x, float y )
+    {
+        //output
+        if (this->outputs.size() == 1)
+        {
+            this->outputs[0].pos = { this->bd.x + this->bd.width , this->bd.y + this->bd.height / 2  };
+        }
+        if (this->inputs.size() == 1)
+        {
+            this->inputs[0].pos = { this->bd.x , this->bd.y + this->bd.height / 2};
+        }
+        else if (this->inputs.size() == 2)
+        {
+            this->inputs[0].pos = { this->bd.x , this->bd.y + SPACING_SIZE };
+            this->inputs[1].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 3};
+
+        }
+    }
     void LogicGate::setPosition(float x, float y)
     {
         bd.x = x;
         bd.y = y;
+        this->setInOutPositions( x, y);
     }
 
     Vector2 LogicGate::getPosition() const
@@ -120,29 +138,38 @@ namespace LogicElements
         return {bd.x, bd.y};
     }
 
-    const std::unordered_map<std::string, bool>& LogicGate::getInputs() const
+    const std::vector<Signal>& LogicGate::getInputs() const
     {
         return inputs;
     }
 
-    const std::unordered_map<std::string, bool>& LogicGate::getOutputs() const
+    const std::vector<Signal>& LogicGate::getOutputs() const
     {
         return outputs;
     }
 
     void LogicGate::setInput(const std::string& name, bool value)
     {
-        if (inputs.find(name) != inputs.end())
+        for (auto& I : this->inputs)
         {
-            inputs[name] = value;
-            notifyObservers();
+            if (I.name == name)
+            {
+                I.val = value;
+                notifyObservers();
+            }
         }
     }
 
     bool LogicGate::getOutput(const std::string& name) const
     {
-        auto it = outputs.find(name);
-        return (it != outputs.end()) ? it->second : false;
+        for (auto& it : this->outputs)
+        {
+            if (it.name == name)
+            {
+                return true; 
+            }
+        }
+        return false;
     }
 
     void LogicGate::setEvaluationFunction(std::function<void(LogicGate&)> evalFunc)
@@ -294,12 +321,9 @@ namespace LogicElements
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            this->bd.x = event.pos.x;
-            this->bd.y = event.pos.y;
-            Rectangle rec = { this->bd.x , this->bd.y , 0 ,0 };
+            Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
-            this->bd.x = v.x;
-            this->bd.y = v.y;
+            this->setPosition(v.x, v.y);
             if (isFirst)
             {
                 posBeforeDrag = { v.x,v.y };
@@ -311,10 +335,9 @@ namespace LogicElements
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            this->bd.x = event.pos.x;
-            this->bd.y = event.pos.y;
-            Rectangle rec = { this->bd.x , this->bd.y , 0 ,0 };
+            Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
+            this->setPosition(v.x, v.y);
             bool is_other_gate_exist = false;
 
             float new_gate_x_start = this->bd.x;
@@ -352,8 +375,7 @@ namespace LogicElements
             }
             if (is_other_gate_exist)
             {
-                this->bd.x = posBeforeDrag.x;
-                this->bd.y = posBeforeDrag.y;
+                this->setPosition(posBeforeDrag.x, posBeforeDrag.y);
             }
             else
             {

@@ -1,5 +1,5 @@
 #include "JsonSerializer.h"
-
+using namespace LogicElements;
 inline std::string gateTypeToString(LogicElements::GateType type) {
     switch (type) {
     case LogicElements::GateType::NONE:  return "NONE";
@@ -24,6 +24,19 @@ inline std::string gateTypeToString(LogicElements::GateType type) {
     default: throw("INVALID CLASS");
     }
 } */
+inline void to_json(json& j, const Vector2& vec) {
+    j = json{
+        {"x", vec.x},
+        {"y", vec.y}
+    };
+}
+/*inline void to_json(json& j, const Signal& vec) {
+    j = json{
+       {"name", vec.name},
+       {"pos", vec.pos},
+       {"val", vec.val},
+    };
+}*/
 inline void to_json(json& j, const Rectangle& rect) {
     j = json{
         {"x", rect.x},
@@ -32,7 +45,7 @@ inline void to_json(json& j, const Rectangle& rect) {
         {"height", rect.height}
     };
 }
-inline void to_json(json& j, const LogicElements::LogicGate& gate) {
+/*inline void to_json(json& j, const LogicElements::LogicGate& gate) {
     j = json{
         {"bounding_box", gate.bd}, // Automatic conversion via to_json for Rectangle
         {"type", gateTypeToString(gate.m_type)},
@@ -40,13 +53,8 @@ inline void to_json(json& j, const LogicElements::LogicGate& gate) {
         {"outputs", gate.outputs}
         // You can add more fields here if needed.
     };
-}
-inline void to_json(json& j, const Vector2& vec) {
-    j = json{
-        {"x", vec.x},
-        {"y", vec.y}
-    };
-}
+}*/
+
 inline void to_json(json& j, const CircuitElements::PhysicalConnection& pc) {
     j = json{
         {"wires", pc.wires}
