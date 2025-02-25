@@ -94,6 +94,9 @@ namespace LogicElements
     LogicGate::LogicGate(GateType gateType, std::string& logger_name)
         : m_type(gateType), m_logger(logger_name)
     {
+        static int nextId = 0;
+        id = nextId++;  // Assign a unique ID
+
         // type = gateType;
         m_texture = logicElementTextures[gateType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
@@ -114,6 +117,11 @@ namespace LogicElements
     Vector2 LogicGate::getPosition() const
     {
         return {bd.x, bd.y};
+    }
+
+    int LogicGate::getID() const
+    {
+        return id;
     }
 
     const std::unordered_map<std::string, bool>& LogicGate::getInputs() const
@@ -191,7 +199,5 @@ namespace LogicElements
     {
         evaluate();  // Automatically reevaluate when input changes
     }
-
-  
 
 }  // namespace LogicElements
