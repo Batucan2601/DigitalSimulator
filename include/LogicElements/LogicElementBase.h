@@ -99,7 +99,7 @@ namespace LogicElements
         CircuitElements::Circuit* circuit;
 
         void OnInputEvent(const InputEvent& event) override;
-        void LogicGate::CheckGatePartClicked(
+        void CheckGatePartClicked(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
       protected:
         void OnLeftClick(const InputEvent& event);
@@ -108,7 +108,7 @@ namespace LogicElements
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
       private:
-          bool LogicGate::is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
+          bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
 
     };
 }  // namespace LogicElements
