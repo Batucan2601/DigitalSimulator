@@ -253,13 +253,11 @@ namespace LogicElements
 
     bool LogicGate::is_connection_clicked(const Vector2& mousePos , CircuitElements::Connection& possibleConnection)
     {
-        this->CheckGatePartClicked(mousePos, possibleConnection);
-        if (possibleConnection.sourceLogic == "")  // not intitialized
+        if (this->CheckMouseOnInOut(mousePos, possibleConnection))
         {
-            return false;
+            return true;
         }
-        return true; 
-
+        return false;
     }
     void LogicGate::OnLeftClick(const InputEvent& event)
     {
@@ -387,17 +385,18 @@ namespace LogicElements
     }
     void LogicGate::OnMove(const InputEvent& event)
     {
-
+        Vector2 mouse_pos = { event.pos.x , event.pos.y };
+        CircuitElements::Connection temp; 
+        if (CheckMouseOnInOut(mouse_pos,temp))
+        {
+            // this should change the input color
+        }
     }
 
-    void LogicGate::CheckGatePartClicked(
+    bool LogicGate::CheckMouseOnInOut(
         const Vector2& mousePosition, CircuitElements::Connection& connection)
     {
-        auto inputTopRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.2, 0.3);
-        auto inputBottomRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.7, 0.8);
-        auto outputRegion = Controls::CalculateRegion(this->bd, 0.85, 0.95, 0.45, 0.55);
         std::shared_ptr<LogicGate> itself = shared_from_this();
-
         Rectangle rec; 
         for (size_t i = 0; i < inputs.size(); i++)
         {
@@ -411,6 +410,7 @@ namespace LogicElements
                 connection.sourceLogic = inputs[i].name;
                 Vector2 pos = { rec.x, rec.y };
                 connection.physCon.wires.push_back(pos);
+                return true; 
             }
         }
         for (size_t i = 0; i < outputs.size(); i++)
@@ -425,6 +425,7 @@ namespace LogicElements
                 connection.sourceLogic = outputs[i].name;
                 Vector2 pos = { rec.x, rec.y };
                 connection.physCon.wires.push_back(pos);
+                return true;
             }
         }
     }

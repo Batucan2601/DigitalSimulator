@@ -110,7 +110,7 @@ namespace LogicElements
         CircuitElements::Circuit* circuit;
 
         void OnInputEvent(const InputEvent& event) override;
-        void CheckGatePartClicked(
+        bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
       protected:
         void OnLeftClick(const InputEvent& event);
