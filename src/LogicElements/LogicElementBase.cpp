@@ -396,29 +396,36 @@ namespace LogicElements
         auto inputTopRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.2, 0.3);
         auto inputBottomRegion = Controls::CalculateRegion(this->bd, 0.05, 0.15, 0.7, 0.8);
         auto outputRegion = Controls::CalculateRegion(this->bd, 0.85, 0.95, 0.45, 0.55);
-
         std::shared_ptr<LogicGate> itself = shared_from_this();
-        // TODO after dynamic input this should change
-        if (CheckCollisionPointRec(mousePosition, inputTopRegion))
+
+        Rectangle rec; 
+        for (size_t i = 0; i < inputs.size(); i++)
         {
-            connection.sourceGate = itself;
-            connection.sourceLogic = "A";
-            Vector2 pos = { inputTopRegion.x, inputTopRegion.y };
-            connection.physCon.wires.push_back(pos);
+            rec.x = inputs[i].pos.x - IN_OUT_RECT_WIDTH/2;
+            rec.y = inputs[i].pos.y - IN_OUT_RECT_WIDTH/2;
+            rec.width = IN_OUT_RECT_WIDTH;
+            rec.height = IN_OUT_RECT_WIDTH;
+            if (CheckCollisionPointRec(mousePosition, rec))
+            {
+                connection.sourceGate = itself;
+                connection.sourceLogic = inputs[i].name;
+                Vector2 pos = { rec.x, rec.y };
+                connection.physCon.wires.push_back(pos);
+            }
         }
-        else if (CheckCollisionPointRec(mousePosition, inputBottomRegion))
+        for (size_t i = 0; i < outputs.size(); i++)
         {
-            connection.sourceGate = itself;
-            connection.sourceLogic = "B";
-            Vector2 pos = { inputBottomRegion.x, inputBottomRegion.y };
-            connection.physCon.wires.push_back(pos);
-        }
-        else if (CheckCollisionPointRec(mousePosition, outputRegion))
-        {
-            connection.sourceGate = itself;
-            connection.sourceLogic = "Out";
-            Vector2 pos = { outputRegion.x, outputRegion.y };
-            connection.physCon.wires.push_back(pos);
+            rec.x = outputs[i].pos.x - IN_OUT_RECT_WIDTH / 2;
+            rec.y = outputs[i].pos.y - IN_OUT_RECT_WIDTH / 2;
+            rec.width = IN_OUT_RECT_WIDTH;
+            rec.height = IN_OUT_RECT_WIDTH;
+            if (CheckCollisionPointRec(mousePosition, rec))
+            {
+                connection.sourceGate = itself;
+                connection.sourceLogic = outputs[i].name;
+                Vector2 pos = { rec.x, rec.y };
+                connection.physCon.wires.push_back(pos);
+            }
         }
     }
 }  // namespace LogicElements

@@ -140,18 +140,17 @@ namespace LogicElementsDraw
     }
     void DrawInOut(std::shared_ptr<LogicElements::LogicGate> gate)
     {
-        float rec_width = GRID_POINT_SIZE * 3;
         for (size_t i = 0; i < gate->outputs.size(); i++)
         {
             //GRID_POINT_SIZE
             Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = { pos.x - rec_width/2, pos.y - rec_width /2,GRID_POINT_SIZE * 3 };
+            Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH /2, pos.y - IN_OUT_RECT_WIDTH /2,IN_OUT_RECT_WIDTH };
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
         for (size_t i = 0; i < gate->inputs.size(); i++)
         {
             Vector2 pos = gate->inputs[i].pos;
-            Rectangle rec = { pos.x - rec_width / 2, pos.y - rec_width / 2,GRID_POINT_SIZE * 3 };
+            Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH / 2, pos.y - IN_OUT_RECT_WIDTH / 2,IN_OUT_RECT_WIDTH };
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
     }
