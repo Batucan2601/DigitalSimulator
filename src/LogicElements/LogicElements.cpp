@@ -70,13 +70,64 @@ namespace CircuitElements
             {
                 OnLeftClick(event);
             }
+            if (event.mouseState == MouseEventState::Move)
+            {
+                OnMove(event);
+            }
         }
     }
     void Connection::OnLeftClick(const InputEvent& event)
     {
-        
+        //if hovering, create a new wire 
+        if (hovering.is_hovering)
+        {
+            /*CircuitElements::Connection possibleConnection;
+            possibleConnection.sourceGate = this->sourceGate;
+            possibleConnection.sourceLogic = this->sourceLogic;
+            possibleConnection.circuit = this->circuit;
+            // if hits select it 
+            circuit->addConnection(possibleConnection.sourceGate, possibleConnection.sourceLogic, possibleConnection.targetGate, possibleConnection.targetLogic);
+            circuit->active_wire.is_visible = true;
+            circuit->active_wire.start = hovering.pos;
+            circuit->active_wire.end = hovering.pos; */
+            //InputResolver::RegisterHandler(static_cast<IInputHandler*>(&(circuit->active_wire)));
+            //InputResolver::setSelectedHandler((IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+        }
     }
-
+    void Connection::OnMove(const InputEvent& event)
+    {
+        //check collision with physcons
+        hovering.is_hovering = false;
+        for (size_t j = 0; j < this->physCon.wires.size() - 1; j++)
+        {
+            Vector2 start = this->physCon.wires[j];
+            Vector2 end = this->physCon.wires[j + 1];
+            Rectangle col = { 0, 0, 0, 0 };
+            float minx = std::min(start.x, end.x);
+            float maxx = std::max(start.x, end.x);
+            float miny = std::min(start.y, end.y);
+            float maxy = std::max(start.y, end.y);
+            start = { minx,miny };
+            end = { maxx,maxy };
+            if (std::abs(end.x - start.x) < SPACING_SIZE)
+            {
+                col = { start.x - MOUSE_SELECTION_OFFSET, start.y,
+                       SPACING_SIZE + MOUSE_SELECTION_OFFSET, std::abs(end.y - start.y) };
+            }
+            else if (std::abs(end.y - start.y) < SPACING_SIZE)
+            {
+                col = { start.x, start.y + -MOUSE_SELECTION_OFFSET, std::abs(end.x - start.x),
+                       SPACING_SIZE + MOUSE_SELECTION_OFFSET };
+            }
+            Vector2 pos = { event.pos.x , event.pos.y };
+            if (CheckCollisionPointRec(pos, col))
+            {
+                hovering.is_hovering = true; 
+                Rectangle rec = { pos.x,pos.y,0,0 };
+                hovering.pos = Controls::SnapToNearestGrid(rec);
+            }
+        }
+    }
     void ActiveWire::OnInputEvent(const InputEvent& event)
     {
         if (event.type == InputType::Mouse) {
@@ -104,10 +155,24 @@ namespace CircuitElements
     void ActiveWire::OnLeftClick(const InputEvent& event)
     {
         if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler())) {
-            d1->physCon.wires.push_back({ this->start.x, this->start.y });
+            if (this->start.x == this->end.x && this->start.y == this->end.y)
+            {
+                return;
+            }
+            if (d1->physCon.wires.size() == 0)
+            {
+                d1->physCon.wires.push_back({ this->start.x , this->start.y });
+            }
             Vector2 straight_line = Controls::Generate_straight_lines(this->start,
                 this->end);
-            d1->physCon.wires.push_back(straight_line);
+            if (! (this->start.x == straight_line.x && this->start.y == straight_line.y))
+            {
+                d1->physCon.wires.push_back(straight_line);
+            }
+            if (straight_line.x == this->end.x && straight_line.y == this->end.y)
+            {
+                return;
+            }
             d1->physCon.wires.push_back({ this->end.x, this->end.y });
             Rectangle pos_rec = { this->end.x , this->end.y, 0, 0 };
             this->start = Controls::SnapToNearestGrid(pos_rec);

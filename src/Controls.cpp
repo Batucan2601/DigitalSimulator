@@ -403,7 +403,7 @@ namespace Controls
     bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit,
                        const Vector2& mousePosition, CircuitElements::Connection& con)
     {
-    /*   for (size_t i = 0; i < circuit->connections.size(); i++)
+    for (size_t i = 0; i < circuit->connections.size(); i++)
         {
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
@@ -426,7 +426,7 @@ namespace Controls
                     return true;
                 }
             }
-        } */
+        } 
         return false;
     }
     void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,

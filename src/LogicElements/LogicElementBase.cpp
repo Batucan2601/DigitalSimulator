@@ -243,8 +243,8 @@ namespace LogicElements
             if (this->is_connection_clicked(pos, possibleConnection))
             {
                 // if hits select it 
+                //possibleConnection.circuit = this->circuit;
                 circuit->addConnection(possibleConnection.sourceGate, possibleConnection.sourceLogic, possibleConnection.targetGate, possibleConnection.targetLogic);
-                //InputResolver::RegisterHandler(static_cast<IInputHandler*>(&circuit->connections[circuit->connections.size() - 1]));
                 circuit->active_wire.is_visible = true; 
                 circuit->active_wire.start = pos; 
                 circuit->active_wire.end = pos; 
@@ -265,6 +265,7 @@ namespace LogicElements
                 handler->targetGate = possibleConnection.sourceGate;
                 handler->targetLogic = possibleConnection.sourceLogic;
                 handler->is_connected = true; 
+                InputResolver::RegisterHandler(static_cast<IInputHandler*>(&circuit->connections[circuit->connections.size() - 1]));
             }
         }
         // connection logic
@@ -341,6 +342,11 @@ namespace LogicElements
             {
                 this->bd.x = posBeforeDrag.x;
                 this->bd.y = posBeforeDrag.y;
+            }
+            else
+            {
+                this->bd.x = v.x;
+                this->bd.y = v.y;
             }
             isFirst = true;
         }

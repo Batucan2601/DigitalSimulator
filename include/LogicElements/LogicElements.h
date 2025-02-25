@@ -14,7 +14,11 @@
 
 namespace CircuitElements
 {
-
+    struct HoveringWire
+    {
+        bool is_hovering;
+        Vector2 pos;
+    };
     struct PhysicalConnection 
     {
         std::vector<Vector2> wires;
@@ -27,9 +31,12 @@ namespace CircuitElements
         std::shared_ptr<LogicElements::LogicGate> targetGate;
         std::string targetLogic;
         PhysicalConnection physCon;
+        HoveringWire hovering;
+        Circuit* circuit;
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
+        void OnMove(const InputEvent& event);
 
     };
     class ActiveWire : public IInputHandler

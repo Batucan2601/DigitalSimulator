@@ -63,10 +63,12 @@ namespace LogicElementsDraw
         }
 
         // color green the selected wires
-        for (size_t i = 0; i < circuit->selected_wires.selected_wires.size(); i++)
+        for (size_t i = 0; i < circuit->connections.size(); i++)
         {
-            Vector2 pos = circuit->selected_wires.selected_wires[i];
-            DrawInteractableWirePoints(pos, pos, GREEN);
+            if (circuit->connections[i].hovering.is_hovering)
+            {
+                DrawInteractableWirePoints(circuit->connections[i].hovering.pos, circuit->connections[i].hovering.pos, GREEN);
+            }
         }
         DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
                                    circuit->selected_wires.wire_hovering, GREEN);
