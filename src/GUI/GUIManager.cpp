@@ -9,6 +9,7 @@
 #include <GUI/GUITools.h>
 #include <imgui.h>
 #include <rlImGui.h>
+#include <GUI/GUILogicSetting.h>
 
 void GUIManager::Init()
 {
@@ -51,6 +52,7 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 
     GUITools::GUITools_Display();
     GUISaveSystem::draw();
+    GUILogicSetting::Draw();
     // GUILogic::Draw();
 
     static bool show_demo_window = true;

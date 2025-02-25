@@ -105,6 +105,9 @@ namespace LogicElements
         void OnLeftClick(const InputEvent& event);
         void OnDown(const InputEvent& event);
         void OnRelease(const InputEvent& event);
+        void OnMove(const InputEvent& event);
+        void OnRightClick(const InputEvent& event);
+
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
       private:

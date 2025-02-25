@@ -204,13 +204,22 @@ namespace LogicElements
             {
                 OnLeftClick(event);
             }
+            if (event.mouseState == MouseEventState::Release)
+            {
+                OnRelease(event);
+            }
+            if (event.mouseState == MouseEventState::RightClick)
+            {
+                OnRightClick(event);
+            }
             if (event.mouseState == MouseEventState::Down)
             {
                 OnDown(event);
             }
-            if (event.mouseState == MouseEventState::Release)
+            
+            if (event.mouseState == MouseEventState::Move)
             {
-                OnRelease(event);
+                OnMove(event);
             }
         }
     }
@@ -275,6 +284,10 @@ namespace LogicElements
         //select the handler.
         //InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
     }
+    void LogicGate::OnRightClick(const InputEvent& event)
+    {
+        InputResolver::setSelectedHandler(nullptr);
+    }
     static Vector2 posBeforeDrag;
     static bool isFirst = true;
     void LogicGate::OnDown(const InputEvent& event)
@@ -298,7 +311,6 @@ namespace LogicElements
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            InputResolver::setSelectedHandler(nullptr);
             this->bd.x = event.pos.x;
             this->bd.y = event.pos.y;
             Rectangle rec = { this->bd.x , this->bd.y , 0 ,0 };
@@ -351,6 +363,11 @@ namespace LogicElements
             isFirst = true;
         }
     }
+    void LogicGate::OnMove(const InputEvent& event)
+    {
+
+    }
+
     void LogicGate::CheckGatePartClicked(
         const Vector2& mousePosition, CircuitElements::Connection& connection)
     {
