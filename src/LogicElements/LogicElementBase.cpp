@@ -277,7 +277,7 @@ namespace LogicElements
         }
         //ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
-        if (InputResolver::getSelectedHandler() == nullptr)
+        if( !circuit->active_wire.is_visible) // we are not building a connection
         {
             // it cannot be a connection end
             // it can be a connection start, or gate select
