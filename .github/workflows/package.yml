@@ -1,0 +1,70 @@
+name: Build & Package DigitalSim
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake make libgl1-mesa-dev libglu1-mesa-dev
+
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install cmake -y
+          choco install nsis -y
+
+      - name: Install Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake
+
+      - name: Build Project
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          cmake --build . --config Release
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cpack -G DEB
+          cpack -G RPM
+          cpack -G TGZ
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cpack -G NSIS
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cpack -G DragNDrop
+
+      - name: Upload Packages to GitHub Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-sim-${{ runner.os }}-${{ github.run_id }}
+          path: build/*.deb, build/*.rpm, build/*.dmg, build/*.exe, build/*.tar.gz
+
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/*.deb, build/*.rpm, build/*.dmg, build/*.exe, build/*.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
