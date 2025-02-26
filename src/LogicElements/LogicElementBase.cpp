@@ -451,5 +451,6 @@ namespace LogicElements
                 return true;
             }
         }
+        return false;
     }
 }  // namespace LogicElements
