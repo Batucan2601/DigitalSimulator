@@ -69,6 +69,7 @@ namespace LogicElements
         GatePosition& getPositionManager();  // Access GatePosition
         GateType getType() const;
         const Texture2D& getTexture() const;
+        int getID() const;
 
         GateType m_type;
         Texture2D m_texture;
@@ -94,6 +95,9 @@ namespace LogicElements
       protected:
         std::unordered_set<GateObserver*> observers;       // Stores registered observers
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
+
+      private:
+        int id;
     };
 }  // namespace LogicElements
 

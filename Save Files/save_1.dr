@@ -1,0 +1,5 @@
+Circuit
+1 -150 -150
+3 0 -150
+Connections
+1 -150 -150 Out 3 0 -150 A

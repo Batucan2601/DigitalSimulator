@@ -1,93 +1,111 @@
 #include "GUI/GUISaveSystem.h"
+
+#include "main.h"
 namespace GUISaveSystem
 {
-	enum class State {  // sorting for filetering of the file lsit
-		STATE_IDLE,
-		STATE_CLICKED,
-		STATE_CANCELLED,
-		STATE_COMPLETE,
-		STATE_SAVING_FIRST_TIME,
-	};
-	State saveState = State::STATE_IDLE;
-	std::string saveFilePath = "";
-	bool is_on_save = false;
-	bool is_on_load = false;
-	std::shared_ptr<CircuitElements::Circuit> localCircuit;
+    State state = State::STATE_IDLE;
 
-	static bool saveCircuit(std::string name);
-	static bool loadCircuit();
-	bool loadFile(std::shared_ptr<CircuitElements::Circuit> circuit)
-	{
-		localCircuit = circuit; 
-		is_on_load = true; 
-		return true;
-	}
-	bool saveFile(std::shared_ptr<CircuitElements::Circuit> circuit)
-	{
-		localCircuit = circuit;
-		if (saveFilePath == "")
-		{
-			saveState =  State::STATE_SAVING_FIRST_TIME;
-		}
-		return true; 
-	}
+    std::shared_ptr<CircuitElements::Circuit> localCircuit;
 
-	void draw()
-	{
-		if (saveState == State::STATE_SAVING_FIRST_TIME || saveState == State::STATE_CLICKED)
-		{
-			// open Dialog Simple
-			IGFD::FileDialogConfig config;
-			config.path = ".";
-			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".dr", config);
-			// display
-			if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-				if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
-					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-					std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-					// action
-					saveCircuit(filePath);
-				}
+    void ShowSaveWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit)
+    {
+        localCircuit = globalCircuit;
+        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
+        state = State::STATE_SAVE;
+    }
 
-				// close
-				ImGuiFileDialog::Instance()->Close();
+    void ShowLoadWindow()
+    {
+        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
+        state = State::STATE_LOAD;
+    }
 
-			}
-		}
-		if (is_on_load)
-		{
-			IGFD::FileDialogConfig config;
-			config.path = ".";
-			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".dr", config);
-			// In your rendering loop, display and handle the dialog:
-			if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
-			{
-				if (ImGuiFileDialog::Instance()->IsOk())
-				{
-					// Retrieve the complete file path that the user entered.
-					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+    void draw()
+    {
+        switch (state)
+        {
+            case State::STATE_IDLE:
+                break;
+            case State::STATE_SAVE:
+                drawSaveWindow();
+                break;
+            case State::STATE_LOAD:
+                drawLoadWindow();
+                break;
+            default:
+                break;
+        }
+    }
 
-					// Use standard file I/O to create (or overwrite) the file.
-					std::ofstream outFile(filePathName, std::ios::out);
-					if (outFile.is_open())
-					{
-						// Write the contents you want to save.
-						outFile << "Your data to be saved";
-						outFile.close();
-					}
-					else
-					{
-						// Optionally handle the error, such as notifying the user.
-					}
-				}
-				// Close the file dialog.
-				ImGuiFileDialog::Instance()->Close();
-			}
-		}
-	}
+    void drawSaveWindow()
+    {
+        IGFD::FileDialogConfig config;
+        config.flags = ImGuiFileDialogFlags_Modal;
+        config.path = std::filesystem::path(PROJECT_ROOT_DIR).string();
 
-	static bool saveCircuit(std::string fileName)
-	{
-		return true; 
-	}
-}
+        ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlgKey", "Save Circuit", ".dr", config);
+
+        if (ImGuiFileDialog::Instance()->Display("SaveFileDlgKey"))
+        {
+            if (ImGuiFileDialog::Instance()->IsOk())
+            {
+                std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                saveCircuit(filePath);
+            }
+            // Close the file dialog.
+            ImGuiFileDialog::Instance()->Close();
+            state = State::STATE_IDLE;
+        }
+    }
+
+    void drawLoadWindow()
+    {
+        IGFD::FileDialogConfig config;
+        config.flags = ImGuiFileDialogFlags_Modal;
+        config.path = std::filesystem::path(PROJECT_ROOT_DIR).string();
+        ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlgKey", "Load Circuit", ".dr", config);
+        // In your rendering loop, display and handle the dialog:
+        if (ImGuiFileDialog::Instance()->Display("LoadFileDlgKey"))
+        {
+            if (ImGuiFileDialog::Instance()->IsOk())
+            {
+                std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                loadCircuit(filePath);
+            }
+            // Close the file dialog.
+            ImGuiFileDialog::Instance()->Close();
+            state = State::STATE_IDLE;
+        }
+    }
+
+    bool saveCircuit(std::string fileName)
+    {
+        std::cout << "Saving file to: " << fileName << std::endl;
+        jsonParser::saveCircuit(*localCircuit.get(), fileName);
+        return true;
+    }
+
+    std::shared_ptr<LogicElements::LogicGate> findGateAtPosition(int x, int y)
+    {
+        for (auto& gate : localCircuit.get()->gates)
+        {
+            if (gate->getPosition().x == x && gate->getPosition().y == y)
+            {
+                return gate;  // ✅ Return shared_ptr instead of raw pointer
+            }
+        }
+        return nullptr;  // Return nullptr if not found
+    }
+
+    bool loadCircuit(std::string fileName)
+    {
+        std::cout << "Loading file from: " << fileName << std::endl;
+
+        auto loaded_circuit = jsonParser::loadCircuit(fileName);
+
+        setLoadedCircuit(loaded_circuit);
+
+        return true;
+    }
+
+}  // namespace GUISaveSystem
