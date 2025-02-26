@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, windows-latest]
+        os: [ubuntu-22.04, windows-latest, macos-latest]
 
     steps:
       # Step 1: Checkout Code
@@ -42,6 +42,13 @@ jobs:
           git clone https://github.com/microsoft/vcpkg.git
           ./vcpkg/bootstrap-vcpkg.bat
           ./vcpkg/vcpkg install glfw3:x64-windows opengl:x64-windows
+
+      - name: Install Dependencies(macos)
+        if: runner.os == 'macos-latest'
+        run: |
+          brew update
+          brew install glfw3
+          brew install cmake
 
       # Step 3: Cache CMake and Build Artifacts
       - name: Cache CMake
@@ -79,6 +86,14 @@ jobs:
           cmake --build . --config Debug
         shell: pwsh
 
+      - name: Build Project (macos)
+        if: runner.os == 'macos-latest'
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make -j$(sysctl -n hw.ncpu)
+
       # # Step 5: Run Tests
       # - name: Run Tests
       #   run: |
@@ -97,4 +112,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-windows-${{ github.run_id }}
+          path: build
+
+      - name: Upload Build Artifacts (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-macos-${{ github.run_id }}
           path: build
