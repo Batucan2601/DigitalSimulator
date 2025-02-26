@@ -421,6 +421,15 @@ namespace LogicElements
         {
             // this should change the input color
         }
+        bool currently_hovered = CheckCollisionPointRec(mouse_pos, this->bd);
+        if (currently_hovered && !this->is_hovered)
+        {
+            this->is_hovered = true;
+        }
+        else if (!currently_hovered && this->is_hovered)
+        {
+            this->is_hovered = false;
+        }
     }
 
     void LogicGate::OnEnter(const InputEvent& event)

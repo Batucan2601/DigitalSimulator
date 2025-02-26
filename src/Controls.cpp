@@ -510,21 +510,7 @@ namespace Controls
         event.mouseState = MouseEventState::Move;
         event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
         InputResolver::PushEvent(event);
-        for(auto gate : selected_circuit->gates)
-        {
-            bool currently_hovered = CheckCollisionPointRec(mouse_pos, gate->bd);
-    
-            if (currently_hovered && !gate->is_hovered)
-            {
-                std::cout << "Mouse entered the gate" << std::endl;
-                gate->is_hovered = true;
-            }
-            else if (!currently_hovered && gate->is_hovered)
-            {
-                std::cout << "Mouse left the gate" << std::endl;
-                gate->is_hovered = false;
-            }
-        }
+        
         
     }
 
