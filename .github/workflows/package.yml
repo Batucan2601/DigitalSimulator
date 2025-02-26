@@ -21,9 +21,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            cmake make \
+            cmake make build-essential \
             libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
-            libgl1-mesa-dev libglu1-mesa-dev build-essential
+            libgl1-mesa-dev libglu1-mesa-dev xorg-dev \
+            libx11-dev libxext-dev libxfixes-dev
 
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
