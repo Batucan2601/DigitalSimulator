@@ -322,26 +322,29 @@ namespace LogicElements
     }
     static Vector2 posBeforeDrag;
     static bool isFirst = true;
-    static bool isDragging = false; 
+    static bool isDragging = false;
+    Vector2 dif;
     void LogicGate::OnDown(const InputEvent& event)
     {
         if (this == InputResolver::getSelectedHandler())
         {
             Vector2 mousePos = { event.pos.x , event.pos.y };
+           
             if (!isDragging)
             {
                 if (CheckCollisionPointRec(mousePos, this->bd))
                 {
                     isDragging = true; 
+                    dif = { this->bd.x - event.pos.x  ,this->bd.y - event.pos.y };
+                }
+                else
+                {
+                    return; 
                 }
             }
-            if (!isDragging)
-            {
-                return; 
-            }
-            Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
+            Rectangle rec = { event.pos.x + dif.x , event.pos.y + dif.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
-            this->setPosition(v.x, v.y);
+            this->setPosition(v.x , v.y);
             if (isFirst)
             {
                 posBeforeDrag = { v.x,v.y };
@@ -401,7 +404,10 @@ namespace LogicElements
             }
             else
             {
-                this->setPosition(v.x, v.y);
+                rec.x = v.x + dif.x;
+                rec.y = v.y + dif.y;
+                Vector2 v = Controls::SnapToNearestGrid(rec);
+                this->setPosition(v.x, v.y );
             }
             isFirst = true;
             isDragging = false; 
