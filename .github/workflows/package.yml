@@ -20,7 +20,10 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake make libgl1-mesa-dev libglu1-mesa-dev
+          sudo apt-get install -y \
+            cmake make \
+            libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+            libgl1-mesa-dev libglu1-mesa-dev build-essential
 
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
