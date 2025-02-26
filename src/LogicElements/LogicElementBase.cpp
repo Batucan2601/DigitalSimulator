@@ -277,7 +277,7 @@ namespace LogicElements
         }
         //ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
-        //if (InputResolver::getSelectedHandler() == nullptr)
+        if (InputResolver::getSelectedHandler() == nullptr)
         {
             // it cannot be a connection end
             // it can be a connection start, or gate select
@@ -446,10 +446,10 @@ namespace LogicElements
         Rectangle rec; 
         for (size_t i = 0; i < inputs.size(); i++)
         {
-            rec.x = inputs[i].pos.x - IN_OUT_RECT_WIDTH/2;
-            rec.y = inputs[i].pos.y - IN_OUT_RECT_WIDTH/2;
-            rec.width = IN_OUT_RECT_WIDTH;
-            rec.height = IN_OUT_RECT_WIDTH;
+            rec.x = inputs[i].pos.x - IN_OUT_RECT_WIDTH;
+            rec.y = inputs[i].pos.y - IN_OUT_RECT_WIDTH;
+            rec.width = IN_OUT_INTERACTION;
+            rec.height = IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;
@@ -461,10 +461,10 @@ namespace LogicElements
         }
         for (size_t i = 0; i < outputs.size(); i++)
         {
-            rec.x = outputs[i].pos.x - IN_OUT_RECT_WIDTH / 2;
-            rec.y = outputs[i].pos.y - IN_OUT_RECT_WIDTH / 2;
-            rec.width = IN_OUT_RECT_WIDTH;
-            rec.height = IN_OUT_RECT_WIDTH;
+            rec.x = outputs[i].pos.x - IN_OUT_RECT_WIDTH;
+            rec.y = outputs[i].pos.y - IN_OUT_RECT_WIDTH;
+            rec.width = IN_OUT_INTERACTION;
+            rec.height = IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;
