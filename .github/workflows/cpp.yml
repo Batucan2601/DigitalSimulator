@@ -43,14 +43,14 @@ jobs:
           ./vcpkg/bootstrap-vcpkg.bat
           ./vcpkg/vcpkg install glfw3:x64-windows opengl:x64-windows
 
-      - name: Install Dependencies(macos)
-        if: runner.os == 'macos-latest'
+      # Step 3: Set Up Dependencies (macOS Only)
+      - name: Install Dependencies (macOS)
+        if: runner.os == 'macOS'
         run: |
           brew update
-          brew install glfw3
-          brew install cmake
+          brew install cmake glfw
 
-      # Step 3: Cache CMake and Build Artifacts
+      # Step 4: Cache CMake and Build Artifacts
       - name: Cache CMake
         uses: actions/cache@v3
         with:
@@ -61,7 +61,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cmake-
 
-      # Step 4: Build Project
+      # Step 5: Build Project (Linux)
       - name: Build Project (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -70,6 +70,7 @@ jobs:
           cmake ..
           make -j12
 
+      # Step 5: Build Project (Windows)
       - name: Build Project (Windows)
         if: runner.os == 'Windows'
         run: |
@@ -86,20 +87,21 @@ jobs:
           cmake --build . --config Debug
         shell: pwsh
 
-      - name: Build Project (macos)
-        if: runner.os == 'macos-latest'
+      # Step 5: Build Project (macOS)
+      - name: Build Project (macOS)
+        if: runner.os == 'macOS'
         run: |
           mkdir -p build
           cd build
           cmake ..
           make -j$(sysctl -n hw.ncpu)
 
-      # # Step 5: Run Tests
+      # # Step 6: Run Tests (Uncomment if needed)
       # - name: Run Tests
       #   run: |
       #     ./scripts/run_tests.sh
 
-      # Step 5: Upload Build Artifacts
+      # Step 6: Upload Build Artifacts (Linux)
       - name: Upload Build Artifacts (Linux)
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
@@ -107,6 +109,7 @@ jobs:
           name: build-artifacts-linux-${{ github.run_id }}
           path: build
 
+      # Step 6: Upload Build Artifacts (Windows)
       - name: Upload Build Artifacts (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -114,6 +117,7 @@ jobs:
           name: build-artifacts-windows-${{ github.run_id }}
           path: build
 
+      # Step 6: Upload Build Artifacts (macOS)
       - name: Upload Build Artifacts (macOS)
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
