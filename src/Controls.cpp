@@ -528,7 +528,8 @@ namespace Controls
         
     }
 
-
+    static float holdTime = 0.0f;
+    const float delayThreshold = 0.1f; // Delay in seconds (e.g., 0.5 seconds)
     void Controls_Mouse_click()
     {
         //mouse always moves 
@@ -540,6 +541,7 @@ namespace Controls
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
+            holdTime = 0.0f;
             HandleMouseLeftClick(selected_circuit, mouse_pos);
         }
 
@@ -550,12 +552,20 @@ namespace Controls
 
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
-            HandleMouseDrag(selected_circuit, mouse_pos);
+            holdTime += GetFrameTime();  // Accumulate elapsed time
+            if (holdTime >= delayThreshold)
+            {
+                HandleMouseDrag(selected_circuit, mouse_pos);
+            }
         }
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
         {
-            HandleMouseRelease(selected_circuit);
+            holdTime += GetFrameTime();  // Accumulate elapsed time
+            if (holdTime >= delayThreshold)
+            {
+                HandleMouseRelease(selected_circuit);
+            }
         }
     }
 

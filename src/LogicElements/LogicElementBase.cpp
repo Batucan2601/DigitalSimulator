@@ -277,7 +277,7 @@ namespace LogicElements
         }
         //ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
-        if (InputResolver::getSelectedHandler() == nullptr)
+        //if (InputResolver::getSelectedHandler() == nullptr)
         {
             // it cannot be a connection end
             // it can be a connection start, or gate select
@@ -322,10 +322,23 @@ namespace LogicElements
     }
     static Vector2 posBeforeDrag;
     static bool isFirst = true;
+    static bool isDragging = false; 
     void LogicGate::OnDown(const InputEvent& event)
     {
         if (this == InputResolver::getSelectedHandler())
         {
+            Vector2 mousePos = { event.pos.x , event.pos.y };
+            if (!isDragging)
+            {
+                if (CheckCollisionPointRec(mousePos, this->bd))
+                {
+                    isDragging = true; 
+                }
+            }
+            if (!isDragging)
+            {
+                return; 
+            }
             Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
             this->setPosition(v.x, v.y);
@@ -338,11 +351,15 @@ namespace LogicElements
     }
     void LogicGate::OnRelease(const InputEvent& event)
     {
+      
         if (this == InputResolver::getSelectedHandler())
         {
+            if (!isDragging)
+            {
+                return;
+            }
             Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
-            this->setPosition(v.x, v.y);
             bool is_other_gate_exist = false;
 
             float new_gate_x_start = this->bd.x;
@@ -384,10 +401,10 @@ namespace LogicElements
             }
             else
             {
-                this->bd.x = v.x;
-                this->bd.y = v.y;
+                this->setPosition(v.x, v.y);
             }
             isFirst = true;
+            isDragging = false; 
         }
     }
     void LogicGate::OnMove(const InputEvent& event)
