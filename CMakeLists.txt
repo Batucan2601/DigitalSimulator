@@ -60,35 +60,35 @@ target_include_directories(${PROJECT_NAME} PUBLIC include/LogicElements)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/imgui)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/rlImGui)
 
-# -------------------
-# 🚀 ADD INSTALL TARGETS FOR PACKAGING
-# -------------------
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-install(DIRECTORY include/ DESTINATION include)
+# # -------------------
+# # 🚀 ADD INSTALL TARGETS FOR PACKAGING
+# # -------------------
+# install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+# install(DIRECTORY include/ DESTINATION include)
 
-# Install assets (Optional)
-install(DIRECTORY assets/ DESTINATION share/digital_sim/assets)
+# # Install assets (Optional)
+# install(DIRECTORY assets/ DESTINATION share/digital_sim/assets)
 
-# -------------------
-# 🏗️ CPack Packaging Configuration
-# -------------------
-set(CPACK_PACKAGE_NAME "Digikrom")
-set(CPACK_PACKAGE_VERSION "1.0.0")
-set(CPACK_PACKAGE_VENDOR "Test")
-set(CPACK_PACKAGE_CONTACT "test@test.com")
-set(CPACK_PACKAGE_DESCRIPTION "A Digital Logic Simulation Software using Raylib and ImGui")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+# # -------------------
+# # 🏗️ CPack Packaging Configuration
+# # -------------------
+# set(CPACK_PACKAGE_NAME "Digikrom")
+# set(CPACK_PACKAGE_VERSION "1.0.0")
+# set(CPACK_PACKAGE_VENDOR "Test")
+# set(CPACK_PACKAGE_CONTACT "test@test.com")
+# set(CPACK_PACKAGE_DESCRIPTION "A Digital Logic Simulation Software using Raylib and ImGui")
+# # set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
-# Define package formats based on OS
-if(WIN32)
-    set(CPACK_GENERATOR "NSIS")
-elseif(APPLE)
-    set(CPACK_GENERATOR "DragNDrop")
-else()
-    set(CPACK_GENERATOR "DEB;RPM;TGZ")
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Test Test")
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "raylib, cmake")
-    set(CPACK_RPM_PACKAGE_REQUIRES "raylib, cmake")
-endif()
+# # Define package formats based on OS
+# if(WIN32)
+#     set(CPACK_GENERATOR "NSIS")
+# elseif(APPLE)
+#     set(CPACK_GENERATOR "DragNDrop")
+# else()
+#     set(CPACK_GENERATOR "DEB;RPM;TGZ")
+#     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Test Test")
+#     set(CPACK_DEBIAN_PACKAGE_DEPENDS "raylib, cmake")
+#     set(CPACK_RPM_PACKAGE_REQUIRES "raylib, cmake")
+# endif()
 
-include(CPack)
+# include(CPack)

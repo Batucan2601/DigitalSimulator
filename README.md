@@ -36,3 +36,28 @@ wget https://github.com/batucan2601/DigitalSimulator/releases/latest/download/Di
 sudo dpkg -i DigitalSimulator-1.0.0-Linux.deb
 sudo apt-get install -f  # Fix dependencies if needed
 ```
+
+**Build Project First**
+mkdir -p build
+cd build
+cmake ..
+cmake --build .
+
+**Linux**
+
+```sh
+cpack -G DEB
+cpack -G RPM
+```
+
+**Windows**
+
+```sh
+cpack -G NSIS
+```
+
+**macOS**
+
+```sh
+cpack -G DragNDrop
+```
