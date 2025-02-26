@@ -7,7 +7,7 @@ namespace LogicElements
     {
         auto gate = std::make_shared<LogicGate>(type, logger_name);
         Signal A("A");
-        Signal B("A");
+        Signal B("B");
         Signal Out("Out");
         switch (type)
         {

@@ -324,6 +324,36 @@ namespace LogicElements
     static bool isFirst = true;
     static bool isDragging = false;
     Vector2 dif;
+
+    void UpdateConnection(LogicGate* gate)
+    {
+        for (size_t i = 0; i < gate->circuit->connections.size(); i++)
+        {
+            CircuitElements::Connection* c = &gate->circuit->connections[i];
+            if (c->sourceGate.get() == gate)
+            {
+                std::string name = c->sourceLogic;
+                for (size_t j = 0; j < gate->inputs.size(); j++)
+                {
+                    if (name == gate->inputs[j].name)
+                    {
+                        //c->physCon.wires.erase(c->physCon.wires.begin(), c->physCon.wires.begin() + 1);
+                        //build again
+                        Vector2 newPos = gate->inputs[j].pos;
+                        Vector2 newLine = Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
+                        c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
+                        if (!(newLine.x == c->physCon.wires[0].x && newLine.y == c->physCon.wires[0].y) )
+                        {
+                            c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
+                        }
+                        //check the physcon wires size
+                        // etc etc
+                        //Controls::Generate_straight_lines(newPos,)
+                    }
+                }
+            }
+        }
+    }
     void LogicGate::OnDown(const InputEvent& event)
     {
         if (this == InputResolver::getSelectedHandler())
@@ -350,8 +380,11 @@ namespace LogicElements
                 posBeforeDrag = { v.x,v.y };
                 isFirst = false;
             }
+            // check the connections and their endpoints
+            UpdateConnection(this);
         }
     }
+    
     void LogicGate::OnRelease(const InputEvent& event)
     {
       
