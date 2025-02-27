@@ -406,42 +406,49 @@ namespace LogicElements
     }
     void ReducePhysicalWires(LogicGate* gate)
     {
-        return; 
+
         for (size_t i = 0; i < gate->circuit->connections.size(); i++)
         {
             CircuitElements::Connection* c = &gate->circuit->connections[i];
-            if (c->sourceGate.get() == gate)
+            if (c->sourceGate.get() == gate || c->targetGate.get() == gate)
             {
-                std::string name = c->sourceLogic;
-                for (size_t j = 0; j < gate->inputs.size(); j++)
+                std::vector<unsigned int> indices_destroyed;
+                for (size_t j = c->physCon.wires.size() - 1; j > 1; j--)
                 {
-                    if (name == gate->inputs[j].name)
+                    Vector2 end = c->physCon.wires[j];
+                    Vector2 mid = c->physCon.wires[j - 1];
+                    Vector2 start = c->physCon.wires[j - 2];
+
+                    if (mid.x == start.x && mid.y == start.y)
                     {
-                        Vector2 newPos = gate->inputs[j].pos;
-                        Vector2 newLine = Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
-                        c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
-                        if (!(newLine.x == c->physCon.wires[0].x && newLine.y == c->physCon.wires[0].y))
-                        {
-                            c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
-                        }
+                        indices_destroyed.push_back(j - 1);
                     }
                 }
-                for (size_t j = 0; j < gate->outputs.size(); j++)
+                for (size_t j = 0; j < indices_destroyed.size(); j++)
                 {
-                    if (name == gate->outputs[j].name)
+                    c->physCon.wires.erase(c->physCon.wires.begin() + indices_destroyed[j]);
+                }
+                indices_destroyed.clear();
+                for (size_t j = c->physCon.wires.size() - 1; j > 1; j--)
+                {
+                    Vector2 end = c->physCon.wires[j];
+                    Vector2 mid = c->physCon.wires[j - 1];
+                    Vector2 start = c->physCon.wires[j - 2];
+                    if ((mid.y == start.y && mid.y == end.y) || (mid.x == start.x && mid.x == end.x))
                     {
-                        Vector2 newPos = gate->outputs[j].pos;
-                        int last_index = c->physCon.wires.size() - 1;
-                        Vector2 newLine = Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
-                        c->physCon.wires.push_back(newLine);
-                        if (!(newLine.x == c->physCon.wires[last_index].x && newLine.y == c->physCon.wires[last_index].y))
-                        {
-                            c->physCon.wires.push_back(newPos);
-                        }
+                        indices_destroyed.push_back(j - 1);
                     }
+                }
+                for (size_t j = 0; j < indices_destroyed.size(); j++)
+                {
+                    c->physCon.wires.erase(c->physCon.wires.begin() + indices_destroyed[j]);
                 }
             }
+            
         }
+        
+
+        
     }
     void LogicGate::OnDown(const InputEvent& event)
     {
