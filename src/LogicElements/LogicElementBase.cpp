@@ -108,29 +108,59 @@ namespace LogicElements
         // UnloadTexture(m_texture);
     }
 
-    void LogicGate::setInOutPositions(float x, float y )
+    void LogicGate::setInOutPositions()
     {
         //output
+        int no_of_grid_points = this->bd.width / GRID_POINT_SIZE + 1;
+
         if (this->outputs.size() == 1)
         {
             this->outputs[0].pos = { this->bd.x + this->bd.width , this->bd.y + this->bd.height / 2  };
+        }
+        else if (this->outputs.size() > 1)
+        {
+            this->outputs[0].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE };
+            this->outputs[1].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 3 };
+        }
+        if (this->outputs.size() > 2)
+        {
+            this->outputs[2].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 2 };
+        }
+        if (this->outputs.size() > 3)
+        {
+            this->outputs[3].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 4 };
+        }
+        if (this->outputs.size() > 4)
+        {
+            this->outputs[4].pos = { this->bd.x + this->bd.width , this->bd.y };
         }
         if (this->inputs.size() == 1)
         {
             this->inputs[0].pos = { this->bd.x , this->bd.y + this->bd.height / 2};
         }
-        else if (this->inputs.size() == 2)
+        else if (this->inputs.size() > 1)
         {
             this->inputs[0].pos = { this->bd.x , this->bd.y + SPACING_SIZE };
             this->inputs[1].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 3};
-
+        }
+        if (this->inputs.size() > 2)
+        {
+            this->inputs[2].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 2};
+        }
+        if (this->inputs.size() > 3)
+        {
+            this->inputs[3].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 4 };
+        }
+        if (this->inputs.size() > 4)
+        {
+            this->inputs[4].pos = { this->bd.x , this->bd.y  };
         }
     }
     void LogicGate::setPosition(float x, float y)
     {
         bd.x = x;
         bd.y = y;
-        this->setInOutPositions( x, y);
+        this->setInOutPositions();
     }
 
     Vector2 LogicGate::getPosition() const

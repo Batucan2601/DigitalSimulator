@@ -9,7 +9,11 @@ namespace GUILogicSetting
 {
     static void draw_Inputs(LogicElements::LogicGate* logicGate);
     static void draw_Outputs(LogicElements::LogicGate* logicGate);
-    static void change_connection_name(LogicElements::LogicGate*  logicGate, bool is_input , int index, std::string newName);
+    static void change_connection_name(LogicElements::LogicGate*  logicGate, bool is_input , std::string newName);
+
+    
+    static std::string new_input_name = "";
+    static std::string new_output_name = "";
     // Global or static variables for the UI state and texture.
     bool is_shown = false; // Basic Logic Display flag.
     static void GUITools_BasicLogicDisplay_draw(LogicElements::LogicGate* logicGate);
@@ -24,7 +28,7 @@ namespace GUILogicSetting
     {
         if (ImGui::TreeNodeEx("Inputs"))
         {
-            int i = 1;
+            int i = 0;
             for (auto& inputs : logicGate->inputs)
             {
                 // Create a unique identifier that doesn't show in the UI.
@@ -32,9 +36,24 @@ namespace GUILogicSetting
                 // Directly pass the reference to the string.
                 if (ImGui::InputText(label.c_str(), &inputs.name))
                 {
-                    change_connection_name(logicGate , true ,  i , inputs.name);
+                    change_connection_name(logicGate , true ,  inputs.name);
+                }
+                ImGui::SameLine();
+                label = "X" + label ;
+                if( ImGui::Button(label.c_str()) ) 
+                {
+                    logicGate->inputs.erase(logicGate->inputs.begin() + i);
+                    logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
                 }
                 i++;
+            }
+            ImGui::InputText("Name", &new_input_name);
+            if (ImGui::Button("Insert"))
+            {
+                LogicElements::Signal s(new_input_name);
+                logicGate->inputs.push_back(s);
+                logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
+                new_input_name = "";
             }
             ImGui::TreePop();
         }
@@ -44,16 +63,24 @@ namespace GUILogicSetting
         if (ImGui::TreeNodeEx("Outputs"))
         {
             int i = 1;
-            for (auto& inputs : logicGate->outputs)
+            for (auto& outputs : logicGate->outputs)
             {
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
                 // Directly pass the reference to the string.
-                if (ImGui::InputText(label.c_str(), &inputs.name))
+                if (ImGui::InputText(label.c_str(), &outputs.name))
                 {
-                    change_connection_name(logicGate, false, i, inputs.name);
+                    change_connection_name(logicGate, false, outputs.name);
                 }
                 i++;
+            }
+            ImGui::InputText("Name", &new_output_name);
+            if (ImGui::Button("Insert"))
+            {
+                LogicElements::Signal s(new_output_name);
+                logicGate->outputs.push_back(s);
+                logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
+                new_output_name = "";
             }
             ImGui::TreePop();
         }
@@ -74,7 +101,7 @@ namespace GUILogicSetting
 
     }
 
-    static void change_connection_name(LogicElements::LogicGate* logicGate, bool is_input, int index, std::string newName)
+    static void change_connection_name(LogicElements::LogicGate* logicGate, bool is_input, std::string newName)
     {
         for (size_t i = 0; i < logicGate->circuit->connections.size(); i++)
         {

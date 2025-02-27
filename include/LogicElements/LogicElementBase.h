@@ -114,6 +114,7 @@ namespace LogicElements
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
+
       protected:
         void OnLeftClick(const InputEvent& event);
         void OnDown(const InputEvent& event);
@@ -127,7 +128,7 @@ namespace LogicElements
         std::function<void(LogicGate&)> evaluateFunction;  // Stores gate logic
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
-          void setInOutPositions(float x, float y);
+          void setInOutPositions();
 
 
     };
