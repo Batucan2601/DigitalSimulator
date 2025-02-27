@@ -303,9 +303,45 @@ namespace LogicElements
         {
             if (this->is_connection_clicked(pos, possibleConnection))
             {
+
+                //the source should be output 
+                //the target should be an input
+                bool is_output = false; 
+                bool is_input = false; 
+                for (size_t i = 0; i < handler->sourceGate->outputs.size(); i++)
+                {
+                    if (handler->sourceGate->outputs[i].name == handler->sourceLogic)
+                    {
+                        is_output = true; 
+                        break; 
+                    }
+                }
+                for (size_t i = 0; i < possibleConnection.sourceGate->inputs.size(); i++)
+                {
+                    if (possibleConnection.sourceGate->inputs[i].name == possibleConnection.sourceLogic)
+                    {
+                        is_input = true;
+                        break;
+                    }
+                }
+                if (is_output != is_input) //if one is true one is false 
+                {
+                    return;
+                }
                 handler->targetGate = possibleConnection.sourceGate;
                 handler->targetLogic = possibleConnection.sourceLogic;
                 handler->is_connected = true; 
+                if (!is_output && !is_input)
+                {
+                    std::shared_ptr<LogicGate> temp_ptr = handler->sourceGate;
+                    handler->sourceGate = handler->targetGate;
+                    handler->targetGate = temp_ptr;
+
+                    std::string temp_str = handler->sourceLogic;
+                    handler->sourceLogic = handler->targetLogic;
+                    handler->targetLogic = temp_str;
+                }
+                
                 InputResolver::RegisterHandler(static_cast<IInputHandler*>(&circuit->connections[circuit->connections.size() - 1]));
             }
         }
