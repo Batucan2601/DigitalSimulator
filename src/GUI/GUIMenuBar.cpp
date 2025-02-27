@@ -2,11 +2,12 @@
 
 #include "GUI/GUISaveSystem.h"
 #include "GUI/GUITools.h"
+#include "appSettings.h"
 
 #include <imgui.h>
 #include <sstream>
-
 GUIMenuBar guiMenuBar;
+extern AppSettings::Settings settings;
 
 static void createMenuItem(std::string path, bool is_menu, std::function<void()> action)
 {
@@ -103,13 +104,30 @@ GUIMenuBar::GUIMenuBar()
                    []()
                    {
                        exit(1);
-                       ;
                    });
     createMenuItem("Tools", true, nullptr);
     createMenuItem("Tools/Component List", false,
                    []()
                    {
                        GUITools::GUITools_BasicLogicDisplay();
+                   });
+    createMenuItem("Settings", true, nullptr);
+    createMenuItem("Settings/System Settings", false,
+                   []()
+                   {
+                       ;
+                   });
+    createMenuItem("Settings/Theme/Dark Mode", false,
+                   []()
+                   {
+                       settings.theme = AppSettings::Theme::DarkMode;
+                       GUIStyle::ApplyDarkTheme();
+                   });
+    createMenuItem("Settings/Theme/Light Mode", false,
+                   []()
+                   {
+                       settings.theme = AppSettings::Theme::LightMode;
+                       GUIStyle::ApplyLightTheme();
                    });
 }
 void GUIMenu::display()

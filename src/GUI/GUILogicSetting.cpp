@@ -1,21 +1,16 @@
 #include "GUI/GUILogicSetting.h"
+
 #include "Component.h"
 #include "LogicElements.h"
+
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #include <raylib.h>
 
 namespace GUILogicSetting
 {
-    static void draw_Inputs(Component* logicGate);
-    static void draw_Outputs(Component* logicGate);
-    static void change_connection_name(Component*  logicGate, bool is_input , std::string newName);
-
-    
-    static std::string new_input_name = "";
-    static std::string new_output_name = "";
     // Global or static variables for the UI state and texture.
-    bool is_shown = false; // Basic Logic Display flag.
+    bool is_shown = false;  // Basic Logic Display flag.
     static void GUITools_BasicLogicDisplay_draw(Component* logicGate);
     void Draw()
     {
@@ -36,11 +31,11 @@ namespace GUILogicSetting
                 // Directly pass the reference to the string.
                 if (ImGui::InputText(label.c_str(), &inputs.name))
                 {
-                    change_connection_name(logicGate , true ,  inputs.name);
+                    change_connection_name(logicGate, true, inputs.name);
                 }
                 ImGui::SameLine();
-                label = "X" + label ;
-                if( ImGui::Button(label.c_str()) ) 
+                label = "X" + label;
+                if (ImGui::Button(label.c_str()))
                 {
                     logicGate->inputs.erase(logicGate->inputs.begin() + i);
                     logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
@@ -88,7 +83,6 @@ namespace GUILogicSetting
     static void GUITools_BasicLogicDisplay_draw(Component* logicGate)
     {
         // Draw interactive windows first.
-        float pos[2] = { logicGate->bd.x, logicGate->bd.y };
         ImGui::Begin("Logic Settings", &is_shown);
         ImGui::InputFloat2("Position", pos);
         draw_Inputs(logicGate);
@@ -97,8 +91,6 @@ namespace GUILogicSetting
 
         logicGate->bd.x = pos[0];
         logicGate->bd.y = pos[1];
-
-
     }
 
     static void change_connection_name(Component* logicGate, bool is_input, std::string newName)
@@ -107,18 +99,18 @@ namespace GUILogicSetting
         {
             if (logicGate->circuit->connections[i].sourceGate.get() == logicGate)
             {
-                if (!is_input) //output
+                if (!is_input)  // output
                 {
                     logicGate->circuit->connections[i].sourceLogic = newName;
                 }
             }
             if (logicGate->circuit->connections[i].targetGate.get() == logicGate)
             {
-                if (is_input) //output
+                if (is_input)  // output
                 {
-                    logicGate->circuit->connections[i].targetLogic= newName;
+                    logicGate->circuit->connections[i].targetLogic = newName;
                 }
             }
         }
     }
-}
+}  // namespace GUILogicSetting

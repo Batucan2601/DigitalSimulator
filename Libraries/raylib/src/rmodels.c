@@ -1113,7 +1113,7 @@ void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, C
 }
 
 // Draw a grid centered at (0, 0)
-void DrawGrid2D(int slices, float spacing , float pointSize)
+void DrawGrid2D(int slices, float spacing , float pointSize, Color color)
 {
     int halfSlices = slices/2;
     rlBegin(RL_POINTS);
@@ -1122,7 +1122,7 @@ void DrawGrid2D(int slices, float spacing , float pointSize)
         {
             for (int y = -halfSlices; y <= halfSlices; y++)
             {
-                rlColor3f(0.5f, 0.5f, 0.5f);
+                rlColor3f(color.r, color.g, color.b);
                 rlVertex2f((float)x * spacing, y * spacing);
             }
         }

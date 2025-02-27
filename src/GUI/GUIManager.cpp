@@ -6,17 +6,66 @@
 #include "GUI/GUIStyle.h"
 
 #include <GUI/GUIEditor.h>
+#include <GUI/GUILogicSetting.h>
 #include <GUI/GUITools.h>
 #include <imgui.h>
 #include <rlImGui.h>
-#include <GUI/GUILogicSetting.h>
+
+bool GUIManager::showDemoWindow = false;
 
 void GUIManager::Init()
 {
     rlImGuiSetup(true);  // Initialize ImGui
     GUIStyle::init();    // Set up custom ImGui styles
 }
-static void draw_parent_screen()
+
+void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
+{
+    rlImGuiBegin();
+    DrawDockingSpace();
+
+    DrawEditor(circuit);
+
+    DrawMainMenu(circuit);
+
+    DrawTools();
+
+    DrawSaveDialog();
+
+    DrawDemoWindow();
+
+    DrawLogicSetting();
+
+    rlImGuiEnd();
+}
+
+void GUIManager::DrawLogicSetting()
+{
+    GUILogicSetting::Draw();
+}
+
+void GUIManager::DrawTools()
+{
+    GUITools::GUITools_Display();
+}
+
+void GUIManager::DrawSaveDialog()
+{
+    GUISaveSystem::draw();
+}
+
+void GUIManager::DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit)
+{
+    GUIEditor::Draw();
+    GUIEditor::RenderScene(circuit);
+}
+
+void GUIManager::DrawMainMenu(std::shared_ptr<CircuitElements::Circuit> circuit)
+{
+    guiMenuBar.Draw(circuit);
+}
+
+void GUIManager::DrawDockingSpace()
 {
     // Get IO for display size
     ImGuiIO& io = ImGui::GetIO();
@@ -41,27 +90,6 @@ static void draw_parent_screen()
 
     ImGui::End();
 };  // this is acutally needed for save and load purposes
-void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
-{
-    rlImGuiBegin();
-    draw_parent_screen();
-    GUIEditor::Draw();
-    // Draw individual components
-    // GUIMenuBar::Draw();
-    guiMenuBar.Draw(circuit);
-
-    GUITools::GUITools_Display();
-    GUISaveSystem::draw();
-    GUILogicSetting::Draw();
-    // GUILogic::Draw();
-
-    // static bool show_demo_window = true;
-
-    // if (show_demo_window)
-    //     ImGui::ShowDemoWindow(&show_demo_window);
-
-    rlImGuiEnd();
-}
 
 void GUIManager::Cleanup()
 {
