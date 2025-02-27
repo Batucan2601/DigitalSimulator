@@ -7,6 +7,9 @@
 
 namespace GUILogicSetting
 {
+    static void draw_Inputs(LogicElements::LogicGate* logicGate);
+    static void draw_Outputs(LogicElements::LogicGate* logicGate);
+    static void change_connection_name(LogicElements::LogicGate*  logicGate, bool is_input , int index, std::string newName);
     // Global or static variables for the UI state and texture.
     bool is_shown = false; // Basic Logic Display flag.
     static void GUITools_BasicLogicDisplay_draw(LogicElements::LogicGate* logicGate);
@@ -27,7 +30,10 @@ namespace GUILogicSetting
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
                 // Directly pass the reference to the string.
-                ImGui::InputText(label.c_str(), &inputs.name);
+                if (ImGui::InputText(label.c_str(), &inputs.name))
+                {
+                    change_connection_name(logicGate , true ,  i , inputs.name);
+                }
                 i++;
             }
             ImGui::TreePop();
@@ -43,7 +49,10 @@ namespace GUILogicSetting
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
                 // Directly pass the reference to the string.
-                ImGui::InputText(label.c_str(), &inputs.name);
+                if (ImGui::InputText(label.c_str(), &inputs.name))
+                {
+                    change_connection_name(logicGate, false, i, inputs.name);
+                }
                 i++;
             }
             ImGui::TreePop();
@@ -63,5 +72,26 @@ namespace GUILogicSetting
         logicGate->bd.y = pos[1];
 
 
+    }
+
+    static void change_connection_name(LogicElements::LogicGate* logicGate, bool is_input, int index, std::string newName)
+    {
+        for (size_t i = 0; i < logicGate->circuit->connections.size(); i++)
+        {
+            if (logicGate->circuit->connections[i].sourceGate.get() == logicGate)
+            {
+                if (!is_input) //output
+                {
+                    logicGate->circuit->connections[i].sourceLogic = newName;
+                }
+            }
+            if (logicGate->circuit->connections[i].targetGate.get() == logicGate)
+            {
+                if (is_input) //output
+                {
+                    logicGate->circuit->connections[i].targetLogic= newName;
+                }
+            }
+        }
     }
 }
