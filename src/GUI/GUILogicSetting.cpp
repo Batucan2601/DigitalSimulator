@@ -22,7 +22,7 @@ namespace GUILogicSetting
         if (ImGui::TreeNodeEx("Inputs"))
         {
             int i = 1;
-            for (auto& inputs : logicGate->outputs)
+            for (auto& inputs : logicGate->inputs)
             {
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
@@ -38,7 +38,7 @@ namespace GUILogicSetting
         if (ImGui::TreeNodeEx("Outputs"))
         {
             int i = 1;
-            for (auto& inputs : logicGate->inputs)
+            for (auto& inputs : logicGate->outputs)
             {
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);

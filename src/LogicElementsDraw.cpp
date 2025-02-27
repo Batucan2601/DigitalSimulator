@@ -47,15 +47,23 @@ namespace LogicElementsDraw
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 // DrawLine();
-                if (circuit->connections[i].sourceGate->getOutput("Out"))
+                if (circuit->connections[i].is_connected)
                 {
-                    DrawLineEx(start, end, LINE_THICKNESS,
-                               circuit->connections[i].is_connected ? GREEN : RED);
+                    bool val = false;
+                    for (size_t i = 0; i < circuit->connections[i].sourceGate->outputs.size(); i++)
+                    {
+                        if (circuit->connections[i].sourceGate->outputs[i].name == circuit->connections[i].sourceLogic)
+                        {
+                            val = circuit->connections[i].sourceGate->outputs[i].val;
+                            break;
+                        }
+                    }
+                    DrawLineEx(start, end, LINE_THICKNESS, val ? GREEN : BLACK);
                 }
                 else
                 {
                     DrawLineEx(start, end, LINE_THICKNESS,
-                               circuit->connections[i].is_connected ? BLACK : RED);
+                        RED);
                 }
 
                 // draw their interactable points
