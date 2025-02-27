@@ -18,6 +18,7 @@ Libraries/imgui/imgui_draw.cpp
 Libraries/imgui/imgui_tables.cpp 
 Libraries/imgui/imgui_widgets.cpp 
 Libraries/imgui/imgui_demo.cpp 
+Libraries/imgui/misc/cpp/imgui_stdlib.cpp 
 #support for rlimgui 
 Libraries/rlImGui/rlImGui.cpp
 Libraries/ImGuiFileDialog/ImGuiFileDialog.cpp
