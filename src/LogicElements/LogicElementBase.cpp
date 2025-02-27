@@ -493,12 +493,6 @@ namespace LogicElements
             Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
             bool is_other_gate_exist = false;
-
-            float new_gate_x_start = this->bd.x;
-            float new_gate_y_start = this->bd.y;
-            float new_gate_x_end = this->bd.x + this->bd.width;
-            float new_gate_y_end = this->bd.y + this->bd.height;
-
             for (auto val : InputResolver::handlers)
             {
                 if (auto handler = dynamic_cast<LogicGate*>(val))
@@ -507,20 +501,9 @@ namespace LogicElements
                     {
                         continue; 
                     }
-                    // Get the bounding box of the existing gate
-                    float existing_gate_x_start = handler->bd.x;
-                    float existing_gate_y_start = handler->bd.y;
-                    float existing_gate_x_end = handler->bd.x + handler->bd.width;
-                    float existing_gate_y_end = handler->bd.y + handler->bd.height;
-
                     // Check for overlap between the new gate's bounding box and the existing gate's
                     // bounding box
-                    if (!(new_gate_x_end <=
-                        existing_gate_x_start ||  // New gate is to the left of the existing gate
-                        new_gate_x_start >=
-                        existing_gate_x_end ||  // New gate is to the right of the existing gate
-                        new_gate_y_end <= existing_gate_y_start ||  // New gate is above the existing gate
-                        new_gate_y_start >= existing_gate_y_end))
+                    if (CheckCollisionRecs(this->bd, handler->bd))
                     {
                         is_other_gate_exist = true;  // Overlap detected, grid is occupied
                         break;
