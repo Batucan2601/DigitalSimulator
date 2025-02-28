@@ -6,6 +6,7 @@
 #include "raylib.h"
 
 #include <filesystem>
+#include <fstream>
 #include <memory>
 #include <stdexcept>
 #include <string>

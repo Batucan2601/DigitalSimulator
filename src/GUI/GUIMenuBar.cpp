@@ -90,12 +90,14 @@ GUIMenuBar::GUIMenuBar()
     createMenuItem("File/Save", false,
                    [this]()  // Capture 'this' here
                    {
-                       GUISaveSystem::saveFile(this->circuit);
+                       GUISaveSystem::ShowSaveWindow(this->circuit);
+                       //    GUISaveSystem::saveFile(this->circuit);
                    });
     createMenuItem("File/Load", false,
                    [this]()  // Capture 'this' here
                    {
-                       GUISaveSystem::loadFile(this->circuit);
+                       GUISaveSystem::ShowLoadWindow();
+                       //    GUISaveSystem::loadFile(&this->circuit);
                    });
     createMenuItem("File/Exit", false,
                    []()

@@ -1,72 +1,128 @@
 #include "JsonSerializer.h"
-using namespace LogicElements;
-inline std::string gateTypeToString(LogicElements::GateType type) {
-    switch (type) {
-    case LogicElements::GateType::NONE:  return "NONE";
-    case LogicElements::GateType::AND:   return "AND";
-    case LogicElements::GateType::OR:    return "OR";
-    case LogicElements::GateType::NOT:   return "NOT";
-    case LogicElements::GateType::XOR:   return "XOR";
-    case LogicElements::GateType::XAND:  return "XAND";
-    case LogicElements::GateType::INPUT: return "INPUT";
-    default: return "UNKNOWN";
-    }
-}
-/*inline static LogicElements::LogicGate* gateTypetoClass(LogicElements::GateType type) {
-    std::string logger = "";
-    switch (type) {
-    case LogicElements::GateType::AND:   return LogicElements::Gates::AndGate(logger);
-    case LogicElements::GateType::OR:    return LogicElements::Gates::OrGate(logger);
-    case LogicElements::GateType::NOT:   return LogicElements::Gates::NotGate(logger);
-    case LogicElements::GateType::XOR:   return LogicElements::Gates::XorGate(logger);
-    case LogicElements::GateType::XAND:  return LogicElements::Gates::XandGate(logger);
-    case LogicElements::GateType::INPUT: return LogicElements::Gates::InputGate(logger);
-    default: throw("INVALID CLASS");
-    }
-} */
-inline void to_json(json& j, const Vector2& vec) {
-    j = json{
-        {"x", vec.x},
-        {"y", vec.y}
-    };
-}
-/*inline void to_json(json& j, const Signal& vec) {
-    j = json{
-       {"name", vec.name},
-       {"pos", vec.pos},
-       {"val", vec.val},
-    };
-}*/
-inline void to_json(json& j, const Rectangle& rect) {
-    j = json{
-        {"x", rect.x},
-        {"y", rect.y},
-        {"width", rect.width},
-        {"height", rect.height}
-    };
-}
-/*inline void to_json(json& j, const LogicElements::LogicGate& gate) {
-    j = json{
-        {"bounding_box", gate.bd}, // Automatic conversion via to_json for Rectangle
-        {"type", gateTypeToString(gate.m_type)},
-        {"inputs", gate.inputs},
-        {"outputs", gate.outputs}
-        // You can add more fields here if needed.
-    };
-}*/
 
-inline void to_json(json& j, const CircuitElements::PhysicalConnection& pc) {
-    j = json{
-        {"wires", pc.wires}
-    };
-}
 
-/*inline void to_json(json& j, const CircuitElements::Connection& con) {
-    j = json{
-        {"sourceGate", con.sourceGate},   // Uses adl_serializer for shared_ptr<LogicGate>
-        {"sourceLogic", con.sourceLogic},
-        {"targetGate", con.targetGate},   // Ditto.
-        {"targetLogic", con.targetLogic},
-        {"is_connected", con.is_connected}
-    };
-} */
+namespace jsonParser
+{
+
+    std::shared_ptr<CircuitElements::Circuit> loadCircuit(const std::string& filePath)
+    {
+        std::ifstream file(filePath);
+        std::string logger_name = "LoggerName";
+
+        if (!file.is_open())
+        {
+            std::cerr << "Error: Could not open file for loading!" << std::endl;
+            return std::make_shared<CircuitElements::Circuit>(
+                logger_name);  // Return an empty circuit
+        }
+
+        json j;
+        file >> j;
+        file.close();
+
+        auto circuit = std::make_shared<CircuitElements::Circuit>(logger_name);
+
+        // Map for fast lookup of gates by ID
+        std::unordered_map<int, std::shared_ptr<LogicElements::LogicGate>> gateMap;
+
+        // Load gates
+        for (const auto& gateJson : j["gates"])
+        {
+            std::string logger = "LoggerName";
+            auto gate = std::make_shared<LogicElements::LogicGate>(gateJson["type"], logger);
+            gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
+
+            int id = gateJson["id"];
+            gateMap[id] = gate;  // Store gate in the map
+            circuit.get()->gates.push_back(gate);
+        }
+
+        // Load connections
+        for (const auto& connJson : j["connections"])
+        {
+            int sourceID = connJson["sourceGate"];
+            int targetID = connJson["targetGate"];
+
+            if (gateMap.find(sourceID) != gateMap.end() && gateMap.find(targetID) != gateMap.end())
+            {
+                circuit.get()->addConnection(gateMap[sourceID], connJson["sourceLogic"],
+                                             gateMap[targetID], connJson["targetLogic"]);
+            }
+
+            // Load wire positions
+            CircuitElements::Connection& conn = circuit.get()->connections.back();
+            conn.physCon.wires = connJson["wires"];
+        }
+
+        return circuit;
+
+    }
+
+    void saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath)
+    {
+        json j;
+
+        // Convert gates to JSON array
+        json gatesArray = json::array();
+        for (const auto& gate : circuit.gates)
+        {
+            if (gate)
+            {
+                json gateJson;
+                to_json(gateJson, *gate);
+                gatesArray.push_back(gateJson);
+            }
+        }
+        j["gates"] = gatesArray;
+
+        // Convert connections to JSON array
+        json connectionsArray = json::array();
+        for (const auto& conn : circuit.connections)
+        {
+            json connJson;
+            to_json(connJson, conn);
+            connectionsArray.push_back(connJson);
+        }
+        j["connections"] = connectionsArray;
+
+        // Open file and write JSON
+        std::ofstream file(filePath);
+        if (file.is_open())
+        {
+            file << j.dump(4);  // Pretty-print JSON with indentation
+            file.close();
+        }
+        else
+        {
+            std::cerr << "Error: Could not open file for saving!" << std::endl;
+        }
+    }
+
+    void to_json(json& j, const LogicElements::LogicGate& gate)
+    {
+        j = json{{"id", gate.getID()},  // Store ID
+                 {"type", gate.getType()},
+                 {"position", {{"x", gate.getPosition().x}, {"y", gate.getPosition().y}}},
+                 {"inputs", gate.getInputs()},
+                 {"outputs", gate.getOutputs()}};
+    }
+
+
+    void to_json(json& j, const Vector2& v)
+    {
+        j = json{{"x", v.x}, {"y", v.y}};
+    }
+
+    void to_json(json& j, const CircuitElements::Connection& conn)
+    {
+        j = json{
+            {"sourceGate", conn.sourceGate ? conn.sourceGate->getID() : -1},  // Save gate ID
+            {"sourceLogic", conn.sourceLogic},
+            {"targetGate", conn.targetGate ? conn.targetGate->getID() : -1},  // Save gate ID
+            {"targetLogic", conn.targetLogic},
+            {"wires", conn.physCon.wires}  // Save wire positions
+        };
+    }
+
+}  // namespace jsonParser
+

@@ -78,6 +78,7 @@ namespace LogicElements
         GatePosition& getPositionManager();  // Access GatePosition
         GateType getType() const;
         const Texture2D& getTexture() const;
+        int getID() const;
 
         GateType m_type;
         Texture2D m_texture;
@@ -122,6 +123,10 @@ namespace LogicElements
           void setInOutPositions();
 
 
+
+
+      private:
+        int id;
     };
 }  // namespace LogicElements
 
