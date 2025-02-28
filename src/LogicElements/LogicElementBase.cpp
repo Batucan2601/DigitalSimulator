@@ -499,11 +499,10 @@ namespace LogicElements
                 }
             }
             Rectangle rec = { event.pos.x + dif.x , event.pos.y + dif.y , 0 ,0 };
-            Vector2 v = Controls::SnapToNearestGrid(rec);
-            this->setPosition(v.x , v.y);
+            this->setPosition(rec.x , rec.y);
             if (isFirst)
             {
-                posBeforeDrag = { v.x,v.y };
+                posBeforeDrag = { rec.x,rec.y };
                 isFirst = false;
             }
             // check the connections and their endpoints
