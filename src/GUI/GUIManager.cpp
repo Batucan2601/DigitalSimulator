@@ -37,14 +37,12 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 
     DrawDemoWindow();
 
-    DrawLogicSetting();
+    // if(GUIEditor::isEditorShown)
+    // {
+    //     GUIEditor::Draw();
+    // }
 
     rlImGuiEnd();
-}
-
-void GUIManager::DrawLogicSetting()
-{
-    GUILogicSetting::Draw();
 }
 
 void GUIManager::DrawTools()
