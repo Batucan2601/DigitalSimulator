@@ -37,6 +37,8 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 
     DrawDemoWindow();
 
+    DrawLogicSetting();
+
     // if(GUIEditor::isEditorShown)
     // {
     //     GUIEditor::Draw();
@@ -53,6 +55,11 @@ void GUIManager::DrawTools()
 void GUIManager::DrawSettings()
 {
     GUISettings::DisplaySettings();
+}
+
+void GUIManager::DrawLogicSetting()
+{
+    GUILogicSetting::Draw();
 }
 
 void GUIManager::DrawSaveDialog()
