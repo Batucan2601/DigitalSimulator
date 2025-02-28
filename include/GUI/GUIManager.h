@@ -17,6 +17,7 @@ class GUIManager
     static void DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit);  // Calls GUIEditor
     static void DrawSaveDialog();  // Calls GUISaveSystem
     static void DrawTools();       // Calls GUITools
+    static void DrawSettings();
 
   private:
     static bool showDemoWindow;

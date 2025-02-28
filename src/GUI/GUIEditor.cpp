@@ -3,6 +3,7 @@
 #include <rlImGui.h>
 namespace GUIEditor
 {
+    bool isEditorShown = true;
 
     struct Editor
     {
@@ -16,10 +17,18 @@ namespace GUIEditor
         editor.renderTexture = LoadRenderTexture(width, height);
     }
 
-    void Draw() {}
-
-    void RenderScene(std::shared_ptr<CircuitElements::Circuit> circuit)
+    void DisplayEditor()
     {
+        isEditorShown = !isEditorShown;
+    }
+
+    void Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
+    {
+        if (!isEditorShown)
+        {
+            return;
+        }
+
         if (IsWindowResized())
         {
             // Unload the old framebuffer
@@ -65,7 +74,8 @@ namespace GUIEditor
                                  Color color = settings.theme == AppSettings::Theme::DarkMode
                                                    ? LIGHTGRAY
                                                    : WHITE;
-                                 DrawGrid2D(SLICE_SIZE, SPACING_SIZE, GRID_POINT_SIZE, color);
+                                 DrawGrid2D(settings.SLICE_SIZE, settings.SPACING_SIZE,
+                                            settings.GRID_POINT_SIZE, color);
                                  // You can draw additional world elements here.
                              });
         EndTextureMode();

@@ -58,7 +58,6 @@ int main(void)
 
         // Draw
         RaylibHelper::BeginFrame();
-
         RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }

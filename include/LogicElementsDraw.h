@@ -2,6 +2,7 @@
 #define LOGICELEMENTDRAW_H
 #include "Controls.h"
 #include "LogicElements.h"
+#include "appSettings.h"
 #include "raylib.h"
 
 #include <math.h>

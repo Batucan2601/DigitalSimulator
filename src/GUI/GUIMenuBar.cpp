@@ -1,6 +1,8 @@
 #include "GUI/GUIMenuBar.h"
 
+#include "GUI/GUIEditor.h"
 #include "GUI/GUISaveSystem.h"
+#include "GUI/GUISettings.h"
 #include "GUI/GUITools.h"
 #include "appSettings.h"
 
@@ -105,30 +107,36 @@ GUIMenuBar::GUIMenuBar()
                    {
                        exit(1);
                    });
+    createMenuItem("Editor", false,
+                   []()
+                   {
+                       GUIEditor::DisplayEditor();
+                   });
+
     createMenuItem("Tools", true, nullptr);
     createMenuItem("Tools/Component List", false,
                    []()
                    {
                        GUITools::GUITools_BasicLogicDisplay();
                    });
-    createMenuItem("Settings", true, nullptr);
     createMenuItem("Settings/System Settings", false,
                    []()
                    {
-                       ;
+                       GUISettings::ToggleSettingsVisibility();
                    });
-    createMenuItem("Settings/Theme/Dark Mode", false,
+    createMenuItem("View/Theme/Dark Mode", false,
                    []()
                    {
                        settings.theme = AppSettings::Theme::DarkMode;
                        GUIStyle::ApplyDarkTheme();
                    });
-    createMenuItem("Settings/Theme/Light Mode", false,
+    createMenuItem("View/Theme/Light Mode", false,
                    []()
                    {
                        settings.theme = AppSettings::Theme::LightMode;
                        GUIStyle::ApplyLightTheme();
                    });
+    createMenuItem("View/Appearance/Default Layout", false, []() {});
 }
 void GUIMenu::display()
 {

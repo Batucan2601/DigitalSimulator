@@ -1,7 +1,7 @@
 #include "Controls.h"
 
-#include "GUI/GUITools.h"
 #include "GUI/GUIEditor.h"
+#include "GUI/GUITools.h"
 #include "LogicElementBase.h"
 #include "LogicElements.h"
 #include "logicElementFactory.h"
@@ -14,9 +14,8 @@
 namespace Controls
 {
 
-
     static Camera2D camera = {};
-    // since we draw raylib inside a texture and pass it to imgui we need a transform. 
+    // since we draw raylib inside a texture and pass it to imgui we need a transform.
     static void ConvertMouseCoord(Vector2& mouse_pos)
     {
         GUIEditor::EditorWindow editor_window = GUIEditor::Window();
@@ -86,7 +85,7 @@ namespace Controls
 
     void Controls_Handle_Continous(std::shared_ptr<CircuitElements::Circuit> circuit)
     {
-          // Get mouse position
+        // Get mouse position
         if (is_logic_selected)
         {
             Rectangle pos = {mouse_pos.x, mouse_pos.y, 0, 0};
@@ -156,22 +155,22 @@ namespace Controls
         if (IsKeyPressed(KEY_UP))
         {
             key_pressed = true;
-            new_position.y -= SPACING_SIZE;
+            new_position.y -= settings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_DOWN))
         {
             key_pressed = true;
-            new_position.y += SPACING_SIZE;
+            new_position.y += settings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_LEFT))
         {
             key_pressed = true;
-            new_position.x -= SPACING_SIZE;
+            new_position.x -= settings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
             key_pressed = true;
-            new_position.x += SPACING_SIZE;
+            new_position.x += settings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_ESCAPE))
         {
@@ -232,8 +231,8 @@ namespace Controls
     Vector2 SnapToNearestGrid(const Rectangle& rect)
     {
         Vector2 nearest_grid_point;
-        nearest_grid_point.x = std::round(rect.x / SPACING_SIZE) * SPACING_SIZE;
-        nearest_grid_point.y = std::round(rect.y / SPACING_SIZE) * SPACING_SIZE;
+        nearest_grid_point.x = std::round(rect.x / settings.SPACING_SIZE) * settings.SPACING_SIZE;
+        nearest_grid_point.y = std::round(rect.y / settings.SPACING_SIZE) * settings.SPACING_SIZE;
         // TODO: Highlight the nearest grid point
         return nearest_grid_point;
     }
@@ -396,15 +395,17 @@ namespace Controls
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 Rectangle col = {0, 0, 0, 0};
-                if (std::abs(end.x - start.x) < SPACING_SIZE)
+                if (std::abs(end.x - start.x) < settings.SPACING_SIZE)
                 {
-                    col = {start.x - MOUSE_SELECTION_OFFSET, start.y,
-                           SPACING_SIZE + MOUSE_SELECTION_OFFSET, std::abs(end.y - start.y)};
+                    col = {start.x - settings.MOUSE_SELECTION_OFFSET, start.y,
+                           settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET,
+                           std::abs(end.y - start.y)};
                 }
-                else if (std::abs(end.y - start.y) < SPACING_SIZE)
+                else if (std::abs(end.y - start.y) < settings.SPACING_SIZE)
                 {
-                    col = {start.x, start.y + -MOUSE_SELECTION_OFFSET, std::abs(end.x - start.x),
-                           SPACING_SIZE + MOUSE_SELECTION_OFFSET};
+                    col = {start.x, start.y + -settings.MOUSE_SELECTION_OFFSET,
+                           std::abs(end.x - start.x),
+                           settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET};
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {

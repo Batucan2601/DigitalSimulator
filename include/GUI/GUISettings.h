@@ -1,20 +1,13 @@
 #ifndef GUISETTINGS_H
 #define GUISETTINGS_H
-
-namespace GUI
+#include "appSettings.h"
+#include "imgui.h"
+namespace GUISettings
 {
-    class GUISettings
-    {
-      public:
-        GUISettings();
-        ~GUISettings();
+    void draw();
+    void DisplaySettings();
+    void ToggleSettingsVisibility();
 
-        // Add your methods and member variables here
-
-      private:
-        // Add your private methods and member variables here
-    };
-
-}  // namespace GUI
+}  // namespace GUISettings
 
 #endif  // GUISETTINGS_H
