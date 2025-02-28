@@ -1,6 +1,5 @@
 #include "JsonSerializer.h"
 
-
 namespace jsonParser
 {
 
@@ -55,7 +54,6 @@ namespace jsonParser
         }
 
         return circuit;
-
     }
 
     void saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath)
@@ -107,7 +105,6 @@ namespace jsonParser
                  {"outputs", gate.getOutputs()}};
     }
 
-
     void to_json(json& j, const Vector2& v)
     {
         j = json{{"x", v.x}, {"y", v.y}};
@@ -124,5 +121,11 @@ namespace jsonParser
         };
     }
 
-}  // namespace jsonParser
+    void to_json(json& j, const Signal& signal)
+    {
+        j = json{{"name", signal.name},
+                 {"val", signal.val},
+                 {"position", {{"x", signal.pos.x}, {"y", signal.pos.y}}}};
+    }
 
+}  // namespace jsonParser
