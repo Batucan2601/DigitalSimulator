@@ -96,14 +96,21 @@ struct Signal {
     }
 };
 
+namespace CircuitElements
+{
+    class Circuit;
+}
 class Component : public IInputHandler
 {
-public: 
+public:
+    Component(){};
+    Component(std::string& fileName);
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
+    void setPosition(float x, float y) {};
     Rectangle bd;
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
-
+    CircuitElements::Circuit* circuit;
 };
 #endif

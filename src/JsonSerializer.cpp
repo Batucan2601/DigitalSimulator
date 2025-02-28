@@ -122,7 +122,8 @@ namespace jsonParser
             {"targetLogic", conn.targetLogic},
             {"wires", conn.physCon.wires}  // Save wire positions
         };
-    }
+    } 
+
 
 }  // namespace jsonParser
 
