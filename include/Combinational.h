@@ -2,9 +2,8 @@
 #define COMBINATIONAL_H
 namespace Combinational
 {
-	class Multiplexer : public LogicGate 
-	{
-
-	};
-}
-#endif 
+    class Multiplexer : public LogicGate
+    {
+    };
+}  // namespace Combinational
+#endif
