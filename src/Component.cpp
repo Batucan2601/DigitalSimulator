@@ -30,3 +30,9 @@ void InputResolver::resolve() {
         }
     }
 }
+
+
+void Component::OnInputEvent(const InputEvent& event)
+{
+
+}

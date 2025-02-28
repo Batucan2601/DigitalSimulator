@@ -4,6 +4,9 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <raylib.h>
+#include <functional>
+#include <string>
 // Enum to identify the type of input event.
 enum class InputType {
     None,
@@ -81,5 +84,25 @@ private:
     static std::queue<InputEvent> queue;
     static IInputHandler* selectedHandler;
     // You can keep additional helper functions if needed.
+};
+struct Signal {
+    std::string name;    // Optional: if you want to name each signal
+    bool val;    // The state of the signal
+    Vector2 pos;
+    Signal(const std::string& n = "", bool l = false)
+        : name(n), val(l) {}
+    bool operator==(const Signal& other) const {
+        return name == other.name && val == other.val;
+    }
+};
+
+class Component : public IInputHandler
+{
+public: 
+    Rectangle bd; 
+    void setEvaluationFunction(std::function<void(Component&)> evalFunc);
+    void OnInputEvent(const InputEvent& event) override;
+
+
 };
 #endif

@@ -1,6 +1,7 @@
 #include "GUI/GUILogicSetting.h"
 #include "Component.h"
 #include "LogicElements.h"
+#include "Component.h"
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #include <raylib.h>
@@ -50,7 +51,7 @@ namespace GUILogicSetting
             ImGui::InputText("Name", &new_input_name);
             if (ImGui::Button("Insert"))
             {
-                LogicElements::Signal s(new_input_name);
+                Signal s(new_input_name);
                 logicGate->inputs.push_back(s);
                 logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
                 new_input_name = "";
@@ -77,7 +78,7 @@ namespace GUILogicSetting
             ImGui::InputText("Name", &new_output_name);
             if (ImGui::Button("Insert"))
             {
-                LogicElements::Signal s(new_output_name);
+                Signal s(new_output_name);
                 logicGate->outputs.push_back(s);
                 logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
                 new_output_name = "";

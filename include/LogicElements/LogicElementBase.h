@@ -53,23 +53,15 @@ namespace LogicElements
     };
 
 
-    struct Signal {
-        std::string name;    // Optional: if you want to name each signal
-        bool val;    // The state of the signal
-        Vector2 pos; 
-        Signal(const std::string& n = "", bool l = false)
-            : name(n), val(l) {}
-    };
-    inline bool operator==(const Signal& lhs, const Signal& rhs) {
-        return lhs.name == rhs.name && lhs.val == rhs.val;
-    }
+
+
     extern std::shared_ptr<std::vector<GateInfo>> gateInfoList;
     extern std::map<LogicElements::GateType, Texture> logicElementTextures;
 
     void init_logicTextures();
     void init_OutlinedLogicTextures();
     void init_FilledLogicTextures();
-    class LogicGate : public GateObserver , public IInputHandler ,public std::enable_shared_from_this<LogicGate>  // Inherit observer to get updates
+    class LogicGate : public GateObserver , public Component,public std::enable_shared_from_this<LogicGate>  // Inherit observer to get updates
     {
       public:
         LogicGate(GateType gateType, std::string& logger_name);
