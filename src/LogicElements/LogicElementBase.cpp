@@ -98,7 +98,7 @@ namespace LogicElements
     {
         static int nextId = 0;
         id = nextId++;  // Assign a unique ID
-
+        Component();
         // type = gateType;
         m_texture = logicElementTextures[gateType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));

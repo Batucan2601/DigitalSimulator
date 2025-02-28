@@ -99,7 +99,7 @@ namespace LogicElements
 
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
-        CircuitElements::Circuit* circuit;
+        //CircuitElements::Circuit* circuit;
 
         bool is_hovered = false; 
 
