@@ -1,6 +1,9 @@
 #include "LogicElementsDraw.h"
 
 #include <iostream>
+
+extern AppSettings::Settings settings;
+
 namespace LogicElementsDraw
 {
 
@@ -27,9 +30,10 @@ namespace LogicElementsDraw
         {
             const auto& gate = circuit->gates[i];  // Access the gate
 
-#ifdef IS_DRAWING_BOUNDARY_BOX
-            DrawBoundaryBox(gate);
-#endif
+            if (settings.isDrawingBoundaryBox)
+            {
+                DrawBoundaryBox(gate);
+            }
 
             DrawGateElement(gate);
             DrawInOut(gate);
@@ -104,8 +108,8 @@ namespace LogicElementsDraw
         if (circuit->is_GUIdragdragging)
         {
             DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
-                               circuit->selected_wires.wire_hovering.y, SLICE_SIZE, SLICE_SIZE,
-                               BLUE);
+                               circuit->selected_wires.wire_hovering.y, settings.SLICE_SIZE,
+                               settings.SLICE_SIZE, BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
@@ -114,7 +118,7 @@ namespace LogicElementsDraw
     }
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
-        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, SPACING_SIZE, color);
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, settings.SPACING_SIZE, color);
     }
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {

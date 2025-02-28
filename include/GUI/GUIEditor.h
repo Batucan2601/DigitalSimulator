@@ -21,8 +21,9 @@ namespace GUIEditor
         Vector2 ImageMax;
     };
     void Init(int width, int height);
-    void Draw();
+    void Draw(std::shared_ptr<CircuitElements::Circuit> circuit);
     EditorWindow Window();
-    void RenderScene(std::shared_ptr<CircuitElements::Circuit> circuit);
+    void DisplayEditor();
+
 }  // namespace GUIEditor
 #endif

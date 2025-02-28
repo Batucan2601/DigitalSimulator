@@ -3,6 +3,7 @@
 #include "GUI/GUILogic.h"
 #include "GUI/GUIMenuBar.h"
 #include "GUI/GUISaveSystem.h"
+#include "GUI/GUISettings.h"
 #include "GUI/GUIStyle.h"
 
 #include <GUI/GUIEditor.h>
@@ -30,6 +31,8 @@ void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
 
     DrawTools();
 
+    DrawSettings();
+
     DrawSaveDialog();
 
     DrawDemoWindow();
@@ -49,6 +52,11 @@ void GUIManager::DrawTools()
     GUITools::GUITools_Display();
 }
 
+void GUIManager::DrawSettings()
+{
+    GUISettings::DisplaySettings();
+}
+
 void GUIManager::DrawSaveDialog()
 {
     GUISaveSystem::draw();
@@ -56,8 +64,7 @@ void GUIManager::DrawSaveDialog()
 
 void GUIManager::DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
-    GUIEditor::Draw();
-    GUIEditor::RenderScene(circuit);
+    GUIEditor::Draw(circuit);
 }
 
 void GUIManager::DrawMainMenu(std::shared_ptr<CircuitElements::Circuit> circuit)
@@ -90,6 +97,12 @@ void GUIManager::DrawDockingSpace()
 
     ImGui::End();
 };  // this is acutally needed for save and load purposes
+
+void GUIManager::DrawDemoWindow()
+{
+    if (settings.showDemoWindow)
+        ImGui::ShowDemoWindow(&settings.showDemoWindow);
+}
 
 void GUIManager::Cleanup()
 {

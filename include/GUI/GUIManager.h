@@ -18,6 +18,7 @@ class GUIManager
     static void DrawSaveDialog();    // Calls GUISaveSystem
     static void DrawTools();         // Calls GUITools
     static void DrawLogicSetting();  // Calls GUILogicSetting
+    static void DrawSettings();      // Calls GUISettings
 
   private:
     static bool showDemoWindow;

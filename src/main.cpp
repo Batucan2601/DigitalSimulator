@@ -57,7 +57,6 @@ int main(void)
         circuit->evaluate();
         // Draw
         RaylibHelper::BeginFrame();
-
         RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
     }
