@@ -459,30 +459,6 @@ namespace Controls
         event.mouseState = MouseEventState::Down;
         event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
         InputResolver::PushEvent(event);
-        /*if (selected_logic_gate[0])
-        {
-            is_dragging = true;
-            selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
-            selected_logic_gate[0]->bd.y = mousePosition.y - offset.y;
-            // check the connections
-            for (size_t i = 0; i < circuit->connections.size(); i++)
-            {
-                // !!! for now this gives the same location as the BB, but when resolved it will
-                // allow us to move wires with gates
-                // TODO
-                if (circuit->connections[i].sourceGate == selected_logic_gate[0])
-                {
-                    circuit->connections[i].physCon.wires[0].x = mousePosition.x - offset.x;
-                    circuit->connections[i].physCon.wires[0].y = mousePosition.y - offset.y;
-                }
-                if (circuit->connections[i].targetGate == selected_logic_gate[0])
-                {
-                    int size = circuit->connections[i].physCon.wires.size() - 1;
-                    circuit->connections[i].physCon.wires[size].x = mousePosition.x - offset.x;
-                    circuit->connections[i].physCon.wires[size].y = mousePosition.y - offset.y;
-                }
-            }
-        } */
     }
 
     void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit)
@@ -515,7 +491,7 @@ namespace Controls
     }
 
     static float holdTime = 0.0f;
-    const float delayThreshold = 0.1f; // Delay in seconds (e.g., 0.5 seconds)
+    const float delayThreshold = 0.08f; // Delay in seconds (e.g., 0.5 seconds)
     void Controls_Mouse_click()
     {
         //mouse always moves 

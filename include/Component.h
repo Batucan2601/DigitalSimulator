@@ -99,10 +99,11 @@ struct Signal {
 class Component : public IInputHandler
 {
 public: 
-    Rectangle bd; 
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
-
+    Rectangle bd;
+    std::vector<Signal> inputs;
+    std::vector<Signal> outputs;
 
 };
 #endif

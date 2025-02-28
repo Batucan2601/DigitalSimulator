@@ -443,7 +443,7 @@ namespace LogicElements
             if (c->sourceGate.get() == gate || c->targetGate.get() == gate)
             {
                 std::vector<unsigned int> indices_destroyed;
-                for (size_t j = c->physCon.wires.size() - 1; j > 1; j--)
+                for (int j = c->physCon.wires.size() - 1; j > 1; j--)
                 {
                     Vector2 end = c->physCon.wires[j];
                     Vector2 mid = c->physCon.wires[j - 1];
@@ -459,7 +459,7 @@ namespace LogicElements
                     c->physCon.wires.erase(c->physCon.wires.begin() + indices_destroyed[j]);
                 }
                 indices_destroyed.clear();
-                for (size_t j = c->physCon.wires.size() - 1; j > 1; j--)
+                for (int j = c->physCon.wires.size() - 1; j > 1; j--)
                 {
                     Vector2 end = c->physCon.wires[j];
                     Vector2 mid = c->physCon.wires[j - 1];

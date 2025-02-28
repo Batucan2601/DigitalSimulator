@@ -95,8 +95,7 @@ namespace LogicElements
         void onInputChanged() override;  // Override observer function
 
         // protected:
-        std::vector<Signal> inputs;
-        std::vector<Signal> outputs;
+
         // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
         CircuitElements::Circuit* circuit;
