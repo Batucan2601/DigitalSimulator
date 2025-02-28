@@ -32,25 +32,38 @@ namespace LogicElementsDraw
 #endif
 
             DrawGateElement(gate);
+            DrawInOut(gate);
         }
 
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)
         {
+            if (circuit->connections[i].physCon.wires.size() == 0)
+            {
+                continue;
+            }
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 // DrawLine();
-                if (circuit->connections[i].sourceGate->getOutput("Out"))
+                if (circuit->connections[i].is_connected)
                 {
-                    DrawLineEx(start, end, LINE_THICKNESS,
-                               circuit->connections[i].is_connected ? GREEN : RED);
+                    bool val = false;
+                    for (size_t i = 0; i < circuit->connections[i].sourceGate->outputs.size(); i++)
+                    {
+                        if (circuit->connections[i].sourceGate->outputs[i].name == circuit->connections[i].sourceLogic)
+                        {
+                            val = circuit->connections[i].sourceGate->outputs[i].val;
+                            break;
+                        }
+                    }
+                    DrawLineEx(start, end, LINE_THICKNESS, val ? GREEN : BLACK);
                 }
                 else
                 {
                     DrawLineEx(start, end, LINE_THICKNESS,
-                               circuit->connections[i].is_connected ? BLACK : RED);
+                        RED);
                 }
 
                 // draw their interactable points
@@ -59,10 +72,12 @@ namespace LogicElementsDraw
         }
 
         // color green the selected wires
-        for (size_t i = 0; i < circuit->selected_wires.selected_wires.size(); i++)
+        for (size_t i = 0; i < circuit->connections.size(); i++)
         {
-            Vector2 pos = circuit->selected_wires.selected_wires[i];
-            DrawInteractableWirePoints(pos, pos, GREEN);
+            if (circuit->connections[i].hovering.is_hovering)
+            {
+                DrawInteractableWirePoints(circuit->connections[i].hovering.pos, circuit->connections[i].hovering.pos, GREEN);
+            }
         }
         DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
                                    circuit->selected_wires.wire_hovering, GREEN);
@@ -70,6 +85,11 @@ namespace LogicElementsDraw
         // 3 - DrawActiveWire
         if (circuit->active_wire.is_visible)
         {
+            Rectangle rec = { circuit->active_wire.start.x , circuit->active_wire.start.y , 0,0 };
+            circuit->active_wire.start = Controls::SnapToNearestGrid(rec);
+            rec = { circuit->active_wire.end.x , circuit->active_wire.end.y , 0,0 };
+            circuit->active_wire.end = Controls::SnapToNearestGrid(rec);
+
             Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
                                                                       circuit->active_wire.end);
             DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x,
@@ -126,5 +146,24 @@ namespace LogicElementsDraw
 
         DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height, color);
     }
+    void DrawInOut(std::shared_ptr<LogicElements::LogicGate> gate)
+    {
+        for (size_t i = 0; i < gate->outputs.size(); i++)
+        {
+            //GRID_POINT_SIZE
+            Vector2 pos = gate->outputs[i].pos;
+            Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH /2, pos.y - IN_OUT_RECT_WIDTH /2,IN_OUT_RECT_WIDTH };
+            DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+        }
+        if(gate->is_hovered)
+        {
+            for (size_t i = 0; i < gate->inputs.size(); i++)
+            {
+                Vector2 pos = gate->inputs[i].pos;
+                Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH / 2, pos.y - IN_OUT_RECT_WIDTH / 2,IN_OUT_RECT_WIDTH };
+                DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+            }
+        }
 
+    }
 }  // namespace LogicElementsDraw

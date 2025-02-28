@@ -5,5 +5,5 @@
 
 namespace GUILogicSetting
 {
-    void display();
+    void Draw();
 }

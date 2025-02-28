@@ -2,6 +2,7 @@
 #define JSONSERIALIZER_H
 
 #include "../Libraries/json.hpp"
+#include "Component.h"
 #include "LogicElements.h"
 #include "raylib.h"  // Include Raylib for Vector2
 
@@ -38,6 +39,27 @@ namespace nlohmann
             j.at("y").get_to(v.y);
         }
     };
+
+    template<>
+    struct adl_serializer<Signal>
+    {
+        static void to_json(json& j, const Signal& signal)
+        {
+            j = json{{"name", signal.name},
+                     {"val", signal.val},
+                     {"position", signal.pos}};  // `Vector2` will be automatically serialized
+        }
+
+        static void from_json(const json& j, Signal& signal)
+        {
+            j.at("name").get_to(signal.name);
+            j.at("val").get_to(signal.val);
+            j.at("position")
+                .get_to(
+                    signal.pos);  // `Vector2` deserialization handled by its own `adl_serializer`
+        }
+    };
+
 }  // namespace nlohmann
 
 #endif  // JSONSERIALIZER_H

@@ -119,6 +119,14 @@ namespace jsonParser
             {"targetLogic", conn.targetLogic},
             {"wires", conn.physCon.wires}  // Save wire positions
         };
+    } 
+
+
+    void to_json(json& j, const Signal& signal)
+    {
+        j = json{{"name", signal.name},
+                 {"val", signal.val},
+                 {"position", {{"x", signal.pos.x}, {"y", signal.pos.y}}}};
     }
 
 }  // namespace jsonParser

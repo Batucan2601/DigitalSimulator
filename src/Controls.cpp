@@ -6,7 +6,7 @@
 #include "LogicElements.h"
 #include "logicElementFactory.h"
 #include "raylib.h"
-
+#include "Component.h"
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -75,8 +75,11 @@ namespace Controls
         selected_circuit = circuit;
 
         Controls_Mouse_click();
+        Controls_Mouse_Movements();
         Control_Keyboard_Event(selected_circuit);
-        Controls_Handle_Continous(selected_circuit);
+        //Controls_Handle_Continous(selected_circuit);
+        
+        InputResolver::resolve();
     }
 
     Camera2D Controls_get_camera()
@@ -193,8 +196,8 @@ namespace Controls
             // delete the connections
             for (size_t i = 0; i < circuit->connections.size(); i++)
             {
-                if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
-                    circuit->connections[i].targetGate == selected_logic_gate[0])
+                //if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
+                //    circuit->connections[i].targetGate == selected_logic_gate[0])
                 {
                     circuit->connections.erase(circuit->connections.begin() + i);
                     i--;
@@ -241,6 +244,12 @@ namespace Controls
     void HandleMouseLeftClick(std::shared_ptr<CircuitElements::Circuit> circuit,
                               const Vector2& mousePosition)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::LeftClick;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+        return; 
         bool gateSelected = false;
         if (!is_logic_selected)  // the default system goes when not doing wiring
         {
@@ -254,7 +263,7 @@ namespace Controls
                     gateSelected = true;
                     if (connection_start.sourceLogic != "")  // not intitialized
                     {
-                        circuit->connections.push_back(connection_start);
+                        //circuit->connections.push_back(connection_start);
                     }
                     if (is_logic_selected)
                     {
@@ -280,7 +289,7 @@ namespace Controls
                     new_connection.sourceGate = con.sourceGate;
                     new_connection.sourceLogic = con.sourceLogic;
                     new_connection.physCon.wires.push_back(mousePosition);
-                    circuit->connections.push_back(new_connection);
+                   // circuit->connectionspush_back(new_connection);
                 }
             }
         }
@@ -294,9 +303,36 @@ namespace Controls
             selected_logic_gate[0] = nullptr;
         }
     }
+
+    void HandleMouseEnter(std::shared_ptr<CircuitElements::Circuit> circuit,
+                          const Vector2& mousePosition)
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Enter;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+    }
+
+    void HandleMouseExit(std::shared_ptr<CircuitElements::Circuit> circuit,
+                         const Vector2& mousePosition)
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Leave;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+    }
+
     void HandleMouseRightClick(std::shared_ptr<CircuitElements::Circuit>& circuit,
                                const Vector2& mousePosition)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::RightClick;
+        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        InputResolver::PushEvent(event);
+
         is_logic_selected = false;  // kills wiring process for sure everytime
         circuit->active_wire.is_visible = false;
     }
@@ -389,7 +425,7 @@ namespace Controls
     bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit,
                        const Vector2& mousePosition, CircuitElements::Connection& con)
     {
-        for (size_t i = 0; i < circuit->connections.size(); i++)
+    for (size_t i = 0; i < circuit->connections.size(); i++)
         {
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
@@ -412,65 +448,62 @@ namespace Controls
                     return true;
                 }
             }
-        }
+        } 
         return false;
     }
     void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,
                          const Vector2& mousePosition)
     {
-        if (selected_logic_gate[0])
-        {
-            is_dragging = true;
-            selected_logic_gate[0]->bd.x = mousePosition.x - offset.x;
-            selected_logic_gate[0]->bd.y = mousePosition.y - offset.y;
-            // check the connections
-            for (size_t i = 0; i < circuit->connections.size(); i++)
-            {
-                // !!! for now this gives the same location as the BB, but when resolved it will
-                // allow us to move wires with gates
-                // TODO
-                if (circuit->connections[i].sourceGate == selected_logic_gate[0])
-                {
-                    circuit->connections[i].physCon.wires[0].x = mousePosition.x - offset.x;
-                    circuit->connections[i].physCon.wires[0].y = mousePosition.y - offset.y;
-                }
-                if (circuit->connections[i].targetGate == selected_logic_gate[0])
-                {
-                    int size = circuit->connections[i].physCon.wires.size() - 1;
-                    circuit->connections[i].physCon.wires[size].x = mousePosition.x - offset.x;
-                    circuit->connections[i].physCon.wires[size].y = mousePosition.y - offset.y;
-                }
-            }
-        }
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Down;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
     }
 
     void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit)
     {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Release;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
+        return; 
         if (selected_logic_gate[0])
         {
             Vector2 nearest_grid_point = SnapToNearestGrid(selected_logic_gate[0]->bd);
 
-            if (!is_grid_occupied(circuit, nearest_grid_point))
-            {
-                selected_logic_gate[0]->bd.x = nearest_grid_point.x;
-                selected_logic_gate[0]->bd.y = nearest_grid_point.y;
-            }
-            else
-            {
-                // Reset to initial position if grid is occupied
-                selected_logic_gate[0]->bd.x = gate_initial_position.x;
-                selected_logic_gate[0]->bd.y = gate_initial_position.y;
-            }
+            
 
             is_dragging = false;
         }
     }
 
+    void Controls_Mouse_Movements()
+    {
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Move;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
+        
+        
+    }
+
+    static float holdTime = 0.0f;
+    const float delayThreshold = 0.08f; // Delay in seconds (e.g., 0.5 seconds)
     void Controls_Mouse_click()
     {
+        //mouse always moves 
+        InputEvent event;
+        event.type = InputType::Mouse;
+        event.mouseState = MouseEventState::Move;
+        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        InputResolver::PushEvent(event);
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
+            holdTime = 0.0f;
             HandleMouseLeftClick(selected_circuit, mouse_pos);
         }
 
@@ -481,12 +514,20 @@ namespace Controls
 
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
-            HandleMouseDrag(selected_circuit, mouse_pos);
+            holdTime += GetFrameTime();  // Accumulate elapsed time
+            if (holdTime >= delayThreshold)
+            {
+                HandleMouseDrag(selected_circuit, mouse_pos);
+            }
         }
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
         {
-            HandleMouseRelease(selected_circuit);
+            holdTime += GetFrameTime();  // Accumulate elapsed time
+            if (holdTime >= delayThreshold)
+            {
+                HandleMouseRelease(selected_circuit);
+            }
         }
     }
 

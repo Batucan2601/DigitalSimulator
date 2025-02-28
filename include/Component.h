@@ -2,7 +2,11 @@
 #define COMPONENT_H
 #include <queue>
 #include <vector>
-
+#include <list>
+#include <algorithm>
+#include <raylib.h>
+#include <functional>
+#include <string>
 // Enum to identify the type of input event.
 enum class InputType {
     None,
@@ -18,7 +22,9 @@ enum class MouseEventState {
     Move,
     Enter,
     Leave,
-    Hover
+    Hover,
+    Down,
+    Release
 };
 
 enum class KeyboardEvent {
@@ -45,11 +51,7 @@ struct InputEvent {
     int keyCode = 0;
 };
 
-class InputResolver
-{
-    static std::queue<InputEvent> queue;
-    void resolve();
-};
+
 // Unified input handler interface.
 class IInputHandler {
 public:
@@ -58,5 +60,57 @@ public:
     // Handles any input event, whether mouse or keyboard.
     virtual void OnInputEvent(const InputEvent& event) = 0;
    
+};
+
+class InputResolver {
+public:
+    // Add a new event to the queue.
+    static void PushEvent(const InputEvent& event);
+
+    // Register an input handler.
+    static void RegisterHandler(IInputHandler* handler);
+
+    // Unregister an input handler (optional but useful).
+    static void UnregisterHandler(IInputHandler* handler);
+
+    // Process all queued events.
+    static void resolve();
+
+    static IInputHandler* getSelectedHandler() { return selectedHandler; }
+    static void setSelectedHandler(IInputHandler* handler) { selectedHandler = handler; }
+
+    static std::list<IInputHandler*> handlers; // Collection of input handlers.
+private:
+    static std::queue<InputEvent> queue;
+    static IInputHandler* selectedHandler;
+    // You can keep additional helper functions if needed.
+};
+struct Signal {
+    std::string name;    // Optional: if you want to name each signal
+    bool val;    // The state of the signal
+    Vector2 pos;
+    Signal(const std::string& n = "", bool l = false)
+        : name(n), val(l) {}
+    bool operator==(const Signal& other) const {
+        return name == other.name && val == other.val;
+    }
+};
+
+namespace CircuitElements
+{
+    class Circuit;
+}
+class Component : public IInputHandler
+{
+public:
+    Component(){};
+    Component(std::string& fileName);
+    void setEvaluationFunction(std::function<void(Component&)> evalFunc);
+    void OnInputEvent(const InputEvent& event) override;
+    void setPosition(float x, float y) {};
+    Rectangle bd;
+    std::vector<Signal> inputs;
+    std::vector<Signal> outputs;
+    CircuitElements::Circuit* circuit;
 };
 #endif
