@@ -1,6 +1,9 @@
 #include "LogicElementsDraw.h"
 
 #include <iostream>
+
+extern AppSettings::Settings settings;
+
 namespace LogicElementsDraw
 {
 
@@ -27,9 +30,10 @@ namespace LogicElementsDraw
         {
             const auto& gate = circuit->gates[i];  // Access the gate
 
-#ifdef IS_DRAWING_BOUNDARY_BOX
-            DrawBoundaryBox(gate);
-#endif
+            if (settings.isDrawingBoundaryBox)
+            {
+                DrawBoundaryBox(gate);
+            }
 
             DrawGateElement(gate);
             DrawInOut(gate);
@@ -52,7 +56,8 @@ namespace LogicElementsDraw
                     bool val = false;
                     for (size_t i = 0; i < circuit->connections[i].sourceGate->outputs.size(); i++)
                     {
-                        if (circuit->connections[i].sourceGate->outputs[i].name == circuit->connections[i].sourceLogic)
+                        if (circuit->connections[i].sourceGate->outputs[i].name ==
+                            circuit->connections[i].sourceLogic)
                         {
                             val = circuit->connections[i].sourceGate->outputs[i].val;
                             break;
@@ -62,8 +67,7 @@ namespace LogicElementsDraw
                 }
                 else
                 {
-                    DrawLineEx(start, end, LINE_THICKNESS,
-                        RED);
+                    DrawLineEx(start, end, LINE_THICKNESS, RED);
                 }
 
                 // draw their interactable points
@@ -76,7 +80,8 @@ namespace LogicElementsDraw
         {
             if (circuit->connections[i].hovering.is_hovering)
             {
-                DrawInteractableWirePoints(circuit->connections[i].hovering.pos, circuit->connections[i].hovering.pos, GREEN);
+                DrawInteractableWirePoints(circuit->connections[i].hovering.pos,
+                                           circuit->connections[i].hovering.pos, GREEN);
             }
         }
         DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
@@ -85,9 +90,9 @@ namespace LogicElementsDraw
         // 3 - DrawActiveWire
         if (circuit->active_wire.is_visible)
         {
-            Rectangle rec = { circuit->active_wire.start.x , circuit->active_wire.start.y , 0,0 };
+            Rectangle rec = {circuit->active_wire.start.x, circuit->active_wire.start.y, 0, 0};
             circuit->active_wire.start = Controls::SnapToNearestGrid(rec);
-            rec = { circuit->active_wire.end.x , circuit->active_wire.end.y , 0,0 };
+            rec = {circuit->active_wire.end.x, circuit->active_wire.end.y, 0, 0};
             circuit->active_wire.end = Controls::SnapToNearestGrid(rec);
 
             Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
@@ -104,8 +109,8 @@ namespace LogicElementsDraw
         if (circuit->is_GUIdragdragging)
         {
             DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
-                               circuit->selected_wires.wire_hovering.y, SLICE_SIZE, SLICE_SIZE,
-                               BLUE);
+                               circuit->selected_wires.wire_hovering.y, settings.SLICE_SIZE,
+                               settings.SLICE_SIZE, BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
@@ -114,7 +119,7 @@ namespace LogicElementsDraw
     }
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
-        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, SPACING_SIZE, color);
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, settings.SPACING_SIZE, color);
     }
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
@@ -150,20 +155,22 @@ namespace LogicElementsDraw
     {
         for (size_t i = 0; i < gate->outputs.size(); i++)
         {
-            //GRID_POINT_SIZE
+            // GRID_POINT_SIZE
             Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH /2, pos.y - IN_OUT_RECT_WIDTH /2,IN_OUT_RECT_WIDTH };
+            Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
+                             pos.y - settings.IN_OUT_RECT_WIDTH / 2, settings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
-        if(gate->is_hovered)
+        if (gate->is_hovered)
         {
             for (size_t i = 0; i < gate->inputs.size(); i++)
             {
                 Vector2 pos = gate->inputs[i].pos;
-                Rectangle rec = { pos.x - IN_OUT_RECT_WIDTH / 2, pos.y - IN_OUT_RECT_WIDTH / 2,IN_OUT_RECT_WIDTH };
+                Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
+                                 pos.y - settings.IN_OUT_RECT_WIDTH / 2,
+                                 settings.IN_OUT_RECT_WIDTH};
                 DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
             }
         }
-
     }
 }  // namespace LogicElementsDraw

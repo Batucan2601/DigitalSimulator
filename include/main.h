@@ -6,6 +6,7 @@
 #include "GUI/GUIEditor.h"
 #include "LogicElements.h"
 #include "LogicElementsDraw.h"
+#include "appSettings.h"
 #include "common_types.h"
 #include "logicElementFactory.h"
 #include "raylib.h"

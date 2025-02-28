@@ -2,6 +2,8 @@
 
 #include <string>
 
+extern AppSettings::Settings settings;
+
 namespace GUIStyle
 {
     void SetFuturisticImGuiStyle();
@@ -16,7 +18,15 @@ namespace GUIStyle
         255.0f, 1.0f); style.Colors[ImGuiCol_WindowBg] = ImVec4(47.0f / 255.0f, 79.0f /
         255.0f, 79.0f / 255.0f, 1.0f);
         */
-        //SetFuturisticImGuiStyle();
+        // SetFuturisticImGuiStyle();
+        if (settings.theme == AppSettings::Theme::DarkMode)
+        {
+            ApplyDarkTheme();
+        }
+        else
+        {
+            ApplyLightTheme();
+        }
     }
 
     void SetFuturisticImGuiStyle()
@@ -82,6 +92,16 @@ namespace GUIStyle
         std::string("/assets/fonts/Roboto_Condensed-Medium.ttf"); font =
         io.Fonts->AddFontFromFileTTF(fontstr.c_str(), 24.0f, NULL,
         io.Fonts->GetGlyphRangesDefault()); io.Fonts->Build(); IM_ASSERT(font != NULL);*/
+    }
+
+    void ApplyDarkTheme()
+    {
+        ImGui::StyleColorsDark();
+    }
+
+    void ApplyLightTheme()
+    {
+        ImGui::StyleColorsLight();
     }
 
 }  // namespace GUIStyle
