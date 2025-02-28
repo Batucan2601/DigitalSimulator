@@ -119,7 +119,7 @@ namespace CircuitElements
                 col = { start.x, start.y + -MOUSE_SELECTION_OFFSET, std::abs(end.x - start.x),
                        SPACING_SIZE + MOUSE_SELECTION_OFFSET };
             }
-            Vector2 pos = { event.pos.x , event.pos.y };
+            Vector2 pos = { (float)event.pos.x , (float)event.pos.y };
             if (CheckCollisionPointRec(pos, col))
             {
                 hovering.is_hovering = true; 

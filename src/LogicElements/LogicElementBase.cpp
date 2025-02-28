@@ -493,7 +493,7 @@ namespace LogicElements
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            Vector2 mousePos = { event.pos.x , event.pos.y };
+            Vector2 mousePos = { (float)event.pos.x , (float)event.pos.y };
            
             if (!isDragging)
             {
@@ -528,7 +528,7 @@ namespace LogicElements
             {
                 return;
             }
-            Rectangle rec = { event.pos.x , event.pos.y , 0 ,0 };
+            Rectangle rec = { (float)event.pos.x , (float)event.pos.y , 0 ,0 };
             Vector2 v = Controls::SnapToNearestGrid(rec);
             bool is_other_gate_exist = false;
             for (auto val : InputResolver::handlers)
@@ -566,7 +566,7 @@ namespace LogicElements
     }
     void LogicGate::OnMove(const InputEvent& event)
     {
-        Vector2 mouse_pos = { event.pos.x , event.pos.y };
+        Vector2 mouse_pos = { (float)event.pos.x , (float)event.pos.y };
         CircuitElements::Connection temp; 
         if (CheckMouseOnInOut(mouse_pos,temp))
         {
