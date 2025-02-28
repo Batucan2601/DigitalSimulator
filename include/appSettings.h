@@ -19,6 +19,13 @@ namespace AppSettings
         unsigned int screenWidth = 600;
         unsigned int screenHeight = 600;
         const unsigned int targetFps = 60;
+
+        bool isDrawingBoundaryBox = false;
+        bool showDemoWindow = false;
+        int SPACING_SIZE = 25;
+        int MOUSE_SELECTION_OFFSET = SPACING_SIZE / 2;
+        int GRID_POINT_SIZE = 3;
+        int SLICE_SIZE = 40;
     };
 
     extern AppSettings::Settings settings;
