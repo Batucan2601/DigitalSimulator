@@ -3,6 +3,7 @@
 
 #include "ClassLogger.h"
 #include "LogicElementBase.h"
+#include "appSettings.h"
 #include "raylib.h"
 
 #include <filesystem>
@@ -20,13 +21,13 @@ namespace CircuitElements
         bool is_hovering;
         Vector2 pos;
     };
-    struct PhysicalConnection 
+    struct PhysicalConnection
     {
         std::vector<Vector2> wires;
     };
     class Connection : public IInputHandler
     {
-    public:
+      public:
         std::shared_ptr<LogicElements::LogicGate> sourceGate;
         std::string sourceLogic;
         std::shared_ptr<LogicElements::LogicGate> targetGate;
@@ -38,16 +39,16 @@ namespace CircuitElements
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
-
     };
     class ActiveWire : public IInputHandler
     {
-    public:
+      public:
         Vector2 start;
         Vector2 end;
         bool is_visible;
         void OnInputEvent(const InputEvent& event) override;
-    private:
+
+      private:
         void OnMove(const InputEvent& event);
         void OnLeftClick(const InputEvent& event);
         void OnRightClick(const InputEvent& event);

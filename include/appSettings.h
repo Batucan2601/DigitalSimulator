@@ -26,6 +26,8 @@ namespace AppSettings
         int MOUSE_SELECTION_OFFSET = SPACING_SIZE / 2;
         int GRID_POINT_SIZE = 3;
         int SLICE_SIZE = 40;
+        float IN_OUT_RECT_WIDTH = GRID_POINT_SIZE * 5;
+        float IN_OUT_INTERACTION = IN_OUT_RECT_WIDTH * 2;
     };
 
     extern AppSettings::Settings settings;

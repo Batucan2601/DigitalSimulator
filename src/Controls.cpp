@@ -1,12 +1,13 @@
 #include "Controls.h"
 
+#include "Component.h"
 #include "GUI/GUIEditor.h"
 #include "GUI/GUITools.h"
 #include "LogicElementBase.h"
 #include "LogicElements.h"
 #include "logicElementFactory.h"
 #include "raylib.h"
-#include "Component.h"
+
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -76,8 +77,8 @@ namespace Controls
         Controls_Mouse_click();
         Controls_Mouse_Movements();
         Control_Keyboard_Event(selected_circuit);
-        //Controls_Handle_Continous(selected_circuit);
-        
+        // Controls_Handle_Continous(selected_circuit);
+
         InputResolver::resolve();
     }
 
@@ -195,8 +196,8 @@ namespace Controls
             // delete the connections
             for (size_t i = 0; i < circuit->connections.size(); i++)
             {
-                //if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
-                //    circuit->connections[i].targetGate == selected_logic_gate[0])
+                // if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
+                //     circuit->connections[i].targetGate == selected_logic_gate[0])
                 {
                     circuit->connections.erase(circuit->connections.begin() + i);
                     i--;
@@ -246,9 +247,9 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::LeftClick;
-        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
-        return; 
+        return;
         bool gateSelected = false;
         if (!is_logic_selected)  // the default system goes when not doing wiring
         {
@@ -262,7 +263,7 @@ namespace Controls
                     gateSelected = true;
                     if (connection_start.sourceLogic != "")  // not intitialized
                     {
-                        //circuit->connections.push_back(connection_start);
+                        // circuit->connections.push_back(connection_start);
                     }
                     if (is_logic_selected)
                     {
@@ -288,7 +289,7 @@ namespace Controls
                     new_connection.sourceGate = con.sourceGate;
                     new_connection.sourceLogic = con.sourceLogic;
                     new_connection.physCon.wires.push_back(mousePosition);
-                   // circuit->connectionspush_back(new_connection);
+                    // circuit->connectionspush_back(new_connection);
                 }
             }
         }
@@ -309,7 +310,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Enter;
-        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -319,7 +320,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Leave;
-        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -329,7 +330,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::RightClick;
-        event.pos = { (int)mousePosition.x , (int)mousePosition.y };
+        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
 
         is_logic_selected = false;  // kills wiring process for sure everytime
@@ -424,7 +425,7 @@ namespace Controls
     bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit,
                        const Vector2& mousePosition, CircuitElements::Connection& con)
     {
-    for (size_t i = 0; i < circuit->connections.size(); i++)
+        for (size_t i = 0; i < circuit->connections.size(); i++)
         {
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
@@ -434,14 +435,14 @@ namespace Controls
                 if (std::abs(end.x - start.x) < settings.SPACING_SIZE)
                 {
                     col = {start.x - settings.MOUSE_SELECTION_OFFSET, start.y,
-                           settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET,
+                           (float)(settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET),
                            std::abs(end.y - start.y)};
                 }
                 else if (std::abs(end.y - start.y) < settings.SPACING_SIZE)
                 {
                     col = {start.x, start.y + -settings.MOUSE_SELECTION_OFFSET,
                            std::abs(end.x - start.x),
-                           settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET};
+                           (float)(settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET)};
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {
@@ -449,7 +450,7 @@ namespace Controls
                     return true;
                 }
             }
-        } 
+        }
         return false;
     }
     void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,
@@ -458,7 +459,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Down;
-        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
         InputResolver::PushEvent(event);
     }
 
@@ -467,14 +468,12 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Release;
-        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
         InputResolver::PushEvent(event);
-        return; 
+        return;
         if (selected_logic_gate[0])
         {
             Vector2 nearest_grid_point = SnapToNearestGrid(selected_logic_gate[0]->bd);
-
-            
 
             is_dragging = false;
         }
@@ -485,21 +484,19 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Move;
-        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
         InputResolver::PushEvent(event);
-        
-        
     }
 
     static float holdTime = 0.0f;
-    const float delayThreshold = 0.08f; // Delay in seconds (e.g., 0.5 seconds)
+    const float delayThreshold = 0.08f;  // Delay in seconds (e.g., 0.5 seconds)
     void Controls_Mouse_click()
     {
-        //mouse always moves 
+        // mouse always moves
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Move;
-        event.pos = { (int)mouse_pos.x , (int)mouse_pos.y };
+        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
         InputResolver::PushEvent(event);
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))

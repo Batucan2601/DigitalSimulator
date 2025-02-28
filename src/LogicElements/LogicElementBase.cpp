@@ -1,10 +1,15 @@
 #include "LogicElementBase.h"
+
 #include "Component.h"
 
 #ifndef PROJECT_ROOT_DIR
 #define PROJECT_ROOT_DIR "/path/to/project/root"  // Replace with the actual project root directory
 #endif
+#include "appSettings.h"
+
 #include <Controls.h>
+
+extern AppSettings::Settings settings;
 
 namespace LogicElements
 {
@@ -113,50 +118,54 @@ namespace LogicElements
 
     void LogicGate::setInOutPositions()
     {
-        //output
-        int no_of_grid_points = this->bd.width / GRID_POINT_SIZE + 1;
+        // output
+        int no_of_grid_points = this->bd.width / settings.GRID_POINT_SIZE + 1;
 
         if (this->outputs.size() == 1)
         {
-            this->outputs[0].pos = { this->bd.x + this->bd.width , this->bd.y + this->bd.height / 2  };
+            this->outputs[0].pos = {this->bd.x + this->bd.width, this->bd.y + this->bd.height / 2};
         }
         else if (this->outputs.size() > 1)
         {
-            this->outputs[0].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE };
-            this->outputs[1].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 3 };
+            this->outputs[0].pos = {this->bd.x + this->bd.width,
+                                    this->bd.y + settings.SPACING_SIZE};
+            this->outputs[1].pos = {this->bd.x + this->bd.width,
+                                    this->bd.y + settings.SPACING_SIZE * 3};
         }
         if (this->outputs.size() > 2)
         {
-            this->outputs[2].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 2 };
+            this->outputs[2].pos = {this->bd.x + this->bd.width,
+                                    this->bd.y + settings.SPACING_SIZE * 2};
         }
         if (this->outputs.size() > 3)
         {
-            this->outputs[3].pos = { this->bd.x + this->bd.width , this->bd.y + SPACING_SIZE * 4 };
+            this->outputs[3].pos = {this->bd.x + this->bd.width,
+                                    this->bd.y + settings.SPACING_SIZE * 4};
         }
         if (this->outputs.size() > 4)
         {
-            this->outputs[4].pos = { this->bd.x + this->bd.width , this->bd.y };
+            this->outputs[4].pos = {this->bd.x + this->bd.width, this->bd.y};
         }
         if (this->inputs.size() == 1)
         {
-            this->inputs[0].pos = { this->bd.x , this->bd.y + this->bd.height / 2};
+            this->inputs[0].pos = {this->bd.x, this->bd.y + this->bd.height / 2};
         }
         else if (this->inputs.size() > 1)
         {
-            this->inputs[0].pos = { this->bd.x , this->bd.y + SPACING_SIZE };
-            this->inputs[1].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 3};
+            this->inputs[0].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE};
+            this->inputs[1].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 3};
         }
         if (this->inputs.size() > 2)
         {
-            this->inputs[2].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 2};
+            this->inputs[2].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 2};
         }
         if (this->inputs.size() > 3)
         {
-            this->inputs[3].pos = { this->bd.x , this->bd.y + SPACING_SIZE * 4 };
+            this->inputs[3].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 4};
         }
         if (this->inputs.size() > 4)
         {
-            this->inputs[4].pos = { this->bd.x , this->bd.y  };
+            this->inputs[4].pos = {this->bd.x, this->bd.y};
         }
     }
     void LogicGate::setPosition(float x, float y)
@@ -170,7 +179,7 @@ namespace LogicElements
     {
         return {bd.x, bd.y};
     }
-  
+
     int LogicGate::getID() const
     {
         return id;
@@ -204,7 +213,7 @@ namespace LogicElements
         {
             if (it.name == name)
             {
-                return true; 
+                return true;
             }
         }
         return false;
@@ -261,11 +270,10 @@ namespace LogicElements
         evaluate();  // Automatically reevaluate when input changes
     }
 
-
-  
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
-        if (event.type == InputType::Mouse) {
+        if (event.type == InputType::Mouse)
+        {
             if (event.mouseState == MouseEventState::LeftClick)
             {
                 OnLeftClick(event);
@@ -286,18 +294,19 @@ namespace LogicElements
             {
                 OnMove(event);
             }
-            if(event.mouseState == MouseEventState::Enter)
+            if (event.mouseState == MouseEventState::Enter)
             {
-                OnEnter(event); 
+                OnEnter(event);
             }
-            if(event.mouseState == MouseEventState::Leave)
+            if (event.mouseState == MouseEventState::Leave)
             {
-                OnExit(event); 
+                OnExit(event);
             }
         }
     }
 
-    bool LogicGate::is_connection_clicked(const Vector2& mousePos , CircuitElements::Connection& possibleConnection)
+    bool LogicGate::is_connection_clicked(const Vector2& mousePos,
+                                          CircuitElements::Connection& possibleConnection)
     {
         if (this->CheckMouseOnInOut(mousePos, possibleConnection))
         {
@@ -307,69 +316,75 @@ namespace LogicElements
     }
     void LogicGate::OnLeftClick(const InputEvent& event)
     {
-        //check bb
-        Vector2 pos = { (float)event.pos.x , (float)event.pos.y };
+        // check bb
+        Vector2 pos = {(float)event.pos.x, (float)event.pos.y};
         bool isCol = CheckCollisionPointRec(pos, this->bd);
         if (!isCol)
         {
             return;
         }
-        //ok first look at the selected handler, check if it is a logic gate
+        // ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
-        if( !circuit->active_wire.is_visible) // we are not building a connection
+        if (!circuit->active_wire.is_visible)  // we are not building a connection
         {
             // it cannot be a connection end
             // it can be a connection start, or gate select
             if (this->is_connection_clicked(pos, possibleConnection))
             {
-                // if hits select it 
-                //possibleConnection.circuit = this->circuit;
-                circuit->addConnection(possibleConnection.sourceGate, possibleConnection.sourceLogic, possibleConnection.targetGate, possibleConnection.targetLogic);
-                circuit->active_wire.is_visible = true; 
-                circuit->active_wire.start = pos; 
-                circuit->active_wire.end = pos; 
-                InputResolver::RegisterHandler(static_cast<IInputHandler*>(&(circuit->active_wire)));
-                InputResolver::setSelectedHandler((IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+                // if hits select it
+                // possibleConnection.circuit = this->circuit;
+                circuit->addConnection(
+                    possibleConnection.sourceGate, possibleConnection.sourceLogic,
+                    possibleConnection.targetGate, possibleConnection.targetLogic);
+                circuit->active_wire.is_visible = true;
+                circuit->active_wire.start = pos;
+                circuit->active_wire.end = pos;
+                InputResolver::RegisterHandler(
+                    static_cast<IInputHandler*>(&(circuit->active_wire)));
+                InputResolver::setSelectedHandler(
+                    (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
             }
-            else // select the gate 
+            else  // select the gate
             {
                 InputResolver::setSelectedHandler((IInputHandler*)this);
             }
-            return; 
+            return;
         }
         // check if a connection already selected.
-        if (auto handler = dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()))
+        if (auto handler =
+                dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()))
         {
             if (this->is_connection_clicked(pos, possibleConnection))
             {
 
-                //the source should be output 
-                //the target should be an input
-                bool is_output = false; 
-                bool is_input = false; 
+                // the source should be output
+                // the target should be an input
+                bool is_output = false;
+                bool is_input = false;
                 for (size_t i = 0; i < handler->sourceGate->outputs.size(); i++)
                 {
                     if (handler->sourceGate->outputs[i].name == handler->sourceLogic)
                     {
-                        is_output = true; 
-                        break; 
+                        is_output = true;
+                        break;
                     }
                 }
                 for (size_t i = 0; i < possibleConnection.sourceGate->inputs.size(); i++)
                 {
-                    if (possibleConnection.sourceGate->inputs[i].name == possibleConnection.sourceLogic)
+                    if (possibleConnection.sourceGate->inputs[i].name ==
+                        possibleConnection.sourceLogic)
                     {
                         is_input = true;
                         break;
                     }
                 }
-                if (is_output != is_input) //if one is true one is false 
+                if (is_output != is_input)  // if one is true one is false
                 {
                     return;
                 }
                 handler->targetGate = possibleConnection.sourceGate;
                 handler->targetLogic = possibleConnection.sourceLogic;
-                handler->is_connected = true; 
+                handler->is_connected = true;
                 if (!is_output && !is_input)
                 {
                     std::shared_ptr<LogicGate> temp_ptr = handler->sourceGate;
@@ -380,16 +395,16 @@ namespace LogicElements
                     handler->sourceLogic = handler->targetLogic;
                     handler->targetLogic = temp_str;
                 }
-                
-                InputResolver::RegisterHandler(static_cast<IInputHandler*>(&circuit->connections[circuit->connections.size() - 1]));
+
+                InputResolver::RegisterHandler(static_cast<IInputHandler*>(
+                    &circuit->connections[circuit->connections.size() - 1]));
             }
         }
         // connection logic
-        
-        
-        
-        //select the handler.
-        //InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size() - 1]));
+
+        // select the handler.
+        // InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size()
+        // - 1]));
     }
     void LogicGate::OnRightClick(const InputEvent& event)
     {
@@ -405,7 +420,7 @@ namespace LogicElements
         for (size_t i = 0; i < gate->circuit->connections.size(); i++)
         {
             CircuitElements::Connection* c = &gate->circuit->connections[i];
-            if (c->sourceGate.get() == gate )
+            if (c->sourceGate.get() == gate)
             {
                 std::string name = c->sourceLogic;
                 for (size_t j = 0; j < gate->outputs.size(); j++)
@@ -413,9 +428,11 @@ namespace LogicElements
                     if (name == gate->outputs[j].name)
                     {
                         Vector2 newPos = gate->outputs[j].pos;
-                        Vector2 newLine = Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
+                        Vector2 newLine =
+                            Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
                         c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
-                        if (!(newLine.x == c->physCon.wires[0].x && newLine.y == c->physCon.wires[0].y))
+                        if (!(newLine.x == c->physCon.wires[0].x &&
+                              newLine.y == c->physCon.wires[0].y))
                         {
                             c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
                         }
@@ -431,13 +448,14 @@ namespace LogicElements
                     {
                         Vector2 newPos = gate->inputs[j].pos;
                         int last_index = c->physCon.wires.size() - 1;
-                        Vector2 newLine = Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
+                        Vector2 newLine =
+                            Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
                         c->physCon.wires.push_back(newLine);
-                        if (!(newLine.x == c->physCon.wires[last_index].x && newLine.y == c->physCon.wires[last_index].y))
+                        if (!(newLine.x == c->physCon.wires[last_index].x &&
+                              newLine.y == c->physCon.wires[last_index].y))
                         {
                             c->physCon.wires.push_back(newPos);
                         }
-                        
                     }
                 }
             }
@@ -473,7 +491,8 @@ namespace LogicElements
                     Vector2 end = c->physCon.wires[j];
                     Vector2 mid = c->physCon.wires[j - 1];
                     Vector2 start = c->physCon.wires[j - 2];
-                    if ((mid.y == start.y && mid.y == end.y) || (mid.x == start.x && mid.x == end.x))
+                    if ((mid.y == start.y && mid.y == end.y) ||
+                        (mid.x == start.x && mid.x == end.x))
                     {
                         indices_destroyed.push_back(j - 1);
                     }
@@ -483,52 +502,48 @@ namespace LogicElements
                     c->physCon.wires.erase(c->physCon.wires.begin() + indices_destroyed[j]);
                 }
             }
-            
         }
-        
-
-        
     }
     void LogicGate::OnDown(const InputEvent& event)
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            Vector2 mousePos = { (float)event.pos.x , (float)event.pos.y };
-           
+            Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
+
             if (!isDragging)
             {
                 if (CheckCollisionPointRec(mousePos, this->bd))
                 {
-                    isDragging = true; 
-                    dif = { this->bd.x - event.pos.x  ,this->bd.y - event.pos.y };
+                    isDragging = true;
+                    dif = {this->bd.x - event.pos.x, this->bd.y - event.pos.y};
                 }
                 else
                 {
-                    return; 
+                    return;
                 }
             }
-            Rectangle rec = { event.pos.x + dif.x , event.pos.y + dif.y , 0 ,0 };
-            this->setPosition(rec.x , rec.y);
+            Rectangle rec = {event.pos.x + dif.x, event.pos.y + dif.y, 0, 0};
+            this->setPosition(rec.x, rec.y);
             if (isFirst)
             {
-                posBeforeDrag = { rec.x,rec.y };
+                posBeforeDrag = {rec.x, rec.y};
                 isFirst = false;
             }
             // check the connections and their endpoints
             UpdateConnection(this);
         }
     }
-    
+
     void LogicGate::OnRelease(const InputEvent& event)
     {
-      
+
         if (this == InputResolver::getSelectedHandler())
         {
             if (!isDragging)
             {
                 return;
             }
-            Rectangle rec = { (float)event.pos.x , (float)event.pos.y , 0 ,0 };
+            Rectangle rec = {(float)event.pos.x, (float)event.pos.y, 0, 0};
             Vector2 v = Controls::SnapToNearestGrid(rec);
             bool is_other_gate_exist = false;
             for (auto val : InputResolver::handlers)
@@ -537,7 +552,7 @@ namespace LogicElements
                 {
                     if (handler == this)
                     {
-                        continue; 
+                        continue;
                     }
                     // Check for overlap between the new gate's bounding box and the existing gate's
                     // bounding box
@@ -557,18 +572,18 @@ namespace LogicElements
                 rec.x = v.x + dif.x;
                 rec.y = v.y + dif.y;
                 Vector2 v = Controls::SnapToNearestGrid(rec);
-                this->setPosition(v.x, v.y );
+                this->setPosition(v.x, v.y);
             }
             isFirst = true;
-            isDragging = false; 
+            isDragging = false;
             ReducePhysicalWires(this);
         }
     }
     void LogicGate::OnMove(const InputEvent& event)
     {
-        Vector2 mouse_pos = { (float)event.pos.x , (float)event.pos.y };
-        CircuitElements::Connection temp; 
-        if (CheckMouseOnInOut(mouse_pos,temp))
+        Vector2 mouse_pos = {(float)event.pos.x, (float)event.pos.y};
+        CircuitElements::Connection temp;
+        if (CheckMouseOnInOut(mouse_pos, temp))
         {
             // this should change the input color
         }
@@ -585,51 +600,50 @@ namespace LogicElements
 
     void LogicGate::OnEnter(const InputEvent& event)
     {
-       // update the circuit->hoveredGate with this object 
-       
+        // update the circuit->hoveredGate with this object
+
         m_logger.info("Mouse entered the gate");
-       if(this == InputResolver::getSelectedHandler())
-       {
-            circuit->hoveredGate = shared_from_this();    
-       }
+        if (this == InputResolver::getSelectedHandler())
+        {
+            circuit->hoveredGate = shared_from_this();
+        }
     }
     void LogicGate::OnExit(const InputEvent& event)
     {
         // update the circuit->hoveredGate with nullptr
-
     }
 
-    bool LogicGate::CheckMouseOnInOut(
-        const Vector2& mousePosition, CircuitElements::Connection& connection)
+    bool LogicGate::CheckMouseOnInOut(const Vector2& mousePosition,
+                                      CircuitElements::Connection& connection)
     {
         std::shared_ptr<LogicGate> itself = shared_from_this();
-        Rectangle rec; 
+        Rectangle rec;
         for (size_t i = 0; i < inputs.size(); i++)
         {
-            rec.x = inputs[i].pos.x - IN_OUT_RECT_WIDTH;
-            rec.y = inputs[i].pos.y - IN_OUT_RECT_WIDTH;
-            rec.width = IN_OUT_INTERACTION;
-            rec.height = IN_OUT_INTERACTION;
+            rec.x = inputs[i].pos.x - settings.IN_OUT_RECT_WIDTH;
+            rec.y = inputs[i].pos.y - settings.IN_OUT_RECT_WIDTH;
+            rec.width = settings.IN_OUT_INTERACTION;
+            rec.height = settings.IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;
                 connection.sourceLogic = inputs[i].name;
-                Vector2 pos = { rec.x, rec.y };
+                Vector2 pos = {rec.x, rec.y};
                 connection.physCon.wires.push_back(pos);
-                return true; 
+                return true;
             }
         }
         for (size_t i = 0; i < outputs.size(); i++)
         {
-            rec.x = outputs[i].pos.x - IN_OUT_RECT_WIDTH;
-            rec.y = outputs[i].pos.y - IN_OUT_RECT_WIDTH;
-            rec.width = IN_OUT_INTERACTION;
-            rec.height = IN_OUT_INTERACTION;
+            rec.x = outputs[i].pos.x - settings.IN_OUT_RECT_WIDTH;
+            rec.y = outputs[i].pos.y - settings.IN_OUT_RECT_WIDTH;
+            rec.width = settings.IN_OUT_INTERACTION;
+            rec.height = settings.IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;
                 connection.sourceLogic = outputs[i].name;
-                Vector2 pos = { rec.x, rec.y };
+                Vector2 pos = {rec.x, rec.y};
                 connection.physCon.wires.push_back(pos);
                 return true;
             }
