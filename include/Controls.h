@@ -30,7 +30,7 @@ namespace Controls
     void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit);
     void HandleLogicWiring(std::shared_ptr<CircuitElements::Circuit> circuit, const Vector2 &mousePosition);
     // keyboard
-    void Control_Keyboard_Event(std::shared_ptr<CircuitElements::Circuit> circuit);
+    void Control_Keyboard_Event();
     Vector2 Generate_straight_lines(const Vector2 &start, const Vector2 &end);
     // TODO this does not belong here
     bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit, const Vector2 &mousePosition, CircuitElements::Connection &con);

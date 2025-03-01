@@ -76,7 +76,7 @@ namespace Controls
 
         Controls_Mouse_click();
         Controls_Mouse_Movements();
-        Control_Keyboard_Event(selected_circuit);
+        Control_Keyboard_Event();
         // Controls_Handle_Continous(selected_circuit);
 
         InputResolver::resolve();
@@ -137,7 +137,8 @@ namespace Controls
             }
         }
     }
-    void Control_Keyboard_Event(std::shared_ptr<CircuitElements::Circuit> circuit)
+
+    void Control_Keyboard_Event()
     {
         if (selected_logic_gate.empty() || !selected_logic_gate[0])
         {
@@ -145,6 +146,8 @@ namespace Controls
             // control_logger.info("Error: No selected logic gate!");
             return;
         }
+
+        std::cout << "Keyboard event" << std::endl;
 
         // Store the current position of the selected logic gate
         float current_x = selected_logic_gate[0]->bd.x;
@@ -179,46 +182,37 @@ namespace Controls
         if (IsKeyPressed(KEY_ESCAPE))
         {
             is_logic_selected = false;  // kills wiring process for sure everytime
-            circuit->active_wire.is_visible = false;
+            // circuit->active_wire.is_visible = false;
         }
 
         if (IsKeyPressed(KEY_DELETE))
         {
-            // delete the selected gate
-            for (size_t i = 0; i < circuit->gates.size(); i++)
-            {
-                if (circuit->gates[i] == selected_logic_gate[0])
-                {
-                    circuit->gates.erase(circuit->gates.begin() + i);
-                    break;
-                }
-            }
-            // delete the connections
-            for (size_t i = 0; i < circuit->connections.size(); i++)
-            {
-                // if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
-                //     circuit->connections[i].targetGate == selected_logic_gate[0])
-                {
-                    circuit->connections.erase(circuit->connections.begin() + i);
-                    i--;
-                }
-            }
-            selected_logic_gate[0] = nullptr;
-        }
-
-        if (key_pressed)
-        {
-            // Check if the new position is occupied
-            if (!is_grid_occupied(circuit, new_position))
-            {
-                // Update the position if the new grid is not occupied
-                selected_logic_gate[0]->bd.x = new_position.x;
-                selected_logic_gate[0]->bd.y = new_position.y;
-            }
-            else
-            {
-                std::cout << "Move blocked: grid is occupied!" << std::endl;
-            }
+            InputEvent event;
+            event.type = InputType::Keyboard;
+            event.keyState = KeyboardEvent::KeyPress;
+            event.keyCode = KEY_DELETE;
+            InputResolver::PushEvent(event);
+            std::cout << "Key pressed: DELETE" << std::endl;
+            // // delete the selected gate
+            // for (size_t i = 0; i < circuit->gates.size(); i++)
+            // {
+            //     if (circuit->gates[i] == selected_logic_gate[0])
+            //     {
+            //         circuit->gates.erase(circuit->gates.begin() + i);
+            //         break;
+            //     }
+            // }
+            // // delete the connections
+            // for (size_t i = 0; i < circuit->connections.size(); i++)
+            // {
+            //     // if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
+            //     //     circuit->connections[i].targetGate == selected_logic_gate[0])
+            //     {
+            //         circuit->connections.erase(circuit->connections.begin() + i);
+            //         i--;
+            //     }
+            // }
+            // selected_logic_gate[0] = nullptr;
         }
     }
 

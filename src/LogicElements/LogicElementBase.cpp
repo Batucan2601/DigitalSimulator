@@ -272,6 +272,7 @@ namespace LogicElements
 
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
+
         if (event.type == InputType::Mouse)
         {
             if (event.mouseState == MouseEventState::LeftClick)
@@ -301,6 +302,23 @@ namespace LogicElements
             if (event.mouseState == MouseEventState::Leave)
             {
                 OnExit(event);
+            }
+        }
+
+        if (event.type == InputType::Keyboard)
+        {
+            std::cout << "Keyboard event" << std::endl;
+            if (event.keyState == KeyboardEvent::KeyPress)
+            {
+                OnKeyPress(event);
+            }
+            if (event.keyState == KeyboardEvent::KeyRelease)
+            {
+                // OnKeyRelease(event);
+            }
+            if (event.keyState == KeyboardEvent::KeyRepeat)
+            {
+                // OnKeyRepeat(event);
             }
         }
     }
@@ -611,6 +629,34 @@ namespace LogicElements
     void LogicGate::OnExit(const InputEvent& event)
     {
         // update the circuit->hoveredGate with nullptr
+    }
+
+    void LogicGate::OnKeyPress(const InputEvent& event)
+    {
+        if (event.keyCode == KeyboardKey::KEY_DELETE)
+        {
+            if (this == InputResolver::getSelectedHandler())
+            {
+                // remove the gate
+                for (size_t i = 0; i < circuit->connections.size(); i++)
+                {
+                    if (circuit->connections[i].sourceGate.get() == this ||
+                        circuit->connections[i].targetGate.get() == this)
+                    {
+                        circuit->connections.erase(circuit->connections.begin() + i);
+                        i--;
+                    }
+                }
+                for (size_t i = 0; i < circuit->gates.size(); i++)
+                {
+                    if (circuit->gates[i].get() == this)
+                    {
+                        circuit->gates.erase(circuit->gates.begin() + i);
+                        i--;
+                    }
+                }
+            }
+        }
     }
 
     bool LogicGate::CheckMouseOnInOut(const Vector2& mousePosition,
