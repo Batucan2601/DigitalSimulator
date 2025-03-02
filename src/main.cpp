@@ -5,20 +5,20 @@ std::string circuit_logger = "CircuitLogger";
 std::shared_ptr<CircuitElements::Circuit> circuit =
     std::make_shared<CircuitElements::Circuit>(circuit_logger);
 
-AppSettings::Settings settings;
+AppSettings::Settings appSettings;
 
 int main(void)
 {
-    settings.theme = AppSettings::Theme::DarkMode;
+    appSettings.theme = AppSettings::Theme::DarkMode;
 
     SetTraceLogLevel(LOG_NONE);  // Disable raylib logging
     // Initialization
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    RaylibHelper::Init(settings.screenWidth, settings.screenHeight, settings.targetFps,
+    RaylibHelper::Init(appSettings.screenWidth, appSettings.screenHeight, appSettings.targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     LogicElements::init_logicTextures();  // this should also be wrapped
-    Controls::Controls_set_camera(settings.screenWidth, settings.screenHeight);
+    Controls::Controls_set_camera(appSettings.screenWidth, appSettings.screenHeight);
     std::string and_gate_logger = "AndLogger1";
     std::string or_gate_logger = "OrLogger1";
     std::string not_gate_logger = "NotLogger1";
@@ -47,11 +47,11 @@ int main(void)
     circuit->addGate(gate4);
     circuit->addGate(gate5);
     // Main game loop
-    GUIEditor::Init(settings.screenWidth, settings.screenHeight);
+    // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
-        settings.screenHeight = GetScreenHeight();
-        settings.screenWidth = GetScreenWidth();
+        appSettings.screenHeight = GetScreenHeight();
+        appSettings.screenWidth = GetScreenWidth();
         // Update
         Controls::Controls_update(circuit);
         circuit->evaluate();

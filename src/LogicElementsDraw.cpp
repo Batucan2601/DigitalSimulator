@@ -1,22 +1,22 @@
 #include "LogicElementsDraw.h"
 
+#include <chrono>  // High precision timing
 #include <iostream>
 
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
 namespace LogicElementsDraw
 {
 
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
-        Rectangle bd = gate->bd;  // Bounding box of the gate
+        const Rectangle& bd = gate->bd;  // Bounding box of the gate
         float bd_width = bd.width;
         float bd_height = bd.height;
 
-        float texture_width = gate->m_texture.width;
-        float texture_height = gate->m_texture.height;
+        Texture texture = gate->m_texture;
 
-        Rectangle source = {0, 0, texture_width, texture_height};
+        Rectangle source = {0, 0, (float)texture.width, (float)texture.height};
         Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
         Vector2 origin = {0, 0};  // Top-left corner as origin
 
@@ -26,18 +26,26 @@ namespace LogicElementsDraw
     void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit)
     {
         // 1 - Draw gates
+        auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
+
         for (size_t i = 0; i < circuit->gates.size(); i++)
         {
             const auto& gate = circuit->gates[i];  // Access the gate
 
-            if (settings.isDrawingBoundaryBox)
+            if (appSettings.isDrawingBoundaryBox)
             {
                 DrawBoundaryBox(gate);
             }
 
             DrawGateElement(gate);
+
             DrawInOut(gate);
         }
+
+        auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
+        double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
+
+        std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)
@@ -109,17 +117,18 @@ namespace LogicElementsDraw
         if (circuit->is_GUIdragdragging)
         {
             DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
-                               circuit->selected_wires.wire_hovering.y, settings.SLICE_SIZE,
-                               settings.SLICE_SIZE, BLUE);
+                               circuit->selected_wires.wire_hovering.y, appSettings.SLICE_SIZE,
+                               appSettings.SLICE_SIZE, BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
             circuit->is_GUIdragdropped = false;
         }
     }
+
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
-        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, settings.SPACING_SIZE, color);
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, appSettings.SPACING_SIZE, color);
     }
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
@@ -157,8 +166,9 @@ namespace LogicElementsDraw
         {
             // GRID_POINT_SIZE
             Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
-                             pos.y - settings.IN_OUT_RECT_WIDTH / 2, settings.IN_OUT_RECT_WIDTH};
+            Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
+                             pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
+                             appSettings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
         if (gate->is_hovered)
@@ -166,9 +176,9 @@ namespace LogicElementsDraw
             for (size_t i = 0; i < gate->inputs.size(); i++)
             {
                 Vector2 pos = gate->inputs[i].pos;
-                Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
-                                 pos.y - settings.IN_OUT_RECT_WIDTH / 2,
-                                 settings.IN_OUT_RECT_WIDTH};
+                Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 appSettings.IN_OUT_RECT_WIDTH};
                 DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
             }
         }

@@ -1,11 +1,11 @@
 #ifndef RAYLIBHELPER_H
 #define RAYLIBHELPER_H
 
+#include "GUI/GUIManager.h"
+#include "LogicElements.h"
 #include "raylib.h"
 
 #include <functional>
-#include "GUI/GUIManager.h"
-#include "LogicElements.h"
 
 class RaylibHelper
 {
@@ -16,12 +16,23 @@ class RaylibHelper
     static void EndFrame();
     static void Draw2D(const Camera2D& camera, const std::function<void()>& drawFn);
     static void DrawGUI(std::shared_ptr<CircuitElements::Circuit> circuit);
-    static void DrawTextOverlay(const char* text, int x = 10, int y = 10, int fontSize = 20,
-                                Color color = DARKGRAY);
-    static void Close();
-    private:
-  static GUIManager imguiManager; // Manages ImGui logic
 
+    static void Close();
+
+    static GUI::BaseWindow* getGUIWindow(const std::string& title)
+    {
+        for (auto& window : imguiManager->windows)
+        {
+            if (window->GetTitle() == title)
+            {
+                return window.get();
+            }
+        }
+        return nullptr;
+    }
+
+  private:
+    static std::shared_ptr<GUIManager> imguiManager;  // Manages ImGui logic
 };
 
 #endif  // RAYLIBHELPER_H

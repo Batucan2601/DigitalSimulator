@@ -9,7 +9,7 @@
 
 #include <Controls.h>
 
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
 namespace LogicElements
 {
@@ -119,7 +119,7 @@ namespace LogicElements
     void LogicGate::setInOutPositions()
     {
         // output
-        int no_of_grid_points = this->bd.width / settings.GRID_POINT_SIZE + 1;
+        int no_of_grid_points = this->bd.width / appSettings.GRID_POINT_SIZE + 1;
 
         if (this->outputs.size() == 1)
         {
@@ -128,19 +128,19 @@ namespace LogicElements
         else if (this->outputs.size() > 1)
         {
             this->outputs[0].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + settings.SPACING_SIZE};
+                                    this->bd.y + appSettings.SPACING_SIZE};
             this->outputs[1].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + settings.SPACING_SIZE * 3};
+                                    this->bd.y + appSettings.SPACING_SIZE * 3};
         }
         if (this->outputs.size() > 2)
         {
             this->outputs[2].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + settings.SPACING_SIZE * 2};
+                                    this->bd.y + appSettings.SPACING_SIZE * 2};
         }
         if (this->outputs.size() > 3)
         {
             this->outputs[3].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + settings.SPACING_SIZE * 4};
+                                    this->bd.y + appSettings.SPACING_SIZE * 4};
         }
         if (this->outputs.size() > 4)
         {
@@ -152,16 +152,16 @@ namespace LogicElements
         }
         else if (this->inputs.size() > 1)
         {
-            this->inputs[0].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE};
-            this->inputs[1].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 3};
+            this->inputs[0].pos = {this->bd.x, this->bd.y + appSettings.SPACING_SIZE};
+            this->inputs[1].pos = {this->bd.x, this->bd.y + appSettings.SPACING_SIZE * 3};
         }
         if (this->inputs.size() > 2)
         {
-            this->inputs[2].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 2};
+            this->inputs[2].pos = {this->bd.x, this->bd.y + appSettings.SPACING_SIZE * 2};
         }
         if (this->inputs.size() > 3)
         {
-            this->inputs[3].pos = {this->bd.x, this->bd.y + settings.SPACING_SIZE * 4};
+            this->inputs[3].pos = {this->bd.x, this->bd.y + appSettings.SPACING_SIZE * 4};
         }
         if (this->inputs.size() > 4)
         {
@@ -272,7 +272,6 @@ namespace LogicElements
 
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
-
         if (event.type == InputType::Mouse)
         {
             if (event.mouseState == MouseEventState::LeftClick)
@@ -481,7 +480,6 @@ namespace LogicElements
     }
     void ReducePhysicalWires(LogicGate* gate)
     {
-
         for (size_t i = 0; i < gate->circuit->connections.size(); i++)
         {
             CircuitElements::Connection* c = &gate->circuit->connections[i];
@@ -666,10 +664,10 @@ namespace LogicElements
         Rectangle rec;
         for (size_t i = 0; i < inputs.size(); i++)
         {
-            rec.x = inputs[i].pos.x - settings.IN_OUT_RECT_WIDTH;
-            rec.y = inputs[i].pos.y - settings.IN_OUT_RECT_WIDTH;
-            rec.width = settings.IN_OUT_INTERACTION;
-            rec.height = settings.IN_OUT_INTERACTION;
+            rec.x = inputs[i].pos.x - appSettings.IN_OUT_RECT_WIDTH;
+            rec.y = inputs[i].pos.y - appSettings.IN_OUT_RECT_WIDTH;
+            rec.width = appSettings.IN_OUT_INTERACTION;
+            rec.height = appSettings.IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;
@@ -681,10 +679,10 @@ namespace LogicElements
         }
         for (size_t i = 0; i < outputs.size(); i++)
         {
-            rec.x = outputs[i].pos.x - settings.IN_OUT_RECT_WIDTH;
-            rec.y = outputs[i].pos.y - settings.IN_OUT_RECT_WIDTH;
-            rec.width = settings.IN_OUT_INTERACTION;
-            rec.height = settings.IN_OUT_INTERACTION;
+            rec.x = outputs[i].pos.x - appSettings.IN_OUT_RECT_WIDTH;
+            rec.y = outputs[i].pos.y - appSettings.IN_OUT_RECT_WIDTH;
+            rec.width = appSettings.IN_OUT_INTERACTION;
+            rec.height = appSettings.IN_OUT_INTERACTION;
             if (CheckCollisionPointRec(mousePosition, rec))
             {
                 connection.sourceGate = itself;

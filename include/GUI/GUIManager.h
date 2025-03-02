@@ -1,24 +1,29 @@
 #ifndef GUIMANAGER_H
 #define GUIMANAGER_H
+
+#include "GUI/BaseWindow.h"
 #include "LogicElements.h"
 class GUIManager
 {
   public:
-    static void Init();  // Initialize ImGui styles and other GUI components
-    static void Draw(std::shared_ptr<CircuitElements::Circuit>
-                         circuit);  // Draw all GUI elements, including menu bar and logic
-    static void Cleanup();          // Cleanup resources if necessary
+    void Init();                    // Initialize ImGui styles and other GUI components
+    void Draw(SP_Circuit circuit);  // Draw all GUI elements, including menu bar and logic
+    void Cleanup();                 // Cleanup resources if necessary
+
+    template<typename T, typename... Args>
+    void AddWindow(Args&&... args);  // Add a new window to the GUI
+
+    void Draw2(SP_Circuit);
+
+    void DrawGUI(SP_Circuit circuit);
+
+    std::vector<std::unique_ptr<GUI::BaseWindow>> windows;
 
   private:
-    static void DrawDemoWindow();
-    static void DrawDockingSpace();  // Draw the parent screen for the dockspace
-    static void
-        DrawMainMenu(std::shared_ptr<CircuitElements::Circuit> circuit);        // Calls GUIMenuBar
-    static void DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit);  // Calls GUIEditor
-    static void DrawSaveDialog();    // Calls GUISaveSystem
-    static void DrawTools();         // Calls GUITools
-    static void DrawLogicSetting();  // Calls GUILogicSetting
-    static void DrawSettings();      // Calls GUISettings
+    void DrawDemoWindow();
+    void DrawDockingSpace();                // Draw the parent screen for the dockspace
+    void DrawMainMenu(SP_Circuit circuit);  // Calls GUIMenuBar
+    void DrawEditor(SP_Circuit circuit);    // Calls GUIEditor
 
   private:
     static bool showDemoWindow;

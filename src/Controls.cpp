@@ -1,12 +1,14 @@
 #include "Controls.h"
 
 #include "Component.h"
+#include "GUI/BaseWindow.h"
 #include "GUI/GUIEditor.h"
-#include "GUI/GUITools.h"
+#include "GUI/Tools.h"
 #include "LogicElementBase.h"
 #include "LogicElements.h"
 #include "logicElementFactory.h"
 #include "raylib.h"
+#include "raylibHelper.h"
 
 #include <iostream>
 #include <memory>
@@ -19,10 +21,17 @@ namespace Controls
     // since we draw raylib inside a texture and pass it to imgui we need a transform.
     static void ConvertMouseCoord(Vector2& mouse_pos)
     {
-        GUIEditor::EditorWindow editor_window = GUIEditor::Window();
+
+        GUI::Editor::EditorWindow* editor_window =
+            (GUI::Editor::EditorWindow*)RaylibHelper::getGUIWindow("Editor");
+        if (editor_window == nullptr)
+        {
+            return;
+        }
+
         Vector2 virtualMouse;
-        virtualMouse.x = (mouse_pos.x - editor_window.ImageMin.x);
-        virtualMouse.y = (mouse_pos.y - editor_window.ImageMin.y);
+        virtualMouse.x = (mouse_pos.x - editor_window->ImageMin.x);
+        virtualMouse.y = (mouse_pos.y - editor_window->ImageMin.y);
 
         mouse_pos = GetScreenToWorld2D(virtualMouse, camera);
     }
@@ -107,7 +116,7 @@ namespace Controls
             // circuit->m_logger.info("catched new ");
         }
 
-        if (GUITools::dragDrop.state == GUITools::DragDropState::DRAGGING)
+        if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
             Vector2 pos = SnapToNearestGrid(rec);
@@ -115,8 +124,7 @@ namespace Controls
             // circuit->m_logger.info("catched new ");
             circuit->is_GUIdragdragging = true;
         }
-        if (circuit->is_GUIdragdragging &&
-            GUITools::dragDrop.state == GUITools::DragDropState::IDLE)
+        if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
         {
             circuit->is_GUIdragdropped = true;
             circuit->is_GUIdragdragging = false;
@@ -124,16 +132,15 @@ namespace Controls
             // add the new circuit
             std::string new_gate = "or_gate_logger";
             std::shared_ptr<LogicElements::LogicGate> gate;
-            gate = LogicElements::LogicElementFactory::createGate(GUITools::dragDrop.gateType,
-                                                                  new_gate);
+            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
             circuit->addGate(gate);
 
-            if (GUITools::dragDrop.gateType != LogicElements::GateType::NONE)
+            if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
             {
                 circuit->gates[circuit->gates.size() - 1]->setPosition(
                     circuit->selected_wires.wire_hovering.x,
                     circuit->selected_wires.wire_hovering.y);
-                GUITools::dragDrop.gateType = LogicElements::GateType::NONE;
+                GUI::dragDrop.gateType = LogicElements::GateType::NONE;
             }
         }
     }
@@ -162,22 +169,22 @@ namespace Controls
         if (IsKeyPressed(KEY_UP))
         {
             key_pressed = true;
-            new_position.y -= settings.SPACING_SIZE;
+            new_position.y -= appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_DOWN))
         {
             key_pressed = true;
-            new_position.y += settings.SPACING_SIZE;
+            new_position.y += appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_LEFT))
         {
             key_pressed = true;
-            new_position.x -= settings.SPACING_SIZE;
+            new_position.x -= appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
             key_pressed = true;
-            new_position.x += settings.SPACING_SIZE;
+            new_position.x += appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_ESCAPE))
         {
@@ -229,8 +236,10 @@ namespace Controls
     Vector2 SnapToNearestGrid(const Rectangle& rect)
     {
         Vector2 nearest_grid_point;
-        nearest_grid_point.x = std::round(rect.x / settings.SPACING_SIZE) * settings.SPACING_SIZE;
-        nearest_grid_point.y = std::round(rect.y / settings.SPACING_SIZE) * settings.SPACING_SIZE;
+        nearest_grid_point.x =
+            std::round(rect.x / appSettings.SPACING_SIZE) * appSettings.SPACING_SIZE;
+        nearest_grid_point.y =
+            std::round(rect.y / appSettings.SPACING_SIZE) * appSettings.SPACING_SIZE;
         // TODO: Highlight the nearest grid point
         return nearest_grid_point;
     }
@@ -426,17 +435,17 @@ namespace Controls
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 Rectangle col = {0, 0, 0, 0};
-                if (std::abs(end.x - start.x) < settings.SPACING_SIZE)
+                if (std::abs(end.x - start.x) < appSettings.SPACING_SIZE)
                 {
-                    col = {start.x - settings.MOUSE_SELECTION_OFFSET, start.y,
-                           (float)(settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET),
+                    col = {start.x - appSettings.MOUSE_SELECTION_OFFSET, start.y,
+                           (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET),
                            std::abs(end.y - start.y)};
                 }
-                else if (std::abs(end.y - start.y) < settings.SPACING_SIZE)
+                else if (std::abs(end.y - start.y) < appSettings.SPACING_SIZE)
                 {
-                    col = {start.x, start.y + -settings.MOUSE_SELECTION_OFFSET,
+                    col = {start.x, start.y + -appSettings.MOUSE_SELECTION_OFFSET,
                            std::abs(end.x - start.x),
-                           (float)(settings.SPACING_SIZE + settings.MOUSE_SELECTION_OFFSET)};
+                           (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET)};
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {

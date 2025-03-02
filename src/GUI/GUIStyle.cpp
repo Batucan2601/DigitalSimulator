@@ -2,7 +2,7 @@
 
 #include <string>
 
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
 namespace GUIStyle
 {
@@ -19,7 +19,7 @@ namespace GUIStyle
         255.0f, 79.0f / 255.0f, 1.0f);
         */
         // SetFuturisticImGuiStyle();
-        if (settings.theme == AppSettings::Theme::DarkMode)
+        if (appSettings.theme == AppSettings::Theme::DarkMode)
         {
             ApplyDarkTheme();
         }

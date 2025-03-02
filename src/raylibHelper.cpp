@@ -1,11 +1,9 @@
 #include "raylibHelper.h"
 
-#include "GUI/GUIMenuBar.h"
-#include "GUI/GUIStyle.h"
-
-#include <GUI/GUILogic.h>
 #include <imgui.h>
 #include <rlImGui.h>
+
+std::shared_ptr<GUIManager> RaylibHelper::imguiManager = std::make_shared<GUIManager>();
 
 void RaylibHelper::Init(int screenWidth, int screenHeight, int targetFps, const char* title)
 {
@@ -13,17 +11,9 @@ void RaylibHelper::Init(int screenWidth, int screenHeight, int targetFps, const 
     // set exit key to 'q'
     SetExitKey(KEY_Q);
     SetTargetFPS(targetFps);
-    imguiManager.Init();
+    imguiManager->Init();
 }
-/* TODO combine imgui drawing
-void RaylibHelper::BeginFrame()
-{
-// inside your game loop, between BeginDrawing() and EndDrawing()
-rlImGuiBegin();			// starts the ImGui content mode. Make all ImGui calls after this
 
-rlImGuiEnd();			// ends the ImGui content mode. Make all ImGui calls before this
-}
-*/
 bool RaylibHelper::ShouldClose()
 {
     return WindowShouldClose();
@@ -49,15 +39,11 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
 
 void RaylibHelper::DrawGUI(std::shared_ptr<CircuitElements::Circuit> circuit)
 {
-    imguiManager.Draw(circuit );
-}
-void RaylibHelper::DrawTextOverlay(const char* text, int x, int y, int fontSize, Color color)
-{
-    DrawText(text, x, y, fontSize, color);
+    imguiManager->DrawGUI(circuit);
 }
 
 void RaylibHelper::Close()
 {
-    imguiManager.Cleanup();
+    imguiManager->Cleanup();
     CloseWindow();
 }

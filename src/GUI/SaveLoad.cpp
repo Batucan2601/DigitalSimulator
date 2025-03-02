@@ -1,26 +1,11 @@
-#include "GUI/GUISaveSystem.h"
+#include "GUI/SaveLoad.h"
 
 #include "main.h"
-namespace GUISaveSystem
+namespace GUI
 {
-    State state = State::STATE_IDLE;
+    SP_Circuit localCircuit;
 
-    std::shared_ptr<CircuitElements::Circuit> localCircuit;
-
-    void ShowSaveWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit)
-    {
-        localCircuit = globalCircuit;
-        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
-        state = State::STATE_SAVE;
-    }
-
-    void ShowLoadWindow()
-    {
-        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
-        state = State::STATE_LOAD;
-    }
-
-    void draw()
+    void SaveLoad::Draw(SP_Circuit circuit)
     {
         switch (state)
         {
@@ -37,7 +22,20 @@ namespace GUISaveSystem
         }
     }
 
-    void drawSaveWindow()
+    void SaveLoad::ShowSaveWindow(SP_Circuit globalCircuit)
+    {
+        localCircuit = globalCircuit;
+        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
+        state = State::STATE_SAVE;
+    }
+
+    void SaveLoad::ShowLoadWindow()
+    {
+        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
+        state = State::STATE_LOAD;
+    }
+
+    void SaveLoad::drawSaveWindow()
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
@@ -58,7 +56,7 @@ namespace GUISaveSystem
         }
     }
 
-    void drawLoadWindow()
+    void SaveLoad::drawLoadWindow()
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
@@ -78,26 +76,14 @@ namespace GUISaveSystem
         }
     }
 
-    bool saveCircuit(std::string fileName)
+    bool SaveLoad::saveCircuit(std::string fileName)
     {
         std::cout << "Saving file to: " << fileName << std::endl;
         jsonParser::saveCircuit(*localCircuit.get(), fileName);
         return true;
     }
 
-    std::shared_ptr<LogicElements::LogicGate> findGateAtPosition(int x, int y)
-    {
-        for (auto& gate : localCircuit.get()->gates)
-        {
-            if (gate->getPosition().x == x && gate->getPosition().y == y)
-            {
-                return gate;  // ✅ Return shared_ptr instead of raw pointer
-            }
-        }
-        return nullptr;  // Return nullptr if not found
-    }
-
-    bool loadCircuit(std::string fileName)
+    bool SaveLoad::loadCircuit(std::string fileName)
     {
         std::cout << "Loading file from: " << fileName << std::endl;
 
@@ -108,4 +94,4 @@ namespace GUISaveSystem
         return true;
     }
 
-}  // namespace GUISaveSystem
+}  // namespace GUI

@@ -1,14 +1,5 @@
-#include "GUI/GUIManager.h"
-
-#include "GUI/GUILogic.h"
-#include "GUI/GUIMenuBar.h"
-#include "GUI/GUISaveSystem.h"
-#include "GUI/GUISettings.h"
-#include "GUI/GUIStyle.h"
-
-#include <GUI/GUIEditor.h>
-#include <GUI/GUILogicSetting.h>
-#include <GUI/GUITools.h>
+#include <GUI/GUIManager.h>
+#include <GUI/include.h>
 #include <imgui.h>
 #include <rlImGui.h>
 
@@ -18,61 +9,38 @@ void GUIManager::Init()
 {
     rlImGuiSetup(true);  // Initialize ImGui
     GUIStyle::init();    // Set up custom ImGui styles
+    windows.clear();     // Clear any existing windows
+
+    GUI::Settings settings = GUI::Settings();                 // Create a settings window
+    GUI::LogicGateInfo logicGateInfo = GUI::LogicGateInfo();  // Create a logic gate info window
+    GUI::SaveLoad saveLoad = GUI::SaveLoad();                 // Create a save/load window
+    GUI::Tools tools = GUI::Tools();                          // Create a tools window
+    GUI::Editor editor = GUI::Editor();                       // Create an editor window
+    editor.Init(appSettings.screenWidth, appSettings.screenHeight);
+
+    windows.push_back(std::make_unique<GUI::Settings>(settings));
+    windows.push_back(std::make_unique<GUI::LogicGateInfo>(logicGateInfo));
+    windows.push_back(std::make_unique<GUI::SaveLoad>(saveLoad));
+    windows.push_back(std::make_unique<GUI::Tools>(tools));
+    windows.push_back(std::make_unique<GUI::Editor>(editor));
+
+    guiMenuBar.SetWindowList(windows);
 }
 
-void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
+void GUIManager::Draw(SP_Circuit circuit)
 {
-    rlImGuiBegin();
-    DrawDockingSpace();
-
-    DrawEditor(circuit);
-
-    DrawMainMenu(circuit);
-
-    DrawTools();
-
-    DrawSettings();
-
-    DrawSaveDialog();
-
+    for (auto& window : windows)
+    {
+        window->Draw(circuit);
+    }
     DrawDemoWindow();
 
-    DrawLogicSetting();
-
-    // if(GUIEditor::isEditorShown)
-    // {
-    //     GUIEditor::Draw();
-    // }
-
-    rlImGuiEnd();
+    DrawMainMenu(circuit);
 }
 
-void GUIManager::DrawTools()
-{
-    GUITools::GUITools_Display();
-}
+void GUIManager::DrawEditor(SP_Circuit circuit) {}
 
-void GUIManager::DrawSettings()
-{
-    GUISettings::DisplaySettings();
-}
-
-void GUIManager::DrawLogicSetting()
-{
-    GUILogicSetting::Draw();
-}
-
-void GUIManager::DrawSaveDialog()
-{
-    GUISaveSystem::draw();
-}
-
-void GUIManager::DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit)
-{
-    GUIEditor::Draw(circuit);
-}
-
-void GUIManager::DrawMainMenu(std::shared_ptr<CircuitElements::Circuit> circuit)
+void GUIManager::DrawMainMenu(SP_Circuit circuit)
 {
     guiMenuBar.Draw(circuit);
 }
@@ -105,8 +73,25 @@ void GUIManager::DrawDockingSpace()
 
 void GUIManager::DrawDemoWindow()
 {
-    if (settings.showDemoWindow)
-        ImGui::ShowDemoWindow(&settings.showDemoWindow);
+    if (appSettings.showDemoWindow)
+        ImGui::ShowDemoWindow(&appSettings.showDemoWindow);
+}
+
+template<typename T, typename... Args>
+void GUIManager::AddWindow(Args&&... args)
+{
+    static_assert(std::is_base_of<GUI::BaseWindow, T>::value, "T must inherit from GUIWindow");
+    windows.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+}
+
+void GUIManager::DrawGUI(SP_Circuit circuit)
+{
+    rlImGuiBegin();
+    DrawDockingSpace();
+
+    Draw(circuit);
+
+    rlImGuiEnd();
 }
 
 void GUIManager::Cleanup()

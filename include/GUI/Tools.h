@@ -2,9 +2,11 @@
 #define GUITOOLS_H
 #include "LogicElements.h"
 
+#include <GUI/include.h>
 // #include <components/TreeView.h>
-namespace GUITools
+namespace GUI
 {
+
     enum class DragDropState
     {
         DRAGGING,
@@ -17,9 +19,17 @@ namespace GUITools
         LogicElements::GateType gateType;
     };
 
+    class Tools : public BaseWindow
+    {
+      public:
+        Tools() : BaseWindow("Tools") {}
+
+        void Draw(SP_Circuit circuit) override;
+        void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
+    };
+
     extern GUIToolsDragDrop dragDrop;
-    void GUITools_BasicLogicDisplay();
-    void GUITools_Display();
-}  // namespace GUITools
+
+}  // namespace GUI
 
 #endif

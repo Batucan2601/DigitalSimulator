@@ -1,8 +1,8 @@
 #ifndef GUI_MENUBAR_H
 #define GUI_MENUBAR_H
-#include "GUI/GUIStyle.h"
 #include "LogicElements.h"
 
+#include <GUI/include.h>
 #include <functional>
 #include <map>
 #include <memory>
@@ -41,6 +41,8 @@ class GUIMenuBar
     std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> menuList;
     void Draw(std::shared_ptr<CircuitElements::Circuit> circuit);
     std::shared_ptr<CircuitElements::Circuit> circuit;
+    std::unordered_map<std::string, GUI::BaseWindow*> windows;
+    void SetWindowList(std::vector<std::unique_ptr<GUI::BaseWindow>>& windows);
 };
 extern GUIMenuBar guiMenuBar;
 #endif  // GUIMENUBAR_H

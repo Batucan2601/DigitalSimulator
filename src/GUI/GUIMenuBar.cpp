@@ -1,15 +1,10 @@
-#include "GUI/GUIMenuBar.h"
-
-#include "GUI/GUIEditor.h"
-#include "GUI/GUISaveSystem.h"
-#include "GUI/GUISettings.h"
-#include "GUI/GUITools.h"
-#include "appSettings.h"
-
+#include <GUI/GUIMenuBar.h>
+#include <GUI/include.h>
+#include <appSettings.h>
 #include <imgui.h>
 #include <sstream>
 GUIMenuBar guiMenuBar;
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
 static void createMenuItem(std::string path, bool is_menu, std::function<void()> action)
 {
@@ -93,14 +88,12 @@ GUIMenuBar::GUIMenuBar()
     createMenuItem("File/Save", false,
                    [this]()  // Capture 'this' here
                    {
-                       GUISaveSystem::ShowSaveWindow(this->circuit);
-                       //    GUISaveSystem::saveFile(this->circuit);
+                       windows["Save/Load"]->ToggleVisibility();
                    });
     createMenuItem("File/Load", false,
                    [this]()  // Capture 'this' here
                    {
-                       GUISaveSystem::ShowLoadWindow();
-                       //    GUISaveSystem::loadFile(&this->circuit);
+                       windows["Save/Load"]->ToggleVisibility();
                    });
     createMenuItem("File/Exit", false,
                    []()
@@ -108,35 +101,42 @@ GUIMenuBar::GUIMenuBar()
                        exit(1);
                    });
     createMenuItem("Editor", false,
-                   []()
+                   [this]()
                    {
-                       GUIEditor::DisplayEditor();
+                       windows["Editor"]->ToggleVisibility();
                    });
 
     createMenuItem("Tools", true, nullptr);
     createMenuItem("Tools/Component List", false,
-                   []()
+                   [this]()
                    {
-                       GUITools::GUITools_BasicLogicDisplay();
+                       windows["Tools"]->ToggleVisibility();
                    });
     createMenuItem("Settings/System Settings", false,
-                   []()
+                   [this]()
                    {
-                       GUISettings::ToggleSettingsVisibility();
+                       windows["Settings"]->ToggleVisibility();
                    });
     createMenuItem("View/Theme/Dark Mode", false,
                    []()
                    {
-                       settings.theme = AppSettings::Theme::DarkMode;
+                       appSettings.theme = AppSettings::Theme::DarkMode;
                        GUIStyle::ApplyDarkTheme();
                    });
     createMenuItem("View/Theme/Light Mode", false,
                    []()
                    {
-                       settings.theme = AppSettings::Theme::LightMode;
+                       appSettings.theme = AppSettings::Theme::LightMode;
                        GUIStyle::ApplyLightTheme();
                    });
     createMenuItem("View/Appearance/Default Layout", false, []() {});
+}
+void GUIMenuBar::SetWindowList(std::vector<std::unique_ptr<GUI::BaseWindow>>& windows)
+{
+    for (auto& window : windows)
+    {
+        this->windows[window->GetTitle()] = window.get();
+    }
 }
 void GUIMenu::display()
 {
