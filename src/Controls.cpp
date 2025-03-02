@@ -21,7 +21,7 @@ namespace Controls
     // since we draw raylib inside a texture and pass it to imgui we need a transform.
     static void ConvertMouseCoord(Vector2& mouse_pos)
     {
-
+        // here is the buggy part batu.
         GUI::Editor::EditorWindow* editor_window =
             (GUI::Editor::EditorWindow*)RaylibHelper::getGUIWindow("Editor");
         if (editor_window == nullptr)
