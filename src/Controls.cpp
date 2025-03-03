@@ -21,17 +21,26 @@ namespace Controls
     // since we draw raylib inside a texture and pass it to imgui we need a transform.
     static void ConvertMouseCoord(Vector2& mouse_pos)
     {
-        // here is the buggy part batu.
-        GUI::Editor::EditorWindow* editor_window =
-            (GUI::Editor::EditorWindow*)RaylibHelper::getGUIWindow("Editor");
-        if (editor_window == nullptr)
+        auto* base_window = RaylibHelper::getGUIWindow("Editor");
+
+        if (!base_window)
         {
+            std::cerr << "Error: Editor window not found!" << std::endl;
             return;
         }
 
+        auto* editor_window = dynamic_cast<GUI::Editor*>(base_window);
+
+        if (!editor_window)
+        {
+            std::cerr << "Error: dynamic_cast failed! Object is not of type Editor." << std::endl;
+            return;
+        }
+
+        // Correct way to access ImageMin
         Vector2 virtualMouse;
-        virtualMouse.x = (mouse_pos.x - editor_window->ImageMin.x);
-        virtualMouse.y = (mouse_pos.y - editor_window->ImageMin.y);
+        virtualMouse.x = (mouse_pos.x - editor_window->m_editor_render.window.ImageMin.x);
+        virtualMouse.y = (mouse_pos.y - editor_window->m_editor_render.window.ImageMin.y);
 
         mouse_pos = GetScreenToWorld2D(virtualMouse, camera);
     }

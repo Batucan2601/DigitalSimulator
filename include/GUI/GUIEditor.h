@@ -37,9 +37,9 @@ namespace GUI
         void Draw(SP_Circuit circuit) override;
 
         void Init(int width, int height);
+        EditorRender m_editor_render;
 
       private:
-        EditorRender m_editor_render;
         EditorWindow getWindow();
     };
 
