@@ -38,8 +38,6 @@ void GUIManager::Draw(SP_Circuit circuit)
     DrawMainMenu(circuit);
 }
 
-void GUIManager::DrawEditor(SP_Circuit circuit) {}
-
 void GUIManager::DrawMainMenu(SP_Circuit circuit)
 {
     guiMenuBar.Draw(circuit);

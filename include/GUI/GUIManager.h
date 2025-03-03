@@ -23,7 +23,6 @@ class GUIManager
     void DrawDemoWindow();
     void DrawDockingSpace();                // Draw the parent screen for the dockspace
     void DrawMainMenu(SP_Circuit circuit);  // Calls GUIMenuBar
-    void DrawEditor(SP_Circuit circuit);    // Calls GUIEditor
 
   private:
     static bool showDemoWindow;

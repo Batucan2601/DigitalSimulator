@@ -12,6 +12,12 @@ namespace GUI
 
     void LogicGateInfo::Draw(SP_Circuit circuit)
     {
+        (void)circuit;
+        if (!visible)
+        {
+            return;
+        }
+
         if (Component* d1 = dynamic_cast<Component*>(InputResolver::getSelectedHandler()))
         {
             GUITools_BasicLogicDisplay_draw(d1);

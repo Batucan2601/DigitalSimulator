@@ -64,7 +64,7 @@ namespace Controls
         camera.zoom = 1.0f;                      // Default zoom
     }
 
-    void Controls_update(std::shared_ptr<CircuitElements::Circuit> circuit)
+    void Controls_update(SP_Circuit circuit)
     {
         // Drag camera with the left mouse button
         if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
@@ -105,7 +105,7 @@ namespace Controls
         return camera;
     }
 
-    void Controls_Handle_Continous(std::shared_ptr<CircuitElements::Circuit> circuit)
+    void Controls_Handle_Continous(SP_Circuit circuit)
     {
         // Get mouse position
         if (is_logic_selected)
@@ -168,31 +168,31 @@ namespace Controls
         // Store the current position of the selected logic gate
         float current_x = selected_logic_gate[0]->bd.x;
         float current_y = selected_logic_gate[0]->bd.y;
-        float gate_width = selected_logic_gate[0]->bd.width;
-        float gate_height = selected_logic_gate[0]->bd.height;
+        // float gate_width = selected_logic_gate[0]->bd.width;
+        // float gate_height = selected_logic_gate[0]->bd.height;
 
         Vector2 new_position = {current_x, current_y};
 
         // Adjust the position based on keyboard input
-        bool key_pressed = false;
+        // bool key_pressed = false;
         if (IsKeyPressed(KEY_UP))
         {
-            key_pressed = true;
+            // key_pressed = true;
             new_position.y -= appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_DOWN))
         {
-            key_pressed = true;
+            // key_pressed = true;
             new_position.y += appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_LEFT))
         {
-            key_pressed = true;
+            // key_pressed = true;
             new_position.x -= appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
-            key_pressed = true;
+            // key_pressed = true;
             new_position.x += appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_ESCAPE))
@@ -253,8 +253,7 @@ namespace Controls
         return nearest_grid_point;
     }
 
-    void HandleMouseLeftClick(std::shared_ptr<CircuitElements::Circuit> circuit,
-                              const Vector2& mousePosition)
+    void HandleMouseLeftClick(SP_Circuit circuit, const Vector2& mousePosition)
     {
         InputEvent event;
         event.type = InputType::Mouse;
@@ -316,8 +315,7 @@ namespace Controls
         }
     }
 
-    void HandleMouseEnter(std::shared_ptr<CircuitElements::Circuit> circuit,
-                          const Vector2& mousePosition)
+    void HandleMouseEnter(SP_Circuit circuit, const Vector2& mousePosition)
     {
         InputEvent event;
         event.type = InputType::Mouse;
@@ -326,8 +324,7 @@ namespace Controls
         InputResolver::PushEvent(event);
     }
 
-    void HandleMouseExit(std::shared_ptr<CircuitElements::Circuit> circuit,
-                         const Vector2& mousePosition)
+    void HandleMouseExit(SP_Circuit circuit, const Vector2& mousePosition)
     {
         InputEvent event;
         event.type = InputType::Mouse;
@@ -336,8 +333,7 @@ namespace Controls
         InputResolver::PushEvent(event);
     }
 
-    void HandleMouseRightClick(std::shared_ptr<CircuitElements::Circuit>& circuit,
-                               const Vector2& mousePosition)
+    void HandleMouseRightClick(SP_Circuit& circuit, const Vector2& mousePosition)
     {
         InputEvent event;
         event.type = InputType::Mouse;
@@ -348,8 +344,7 @@ namespace Controls
         is_logic_selected = false;  // kills wiring process for sure everytime
         circuit->active_wire.is_visible = false;
     }
-    void HandleLogicWiring(std::shared_ptr<CircuitElements::Circuit> circuit,
-                           const Vector2& mousePosition)
+    void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition)
     {
         Rectangle mockRec = {mousePosition.x, mousePosition.y, 0, 0};
         Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
@@ -397,7 +392,7 @@ namespace Controls
         offset.x = mousePosition.x - gate->bd.x;
         offset.y = mousePosition.y - gate->bd.y;
     }
-    void CheckGatePartClicked(std::shared_ptr<CircuitElements::Circuit> circuit,
+    void CheckGatePartClicked(SP_Circuit circuit,
                               const std::shared_ptr<LogicElements::LogicGate>& gate,
                               const Vector2& mousePosition, CircuitElements::Connection& connection)
     {
@@ -434,8 +429,8 @@ namespace Controls
             connection.physCon.wires.push_back(pos);
         }
     }
-    bool CheckNearWire(std::shared_ptr<CircuitElements::Circuit> circuit,
-                       const Vector2& mousePosition, CircuitElements::Connection& con)
+    bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
+                       CircuitElements::Connection& con)
     {
         for (size_t i = 0; i < circuit->connections.size(); i++)
         {
@@ -465,8 +460,7 @@ namespace Controls
         }
         return false;
     }
-    void HandleMouseDrag(std::shared_ptr<CircuitElements::Circuit> circuit,
-                         const Vector2& mousePosition)
+    void HandleMouseDrag(SP_Circuit circuit, const Vector2& mousePosition)
     {
         InputEvent event;
         event.type = InputType::Mouse;
@@ -475,8 +469,10 @@ namespace Controls
         InputResolver::PushEvent(event);
     }
 
-    void HandleMouseRelease(std::shared_ptr<CircuitElements::Circuit> circuit)
+    void HandleMouseRelease(SP_Circuit circuit)
     {
+        (void)circuit;
+
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Release;
@@ -541,8 +537,7 @@ namespace Controls
         }
     }
 
-    bool is_grid_occupied(std::shared_ptr<CircuitElements::Circuit> circuit,
-                          Vector2 nearest_grid_point)
+    bool is_grid_occupied(SP_Circuit circuit, Vector2 nearest_grid_point)
     {
         // Check if the nearest grid point is occupied by any gate other than the selected gate.
         if (selected_logic_gate.empty() || !selected_logic_gate[0])

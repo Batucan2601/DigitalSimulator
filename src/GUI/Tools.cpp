@@ -1,4 +1,5 @@
 #include "GUI/Tools.h"
+
 #include "LogicElements.h"
 
 #include <imgui.h>
@@ -10,6 +11,7 @@ namespace GUI
 
     void Tools::Draw(SP_Circuit circuit)
     {
+        (void)circuit;
         if (!visible)
         {
             return;

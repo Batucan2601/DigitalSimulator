@@ -168,7 +168,7 @@ namespace LogicElementsDraw
             Vector2 pos = gate->outputs[i].pos;
             Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
                              pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                             appSettings.IN_OUT_RECT_WIDTH};
+                             appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
         if (gate->is_hovered)
@@ -178,7 +178,7 @@ namespace LogicElementsDraw
                 Vector2 pos = gate->inputs[i].pos;
                 Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
                                  pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                                 appSettings.IN_OUT_RECT_WIDTH};
+                                 appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
                 DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
             }
         }

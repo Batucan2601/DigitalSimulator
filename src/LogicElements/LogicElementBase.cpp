@@ -617,6 +617,7 @@ namespace LogicElements
     void LogicGate::OnEnter(const InputEvent& event)
     {
         // update the circuit->hoveredGate with this object
+        (void)event;
 
         m_logger.info("Mouse entered the gate");
         if (this == InputResolver::getSelectedHandler())
@@ -626,6 +627,7 @@ namespace LogicElements
     }
     void LogicGate::OnExit(const InputEvent& event)
     {
+        (void)event;
         // update the circuit->hoveredGate with nullptr
     }
 
