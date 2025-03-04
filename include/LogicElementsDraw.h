@@ -5,12 +5,13 @@
 #include "appSettings.h"
 #include "raylib.h"
 
+#include <common_types.h>
 #include <math.h>
 
 #define IS_DRAWING_BOUNDARY_BOX true  // TODO: this should be in userspace
 namespace LogicElementsDraw
 {
-    void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit);
+    void DrawCircuit(const SP_Circuit circuit);
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate);
 
     // Helper drawing functions

@@ -7,23 +7,42 @@
 #include "raylib.h"
 #include "raylibHelper.h"
 
+#include <GUI/BaseWindow.h>
 #include <imgui.h>
 
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
-namespace GUIEditor
+namespace GUI
 {
-    struct EditorWindow
+    class Editor : public BaseWindow
     {
-        Rectangle window;
-        float borderWidth;
-        Vector2 ImageMin;
-        Vector2 ImageMax;
-    };
-    void Init(int width, int height);
-    void Draw(std::shared_ptr<CircuitElements::Circuit> circuit);
-    EditorWindow Window();
-    void DisplayEditor();
 
-}  // namespace GUIEditor
+      public:
+        struct EditorWindow
+        {
+            Rectangle window;
+            float borderWidth;
+            Vector2 ImageMin;
+            Vector2 ImageMax;
+        };
+
+        struct EditorRender
+        {
+            RenderTexture renderTexture;
+            EditorWindow window;
+        };
+
+        Editor() : BaseWindow("Editor") {}
+
+        void Draw(SP_Circuit circuit) override;
+
+        void Init(int width, int height);
+        EditorRender m_editor_render;
+
+      private:
+        EditorWindow getWindow();
+    };
+
+}  // namespace GUI
+
 #endif

@@ -33,8 +33,11 @@ namespace CircuitElements
         std::shared_ptr<LogicElements::LogicGate> targetGate;
         std::string targetLogic;
         PhysicalConnection physCon;
-        HoveringWire hovering;
-        Circuit* circuit;
+        HoveringWire hovering{
+            false,
+            {0.0f, 0.0f}};  // when this variable is uninitialized, it
+                            // causes a crash when rendering the is_hovering wires in the circuit
+        Circuit* circuit;   // = nullptr;
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);

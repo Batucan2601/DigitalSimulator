@@ -1,30 +1,18 @@
 #include "GUI/GUIEditor.h"
 
 #include <rlImGui.h>
-namespace GUIEditor
+namespace GUI
 {
-    bool isEditorShown = true;
 
-    struct Editor
+    void Editor::Init(int width, int height)
     {
-        RenderTexture renderTexture;
-        EditorWindow window;
-    };
-
-    static Editor editor;
-    void Init(int width, int height)
-    {
-        editor.renderTexture = LoadRenderTexture(width, height);
+        m_editor_render.renderTexture = LoadRenderTexture(width, height);
+        visible = true;
     }
 
-    void DisplayEditor()
+    void Editor::Draw(SP_Circuit circuit)
     {
-        isEditorShown = !isEditorShown;
-    }
-
-    void Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
-    {
-        if (!isEditorShown)
+        if (!visible)
         {
             return;
         }
@@ -32,18 +20,18 @@ namespace GUIEditor
         if (IsWindowResized())
         {
             // Unload the old framebuffer
-            UnloadRenderTexture(editor.renderTexture);
+            UnloadRenderTexture(m_editor_render.renderTexture);
 
             // Get the new window size and recreate the framebuffer accordingly
             unsigned int fbWidth = GetScreenWidth();
             unsigned int fbHeight = GetScreenHeight();
-            editor.renderTexture = LoadRenderTexture(fbWidth, fbHeight);
+            m_editor_render.renderTexture = LoadRenderTexture(fbWidth, fbHeight);
         }
         if (ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoScrollbar))
         {
-            ImGui::Image((ImTextureID)&editor.renderTexture.texture,
-                         ImVec2((float)editor.renderTexture.texture.width,
-                                (float)editor.renderTexture.texture.height),
+            ImGui::Image((ImTextureID)&m_editor_render.renderTexture.texture,
+                         ImVec2((float)m_editor_render.renderTexture.texture.width,
+                                (float)m_editor_render.renderTexture.texture.height),
                          ImVec2(0, 1), ImVec2(1, 0));  // Adjust UVs if necessary
             // update editor
             ImVec2 windowPos = ImGui::GetWindowPos();
@@ -51,14 +39,14 @@ namespace GUIEditor
             ImVec2 imageMin =
                 ImGui::GetItemRectMin();  // top-left of the drawn image in screen space
             ImVec2 imageMax = ImGui::GetItemRectMax();
-            editor.window.window = {windowPos.x, windowPos.y, windowSize.x, windowSize.y};
-            editor.window.borderWidth = ImGui::GetStyle().WindowBorderSize;
-            editor.window.ImageMin = {imageMin.x, imageMin.y};
-            editor.window.ImageMax = {imageMax.x, imageMax.y};
+            m_editor_render.window.window = {windowPos.x, windowPos.y, windowSize.x, windowSize.y};
+            m_editor_render.window.borderWidth = ImGui::GetStyle().WindowBorderSize;
+            m_editor_render.window.ImageMin = {imageMin.x, imageMin.y};
+            m_editor_render.window.ImageMax = {imageMax.x, imageMax.y};
         }
         ImGui::End();
-        BeginTextureMode(editor.renderTexture);
-        ClearBackground(settings.theme == AppSettings::Theme::DarkMode ? WHITE : GRAY);
+        BeginTextureMode(m_editor_render.renderTexture);
+        ClearBackground(appSettings.theme == AppSettings::Theme::DarkMode ? GRAY : WHITE);
 
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
@@ -71,18 +59,18 @@ namespace GUIEditor
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.
-                                 Color color = settings.theme == AppSettings::Theme::DarkMode
+                                 Color color = appSettings.theme == AppSettings::Theme::DarkMode
                                                    ? LIGHTGRAY
-                                                   : WHITE;
-                                 DrawGrid2D(settings.SLICE_SIZE, settings.SPACING_SIZE,
-                                            settings.GRID_POINT_SIZE, color);
+                                                   : BLACK;
+                                 DrawGrid2D(appSettings.SLICE_SIZE, appSettings.SPACING_SIZE,
+                                            appSettings.GRID_POINT_SIZE, color);
                                  // You can draw additional world elements here.
                              });
         EndTextureMode();
     }
 
-    EditorWindow Window()
+    Editor::EditorWindow Editor::getWindow()
     {
-        return editor.window;
+        return m_editor_render.window;
     }
-}  // namespace GUIEditor
+}  // namespace GUI

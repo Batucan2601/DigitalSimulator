@@ -1116,16 +1116,19 @@ void DrawPointAcross(Vector2 start, Vector2 end, float pointSize, int spacing, C
 void DrawGrid2D(int slices, float spacing , float pointSize, Color color)
 {
     int halfSlices = slices/2;
-    rlBegin(RL_POINTS);
+    
     rlEnablePointSize(pointSize);
-        for (int x = -halfSlices; x <= halfSlices; x++)
+    rlBegin(RL_POINTS);
+
+    rlColor3f(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f);
+
+    for (int x = -halfSlices; x <= halfSlices; x++)
+    {
+        for (int y = -halfSlices; y <= halfSlices; y++)
         {
-            for (int y = -halfSlices; y <= halfSlices; y++)
-            {
-                rlColor3f(color.r, color.g, color.b);
-                rlVertex2f((float)x * spacing, y * spacing);
-            }
+            rlVertex2f((float)x * spacing, (float)y * spacing);
         }
+    }
     rlDisablePointSize();
     rlEnd();
 }

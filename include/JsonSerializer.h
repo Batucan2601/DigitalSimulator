@@ -6,6 +6,7 @@
 #include "LogicElements.h"
 #include "raylib.h"  // Include Raylib for Vector2
 
+#include <common_types.h>
 #include <fstream>
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace jsonParser
     using json = nlohmann::json;
 
     void saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath);
-    std::shared_ptr<CircuitElements::Circuit> loadCircuit(const std::string& filePath);
+    SP_Circuit loadCircuit(const std::string& filePath);
 
     // Explicitly declare to_json functions
     void to_json(json& j, const LogicElements::LogicGate& gate);
