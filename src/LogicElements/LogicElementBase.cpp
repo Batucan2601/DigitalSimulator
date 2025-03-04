@@ -444,7 +444,8 @@ namespace LogicElements
                 {
                     if (name == gate->outputs[j].name)
                     {
-                        Vector2 newPos = gate->outputs[j].pos;
+                        Rectangle rec = { gate->outputs[j].pos.x ,gate->outputs[j].pos.y,0,0 };
+                        Vector2 newPos = Controls::SnapToNearestGrid(rec);
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
                         c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
@@ -463,7 +464,8 @@ namespace LogicElements
                 {
                     if (name == gate->inputs[j].name)
                     {
-                        Vector2 newPos = gate->inputs[j].pos;
+                        Rectangle rec = { gate->inputs[j].pos.x ,gate->inputs[j].pos.y,0,0 };
+                        Vector2 newPos = Controls::SnapToNearestGrid(rec);
                         int last_index = c->physCon.wires.size() - 1;
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
@@ -547,6 +549,7 @@ namespace LogicElements
             }
             // check the connections and their endpoints
             UpdateConnection(this);
+            ReducePhysicalWires(this);
         }
     }
 
