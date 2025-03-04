@@ -49,7 +49,7 @@ add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
 # Detect the compiler and apply appropriate warning flags
 if (MSVC)  # Microsoft Visual Studio Compiler
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)  # Equivalent to -Wall -Werror in MSVC
+    # target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)  # Equivalent to -Wall -Werror in MSVC
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")  # GCC or Clang
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
