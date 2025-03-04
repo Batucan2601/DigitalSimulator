@@ -47,7 +47,12 @@ file(GLOB_RECURSE INCLUDE_FILES CONFIGURE_DEPENDS include/*.h)
 # Create the executable
 add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)# //TODO: uncomment this line
+# Detect the compiler and apply appropriate warning flags
+if (MSVC)  # Microsoft Visual Studio Compiler
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)  # Equivalent to -Wall -Werror in MSVC
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")  # GCC or Clang
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
 
 # Link raylib to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
