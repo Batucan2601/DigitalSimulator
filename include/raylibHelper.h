@@ -5,6 +5,7 @@
 #include "LogicElements.h"
 #include "raylib.h"
 
+#include <common_types.h>
 #include <functional>
 
 class RaylibHelper
@@ -15,7 +16,7 @@ class RaylibHelper
     static void BeginFrame();
     static void EndFrame();
     static void Draw2D(const Camera2D& camera, const std::function<void()>& drawFn);
-    static void DrawGUI(std::shared_ptr<CircuitElements::Circuit> circuit);
+    static void DrawGUI(SP_Circuit circuit);
 
     static void Close();
 

@@ -23,7 +23,7 @@ namespace LogicElementsDraw
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
     }
 
-    void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit)
+    void DrawCircuit(const SP_Circuit circuit)
     {
         // 1 - Draw gates
         auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing

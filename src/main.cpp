@@ -2,8 +2,7 @@
 
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
-std::shared_ptr<CircuitElements::Circuit> circuit =
-    std::make_shared<CircuitElements::Circuit>(circuit_logger);
+SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
 
 AppSettings::Settings appSettings;
 
@@ -66,7 +65,7 @@ int main(void)
     return 0;
 }
 
-void setLoadedCircuit(std::shared_ptr<CircuitElements::Circuit> loadedCircuit)
+void setLoadedCircuit(SP_Circuit loadedCircuit)
 {
     circuit = loadedCircuit;
 }

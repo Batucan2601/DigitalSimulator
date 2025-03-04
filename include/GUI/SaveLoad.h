@@ -6,9 +6,9 @@
 #include "logicElementFactory.h"
 
 #include <GUI/include.h>
+#include <common_types.h>
 #include <filesystem>
 #include <string>
-
 #ifndef PROJECT_ROOT_DIR
 #define PROJECT_ROOT_DIR "/path/to/project/root"  // Replace with the actual project root directory
 #endif
@@ -32,7 +32,7 @@ namespace GUI
         void RenderLoadButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
 
       private:
-        void ShowSaveWindow(std::shared_ptr<CircuitElements::Circuit> globalCircuit);
+        void ShowSaveWindow(SP_Circuit globalCircuit);
         void ShowLoadWindow();
 
         void drawSaveWindow();
