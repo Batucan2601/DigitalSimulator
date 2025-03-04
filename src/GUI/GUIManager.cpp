@@ -3,8 +3,6 @@
 #include <imgui.h>
 #include <rlImGui.h>
 
-bool GUIManager::showDemoWindow = false;
-
 void GUIManager::Init()
 {
     // Initialize ImGui and apply custom styles
