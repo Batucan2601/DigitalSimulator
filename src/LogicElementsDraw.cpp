@@ -25,9 +25,12 @@ namespace LogicElementsDraw
 
     void DrawCircuit(const SP_Circuit circuit)
     {
-        // 1 - Draw gates
-        auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
+        // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
+        // auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
+        // double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
+        // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
+        // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)
         {
             const auto& gate = circuit->gates[i];  // Access the gate
@@ -41,11 +44,6 @@ namespace LogicElementsDraw
 
             DrawInOut(gate);
         }
-
-        auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
-        double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
-
-        // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)

@@ -119,7 +119,7 @@ namespace LogicElements
     void LogicGate::setInOutPositions()
     {
         // output
-        int no_of_grid_points = this->bd.width / appSettings.GRID_POINT_SIZE + 1;
+        // int no_of_grid_points = this->bd.width / appSettings.GRID_POINT_SIZE + 1;
 
         if (this->outputs.size() == 1)
         {
@@ -425,6 +425,7 @@ namespace LogicElements
     }
     void LogicGate::OnRightClick(const InputEvent& event)
     {
+        (void)event;
         InputResolver::setSelectedHandler(nullptr);
     }
     static Vector2 posBeforeDrag;
@@ -490,7 +491,7 @@ namespace LogicElements
                 std::vector<unsigned int> indices_destroyed;
                 for (int j = c->physCon.wires.size() - 1; j > 1; j--)
                 {
-                    Vector2 end = c->physCon.wires[j];
+                    // Vector2 end = c->physCon.wires[j];
                     Vector2 mid = c->physCon.wires[j - 1];
                     Vector2 start = c->physCon.wires[j - 2];
 

@@ -49,7 +49,6 @@ namespace Controls
     static ClassLogger control_logger(control_logger_name);
     static auto selected_circuit = std::make_shared<CircuitElements::Circuit>(gui_circuit_logger);
     std::vector<std::shared_ptr<LogicElements::LogicGate>> selected_logic_gate(1);
-    static bool is_dragging = false;
     static bool is_logic_selected = false;
     static Vector2 mouse_pos;
     Vector2 offset;
@@ -317,6 +316,7 @@ namespace Controls
 
     void HandleMouseEnter(SP_Circuit circuit, const Vector2& mousePosition)
     {
+        (void)circuit;
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Enter;
@@ -326,6 +326,8 @@ namespace Controls
 
     void HandleMouseExit(SP_Circuit circuit, const Vector2& mousePosition)
     {
+        (void)circuit;
+
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Leave;
@@ -396,6 +398,8 @@ namespace Controls
                               const std::shared_ptr<LogicElements::LogicGate>& gate,
                               const Vector2& mousePosition, CircuitElements::Connection& connection)
     {
+        (void)circuit;
+
         auto inputTopRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.2, 0.3);
         auto inputBottomRegion = CalculateRegion(gate->bd, 0.05, 0.15, 0.7, 0.8);
         auto outputRegion = CalculateRegion(gate->bd, 0.85, 0.95, 0.45, 0.55);
@@ -462,10 +466,11 @@ namespace Controls
     }
     void HandleMouseDrag(SP_Circuit circuit, const Vector2& mousePosition)
     {
+        (void)circuit;
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Down;
-        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
+        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -478,13 +483,6 @@ namespace Controls
         event.mouseState = MouseEventState::Release;
         event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
         InputResolver::PushEvent(event);
-        return;
-        if (selected_logic_gate[0])
-        {
-            Vector2 nearest_grid_point = SnapToNearestGrid(selected_logic_gate[0]->bd);
-
-            is_dragging = false;
-        }
     }
 
     void Controls_Mouse_Movements()

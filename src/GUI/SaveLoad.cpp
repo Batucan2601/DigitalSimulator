@@ -7,6 +7,7 @@ namespace GUI
 
     void SaveLoad::Draw(SP_Circuit circuit)
     {
+        (void)circuit;
         switch (state)
         {
             case State::STATE_IDLE:

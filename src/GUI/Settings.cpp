@@ -6,6 +6,7 @@ namespace GUI
 {
     void Settings::Draw(SP_Circuit circuit)
     {
+        (void)circuit;
         if (!visible)
         {
             return;

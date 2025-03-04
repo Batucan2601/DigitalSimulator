@@ -81,6 +81,7 @@ namespace CircuitElements
     }
     void Connection::OnLeftClick(const InputEvent& event)
     {
+        (void)event;
         // if hovering, create a new wire
         if (hovering.is_hovering)
         {
@@ -161,6 +162,7 @@ namespace CircuitElements
 
     void ActiveWire::OnLeftClick(const InputEvent& event)
     {
+        (void)event;
         if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler()))
         {
             if (this->start.x == this->end.x && this->start.y == this->end.y)
@@ -193,6 +195,7 @@ namespace CircuitElements
     }
     void ActiveWire::OnRightClick(const InputEvent& event)
     {
+        (void)event;
         if (this == (InputResolver::getSelectedHandler()))
         {
             InputResolver::UnregisterHandler(this);

@@ -47,7 +47,7 @@ file(GLOB_RECURSE INCLUDE_FILES CONFIGURE_DEPENDS include/*.h)
 # Create the executable
 add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
-# target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror) //TODO: uncomment this line
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)# //TODO: uncomment this line
 
 # Link raylib to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
