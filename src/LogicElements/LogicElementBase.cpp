@@ -467,7 +467,7 @@ namespace LogicElements
                     {
                         Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
                         Vector2 newPos = Controls::SnapToNearestGrid(rec);
-                        int last_index = c->physCon.wires.size() - 1;
+                        size_t last_index = c->physCon.wires.size() - 1;
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
                         c->physCon.wires.push_back(newLine);

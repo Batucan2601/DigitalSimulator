@@ -134,10 +134,10 @@ namespace GUI
                        });
         createMenuItem("View/Appearance/Default Layout", false, []() {});
     }
-    void GUIMenuBar::SetWindowList(std::vector<std::unique_ptr<GUI::BaseWindow>>& windows)
+    void GUIMenuBar::SetWindowList(std::vector<std::unique_ptr<GUI::BaseWindow>>& localWindows)
     {
         this->windows.clear();
-        for (auto& window : windows)
+        for (auto& window : localWindows)
         {
             this->windows[window->GetTitle()] = window.get();
         }
