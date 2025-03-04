@@ -7,24 +7,39 @@ bool GUIManager::showDemoWindow = false;
 
 void GUIManager::Init()
 {
-    rlImGuiSetup(true);  // Initialize ImGui
-    GUIStyle::init();    // Set up custom ImGui styles
-    windows.clear();     // Clear any existing windows
+    // Initialize ImGui and apply custom styles
+    rlImGuiSetup(true);
+    GUIStyle::init();
 
-    GUI::Settings settings = GUI::Settings();                 // Create a settings window
-    GUI::LogicGateInfo logicGateInfo = GUI::LogicGateInfo();  // Create a logic gate info window
-    GUI::SaveLoad saveLoad = GUI::SaveLoad();                 // Create a save/load window
-    GUI::Tools tools = GUI::Tools();                          // Create a tools window
-    GUI::Editor editor = GUI::Editor();                       // Create an editor window
-    editor.Init(appSettings.screenWidth, appSettings.screenHeight);
+    // Clear existing windows
+    windows.clear();
 
-    windows.push_back(std::make_unique<GUI::Settings>(settings));
-    windows.push_back(std::make_unique<GUI::LogicGateInfo>(logicGateInfo));
-    windows.push_back(std::make_unique<GUI::SaveLoad>(saveLoad));
-    windows.push_back(std::make_unique<GUI::Tools>(tools));
-    windows.push_back(std::make_unique<GUI::Editor>(editor));
+    // Create and add windows to the list
+    windows.push_back(std::make_unique<GUI::Settings>());
+    windows.push_back(std::make_unique<GUI::LogicGateInfo>());
+    windows.push_back(std::make_unique<GUI::SaveLoad>());
+    windows.push_back(std::make_unique<GUI::Tools>());
 
-    guiMenuBar.SetWindowList(windows);
+    // Initialize and add the editor window
+    auto editor = std::make_unique<GUI::Editor>();
+    editor->Init(appSettings.screenWidth, appSettings.screenHeight);
+    windows.push_back(std::move(editor));  // Move to maintain ownership
+
+    // Add the menu bar
+    auto menuBar = std::make_unique<GUI::GUIMenuBar>();
+    menuBar->Init();
+    windows.push_back(std::move(menuBar));
+
+    // Register windows in the menu bar
+    auto* guiMenuBar = dynamic_cast<GUI::GUIMenuBar*>(windows.back().get());
+    if (guiMenuBar)
+    {
+        guiMenuBar->SetWindowList(windows);
+    }
+    else
+    {
+        std::cerr << "Error: Failed to retrieve GUIMenuBar instance." << std::endl;
+    }
 }
 
 void GUIManager::Draw(SP_Circuit circuit)
@@ -34,13 +49,6 @@ void GUIManager::Draw(SP_Circuit circuit)
         window->Draw(circuit);
     }
     DrawDemoWindow();
-
-    DrawMainMenu(circuit);
-}
-
-void GUIManager::DrawMainMenu(SP_Circuit circuit)
-{
-    guiMenuBar.Draw(circuit);
 }
 
 void GUIManager::DrawDockingSpace()
