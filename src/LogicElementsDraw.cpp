@@ -60,12 +60,12 @@ namespace LogicElementsDraw
                 if (circuit->connections[i].is_connected)
                 {
                     bool val = false;
-                    for (size_t i = 0; i < circuit->connections[i].sourceGate->outputs.size(); i++)
+                    for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
-                        if (circuit->connections[i].sourceGate->outputs[i].name ==
+                        if (circuit->connections[i].sourceGate->outputs[k].name ==
                             circuit->connections[i].sourceLogic)
                         {
-                            val = circuit->connections[i].sourceGate->outputs[i].val;
+                            val = circuit->connections[i].sourceGate->outputs[k].val;
                             break;
                         }
                     }
