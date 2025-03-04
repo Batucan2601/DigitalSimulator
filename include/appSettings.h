@@ -27,7 +27,7 @@ namespace AppSettings
         int GRID_POINT_SIZE = 3;
         int SLICE_SIZE = 40;
         float IN_OUT_RECT_WIDTH = static_cast<float>(GRID_POINT_SIZE * 5);
-        float IN_OUT_INTERACTION = statoc_cast<float>(IN_OUT_RECT_WIDTH * 2);
+        float IN_OUT_INTERACTION = static_cast<float>(IN_OUT_RECT_WIDTH * 2);
     };
 
     extern AppSettings::Settings appSettings;
