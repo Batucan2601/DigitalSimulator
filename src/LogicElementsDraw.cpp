@@ -45,7 +45,7 @@ namespace LogicElementsDraw
         auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
         double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
 
-        std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
+        // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)

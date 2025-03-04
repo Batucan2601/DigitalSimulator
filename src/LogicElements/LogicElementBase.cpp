@@ -444,7 +444,7 @@ namespace LogicElements
                 {
                     if (name == gate->outputs[j].name)
                     {
-                        Rectangle rec = { gate->outputs[j].pos.x ,gate->outputs[j].pos.y,0,0 };
+                        Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
                         Vector2 newPos = Controls::SnapToNearestGrid(rec);
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
@@ -464,7 +464,7 @@ namespace LogicElements
                 {
                     if (name == gate->inputs[j].name)
                     {
-                        Rectangle rec = { gate->inputs[j].pos.x ,gate->inputs[j].pos.y,0,0 };
+                        Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
                         Vector2 newPos = Controls::SnapToNearestGrid(rec);
                         int last_index = c->physCon.wires.size() - 1;
                         Vector2 newLine =
