@@ -1,80 +1,52 @@
-#include "GUI/GUIManager.h"
-
-#include "GUI/GUILogic.h"
-#include "GUI/GUIMenuBar.h"
-#include "GUI/GUISaveSystem.h"
-#include "GUI/GUISettings.h"
-#include "GUI/GUIStyle.h"
-
-#include <GUI/GUIEditor.h>
-#include <GUI/GUILogicSetting.h>
-#include <GUI/GUITools.h>
+#include <GUI/GUIManager.h>
+#include <GUI/include.h>
 #include <imgui.h>
 #include <rlImGui.h>
 
-bool GUIManager::showDemoWindow = false;
-
 void GUIManager::Init()
 {
-    rlImGuiSetup(true);  // Initialize ImGui
-    GUIStyle::init();    // Set up custom ImGui styles
+    // Initialize ImGui and apply custom styles
+    rlImGuiSetup(true);
+    GUIStyle::init();
+
+    // Clear existing windows
+    windows.clear();
+
+    // Create and add windows to the list
+    windows.push_back(std::make_unique<GUI::Settings>());
+    windows.push_back(std::make_unique<GUI::LogicGateInfo>());
+    windows.push_back(std::make_unique<GUI::SaveLoad>());
+    windows.push_back(std::make_unique<GUI::Tools>());
+
+    // Initialize and add the editor window
+    auto editor = std::make_unique<GUI::Editor>();
+    editor->Init(appSettings.screenWidth, appSettings.screenHeight);
+    windows.push_back(std::move(editor));  // Move to maintain ownership
+
+    // Add the menu bar
+    auto menuBar = std::make_unique<GUI::GUIMenuBar>();
+    menuBar->Init();
+    windows.push_back(std::move(menuBar));
+
+    // Register windows in the menu bar
+    auto* guiMenuBar = dynamic_cast<GUI::GUIMenuBar*>(windows.back().get());
+    if (guiMenuBar)
+    {
+        guiMenuBar->SetWindowList(windows);
+    }
+    else
+    {
+        std::cerr << "Error: Failed to retrieve GUIMenuBar instance." << std::endl;
+    }
 }
 
-void GUIManager::Draw(std::shared_ptr<CircuitElements::Circuit> circuit)
+void GUIManager::Draw(SP_Circuit circuit)
 {
-    rlImGuiBegin();
-    DrawDockingSpace();
-
-    DrawEditor(circuit);
-
-    DrawMainMenu(circuit);
-
-    DrawTools();
-
-    DrawSettings();
-
-    DrawSaveDialog();
-
+    for (auto& window : windows)
+    {
+        window->Draw(circuit);
+    }
     DrawDemoWindow();
-
-    DrawLogicSetting();
-
-    // if(GUIEditor::isEditorShown)
-    // {
-    //     GUIEditor::Draw();
-    // }
-
-    rlImGuiEnd();
-}
-
-void GUIManager::DrawTools()
-{
-    GUITools::GUITools_Display();
-}
-
-void GUIManager::DrawSettings()
-{
-    GUISettings::DisplaySettings();
-}
-
-void GUIManager::DrawLogicSetting()
-{
-    GUILogicSetting::Draw();
-}
-
-void GUIManager::DrawSaveDialog()
-{
-    GUISaveSystem::draw();
-}
-
-void GUIManager::DrawEditor(std::shared_ptr<CircuitElements::Circuit> circuit)
-{
-    GUIEditor::Draw(circuit);
-}
-
-void GUIManager::DrawMainMenu(std::shared_ptr<CircuitElements::Circuit> circuit)
-{
-    guiMenuBar.Draw(circuit);
 }
 
 void GUIManager::DrawDockingSpace()
@@ -105,8 +77,25 @@ void GUIManager::DrawDockingSpace()
 
 void GUIManager::DrawDemoWindow()
 {
-    if (settings.showDemoWindow)
-        ImGui::ShowDemoWindow(&settings.showDemoWindow);
+    if (appSettings.showDemoWindow)
+        ImGui::ShowDemoWindow(&appSettings.showDemoWindow);
+}
+
+template<typename T, typename... Args>
+void GUIManager::AddWindow(Args&&... args)
+{
+    static_assert(std::is_base_of<GUI::BaseWindow, T>::value, "T must inherit from GUIWindow");
+    windows.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+}
+
+void GUIManager::DrawGUI(SP_Circuit circuit)
+{
+    rlImGuiBegin();
+    DrawDockingSpace();
+
+    Draw(circuit);
+
+    rlImGuiEnd();
 }
 
 void GUIManager::Cleanup()

@@ -1,41 +1,25 @@
-#include "GUI/GUITools.h"
+#include "GUI/Tools.h"
 
 #include "LogicElements.h"
 
 #include <imgui.h>
 #include <raylib.h>
 
-namespace GUITools
+namespace GUI
 {
-
-    // Global or static variables for the UI state and texture.
-    bool is_BLD_shown = false;  // Basic Logic Display flag.
-    // UI state variables (persistent across frames).
-    static void GUITools_BasicLogicDisplay_draw();
-
     GUIToolsDragDrop dragDrop = {DragDropState::IDLE, LogicElements::GateType::NONE};
-    static void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
 
-    void GUITools_BasicLogicDisplay()
+    void Tools::Draw(SP_Circuit circuit)
     {
-        is_BLD_shown = !is_BLD_shown;
-    }
-
-    void GUITools_Display()
-    {
-        GUITools_BasicLogicDisplay_draw();
-    }
-
-    static void GUITools_BasicLogicDisplay_draw()
-    {
-        if (!is_BLD_shown)
+        (void)circuit;
+        if (!visible)
         {
             return;
         }
         // Then, draw the drop area overlay on top if needed (and only during a drag operation).
 
         // Draw interactive windows first.
-        ImGui::Begin("Components", &is_BLD_shown);
+        ImGui::Begin(title.c_str(), &visible);
         {
             static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow |
                                                    ImGuiTreeNodeFlags_OpenOnDoubleClick |
@@ -72,7 +56,7 @@ namespace GUITools
         ImGui::End();
     }
 
-    static void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
+    void Tools::RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
     {
         float icon_size = 50.0f;
 
@@ -121,4 +105,4 @@ namespace GUITools
         }
     }
 
-}  // namespace GUITools
+}  // namespace GUI

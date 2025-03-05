@@ -1,4 +1,4 @@
-#include "GUI/GUILogicSetting.h"
+#include "GUI/LogicGateInfo.h"
 
 #include "Component.h"
 #include "LogicElements.h"
@@ -7,27 +7,24 @@
 #include <misc/cpp/imgui_stdlib.h>
 #include <raylib.h>
 
-namespace GUILogicSetting
+namespace GUI
 {
-    static void draw_Inputs(Component* logicGate);
-    static void draw_Outputs(Component* logicGate);
-    static void change_connection_name(Component* logicGate, bool is_input, std::string newName);
 
-    static std::string new_input_name = "";
-    static std::string new_output_name = "";
-    // Global or static variables for the UI state and texture.
-    bool is_shown = false;  // Basic Logic Display flag.
-    static void GUITools_BasicLogicDisplay_draw(Component* logicGate);
-
-    void Draw()
+    void LogicGateInfo::Draw(SP_Circuit circuit)
     {
+        (void)circuit;
+        if (!visible)
+        {
+            return;
+        }
+
         if (Component* d1 = dynamic_cast<Component*>(InputResolver::getSelectedHandler()))
         {
             GUITools_BasicLogicDisplay_draw(d1);
         }
     }
 
-    static void draw_Inputs(Component* logicGate)
+    void LogicGateInfo::draw_Inputs(Component* logicGate)
     {
         if (ImGui::TreeNodeEx("Inputs"))
         {
@@ -50,6 +47,7 @@ namespace GUILogicSetting
                 }
                 i++;
             }
+            static std::string new_input_name = "";
             ImGui::InputText("Name", &new_input_name);
             if (ImGui::Button("Insert"))
             {
@@ -61,7 +59,7 @@ namespace GUILogicSetting
             ImGui::TreePop();
         }
     }
-    static void draw_Outputs(Component* logicGate)
+    void LogicGateInfo::draw_Outputs(Component* logicGate)
     {
         if (ImGui::TreeNodeEx("Outputs"))
         {
@@ -77,6 +75,7 @@ namespace GUILogicSetting
                 }
                 i++;
             }
+            static std::string new_output_name = "";
             ImGui::InputText("Name", &new_output_name);
             if (ImGui::Button("Insert"))
             {
@@ -89,21 +88,8 @@ namespace GUILogicSetting
         }
     }
 
-    static void GUITools_BasicLogicDisplay_draw(Component* logicGate)
-    {
-        // Draw interactive windows first.
-        float pos[2] = {logicGate->bd.x, logicGate->bd.y};
-        ImGui::Begin("Logic Settings", &is_shown);
-        ImGui::InputFloat2("Position", pos);
-        draw_Inputs(logicGate);
-        draw_Outputs(logicGate);
-        ImGui::End();
-
-        logicGate->bd.x = pos[0];
-        logicGate->bd.y = pos[1];
-    }
-
-    static void change_connection_name(Component* logicGate, bool is_input, std::string newName)
+    void LogicGateInfo::change_connection_name(Component* logicGate, bool is_input,
+                                               std::string newName)
     {
         for (size_t i = 0; i < logicGate->circuit->connections.size(); i++)
         {
@@ -123,4 +109,21 @@ namespace GUILogicSetting
             }
         }
     }
-}  // namespace GUILogicSetting
+
+    // Global or static variables for the UI state and texture.
+
+    void LogicGateInfo::GUITools_BasicLogicDisplay_draw(Component* logicGate)
+    {
+        // Draw interactive windows first.
+        float pos[2] = {logicGate->bd.x, logicGate->bd.y};
+        ImGui::Begin("Logic Settings", &visible);
+        ImGui::InputFloat2("Position", pos);
+        draw_Inputs(logicGate);
+        draw_Outputs(logicGate);
+        ImGui::End();
+
+        logicGate->bd.x = pos[0];
+        logicGate->bd.y = pos[1];
+    }
+
+}  // namespace GUI

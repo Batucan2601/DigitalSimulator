@@ -14,8 +14,8 @@
 
 #include <iostream>
 // Function declarations
-extern std::shared_ptr<CircuitElements::Circuit> circuit;
+extern SP_Circuit circuit;
 
-void setLoadedCircuit(std::shared_ptr<CircuitElements::Circuit> loadedCircuit);
+void setLoadedCircuit(SP_Circuit loadedCircuit);
 
 #endif  // MAIN_H

@@ -1,41 +1,47 @@
 #include "LogicElementsDraw.h"
 
+#include <chrono>  // High precision timing
 #include <iostream>
 
-extern AppSettings::Settings settings;
+extern AppSettings::Settings appSettings;
 
 namespace LogicElementsDraw
 {
 
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
-        Rectangle bd = gate->bd;  // Bounding box of the gate
+        const Rectangle& bd = gate->bd;  // Bounding box of the gate
         float bd_width = bd.width;
         float bd_height = bd.height;
 
-        float texture_width = gate->m_texture.width;
-        float texture_height = gate->m_texture.height;
+        Texture texture = gate->m_texture;
 
-        Rectangle source = {0, 0, texture_width, texture_height};
+        Rectangle source = {0, 0, (float)texture.width, (float)texture.height};
         Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
         Vector2 origin = {0, 0};  // Top-left corner as origin
 
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
     }
 
-    void DrawCircuit(const std::shared_ptr<CircuitElements::Circuit> circuit)
+    void DrawCircuit(const SP_Circuit circuit)
     {
+        // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
+        // auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
+        // double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
+        // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
+
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)
         {
             const auto& gate = circuit->gates[i];  // Access the gate
 
-            if (settings.isDrawingBoundaryBox)
+            if (appSettings.isDrawingBoundaryBox)
             {
                 DrawBoundaryBox(gate);
             }
 
             DrawGateElement(gate);
+
             DrawInOut(gate);
         }
 
@@ -54,12 +60,12 @@ namespace LogicElementsDraw
                 if (circuit->connections[i].is_connected)
                 {
                     bool val = false;
-                    for (size_t i = 0; i < circuit->connections[i].sourceGate->outputs.size(); i++)
+                    for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
-                        if (circuit->connections[i].sourceGate->outputs[i].name ==
+                        if (circuit->connections[i].sourceGate->outputs[k].name ==
                             circuit->connections[i].sourceLogic)
                         {
-                            val = circuit->connections[i].sourceGate->outputs[i].val;
+                            val = circuit->connections[i].sourceGate->outputs[k].val;
                             break;
                         }
                     }
@@ -109,17 +115,18 @@ namespace LogicElementsDraw
         if (circuit->is_GUIdragdragging)
         {
             DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
-                               circuit->selected_wires.wire_hovering.y, settings.SLICE_SIZE,
-                               settings.SLICE_SIZE, BLUE);
+                               circuit->selected_wires.wire_hovering.y, appSettings.SLICE_SIZE,
+                               appSettings.SLICE_SIZE, BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
             circuit->is_GUIdragdropped = false;
         }
     }
+
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
-        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, settings.SPACING_SIZE, color);
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, appSettings.SPACING_SIZE, color);
     }
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
@@ -157,8 +164,9 @@ namespace LogicElementsDraw
         {
             // GRID_POINT_SIZE
             Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
-                             pos.y - settings.IN_OUT_RECT_WIDTH / 2, settings.IN_OUT_RECT_WIDTH};
+            Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
+                             pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
+                             appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
         if (gate->is_hovered)
@@ -166,9 +174,9 @@ namespace LogicElementsDraw
             for (size_t i = 0; i < gate->inputs.size(); i++)
             {
                 Vector2 pos = gate->inputs[i].pos;
-                Rectangle rec = {pos.x - settings.IN_OUT_RECT_WIDTH / 2,
-                                 pos.y - settings.IN_OUT_RECT_WIDTH / 2,
-                                 settings.IN_OUT_RECT_WIDTH};
+                Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
                 DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
             }
         }

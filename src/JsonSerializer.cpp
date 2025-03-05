@@ -3,7 +3,7 @@
 namespace jsonParser
 {
 
-    std::shared_ptr<CircuitElements::Circuit> loadCircuit(const std::string& filePath)
+    SP_Circuit loadCircuit(const std::string& filePath)
     {
         std::ifstream file(filePath);
         std::string logger_name = "LoggerName";
@@ -119,8 +119,7 @@ namespace jsonParser
             {"targetLogic", conn.targetLogic},
             {"wires", conn.physCon.wires}  // Save wire positions
         };
-    } 
-
+    }
 
     void to_json(json& j, const Signal& signal)
     {
