@@ -701,4 +701,25 @@ namespace LogicElements
         return false;
     }
 
+    void DrawGateElement(const LogicGate* gate)
+    {
+        const Rectangle& bd = gate->bd;  // Bounding box of the gate
+        float bd_width = bd.width;
+        float bd_height = bd.height;
+
+        Texture texture = gate->m_texture;
+
+        Rectangle source = { 0, 0, (float)texture.width, (float)texture.height };
+        Rectangle dest = { bd.x, bd.y, bd_width, bd_height };
+        Vector2 origin = { 0, 0 };  // Top-left corner as origin
+
+        DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
+    }
+
+    void LogicGate::Draw()
+    {
+        DrawGateElement(this);
+    }
+
+
 }  // namespace LogicElements

@@ -122,7 +122,7 @@ class Component : public IInputHandler
     void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
-    void Draw();
+    void virtual Draw();
     void setPosition(float x, float y)
     {
         bd.x = x;

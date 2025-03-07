@@ -106,7 +106,7 @@ namespace LogicElements
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
-
+        void Draw() override;
       protected:
         void OnLeftClick(const InputEvent& event);
         void OnDown(const InputEvent& event);
