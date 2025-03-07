@@ -43,3 +43,15 @@ void Component::OnInputEvent(const InputEvent& event)
     (void)event;
     // TODO: Implement the event handling logic here.
 }
+
+void Component::allocateConnection()
+{
+    this->connections.reserve(1000);
+}
+void Component::Draw()
+{
+    for (size_t i = 0; i < this->components.size(); i++)
+    {
+        this->components[i]->Draw();
+    }
+}

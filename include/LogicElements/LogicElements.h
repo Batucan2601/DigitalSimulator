@@ -76,8 +76,7 @@ namespace CircuitElements
                            const std::string& targetInput);
         void evaluate();
         ClassLogger m_logger;
-
-        std::vector<std::shared_ptr<LogicElements::LogicGate>> gates;
+        std::vector<Component> components;
         // std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
         std::vector<Connection> connections;
         // TODO

@@ -7,6 +7,7 @@
 #include <raylib.h>
 #include <string>
 #include <vector>
+#include <memory>
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -111,14 +112,17 @@ struct Signal
 namespace CircuitElements
 {
     class Circuit;
+    class Connection;
 }
 class Component : public IInputHandler
 {
   public:
-    Component() {};
+    Component(){};
     Component(std::string& fileName);
+    void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
+    void Draw();
     void setPosition(float x, float y)
     {
         bd.x = x;
@@ -127,6 +131,8 @@ class Component : public IInputHandler
     Rectangle bd;
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
+    std::vector<CircuitElements::Connection> connections;
+    std::vector<std::shared_ptr<Component>>  components; 
     CircuitElements::Circuit* circuit;
 };
 #endif

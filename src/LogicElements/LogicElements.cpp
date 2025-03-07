@@ -64,7 +64,6 @@ namespace CircuitElements
             throw std::runtime_error("Circuit evaluation did not stabilize.");
         }
     }
-
     void Connection::OnInputEvent(const InputEvent& event)
     {
         if (event.type == InputType::Mouse)
