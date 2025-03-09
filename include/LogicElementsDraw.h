@@ -15,9 +15,9 @@ namespace LogicElementsDraw
     void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate);
 
     // Helper drawing functions
-    void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate);
+    void DrawBoundaryBox(const std::shared_ptr<Component> gate);
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color);
-    void DrawInOut(std::shared_ptr<LogicElements::LogicGate> gate);
+    void DrawInOut(std::shared_ptr<Component> gate);
 }  // namespace LogicElementsDraw
 
 #endif

@@ -9,5 +9,6 @@
 #define LINE_THICKNESS           5
 
 typedef std::shared_ptr<CircuitElements::Circuit> SP_Circuit;
+typedef std::shared_ptr<Component> SP_Component;
 
 #endif  // COMMON_TYPES_H

@@ -109,10 +109,39 @@ struct Signal
     }
 };
 
+class Component;
+
 namespace CircuitElements
 {
     class Circuit;
-    class Connection;
+
+    struct HoveringWire
+    {
+        bool is_hovering;
+        Vector2 pos;
+    };
+    struct PhysicalConnection
+    {
+        std::vector<Vector2> wires;
+    };
+    class Connection : public IInputHandler
+    {
+    public:
+        std::shared_ptr<Component> sourceGate;
+        std::string sourceLogic;
+        std::shared_ptr<Component> targetGate;
+        std::string targetLogic;
+        PhysicalConnection physCon;
+        HoveringWire hovering{
+            false,
+            {0.0f, 0.0f} };  // when this variable is uninitialized, it
+        // causes a crash when rendering the is_hovering wires in the circuit
+        CircuitElements::Circuit* circuit;   // = nullptr;
+        bool is_connected = false;
+        void OnInputEvent(const InputEvent& event) override;
+        void OnLeftClick(const InputEvent& event);
+        void OnMove(const InputEvent& event);
+    };
 }
 class Component : public IInputHandler
 {
@@ -122,17 +151,29 @@ class Component : public IInputHandler
     void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
+    void addComponent(const Component& comp);
+    void addConnection(const CircuitElements::Connection& comp);
     void virtual Draw();
+    void evaluate();
+    const std::vector<Signal>& Component::getInputs() const;
+    const std::vector<Signal>& Component::getOutputs() const;
+    int getID() const;
+    void setInput(const std::string& name, bool value);
+    bool getOutput(const std::string& name) const;
+
     void setPosition(float x, float y)
     {
         bd.x = x;
         bd.y = y;
     };  // TODO: Implement this
     Rectangle bd;
+    int id; 
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     std::vector<CircuitElements::Connection> connections;
-    std::vector<std::shared_ptr<Component>>  components; 
+    std::vector<Component>  components; 
     CircuitElements::Circuit* circuit;
+
+    bool is_hovered = false;
 };
 #endif

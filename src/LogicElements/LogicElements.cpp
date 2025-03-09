@@ -6,13 +6,16 @@ extern AppSettings::Settings appSettings;
 
 namespace CircuitElements
 {
-    void Circuit::addGate(std::shared_ptr<LogicElements::LogicGate> gate)
+    void Circuit::addComponent(Component gate)
     {
         this->m_logger.info("Gate added to the circuit.");
-        gate->circuit = this;
-        gates.push_back(gate);
+        gate.circuit = this;
+        this->components.push_back(gate);
     }
-
+    Component* Circuit::getMainComponent()
+    {
+        return (&this->components.front());
+    }
     void Circuit::addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
                                 const std::string& sourceOutput,
                                 std::shared_ptr<LogicElements::LogicGate> targetGate,
@@ -37,12 +40,12 @@ namespace CircuitElements
         while (!stabilized && iterations < maxIterations)
         {
             stabilized = true;
-            for (auto& gate : gates)
+            for (auto& gate : this->getMainComponent()->components)
             {
-                gate->evaluate();
-                auto previousOutputs = gate->getOutputs();
-                gate->evaluate();
-                if (gate->getOutputs() != previousOutputs)
+                gate.evaluate();
+                auto previousOutputs = gate.getOutputs();
+                gate.evaluate();
+                if (gate.getOutputs() != previousOutputs)
                 {
                     stabilized = false;
                 }

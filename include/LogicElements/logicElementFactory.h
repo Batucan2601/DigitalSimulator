@@ -10,7 +10,7 @@ namespace LogicElements
     class LogicElementFactory
     {
       public:
-        static std::shared_ptr<LogicGate> createGate(GateType type, std::string logger_name);
+        static LogicGate createGate(GateType type, std::string logger_name);
     };
 }  // namespace LogicElements
 

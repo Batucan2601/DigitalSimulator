@@ -23,28 +23,33 @@ int main(void)
     std::string not_gate_logger = "NotLogger1";
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
-    auto gate1 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::AND,
+    
+    auto gate1 = circuit->factory.createGate(LogicElements::GateType::AND,
                                                                 and_gate_logger);
     auto gate2 =
-        LogicElements::LogicElementFactory::createGate(LogicElements::GateType::OR, or_gate_logger);
-    auto gate3 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::NOT,
+        circuit->factory.createGate(LogicElements::GateType::OR, or_gate_logger);
+    auto gate3 = circuit->factory.createGate(LogicElements::GateType::NOT,
                                                                 not_gate_logger);
-    auto gate4 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XAND,
+    auto gate4 = circuit->factory.createGate(LogicElements::GateType::XAND,
                                                                 xand_gate_logger);
-    auto gate5 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XOR,
+    auto gate5 = circuit->factory.createGate(LogicElements::GateType::XOR,
                                                                 xor_gate_logger);
 
-    gate1->setPosition(0, 100 - 250);
-    gate2->setPosition(0, 200 - 250);
-    gate3->setPosition(0, 300 - 250);
-    gate4->setPosition(0, 400 - 250);
-    gate5->setPosition(0, 500 - 250);
+    gate1.setPosition(0, 100 - 250);
+    gate2.setPosition(0, 200 - 250);
+    gate3.setPosition(0, 300 - 250);
+    gate4.setPosition(0, 400 - 250);
+    gate5.setPosition(0, 500 - 250);
 
-    circuit->addGate(gate1);
-    circuit->addGate(gate2);
-    circuit->addGate(gate3);
-    circuit->addGate(gate4);
-    circuit->addGate(gate5);
+    Component mainC; 
+    mainC.allocateConnection();
+    mainC.addComponent(gate1);
+    mainC.addComponent(gate2);
+    mainC.addComponent(gate3);
+    mainC.addComponent(gate4);
+    mainC.addComponent(gate5);
+
+    circuit->addComponent(mainC);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key

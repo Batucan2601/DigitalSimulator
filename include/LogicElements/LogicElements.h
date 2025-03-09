@@ -13,36 +13,11 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <logicElementFactory.h>
 
 namespace CircuitElements
 {
-    struct HoveringWire
-    {
-        bool is_hovering;
-        Vector2 pos;
-    };
-    struct PhysicalConnection
-    {
-        std::vector<Vector2> wires;
-    };
-    class Connection : public IInputHandler
-    {
-      public:
-        std::shared_ptr<LogicElements::LogicGate> sourceGate;
-        std::string sourceLogic;
-        std::shared_ptr<LogicElements::LogicGate> targetGate;
-        std::string targetLogic;
-        PhysicalConnection physCon;
-        HoveringWire hovering{
-            false,
-            {0.0f, 0.0f}};  // when this variable is uninitialized, it
-                            // causes a crash when rendering the is_hovering wires in the circuit
-        Circuit* circuit;   // = nullptr;
-        bool is_connected = false;
-        void OnInputEvent(const InputEvent& event) override;
-        void OnLeftClick(const InputEvent& event);
-        void OnMove(const InputEvent& event);
-    };
+
     class ActiveWire : public IInputHandler
     {
       public:
@@ -69,7 +44,8 @@ namespace CircuitElements
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
         }
-        void addGate(std::shared_ptr<LogicElements::LogicGate> gate);
+        void addComponent(Component gate);
+        Component* getMainComponent();
         void addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
                            const std::string& sourceOutput,
                            std::shared_ptr<LogicElements::LogicGate> targetGate,
@@ -83,6 +59,7 @@ namespace CircuitElements
         // this might be moved to a better data structure
         ActiveWire active_wire = {};
         SelectedWires selected_wires;
+        LogicElements::LogicElementFactory factory;
 
         bool is_GUIdragdropped = false;
         bool is_GUIdragdragging = false;

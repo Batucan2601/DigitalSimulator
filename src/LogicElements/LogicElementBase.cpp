@@ -107,7 +107,7 @@ namespace LogicElements
         // type = gateType;
         m_texture = logicElementTextures[gateType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
-        InputResolver::RegisterHandler(this);
+        //InputResolver::RegisterHandler(this);
     }
 
     LogicGate::~LogicGate()
@@ -350,9 +350,7 @@ namespace LogicElements
             {
                 // if hits select it
                 // possibleConnection.circuit = this->circuit;
-                circuit->addConnection(
-                    possibleConnection.sourceGate, possibleConnection.sourceLogic,
-                    possibleConnection.targetGate, possibleConnection.targetLogic);
+                circuit->getMainComponent()->addConnection(possibleConnection);
                 circuit->active_wire.is_visible = true;
                 circuit->active_wire.start = pos;
                 circuit->active_wire.end = pos;
@@ -404,7 +402,7 @@ namespace LogicElements
                 handler->is_connected = true;
                 if (!is_output && !is_input)
                 {
-                    std::shared_ptr<LogicGate> temp_ptr = handler->sourceGate;
+                    std::shared_ptr<Component> temp_ptr = handler->sourceGate;
                     handler->sourceGate = handler->targetGate;
                     handler->targetGate = temp_ptr;
 
@@ -412,9 +410,8 @@ namespace LogicElements
                     handler->sourceLogic = handler->targetLogic;
                     handler->targetLogic = temp_str;
                 }
-
-                InputResolver::RegisterHandler(static_cast<IInputHandler*>(
-                    &circuit->connections[circuit->connections.size() - 1]));
+                CircuitElements::Connection* con = &circuit->getMainComponent()->connections[circuit->getMainComponent()->connections.size()-1];
+                InputResolver::RegisterHandler(static_cast<IInputHandler*>(con));
             }
         }
         // connection logic
@@ -651,13 +648,14 @@ namespace LogicElements
                         i--;
                     }
                 }
-                for (size_t i = 0; i < circuit->gates.size(); i++)
+                for (size_t i = 0; i < circuit->components.size(); i++)
                 {
-                    if (circuit->gates[i].get() == this)
+                    //TODO fix 
+                    /*if (circuit->components[i] == *this)
                     {
                         circuit->gates.erase(circuit->gates.begin() + i);
                         i--;
-                    }
+                    } */
                 }
             }
         }

@@ -101,7 +101,6 @@ namespace LogicElements
         ClassLogger m_logger;
         //CircuitElements::Circuit* circuit;
 
-        bool is_hovered = false; 
 
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(

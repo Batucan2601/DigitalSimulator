@@ -33,7 +33,7 @@ namespace jsonParser
 
             int id = gateJson["id"];
             gateMap[id] = gate;  // Store gate in the map
-            circuit.get()->gates.push_back(gate);
+            //circuit.get()->gates.push_back(gate);
         }
 
         // Load connections
@@ -62,12 +62,12 @@ namespace jsonParser
 
         // Convert gates to JSON array
         json gatesArray = json::array();
-        for (const auto& gate : circuit.gates)
+        //for (const auto& gate : circuit.getMainComponent()->components)
         {
-            if (gate)
+            //if (gate)
             {
                 json gateJson;
-                to_json(gateJson, *gate);
+            //    to_json(gateJson, *gate);
                 gatesArray.push_back(gateJson);
             }
         }

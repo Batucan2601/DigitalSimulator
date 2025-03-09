@@ -31,16 +31,15 @@ namespace LogicElementsDraw
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
         // 1 - Draw gates
-        for (size_t i = 0; i < circuit->gates.size(); i++)
+        for (size_t i = 0; i < circuit->components.size(); i++)
         {
-            const auto& gate = circuit->gates[i];  // Access the gate
-
+            const auto& gate = std::make_shared<Component>(circuit->components[i]);  // Access the gate
+            
             if (appSettings.isDrawingBoundaryBox)
             {
                 DrawBoundaryBox(gate);
             }
-
-            DrawGateElement(gate);
+            gate->Draw();
 
             DrawInOut(gate);
         }
@@ -128,10 +127,10 @@ namespace LogicElementsDraw
     {
         DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, appSettings.SPACING_SIZE, color);
     }
-    void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
+    void DrawBoundaryBox(const std::shared_ptr<Component> component)
     {
-        Color color;
-        if (gate->m_type == LogicElements::GateType::AND)
+        Color color = GREEN;
+        /*if (gate->m_type == LogicElements::GateType::AND)
         {
             color = GREEN;
         }
@@ -154,11 +153,10 @@ namespace LogicElementsDraw
         else
         {
             color = BLACK;
-        }
-
-        DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height, color);
+        }*/
+        DrawRectangleLines(component->bd.x, component->bd.y, component->bd.width, component->bd.height, color);
     }
-    void DrawInOut(std::shared_ptr<LogicElements::LogicGate> gate)
+    void DrawInOut(std::shared_ptr<Component> gate)
     {
         for (size_t i = 0; i < gate->outputs.size(); i++)
         {

@@ -47,11 +47,67 @@ void Component::OnInputEvent(const InputEvent& event)
 void Component::allocateConnection()
 {
     this->connections.reserve(1000);
+    this->components.reserve(1000);
 }
 void Component::Draw()
 {
     for (size_t i = 0; i < this->components.size(); i++)
     {
-        this->components[i]->Draw();
+        this->components[i].Draw();
     }
+}
+
+void Component::addComponent(const Component& comp)
+{
+    this->components.push_back(comp);
+    InputResolver::RegisterHandler(&this->components[this->components.size() - 1]);
+}
+const std::vector<Signal>& Component::getInputs() const
+{
+    return inputs;
+}
+const std::vector<Signal>& Component::getOutputs() const
+{
+    return outputs;
+}
+void Component::evaluate()
+{
+    for (size_t i = 0; i < this->components.size(); i++)
+    {
+        this->components[i].evaluate();
+    }
+}
+
+int Component::getID() const
+{
+    return id; 
+}
+
+void Component::setInput(const std::string& name, bool value)
+{
+    for (auto& I : this->inputs)
+    {
+        if (I.name == name)
+        {
+            I.val = value;
+            //notifyObservers();
+        }
+    }
+}
+
+bool Component::getOutput(const std::string& name) const
+{
+    for (auto& it : this->outputs)
+    {
+        if (it.name == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Component::addConnection(const CircuitElements::Connection& con)
+{
+    this->connections.push_back(con);
 }

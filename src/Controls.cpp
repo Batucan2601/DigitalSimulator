@@ -139,13 +139,11 @@ namespace Controls
 
             // add the new circuit
             std::string new_gate = "or_gate_logger";
-            std::shared_ptr<LogicElements::LogicGate> gate;
-            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
-            circuit->addGate(gate);
-
+            LogicElements::LogicGate gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
+            circuit->getMainComponent()->addComponent(gate);
             if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
             {
-                circuit->gates[circuit->gates.size() - 1]->setPosition(
+                circuit->getMainComponent()->components[circuit->getMainComponent()->components.size() - 1].setPosition(
                     circuit->selected_wires.wire_hovering.x,
                     circuit->selected_wires.wire_hovering.y);
                 GUI::dragDrop.gateType = LogicElements::GateType::NONE;
@@ -260,58 +258,6 @@ namespace Controls
         event.pos = {(int)mousePosition.x, (int)mousePosition.y};
         InputResolver::PushEvent(event);
         return;
-        bool gateSelected = false;
-        if (!is_logic_selected)  // the default system goes when not doing wiring
-        {
-            CircuitElements::Connection connection_start = {};
-            for (const auto& gate : circuit->gates)
-            {
-                if (CheckCollisionPointRec(mousePosition, gate->bd))
-                {
-                    HandleGateSelection(gate, mousePosition);
-                    CheckGatePartClicked(circuit, gate, mousePosition, connection_start);
-                    gateSelected = true;
-                    if (connection_start.sourceLogic != "")  // not intitialized
-                    {
-                        // circuit->connections.push_back(connection_start);
-                    }
-                    if (is_logic_selected)
-                    {
-                        Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                        circuit->active_wire.start = SnapToNearestGrid(pos);
-                        circuit->active_wire.is_visible = true;
-                    }
-                    break;
-                }
-            }
-            // if still not wiring
-            if (!is_logic_selected)
-            {
-                CircuitElements::Connection con;
-                is_logic_selected = CheckNearWire(circuit, mousePosition, con);
-                if (is_logic_selected)  // this section checks what happens when you touch a wire
-                {
-                    Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                    circuit->active_wire.start = SnapToNearestGrid(pos);
-                    circuit->active_wire.is_visible = true;
-                    // get which line it belongs to
-                    CircuitElements::Connection new_connection;
-                    new_connection.sourceGate = con.sourceGate;
-                    new_connection.sourceLogic = con.sourceLogic;
-                    new_connection.physCon.wires.push_back(mousePosition);
-                    // circuit->connectionspush_back(new_connection);
-                }
-            }
-        }
-        else
-        {
-            HandleLogicWiring(circuit, mousePosition);
-        }
-        // TODO: Deselect the gate if no gate was clicked
-        if (!gateSelected)
-        {
-            selected_logic_gate[0] = nullptr;
-        }
     }
 
     void HandleMouseEnter(SP_Circuit circuit, const Vector2& mousePosition)
@@ -345,46 +291,6 @@ namespace Controls
 
         is_logic_selected = false;  // kills wiring process for sure everytime
         circuit->active_wire.is_visible = false;
-    }
-    void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition)
-    {
-        Rectangle mockRec = {mousePosition.x, mousePosition.y, 0, 0};
-        Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
-        Vector2 wire_prev =
-            circuit->connections[circuit->connections.size() - 1].physCon.wires
-                [circuit->connections[circuit->connections.size() - 1].physCon.wires.size() - 1];
-        Vector2 straight_line = Generate_straight_lines(wire_prev, nearest_grid_point);
-        circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(
-            straight_line);
-        circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(
-            nearest_grid_point);
-
-        // finish if we hit logic gates
-        CircuitElements::Connection connection_end;
-        for (const auto& gate : circuit->gates)
-        {
-            if (CheckCollisionPointRec(mousePosition, gate->bd))
-            {
-                CheckGatePartClicked(circuit, gate, mousePosition, connection_end);
-                if (connection_end.sourceLogic != "")  // not intitialized
-                {
-                    circuit->connections[circuit->connections.size() - 1].targetGate =
-                        connection_end.sourceGate;
-                    circuit->connections[circuit->connections.size() - 1].targetLogic =
-                        connection_end.sourceLogic;
-                    circuit->connections[circuit->connections.size() - 1].is_connected = true;
-                    is_logic_selected = false;
-                    circuit->active_wire.is_visible = false;
-                }
-                break;
-            }
-        }
-        if (is_logic_selected)
-        {
-            Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-            circuit->active_wire.start = SnapToNearestGrid(pos);
-            circuit->active_wire.is_visible = true;
-        }
     }
     void HandleGateSelection(const std::shared_ptr<LogicElements::LogicGate>& gate,
                              const Vector2& mousePosition)
@@ -533,49 +439,6 @@ namespace Controls
                 HandleMouseRelease(selected_circuit);
             }
         }
-    }
-
-    bool is_grid_occupied(SP_Circuit circuit, Vector2 nearest_grid_point)
-    {
-        // Check if the nearest grid point is occupied by any gate other than the selected gate.
-        if (selected_logic_gate.empty() || !selected_logic_gate[0])
-        {
-            std::cerr << "Error: selected_logic_gate is empty!" << std::endl;
-            return true;  // Assume grid is occupied if no gate is selected.
-        }
-
-        // Calculate the bounding box of the gate being placed
-        float new_gate_x_start = nearest_grid_point.x;
-        float new_gate_y_start = nearest_grid_point.y;
-        float new_gate_x_end = nearest_grid_point.x + selected_logic_gate[0]->bd.width;
-        float new_gate_y_end = nearest_grid_point.y + selected_logic_gate[0]->bd.height;
-
-        for (auto gate : circuit->gates)
-        {
-            // Skip the currently selected logic gate
-            if (gate == selected_logic_gate[0])
-            {
-                continue;
-            }
-            // Get the bounding box of the existing gate
-            float existing_gate_x_start = gate->bd.x;
-            float existing_gate_y_start = gate->bd.y;
-            float existing_gate_x_end = gate->bd.x + gate->bd.width;
-            float existing_gate_y_end = gate->bd.y + gate->bd.height;
-
-            // Check for overlap between the new gate's bounding box and the existing gate's
-            // bounding box
-            if (!(new_gate_x_end <=
-                      existing_gate_x_start ||  // New gate is to the left of the existing gate
-                  new_gate_x_start >=
-                      existing_gate_x_end ||  // New gate is to the right of the existing gate
-                  new_gate_y_end <= existing_gate_y_start ||  // New gate is above the existing gate
-                  new_gate_y_start >= existing_gate_y_end))   // New gate is below the existing gate
-            {
-                return true;  // Overlap detected, grid is occupied
-            }
-        }
-        return false;  // No overlap detected, grid is not occupied
     }
     Vector2 Generate_straight_lines(const Vector2& start, const Vector2& end)
     {
