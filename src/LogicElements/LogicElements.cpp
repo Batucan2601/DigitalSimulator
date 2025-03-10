@@ -42,10 +42,10 @@ namespace CircuitElements
             stabilized = true;
             for (auto& gate : this->getMainComponent()->components)
             {
-                gate.evaluate();
-                auto previousOutputs = gate.getOutputs();
-                gate.evaluate();
-                if (gate.getOutputs() != previousOutputs)
+                gate->evaluate();
+                auto previousOutputs = gate->getOutputs();
+                gate->evaluate();
+                if (gate->getOutputs() != previousOutputs)
                 {
                     stabilized = false;
                 }

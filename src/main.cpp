@@ -35,11 +35,11 @@ int main(void)
     auto gate5 = circuit->factory.createGate(LogicElements::GateType::XOR,
                                                                 xor_gate_logger);
 
-    gate1.setPosition(0, 100 - 250);
-    gate2.setPosition(0, 200 - 250);
-    gate3.setPosition(0, 300 - 250);
-    gate4.setPosition(0, 400 - 250);
-    gate5.setPosition(0, 500 - 250);
+    gate1->setPosition(0, 100 - 250);
+    gate2->setPosition(0, 200 - 250);
+    gate3->setPosition(0, 300 - 250);
+    gate4->setPosition(0, 400 - 250);
+    gate5->setPosition(0, 500 - 250);
 
     Component mainC; 
     mainC.allocateConnection();

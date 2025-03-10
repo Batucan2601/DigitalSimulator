@@ -139,11 +139,11 @@ namespace Controls
 
             // add the new circuit
             std::string new_gate = "or_gate_logger";
-            LogicElements::LogicGate gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
+            std::shared_ptr<LogicElements::LogicGate> gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
             circuit->getMainComponent()->addComponent(gate);
             if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
             {
-                circuit->getMainComponent()->components[circuit->getMainComponent()->components.size() - 1].setPosition(
+                circuit->getMainComponent()->components[circuit->getMainComponent()->components.size() - 1]->setPosition(
                     circuit->selected_wires.wire_hovering.x,
                     circuit->selected_wires.wire_hovering.y);
                 GUI::dragDrop.gateType = LogicElements::GateType::NONE;

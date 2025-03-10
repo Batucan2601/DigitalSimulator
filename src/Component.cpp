@@ -53,14 +53,14 @@ void Component::Draw()
 {
     for (size_t i = 0; i < this->components.size(); i++)
     {
-        this->components[i].Draw();
+        this->components[i]->Draw();
     }
 }
 
-void Component::addComponent(const Component& comp)
+void Component::addComponent(const std::shared_ptr<Component>& comp)
 {
     this->components.push_back(comp);
-    InputResolver::RegisterHandler(&this->components[this->components.size() - 1]);
+    InputResolver::RegisterHandler((IInputHandler*)comp.get()); // TODO get a better place 
 }
 const std::vector<Signal>& Component::getInputs() const
 {
@@ -74,7 +74,7 @@ void Component::evaluate()
 {
     for (size_t i = 0; i < this->components.size(); i++)
     {
-        this->components[i].evaluate();
+        this->components[i]->evaluate();
     }
 }
 

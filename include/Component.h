@@ -151,9 +151,9 @@ class Component : public IInputHandler
     void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
-    void addComponent(const Component& comp);
+    void addComponent(const std::shared_ptr<Component>& comp);
     void addConnection(const CircuitElements::Connection& comp);
-    void virtual Draw();
+    virtual void Draw();
     void evaluate();
     const std::vector<Signal>& Component::getInputs() const;
     const std::vector<Signal>& Component::getOutputs() const;
@@ -171,7 +171,7 @@ class Component : public IInputHandler
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     std::vector<CircuitElements::Connection> connections;
-    std::vector<Component>  components; 
+    std::vector<std::shared_ptr<Component>>  components; 
     CircuitElements::Circuit* circuit;
 
     bool is_hovered = false;
