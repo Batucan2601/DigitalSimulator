@@ -33,7 +33,7 @@ namespace LogicElementsDraw
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->components.size(); i++)
         {
-            const auto& gate = std::make_shared<Component>(circuit->components[i]);  // Access the gate
+            const auto& gate = (circuit->components[i]);  // Access the gate
             
             if (appSettings.isDrawingBoundaryBox)
             {

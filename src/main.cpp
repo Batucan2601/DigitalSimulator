@@ -3,7 +3,6 @@
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
 SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
-
 AppSettings::Settings appSettings;
 
 int main(void)
@@ -24,6 +23,7 @@ int main(void)
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
     
+    circuit->factory.initFactory(circuit);
     auto gate1 = circuit->factory.createGate(LogicElements::GateType::AND,
                                                                 and_gate_logger);
     auto gate2 =
@@ -42,14 +42,15 @@ int main(void)
     gate5->setPosition(0, 500 - 250);
 
     Component mainC; 
-    mainC.allocateConnection();
-    mainC.addComponent(gate1);
-    mainC.addComponent(gate2);
-    mainC.addComponent(gate3);
-    mainC.addComponent(gate4);
-    mainC.addComponent(gate5);
+    std::shared_ptr<Component> mainC_sp = std::make_shared<Component>(mainC);
+    mainC_sp->allocateConnection();
+    mainC_sp->addComponent(gate1);
+    mainC_sp->addComponent(gate2);
+    mainC_sp->addComponent(gate3);
+    mainC_sp->addComponent(gate4);
+    mainC_sp->addComponent(gate5);
 
-    circuit->addComponent(mainC);
+    circuit->addComponent(mainC_sp);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
