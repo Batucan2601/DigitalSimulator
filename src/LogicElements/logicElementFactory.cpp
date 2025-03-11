@@ -2,6 +2,12 @@
 
 namespace LogicElements
 {
+
+    void LogicElementFactory::initFactory(std::shared_ptr<CircuitElements::Circuit> circuitPtr)
+    {
+        //LogicElements::LogicElementFactory::circuit = circuit;
+        this->circuit = circuitPtr; 
+    }
     std::shared_ptr<LogicGate> LogicElementFactory::createGate(GateType type, std::string logger_name)
     {
         auto gate = std::make_shared<LogicGate>(type, logger_name);
@@ -97,7 +103,7 @@ namespace LogicElements
             default:
                 break;
         }
-
+        gate->circuit = this->circuit;
         return gate;
     }
 }  // namespace LogicElements

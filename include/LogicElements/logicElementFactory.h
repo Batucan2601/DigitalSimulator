@@ -5,12 +5,18 @@
 
 #include <memory>
 
+namespace CircuitElements
+{
+    class Circuit; 
+}
 namespace LogicElements
 {
     class LogicElementFactory
     {
       public:
-        static std::shared_ptr<LogicGate>  createGate(GateType type, std::string logger_name);
+        void initFactory(std::shared_ptr<CircuitElements::Circuit> circuit);
+        std::shared_ptr<LogicGate>  createGate(GateType type, std::string logger_name);
+        std::shared_ptr<CircuitElements::Circuit> circuit;
     };
 }  // namespace LogicElements
 

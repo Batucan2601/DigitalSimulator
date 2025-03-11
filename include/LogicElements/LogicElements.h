@@ -36,23 +36,24 @@ namespace CircuitElements
         std::vector<Vector2> selected_wires;
         Vector2 wire_hovering;
     };
-    class Circuit
+    class Circuit: public std::enable_shared_from_this<Circuit>
     {
       public:
         Circuit(std::string& logger_name) : m_logger(logger_name)
         {
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
+            //LogicElements::LogicElementFactory::initFactory(shared_from_this());
         }
-        void addComponent(Component gate);
-        Component* getMainComponent();
+        void addComponent(std::shared_ptr<Component> gate);
+        std::shared_ptr<Component> Circuit::getMainComponent();
         void addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
                            const std::string& sourceOutput,
                            std::shared_ptr<LogicElements::LogicGate> targetGate,
                            const std::string& targetInput);
         void evaluate();
         ClassLogger m_logger;
-        std::vector<Component> components;
+        std::vector<std::shared_ptr<Component>> components;
         // std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
         std::vector<Connection> connections;
         // TODO

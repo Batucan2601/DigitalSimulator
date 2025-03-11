@@ -147,7 +147,7 @@ class Component : public IInputHandler
 {
   public:
     Component(){};
-    Component(std::string& fileName);
+    Component(std::string& fileName){};
     void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
@@ -172,7 +172,7 @@ class Component : public IInputHandler
     std::vector<Signal> outputs;
     std::vector<CircuitElements::Connection> connections;
     std::vector<std::shared_ptr<Component>>  components; 
-    CircuitElements::Circuit* circuit;
+    std::shared_ptr<CircuitElements::Circuit> circuit;
 
     bool is_hovered = false;
 };
