@@ -41,7 +41,7 @@ namespace LogicElementsDraw
             }
             gate->Draw();
 
-            DrawInOut(gate);
+            //DrawInOut(gate);
         }
 
         // 2 - Draw connections
@@ -156,27 +156,5 @@ namespace LogicElementsDraw
         }*/
         DrawRectangleLines(component->bd.x, component->bd.y, component->bd.width, component->bd.height, color);
     }
-    void DrawInOut(std::shared_ptr<Component> gate)
-    {
-        for (size_t i = 0; i < gate->outputs.size(); i++)
-        {
-            // GRID_POINT_SIZE
-            Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
-                             pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                             appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
-            DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
-        }
-        if (gate->is_hovered)
-        {
-            for (size_t i = 0; i < gate->inputs.size(); i++)
-            {
-                Vector2 pos = gate->inputs[i].pos;
-                Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
-                                 pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                                 appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
-                DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
-            }
-        }
-    }
+    
 }  // namespace LogicElementsDraw

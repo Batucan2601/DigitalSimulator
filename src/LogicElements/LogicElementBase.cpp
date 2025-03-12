@@ -99,7 +99,7 @@ namespace LogicElements
     }
 
     LogicGate::LogicGate(GateType gateType, std::string& logger_name)
-    :  Component(),m_type(gateType), m_logger(logger_name)
+    :m_type(gateType), m_logger(logger_name)
     {
         static int nextId = 0;
         id = nextId++;  // Assign a unique ID
