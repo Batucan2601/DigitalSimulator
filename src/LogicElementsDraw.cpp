@@ -40,31 +40,29 @@ namespace LogicElementsDraw
                 DrawBoundaryBox(gate);
             }
             gate->Draw();
-
-            //DrawInOut(gate);
         }
 
         // 2 - Draw connections
-        for (size_t i = 0; i < circuit->connections.size(); i++)
+        for (size_t i = 0; i < circuit->getMainComponent()->connections.size(); i++)
         {
-            if (circuit->connections[i].physCon.wires.size() == 0)
+            if (circuit->getMainComponent()->connections[i].physCon.wires.size() == 0)
             {
                 continue;
             }
-            for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+            for (size_t j = 0; j < circuit->getMainComponent()->connections[i].physCon.wires.size() - 1; j++)
             {
-                Vector2 start = circuit->connections[i].physCon.wires[j];
-                Vector2 end = circuit->connections[i].physCon.wires[j + 1];
+                Vector2 start = circuit->getMainComponent()->connections[i].physCon.wires[j];
+                Vector2 end = circuit->getMainComponent()->connections[i].physCon.wires[j + 1];
                 // DrawLine();
-                if (circuit->connections[i].is_connected)
+                if (circuit->getMainComponent()->connections[i].is_connected)
                 {
                     bool val = false;
-                    for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
+                    for (size_t k = 0; k < circuit->getMainComponent()->connections[i].sourceGate->outputs.size(); k++)
                     {
-                        if (circuit->connections[i].sourceGate->outputs[k].name ==
-                            circuit->connections[i].sourceLogic)
+                        if (circuit->getMainComponent()->connections[i].sourceGate->outputs[k].name ==
+                            circuit->getMainComponent()->connections[i].sourceLogic)
                         {
-                            val = circuit->connections[i].sourceGate->outputs[k].val;
+                            val = circuit->getMainComponent()->connections[i].sourceGate->outputs[k].val;
                             break;
                         }
                     }

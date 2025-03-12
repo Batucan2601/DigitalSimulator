@@ -356,7 +356,7 @@ namespace LogicElements
                 InputResolver::RegisterHandler(
                     static_cast<IInputHandler*>(&(circuit->active_wire)));
                 InputResolver::setSelectedHandler(
-                    (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+                    (IInputHandler*)&circuit->getMainComponent()->connections[circuit->getMainComponent()->connections.size() - 1]);
             }
             else  // select the gate
             {
