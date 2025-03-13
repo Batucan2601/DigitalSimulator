@@ -8,12 +8,12 @@
 
 #include <filesystem>
 #include <fstream>
+#include <logicElementFactory.h>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <logicElementFactory.h>
 
 namespace CircuitElements
 {
@@ -36,17 +36,17 @@ namespace CircuitElements
         std::vector<Vector2> selected_wires;
         Vector2 wire_hovering;
     };
-    class Circuit: public std::enable_shared_from_this<Circuit>
+    class Circuit : public std::enable_shared_from_this<Circuit>
     {
       public:
         Circuit(std::string& logger_name) : m_logger(logger_name)
         {
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
-            //LogicElements::LogicElementFactory::initFactory(shared_from_this());
+            // LogicElements::LogicElementFactory::initFactory(shared_from_this());
         }
         void addComponent(std::shared_ptr<Component> gate);
-        std::shared_ptr<Component> Circuit::getMainComponent();
+        std::shared_ptr<Component> getMainComponent();
         void addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
                            const std::string& sourceOutput,
                            std::shared_ptr<LogicElements::LogicGate> targetGate,

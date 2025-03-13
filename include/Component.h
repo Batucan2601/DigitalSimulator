@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <functional>
 #include <list>
+#include <memory>
 #include <queue>
 #include <raylib.h>
 #include <string>
 #include <vector>
-#include <memory>
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -126,28 +126,26 @@ namespace CircuitElements
     };
     class Connection : public IInputHandler
     {
-    public:
+      public:
         std::shared_ptr<Component> sourceGate;
         std::string sourceLogic;
         std::shared_ptr<Component> targetGate;
         std::string targetLogic;
         PhysicalConnection physCon;
-        HoveringWire hovering{
-            false,
-            {0.0f, 0.0f} };  // when this variable is uninitialized, it
+        HoveringWire hovering{false, {0.0f, 0.0f}};  // when this variable is uninitialized, it
         // causes a crash when rendering the is_hovering wires in the circuit
-        CircuitElements::Circuit* circuit;   // = nullptr;
+        CircuitElements::Circuit* circuit;  // = nullptr;
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
     };
-}
+}  // namespace CircuitElements
 class Component : public IInputHandler
 {
   public:
-    Component(){};
-    Component(std::string& fileName){};
+    Component() {};
+    Component(std::string& fileName) {};
     void allocateConnection();
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
@@ -155,8 +153,8 @@ class Component : public IInputHandler
     void addConnection(const CircuitElements::Connection& comp);
     virtual void Draw();
     void evaluate();
-    const std::vector<Signal>& Component::getInputs() const;
-    const std::vector<Signal>& Component::getOutputs() const;
+    const std::vector<Signal>& getInputs() const;
+    const std::vector<Signal>& getOutputs() const;
     int getID() const;
     void setInput(const std::string& name, bool value);
     bool getOutput(const std::string& name) const;
@@ -167,11 +165,11 @@ class Component : public IInputHandler
         bd.y = y;
     };  // TODO: Implement this
     Rectangle bd;
-    int id; 
+    int id;
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     std::vector<CircuitElements::Connection> connections;
-    std::vector<std::shared_ptr<Component>>  components; 
+    std::vector<std::shared_ptr<Component>> components;
     std::shared_ptr<CircuitElements::Circuit> circuit;
 
     bool is_hovered = false;
