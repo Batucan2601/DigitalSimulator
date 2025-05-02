@@ -28,6 +28,8 @@ namespace AppSettings
         float SLICE_SIZE = 40;
         float IN_OUT_RECT_WIDTH = GRID_POINT_SIZE * 5;
         float IN_OUT_INTERACTION = IN_OUT_RECT_WIDTH * 2;
+        int LOGIC_GATE_WIDTH = 100;
+        int LOGIC_GATE_HEIGHT = 100;
     };
 
     extern AppSettings::Settings appSettings;

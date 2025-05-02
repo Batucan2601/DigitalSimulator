@@ -22,7 +22,7 @@ namespace LogicElementsDraw
 
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
     }
-
+    
     void DrawCircuit(const SP_Circuit circuit)
     {
         // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
@@ -30,16 +30,23 @@ namespace LogicElementsDraw
         // double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
 
-        // 1 - Draw gates
-        for (size_t i = 0; i < circuit->components.size(); i++)
-        {
-            const auto& gate = (circuit->components[i]);  // Access the gate
-            
+         // 1) Seed the stack with all top-level components
+        std::vector<SP_Component> stack;
+        stack.reserve(circuit->components.size());
+        for (const auto& gate : circuit->components)
+            stack.push_back(gate);
+        // 2) Pop, draw, then push any children
+        while (!stack.empty()) {
+            SP_Component gate = stack.back();
+            stack.pop_back();
             if (appSettings.isDrawingBoundaryBox)
-            {
                 DrawBoundaryBox(gate);
-            }
             gate->Draw();
+            // push this gate’s own components onto the stack
+            // (so they’ll be drawn later)
+            for (const auto& child : gate->components) {
+                stack.push_back(child);
+            }
         }
 
         // 2 - Draw connections
@@ -79,12 +86,12 @@ namespace LogicElementsDraw
         }
 
         // color green the selected wires
-        for (size_t i = 0; i < circuit->connections.size(); i++)
+        for (size_t i = 0; i < circuit->getMainComponent()->connections.size(); i++)
         {
-            if (circuit->connections[i].hovering.is_hovering)
+            if (circuit->getMainComponent()->connections[i].hovering.is_hovering)
             {
-                DrawInteractableWirePoints(circuit->connections[i].hovering.pos,
-                                           circuit->connections[i].hovering.pos, GREEN);
+                DrawInteractableWirePoints(circuit->getMainComponent()->connections[i].hovering.pos,
+                    circuit->getMainComponent()->connections[i].hovering.pos, GREEN);
             }
         }
         DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,

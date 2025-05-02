@@ -169,14 +169,16 @@ namespace LogicElements
     }
     void LogicGate::setPosition(float x, float y)
     {
-        bd.x = x;
-        bd.y = y;
+        this->bd.x = x;
+        this->bd.y = y;
+        this->bd.width = appSettings.LOGIC_GATE_WIDTH;
+        this->bd.height = appSettings.LOGIC_GATE_HEIGHT;
         this->setInOutPositions();
     }
 
     Vector2 LogicGate::getPosition() const
     {
-        return {bd.x, bd.y};
+        return {this->bd.x, this->bd.y};
     }
 
     int LogicGate::getID() const
