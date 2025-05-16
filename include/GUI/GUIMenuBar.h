@@ -44,6 +44,7 @@ namespace GUI
         GUIMenuBar() : BaseWindow("Toolbar") {};
         std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> menuList;
         void Draw(SP_Circuit circuit);
+        void Update(SP_Circuit circuit);
         SP_Circuit circuit;
         std::unordered_map<std::string, GUI::BaseWindow*> windows;
         void SetWindowList(std::vector<std::unique_ptr<GUI::BaseWindow>>& windows);

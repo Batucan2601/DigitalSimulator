@@ -10,7 +10,7 @@ namespace GUI
         Settings() : BaseWindow("Settings") {}
 
         void Draw(SP_Circuit circuit) override;
-
+        void Update(SP_Circuit circuit) override; 
       protected:
     };
 }  // namespace GUI

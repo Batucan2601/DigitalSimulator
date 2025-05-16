@@ -23,7 +23,10 @@ namespace GUI
             GUITools_BasicLogicDisplay_draw(d1);
         }
     }
+    void LogicGateInfo::Update(SP_Circuit circuit)
+    {
 
+    }
     void LogicGateInfo::draw_Inputs(Component* logicGate)
     {
         if (ImGui::TreeNodeEx("Inputs"))

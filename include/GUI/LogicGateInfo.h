@@ -14,6 +14,7 @@ namespace GUI
         LogicGateInfo() : BaseWindow("Logic Gate Info") {}
 
         void Draw(SP_Circuit circuit) override;
+        void Update(SP_Circuit circuit) override;
         void draw_Inputs(Component* logicGate);
         void draw_Outputs(Component* logicGate);
         void change_connection_name(Component* logicGate, bool is_input, std::string newName);

@@ -35,6 +35,8 @@ namespace GUI
         Editor() : BaseWindow("Editor") {}
 
         void Draw(SP_Circuit circuit) override;
+        void Update(SP_Circuit circuit) override;
+
 
         void Init(int width, int height);
         EditorRender m_editor_render;

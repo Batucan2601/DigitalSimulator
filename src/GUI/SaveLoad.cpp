@@ -23,6 +23,10 @@ namespace GUI
         }
     }
 
+    void SaveLoad::Update(SP_Circuit circuit)
+    {
+
+    }
     void SaveLoad::ShowSaveWindow(SP_Circuit globalCircuit)
     {
         localCircuit = globalCircuit;

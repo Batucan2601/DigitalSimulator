@@ -25,6 +25,7 @@ namespace GUI
         Tools() : BaseWindow("Tools") {}
 
         void Draw(SP_Circuit circuit) override;
+        void Update(SP_Circuit circuit) override;
         void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
     };
 

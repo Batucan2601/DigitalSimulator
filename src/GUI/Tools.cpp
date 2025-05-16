@@ -55,7 +55,10 @@ namespace GUI
         }
         ImGui::End();
     }
+    void Tools::Update(SP_Circuit circuit)
+    {
 
+    }
     void Tools::RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
     {
         float icon_size = 50.0f;

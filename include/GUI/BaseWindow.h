@@ -15,6 +15,7 @@ namespace GUI
         virtual ~BaseWindow() = default;
 
         virtual void Draw(SP_Circuit circuit) = 0;  // Default parameter-less version
+        virtual void Update(SP_Circuit circuit) = 0;
 
         virtual bool IsVisible() const
         {

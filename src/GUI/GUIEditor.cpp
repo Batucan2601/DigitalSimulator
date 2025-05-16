@@ -68,7 +68,10 @@ namespace GUI
                              });
         EndTextureMode();
     }
+    void Editor::Update(SP_Circuit circuit)
+    {
 
+    }
     Editor::EditorWindow Editor::getWindow()
     {
         return m_editor_render.window;

@@ -172,4 +172,8 @@ namespace GUI
         }
         this->circuit = circuit;
     }
+    void GUIMenuBar::Update(SP_Circuit circuit)
+    {
+
+    }
 }  // namespace GUI

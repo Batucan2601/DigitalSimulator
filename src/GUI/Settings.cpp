@@ -53,4 +53,9 @@ namespace GUI
         }
     }
 
+    void Settings::Update(SP_Circuit circuit)  
+    {
+
+    }
+
 }  // namespace GUI
