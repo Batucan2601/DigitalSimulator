@@ -29,7 +29,6 @@ namespace Controls
     Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,
                               float yEndRatio);
     void HandleMouseDrag(SP_Circuit circuit, const Vector2& mousePosition);
-    Vector2 SnapToNearestGrid(const Rectangle& rect);
     void HandleMouseRelease(SP_Circuit circuit);
     void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition);
     // keyboard

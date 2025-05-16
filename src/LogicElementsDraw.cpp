@@ -2,6 +2,7 @@
 
 #include <chrono>  // High precision timing
 #include <iostream>
+#include <Util/utils.h>
 
 
 namespace LogicElementsDraw
@@ -96,9 +97,9 @@ namespace LogicElementsDraw
         if (circuit->active_wire.is_visible)
         {
             Rectangle rec = {circuit->active_wire.start.x, circuit->active_wire.start.y, 0, 0};
-            circuit->active_wire.start = Controls::SnapToNearestGrid(rec);
+            circuit->active_wire.start = Utils::SnapToNearestGrid(rec);
             rec = {circuit->active_wire.end.x, circuit->active_wire.end.y, 0, 0};
-            circuit->active_wire.end = Controls::SnapToNearestGrid(rec);
+            circuit->active_wire.end = Utils::SnapToNearestGrid(rec);
 
             Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
                                                                       circuit->active_wire.end);

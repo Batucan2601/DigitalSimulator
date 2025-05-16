@@ -38,4 +38,14 @@ namespace Utils
         }
         return false;
     }
+    Vector2 SnapToNearestGrid(const Rectangle& rect)
+    {
+        Vector2 nearest_grid_point;
+        nearest_grid_point.x =
+            std::round(rect.x / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
+        nearest_grid_point.y =
+            std::round(rect.y / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
+        // TODO: Highlight the nearest grid point
+        return nearest_grid_point;
+    }
 }

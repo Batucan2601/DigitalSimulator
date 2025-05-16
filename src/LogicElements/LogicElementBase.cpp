@@ -8,6 +8,7 @@
 #include "appSettings.h"
 
 #include <Controls.h>
+#include <Util/utils.h>
 
 
 namespace LogicElements
@@ -445,7 +446,7 @@ namespace LogicElements
                     if (name == gate->outputs[j].name)
                     {
                         Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
-                        Vector2 newPos = Controls::SnapToNearestGrid(rec);
+                        Vector2 newPos = Utils::SnapToNearestGrid(rec);
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
                         c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
@@ -465,7 +466,7 @@ namespace LogicElements
                     if (name == gate->inputs[j].name)
                     {
                         Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
-                        Vector2 newPos = Controls::SnapToNearestGrid(rec);
+                        Vector2 newPos = Utils::SnapToNearestGrid(rec);
                         size_t last_index = c->physCon.wires.size() - 1;
                         Vector2 newLine =
                             Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
@@ -563,7 +564,7 @@ namespace LogicElements
                 return;
             }
             Rectangle rec = {(float)event.pos.x, (float)event.pos.y, 0, 0};
-            Vector2 v = Controls::SnapToNearestGrid(rec);
+            Vector2 v = Utils::SnapToNearestGrid(rec);
             bool is_other_gate_exist = false;
             for (auto val : InputResolver::handlers)
             {
@@ -590,7 +591,7 @@ namespace LogicElements
             {
                 rec.x = v.x + dif.x;
                 rec.y = v.y + dif.y;
-                Vector2 v = Controls::SnapToNearestGrid(rec);
+                Vector2 v = Utils::SnapToNearestGrid(rec);
                 this->setPosition(v.x, v.y);
             }
             isFirst = true;

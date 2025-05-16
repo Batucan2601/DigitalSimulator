@@ -114,14 +114,14 @@ namespace Controls
         if (is_near_wire)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
-            Vector2 pos = SnapToNearestGrid(rec);
+            Vector2 pos = Utils::SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
         }
        
         if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
-            Vector2 pos = SnapToNearestGrid(rec);
+            Vector2 pos = Utils::SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
             // circuit->m_logger.info("catched new ");
             circuit->is_GUIdragdragging = true;
@@ -235,16 +235,7 @@ namespace Controls
 
         return {xLower, yLower, xUpper - xLower, yUpper - yLower};
     }
-    Vector2 SnapToNearestGrid(const Rectangle& rect)
-    {
-        Vector2 nearest_grid_point;
-        nearest_grid_point.x =
-            std::round(rect.x / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
-        nearest_grid_point.y =
-            std::round(rect.y / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
-        // TODO: Highlight the nearest grid point
-        return nearest_grid_point;
-    }
+
 
     void HandleMouseLeftClick(SP_Circuit circuit, const Vector2& mousePosition)
     {
@@ -272,7 +263,7 @@ namespace Controls
                     if (is_logic_selected)
                     {
                         Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                        circuit->active_wire.start = SnapToNearestGrid(pos);
+                        circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
                         circuit->active_wire.is_visible = true;
                     }
                     break;
@@ -286,7 +277,7 @@ namespace Controls
                 if (is_logic_selected)  // this section checks what happens when you touch a wire
                 {
                     Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                    circuit->active_wire.start = SnapToNearestGrid(pos);
+                    circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
                     circuit->active_wire.is_visible = true;
                     // get which line it belongs to
                     CircuitElements::Connection new_connection;
@@ -343,7 +334,7 @@ namespace Controls
     void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition)
     {
         Rectangle mockRec = {mousePosition.x, mousePosition.y, 0, 0};
-        Vector2 nearest_grid_point = SnapToNearestGrid(mockRec);
+        Vector2 nearest_grid_point = Utils::SnapToNearestGrid(mockRec);
         Vector2 wire_prev =
             circuit->connections[circuit->connections.size() - 1].physCon.wires
                 [circuit->connections[circuit->connections.size() - 1].physCon.wires.size() - 1];
@@ -376,7 +367,7 @@ namespace Controls
         if (is_logic_selected)
         {
             Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-            circuit->active_wire.start = SnapToNearestGrid(pos);
+            circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
             circuit->active_wire.is_visible = true;
         }
     }

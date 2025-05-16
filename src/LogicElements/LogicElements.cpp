@@ -1,6 +1,7 @@
 #include "LogicElements.h"
 
 #include "Controls.h"
+#include <Util/utils.h>
 
 
 namespace CircuitElements
@@ -131,7 +132,7 @@ namespace CircuitElements
             {
                 hovering.is_hovering = true;
                 Rectangle rec = {pos.x, pos.y, 0, 0};
-                hovering.pos = Controls::SnapToNearestGrid(rec);
+                hovering.pos = Utils::SnapToNearestGrid(rec);
             }
         }
     }
@@ -156,7 +157,7 @@ namespace CircuitElements
     void ActiveWire::OnMove(const InputEvent& event)
     {
         Rectangle pos_rec = {(float)event.pos.x, (float)event.pos.y, 0, 0};
-        this->end = Controls::SnapToNearestGrid(pos_rec);
+        this->end = Utils::SnapToNearestGrid(pos_rec);
     }
 
     void ActiveWire::OnLeftClick(const InputEvent& event)
@@ -183,7 +184,7 @@ namespace CircuitElements
             }
             d1->physCon.wires.push_back({this->end.x, this->end.y});
             Rectangle pos_rec = {this->end.x, this->end.y, 0, 0};
-            this->start = Controls::SnapToNearestGrid(pos_rec);
+            this->start = Utils::SnapToNearestGrid(pos_rec);
 
             if (d1->is_connected)
             {
