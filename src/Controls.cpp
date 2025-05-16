@@ -118,33 +118,7 @@ namespace Controls
             circuit->selected_wires.wire_hovering = pos;
         }
        
-        if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
-        {
-            Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
-            Vector2 pos = Utils::SnapToNearestGrid(rec);
-            circuit->selected_wires.wire_hovering = pos;
-            // circuit->m_logger.info("catched new ");
-            circuit->is_GUIdragdragging = true;
-        }
-        if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
-        {
-            circuit->is_GUIdragdropped = true;
-            circuit->is_GUIdragdragging = false;
-
-            // add the new circuit
-            std::string new_gate = "or_gate_logger";
-            std::shared_ptr<LogicElements::LogicGate> gate;
-            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
-            circuit->addGate(gate);
-
-            if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
-            {
-                circuit->gates[circuit->gates.size() - 1]->setPosition(
-                    circuit->selected_wires.wire_hovering.x,
-                    circuit->selected_wires.wire_hovering.y);
-                GUI::dragDrop.gateType = LogicElements::GateType::NONE;
-            }
-        }
+        
     }
 
     void Control_Keyboard_Event()

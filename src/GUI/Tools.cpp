@@ -4,6 +4,7 @@
 
 #include <imgui.h>
 #include <raylib.h>
+#include <Util/utils.h>
 
 namespace GUI
 {
@@ -57,7 +58,35 @@ namespace GUI
     }
     void Tools::Update(SP_Circuit circuit)
     {
+        if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
+        {
+            //Vector2 mouse_pos = GetMousePosition();
+            //ConvertMouseCoord(mouse_pos);
+            //
+            //Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
+            //Vector2 pos = Utils::SnapToNearestGrid(rec);
+            //circuit->selected_wires.wire_hovering = pos;
+            circuit->is_GUIdragdragging = true;
+        }
+        if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
+        {
+            circuit->is_GUIdragdropped = true;
+            circuit->is_GUIdragdragging = false;
 
+            // add the new circuit
+            std::string new_gate = "or_gate_logger";
+            std::shared_ptr<LogicElements::LogicGate> gate;
+            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
+            circuit->addGate(gate);
+
+            if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
+            {
+                circuit->gates[circuit->gates.size() - 1]->setPosition(
+                    circuit->selected_wires.wire_hovering.x,
+                    circuit->selected_wires.wire_hovering.y);
+                GUI::dragDrop.gateType = LogicElements::GateType::NONE;
+            }
+        }
     }
     void Tools::RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
     {

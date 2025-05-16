@@ -17,6 +17,8 @@ class RaylibHelper
     static void EndFrame();
     static void Draw2D(const Camera2D& camera, const std::function<void()>& drawFn);
     static void DrawGUI(SP_Circuit circuit);
+    static void Update(SP_Circuit circuit);
+
 
     static void Close();
 

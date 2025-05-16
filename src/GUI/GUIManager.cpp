@@ -50,6 +50,14 @@ void GUIManager::Draw(SP_Circuit circuit)
     DrawDemoWindow();
 }
 
+void GUIManager::Update(SP_Circuit circuit)
+{
+    for (auto& window : windows)
+    {
+        window->Update(circuit);
+    }
+}
+
 void GUIManager::DrawDockingSpace()
 {
     // Get IO for display size

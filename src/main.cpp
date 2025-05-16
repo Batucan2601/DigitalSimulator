@@ -57,6 +57,8 @@ int main(void)
         RaylibHelper::BeginFrame();
         RaylibHelper::DrawGUI(circuit);
         RaylibHelper::EndFrame();
+        //update each GUI object 
+        RaylibHelper::Update(circuit);
     }
 
     // De-Initialization
