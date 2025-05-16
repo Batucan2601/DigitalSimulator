@@ -119,12 +119,12 @@ class Component : public IInputHandler
     Component(std::string& fileName);
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
+    Rectangle bd = {0, 0, 100, 100};  // bounding box
     void setPosition(float x, float y)
     {
         bd.x = x;
         bd.y = y;
     };  // TODO: Implement this
-    Rectangle bd;
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     CircuitElements::Circuit* circuit;

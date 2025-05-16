@@ -85,7 +85,7 @@ namespace LogicElements
 
         void setEvaluationFunction(std::function<void(LogicGate&)> evalFunc);
 
-        Rectangle bd = {0, 0, 100, 100};  // bounding box
+
         void setPosition(float x, float y);
         Vector2 getPosition() const;
 
