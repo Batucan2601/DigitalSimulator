@@ -94,7 +94,7 @@ namespace Controls
         Controls_Mouse_click();
         Controls_Mouse_Movements();
         Control_Keyboard_Event();
-        // Controls_Handle_Continous(selected_circuit);
+        Controls_Handle_Continous(selected_circuit);
 
         InputResolver::resolve();
     }
@@ -106,12 +106,6 @@ namespace Controls
 
     void Controls_Handle_Continous(SP_Circuit circuit)
     {
-        // Get mouse position
-        if (is_logic_selected)
-        {
-            Rectangle pos = {mouse_pos.x, mouse_pos.y, 0, 0};
-            circuit->active_wire.end = SnapToNearestGrid(pos);
-        }
 
         // hovering coloring
         CircuitElements::Connection temp;
@@ -121,9 +115,8 @@ namespace Controls
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
             Vector2 pos = SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
-            // circuit->m_logger.info("catched new ");
         }
-
+       
         if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
@@ -436,13 +429,18 @@ namespace Controls
     bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
                        CircuitElements::Connection& con)
     {
-        for (size_t i = 0; i < circuit->connections.size(); i++)
+        for (int i = 0; i < circuit->connections.size(); i++)
         {
-            for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+            if (circuit->connections[i].physCon.wires.size() == 0)
+            {
+                continue; 
+            }
+            for (int j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];
                 Rectangle col = {0, 0, 0, 0};
+
                 if (std::abs(end.x - start.x) < appSettings.SPACING_SIZE)
                 {
                     col = {start.x - appSettings.MOUSE_SELECTION_OFFSET, start.y,
