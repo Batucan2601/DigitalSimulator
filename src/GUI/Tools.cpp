@@ -56,17 +56,17 @@ namespace GUI
         }
         ImGui::End();
     }
+    Vector2 mouse_pos;
     void Tools::Update(SP_Circuit circuit)
     {
         if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
         {
-            //Vector2 mouse_pos = GetMousePosition();
-            //ConvertMouseCoord(mouse_pos);
-            //
-            //Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
-            //Vector2 pos = Utils::SnapToNearestGrid(rec);
-            //circuit->selected_wires.wire_hovering = pos;
+            mouse_pos = AppSettings::appSettings.mousePos;
+            Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
+            Vector2 pos = Utils::SnapToNearestGrid(rec);
+            circuit->selected_wires.wire_hovering = pos;
             circuit->is_GUIdragdragging = true;
+            std::cout << "mouse pos " << AppSettings::appSettings.mousePos.x  <<  std::endl;
         }
         if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
         {

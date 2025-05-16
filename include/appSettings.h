@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
-
+#include <raymath.h>
 namespace AppSettings
 {
     typedef enum
@@ -28,6 +28,8 @@ namespace AppSettings
         float SLICE_SIZE = 40;
         float IN_OUT_RECT_WIDTH = GRID_POINT_SIZE * 5;
         float IN_OUT_INTERACTION = IN_OUT_RECT_WIDTH * 2;
+
+        Vector2 mousePos; // the mouseposition in editor the general mousePos can be generate with GetMousePos()
     };
 
     static Settings appSettings;

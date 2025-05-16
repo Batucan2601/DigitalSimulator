@@ -37,7 +37,7 @@ namespace Controls
             std::cerr << "Error: dynamic_cast failed! Object is not of type Editor." << std::endl;
             return;
         }
-
+        
         // Correct way to access ImageMin
         Vector2 virtualMouse;
         virtualMouse.x = (mouse_pos.x - editor_window->m_editor_render.window.ImageMin.x);
@@ -88,6 +88,9 @@ namespace Controls
 
         mouse_pos = GetMousePosition();
         ConvertMouseCoord(mouse_pos);
+        std::cout << " mouse pos sss " << mouse_pos.x <<  std::endl;
+        AppSettings::appSettings.mousePos = mouse_pos;
+        std::cout << " mouse pos 1 " << AppSettings::appSettings.mousePos.x <<  std::endl;
 
         // get data
         selected_circuit = circuit;
