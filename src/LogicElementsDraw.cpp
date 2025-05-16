@@ -3,7 +3,6 @@
 #include <chrono>  // High precision timing
 #include <iostream>
 
-extern AppSettings::Settings appSettings;
 
 namespace LogicElementsDraw
 {
@@ -35,7 +34,7 @@ namespace LogicElementsDraw
         {
             const auto& gate = circuit->gates[i];  // Access the gate
 
-            if (appSettings.isDrawingBoundaryBox)
+            if (AppSettings::appSettings.isDrawingBoundaryBox)
             {
                 DrawBoundaryBox(gate);
             }
@@ -115,8 +114,8 @@ namespace LogicElementsDraw
         if (circuit->is_GUIdragdragging)
         {
             DrawRectangleLines(circuit->selected_wires.wire_hovering.x,
-                               circuit->selected_wires.wire_hovering.y, appSettings.SLICE_SIZE,
-                               appSettings.SLICE_SIZE, BLUE);
+                               circuit->selected_wires.wire_hovering.y, AppSettings::appSettings.SLICE_SIZE,
+                               AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
         if (circuit->is_GUIdragdropped)
         {
@@ -126,7 +125,7 @@ namespace LogicElementsDraw
 
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
-        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, appSettings.SPACING_SIZE, color);
+        DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, AppSettings::appSettings.SPACING_SIZE, color);
     }
     void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
     {
@@ -164,9 +163,9 @@ namespace LogicElementsDraw
         {
             // GRID_POINT_SIZE
             Vector2 pos = gate->outputs[i].pos;
-            Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
-                             pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                             appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
+            Rectangle rec = {pos.x - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
+                             pos.y - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
+                             AppSettings::appSettings.IN_OUT_RECT_WIDTH, AppSettings::appSettings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
         if (gate->is_hovered)
@@ -174,9 +173,9 @@ namespace LogicElementsDraw
             for (size_t i = 0; i < gate->inputs.size(); i++)
             {
                 Vector2 pos = gate->inputs[i].pos;
-                Rectangle rec = {pos.x - appSettings.IN_OUT_RECT_WIDTH / 2,
-                                 pos.y - appSettings.IN_OUT_RECT_WIDTH / 2,
-                                 appSettings.IN_OUT_RECT_WIDTH, appSettings.IN_OUT_RECT_WIDTH};
+                Rectangle rec = {pos.x - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 pos.y - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
+                                 AppSettings::appSettings.IN_OUT_RECT_WIDTH, AppSettings::appSettings.IN_OUT_RECT_WIDTH};
                 DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
             }
         }

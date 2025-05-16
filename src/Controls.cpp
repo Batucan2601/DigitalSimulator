@@ -13,6 +13,7 @@
 #include <iostream>
 #include <memory>
 #include <queue>
+#include <Util/Utils.h>
 
 namespace Controls
 {
@@ -109,7 +110,7 @@ namespace Controls
 
         // hovering coloring
         CircuitElements::Connection temp;
-        bool is_near_wire = CheckNearWire(circuit, mouse_pos, temp);
+        bool is_near_wire = Utils::CheckNearWire(circuit, mouse_pos, temp);
         if (is_near_wire)
         {
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
@@ -170,22 +171,22 @@ namespace Controls
         if (IsKeyPressed(KEY_UP))
         {
             // key_pressed = true;
-            new_position.y -= appSettings.SPACING_SIZE;
+            new_position.y -= AppSettings::appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_DOWN))
         {
             // key_pressed = true;
-            new_position.y += appSettings.SPACING_SIZE;
+            new_position.y += AppSettings::appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_LEFT))
         {
             // key_pressed = true;
-            new_position.x -= appSettings.SPACING_SIZE;
+            new_position.x -= AppSettings::appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
             // key_pressed = true;
-            new_position.x += appSettings.SPACING_SIZE;
+            new_position.x += AppSettings::appSettings.SPACING_SIZE;
         }
         if (IsKeyPressed(KEY_ESCAPE))
         {
@@ -238,9 +239,9 @@ namespace Controls
     {
         Vector2 nearest_grid_point;
         nearest_grid_point.x =
-            std::round(rect.x / appSettings.SPACING_SIZE) * appSettings.SPACING_SIZE;
+            std::round(rect.x / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
         nearest_grid_point.y =
-            std::round(rect.y / appSettings.SPACING_SIZE) * appSettings.SPACING_SIZE;
+            std::round(rect.y / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
         // TODO: Highlight the nearest grid point
         return nearest_grid_point;
     }
@@ -281,7 +282,7 @@ namespace Controls
             if (!is_logic_selected)
             {
                 CircuitElements::Connection con;
-                is_logic_selected = CheckNearWire(circuit, mousePosition, con);
+                is_logic_selected = Utils::CheckNearWire(circuit, mousePosition, con);
                 if (is_logic_selected)  // this section checks what happens when you touch a wire
                 {
                     Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
@@ -426,42 +427,7 @@ namespace Controls
             connection.physCon.wires.push_back(pos);
         }
     }
-    bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
-                       CircuitElements::Connection& con)
-    {
-        for (int i = 0; i < circuit->connections.size(); i++)
-        {
-            if (circuit->connections[i].physCon.wires.size() == 0)
-            {
-                continue; 
-            }
-            for (int j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
-            {
-                Vector2 start = circuit->connections[i].physCon.wires[j];
-                Vector2 end = circuit->connections[i].physCon.wires[j + 1];
-                Rectangle col = {0, 0, 0, 0};
-
-                if (std::abs(end.x - start.x) < appSettings.SPACING_SIZE)
-                {
-                    col = {start.x - appSettings.MOUSE_SELECTION_OFFSET, start.y,
-                           (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET),
-                           std::abs(end.y - start.y)};
-                }
-                else if (std::abs(end.y - start.y) < appSettings.SPACING_SIZE)
-                {
-                    col = {start.x, start.y + -appSettings.MOUSE_SELECTION_OFFSET,
-                           std::abs(end.x - start.x),
-                           (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET)};
-                }
-                if (CheckCollisionPointRec(mousePosition, col))
-                {
-                    con = circuit->connections[i];
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    
     void HandleMouseDrag(SP_Circuit circuit, const Vector2& mousePosition)
     {
         (void)circuit;

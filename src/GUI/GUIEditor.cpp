@@ -46,7 +46,7 @@ namespace GUI
         }
         ImGui::End();
         BeginTextureMode(m_editor_render.renderTexture);
-        ClearBackground(appSettings.theme == AppSettings::Theme::DarkMode ? GRAY : WHITE);
+        ClearBackground(AppSettings::appSettings.theme == AppSettings::Theme::DarkMode ? GRAY : WHITE);
 
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
@@ -59,11 +59,11 @@ namespace GUI
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.
-                                 Color color = appSettings.theme == AppSettings::Theme::DarkMode
+                                 Color color = AppSettings::appSettings.theme == AppSettings::Theme::DarkMode
                                                    ? LIGHTGRAY
                                                    : BLACK;
-                                 DrawGrid2D(appSettings.SLICE_SIZE, appSettings.SPACING_SIZE,
-                                            appSettings.GRID_POINT_SIZE, color);
+                                 DrawGrid2D(AppSettings::appSettings.SLICE_SIZE, AppSettings::appSettings.SPACING_SIZE,
+                                            AppSettings::appSettings.GRID_POINT_SIZE, color);
                                  // You can draw additional world elements here.
                              });
         EndTextureMode();

@@ -2,7 +2,6 @@
 
 #include "Controls.h"
 
-extern AppSettings::Settings appSettings;
 
 namespace CircuitElements
 {
@@ -115,17 +114,17 @@ namespace CircuitElements
             float maxy = std::max(start.y, end.y);
             start = {minx, miny};
             end = {maxx, maxy};
-            if (std::abs(end.x - start.x) < appSettings.SPACING_SIZE)
+            if (std::abs(end.x - start.x) < AppSettings::appSettings.SPACING_SIZE)
             {
-                col = {start.x - appSettings.MOUSE_SELECTION_OFFSET, start.y,
-                       (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET),
+                col = {start.x - AppSettings::appSettings.MOUSE_SELECTION_OFFSET, start.y,
+                       (float)(AppSettings::appSettings.SPACING_SIZE + AppSettings::appSettings.MOUSE_SELECTION_OFFSET),
                        std::abs(end.y - start.y)};
             }
-            else if (std::abs(end.y - start.y) < appSettings.SPACING_SIZE)
+            else if (std::abs(end.y - start.y) < AppSettings::appSettings.SPACING_SIZE)
             {
-                col = {start.x, start.y + -appSettings.MOUSE_SELECTION_OFFSET,
+                col = {start.x, start.y + -AppSettings::appSettings.MOUSE_SELECTION_OFFSET,
                        std::abs(end.x - start.x),
-                       (float)(appSettings.SPACING_SIZE + appSettings.MOUSE_SELECTION_OFFSET)};
+                       (float)(AppSettings::appSettings.SPACING_SIZE + AppSettings::appSettings.MOUSE_SELECTION_OFFSET)};
             }
             Vector2 pos = {(float)event.pos.x, (float)event.pos.y};
             if (CheckCollisionPointRec(pos, col))

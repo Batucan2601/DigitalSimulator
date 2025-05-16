@@ -30,7 +30,7 @@ namespace AppSettings
         float IN_OUT_INTERACTION = IN_OUT_RECT_WIDTH * 2;
     };
 
-    extern AppSettings::Settings appSettings;
+    static Settings appSettings;
 
 }  // namespace AppSettings
 

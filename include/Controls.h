@@ -36,8 +36,7 @@ namespace Controls
     void Control_Keyboard_Event();
     Vector2 Generate_straight_lines(const Vector2& start, const Vector2& end);
     // TODO this does not belong here
-    bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
-                       CircuitElements::Connection& con);
+
 }  // namespace Controls
 
 #endif

@@ -2,6 +2,7 @@
 #include <GUI/include.h>
 #include <imgui.h>
 #include <rlImGui.h>
+#include "appSettings.h"
 
 void GUIManager::Init()
 {
@@ -20,7 +21,7 @@ void GUIManager::Init()
 
     // Initialize and add the editor window
     auto editor = std::make_unique<GUI::Editor>();
-    editor->Init(appSettings.screenWidth, appSettings.screenHeight);
+    editor->Init(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight);
     windows.push_back(std::move(editor));  // Move to maintain ownership
 
     // Add the menu bar
@@ -77,8 +78,8 @@ void GUIManager::DrawDockingSpace()
 
 void GUIManager::DrawDemoWindow()
 {
-    if (appSettings.showDemoWindow)
-        ImGui::ShowDemoWindow(&appSettings.showDemoWindow);
+    if (AppSettings::appSettings.showDemoWindow)
+        ImGui::ShowDemoWindow(&AppSettings::appSettings.showDemoWindow);
 }
 
 template<typename T, typename... Args>

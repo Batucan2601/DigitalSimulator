@@ -4,20 +4,19 @@
 std::string circuit_logger = "CircuitLogger";
 SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
 
-AppSettings::Settings appSettings;
 
 int main(void)
 {
-    appSettings.theme = AppSettings::Theme::DarkMode;
+    AppSettings::appSettings.theme = AppSettings::Theme::DarkMode;
 
     SetTraceLogLevel(LOG_NONE);  // Disable raylib logging
     // Initialization
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    RaylibHelper::Init(appSettings.screenWidth, appSettings.screenHeight, appSettings.targetFps,
+    RaylibHelper::Init(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight, AppSettings::appSettings.targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     LogicElements::init_logicTextures();  // this should also be wrapped
-    Controls::Controls_set_camera(appSettings.screenWidth, appSettings.screenHeight);
+    Controls::Controls_set_camera(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight);
     std::string and_gate_logger = "AndLogger1";
     std::string or_gate_logger = "OrLogger1";
     std::string not_gate_logger = "NotLogger1";
@@ -49,8 +48,8 @@ int main(void)
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
-        appSettings.screenHeight = GetScreenHeight();
-        appSettings.screenWidth = GetScreenWidth();
+        AppSettings::appSettings.screenHeight = GetScreenHeight();
+        AppSettings::appSettings.screenWidth = GetScreenWidth();
         // Update
         Controls::Controls_update(circuit);
         circuit->evaluate();

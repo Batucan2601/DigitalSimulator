@@ -4,8 +4,6 @@
 #include <imgui.h>
 #include <sstream>
 
-extern AppSettings::Settings appSettings;
-
 namespace GUI
 {
 
@@ -123,13 +121,13 @@ namespace GUI
         createMenuItem("View/Theme/Dark Mode", false,
                        []()
                        {
-                           appSettings.theme = AppSettings::Theme::DarkMode;
+                           AppSettings::appSettings.theme = AppSettings::Theme::DarkMode;
                            GUIStyle::ApplyDarkTheme();
                        });
         createMenuItem("View/Theme/Light Mode", false,
                        []()
                        {
-                           appSettings.theme = AppSettings::Theme::LightMode;
+                           AppSettings::appSettings.theme = AppSettings::Theme::LightMode;
                            GUIStyle::ApplyLightTheme();
                        });
         createMenuItem("View/Appearance/Default Layout", false, []() {});

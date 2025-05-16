@@ -10,7 +10,6 @@
 #include <GUI/BaseWindow.h>
 #include <imgui.h>
 
-extern AppSettings::Settings appSettings;
 
 namespace GUI
 {
