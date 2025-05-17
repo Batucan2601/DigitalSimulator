@@ -88,9 +88,7 @@ namespace Controls
 
         mouse_pos = GetMousePosition();
         ConvertMouseCoord(mouse_pos);
-        std::cout << " mouse pos sss " << mouse_pos.x <<  std::endl;
         AppSettings::appSettings.mousePos = mouse_pos;
-        std::cout << " mouse pos 1 " << AppSettings::appSettings.mousePos.x <<  std::endl;
 
         // get data
         selected_circuit = circuit;
