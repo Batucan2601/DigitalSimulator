@@ -66,7 +66,6 @@ namespace GUI
             Vector2 pos = Utils::SnapToNearestGrid(rec);
             circuit->selected_wires.wire_hovering = pos;
             circuit->is_GUIdragdragging = true;
-            std::cout << "mouse pos " << AppSettings::appSettings.mousePos.x  <<  std::endl;
         }
         if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
         {

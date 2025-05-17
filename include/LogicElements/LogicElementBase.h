@@ -36,6 +36,8 @@ namespace LogicElements
         XAND_FILLED,
         INPUT,
         INPUT_FILLED,
+        INPUT_0,
+        INPUT_1
     };
 
     struct GateInfo

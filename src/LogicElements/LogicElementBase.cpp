@@ -37,9 +37,12 @@ namespace LogicElements
         gateInfoList->push_back(GateInfo("XAND Gate", GateType::XAND,
                                          &logicElementTextures[GateType::XAND],
                                          &logicElementTextures[GateType::XAND_FILLED]));
-        gateInfoList->push_back(GateInfo("INPUT Gate", GateType::INPUT,
-                                         &logicElementTextures[GateType::INPUT],
-                                         &logicElementTextures[GateType::INPUT_FILLED]));
+        gateInfoList->push_back(GateInfo("INPUT0 Gate", GateType::INPUT_0,
+                                         &logicElementTextures[GateType::INPUT_0],
+                                         &logicElementTextures[GateType::INPUT_0]));
+        gateInfoList->push_back(GateInfo("INPUT1 Gate", GateType::INPUT_1,
+                                         &logicElementTextures[GateType::INPUT_1],
+                                         &logicElementTextures[GateType::INPUT_1]));
     }
 
     void init_OutlinedLogicTextures()
@@ -67,9 +70,12 @@ namespace LogicElements
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[GateType::XAND] = LoadTexture(full_path.c_str());
 
-        file_path = folder_path + "not.png";  // Use relative path
+        file_path = folder_path + "0.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::INPUT] = LoadTexture(full_path.c_str());
+        logicElementTextures[GateType::INPUT_0] = LoadTexture(full_path.c_str());
+        file_path = folder_path + "1.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::INPUT_1] = LoadTexture(full_path.c_str());
     }
     void init_FilledLogicTextures()
     {
@@ -340,6 +346,17 @@ namespace LogicElements
         {
             return;
         }
+        // if it is a inputgate
+        if (this->m_type == GateType::INPUT_0)
+        {
+            this->m_type = GateType::INPUT_1;
+            this->m_texture = logicElementTextures[GateType::INPUT_1];
+        }
+        else if (this->m_type == GateType::INPUT_1)
+        {
+            this->m_type = GateType::INPUT_0;
+            this->m_texture = logicElementTextures[GateType::INPUT_0];
+        }
         // ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
         if (!circuit->active_wire.is_visible)  // we are not building a connection
@@ -417,11 +434,7 @@ namespace LogicElements
                     &circuit->connections[circuit->connections.size() - 1]));
             }
         }
-        // connection logic
-
-        // select the handler.
-        // InputResolver::setSelectedHandler((IInputHandler*)(&circuit->connections[circuit->connections.size()
-        // - 1]));
+       
     }
     void LogicGate::OnRightClick(const InputEvent& event)
     {
