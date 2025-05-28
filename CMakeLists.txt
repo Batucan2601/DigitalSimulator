@@ -24,6 +24,11 @@ Libraries/rlImGui/rlImGui.cpp
 Libraries/ImGuiFileDialog/ImGuiFileDialog.cpp
 )
 
+if (UNIX)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-missing-field-initializers")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
+endif()
+
 add_library( ImGuiLib  ${IMGUI_FILES})
 target_include_directories(ImGuiLib PUBLIC Libraries/raylib/src)
 target_include_directories(ImGuiLib PUBLIC Libraries/imgui)
@@ -67,6 +72,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PUBLIC include/LogicElements)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/imgui)
 target_include_directories(${PROJECT_NAME} PUBLIC Libraries/rlImGui)
+
+
 
 # # -------------------
 # # 🚀 ADD INSTALL TARGETS FOR PACKAGING

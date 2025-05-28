@@ -4,7 +4,7 @@
 
 #include <imgui.h>
 #include <raylib.h>
-#include <Util/utils.h>
+#include <Util/Utils.h>
 
 namespace GUI
 {

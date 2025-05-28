@@ -25,7 +25,7 @@ namespace GUI
     }
     void LogicGateInfo::Update(SP_Circuit circuit)
     {
-
+        (void)circuit;
     }
     void LogicGateInfo::draw_Inputs(Component* logicGate)
     {

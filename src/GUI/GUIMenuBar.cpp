@@ -172,6 +172,6 @@ namespace GUI
     }
     void GUIMenuBar::Update(SP_Circuit circuit)
     {
-
+        (void)circuit;
     }
 }  // namespace GUI

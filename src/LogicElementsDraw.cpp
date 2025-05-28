@@ -2,7 +2,7 @@
 
 #include <chrono>  // High precision timing
 #include <iostream>
-#include <Util/utils.h>
+#include <Util/Utils.h>
 
 
 namespace LogicElementsDraw

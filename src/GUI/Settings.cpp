@@ -53,7 +53,7 @@ namespace GUI
 
     void Settings::Update(SP_Circuit circuit)  
     {
-
+        (void)circuit;
     }
 
 }  // namespace GUI

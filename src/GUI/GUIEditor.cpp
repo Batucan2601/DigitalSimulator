@@ -70,7 +70,7 @@ namespace GUI
     }
     void Editor::Update(SP_Circuit circuit)
     {
-
+	(void)circuit;
     }
     Editor::EditorWindow Editor::getWindow()
     {

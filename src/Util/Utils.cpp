@@ -5,13 +5,13 @@ namespace Utils
 	bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
                        CircuitElements::Connection& con)
     {
-        for (int i = 0; i < circuit->connections.size(); i++)
+        for (int i = 0; i < (int)circuit->connections.size(); i++)
         {
             if (circuit->connections[i].physCon.wires.size() == 0)
             {
                 continue; 
             }
-            for (int j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+            for (int j = 0; j < (int)circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];
                 Vector2 end = circuit->connections[i].physCon.wires[j + 1];

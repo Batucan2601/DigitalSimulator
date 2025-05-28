@@ -8,7 +8,7 @@
 #include "appSettings.h"
 
 #include <Controls.h>
-#include <Util/utils.h>
+#include <Util/Utils.h>
 
 
 namespace LogicElements
