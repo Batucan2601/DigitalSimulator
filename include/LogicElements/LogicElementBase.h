@@ -37,7 +37,8 @@ namespace LogicElements
         INPUT,
         INPUT_FILLED,
         INPUT_0,
-        INPUT_1
+        INPUT_1,
+        CLK
     };
 
     struct GateInfo

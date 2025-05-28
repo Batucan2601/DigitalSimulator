@@ -2,6 +2,7 @@
 
 namespace LogicElements
 {
+    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , GateType type,  Signal A , Signal B , Signal Out );
     std::shared_ptr<LogicGate> LogicElementFactory::createGate(GateType type,
                                                                std::string logger_name)
     {
@@ -9,6 +10,12 @@ namespace LogicElements
         Signal A("A");
         Signal B("B");
         Signal Out("Out");
+        // types for actual logic gates
+        generate_logic_gate(gate, type, A, B, Out);
+        return gate;
+    }
+    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , GateType type,  Signal A , Signal B , Signal Out )
+    {
         switch (type)
         {
             case GateType::AND:
@@ -98,7 +105,7 @@ namespace LogicElements
             default:
                 break;
         }
-
-        return gate;
     }
+
+ 
 }  // namespace LogicElements

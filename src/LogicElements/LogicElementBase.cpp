@@ -43,6 +43,9 @@ namespace LogicElements
         gateInfoList->push_back(GateInfo("INPUT1 Gate", GateType::INPUT_1,
                                          &logicElementTextures[GateType::INPUT_1],
                                          &logicElementTextures[GateType::INPUT_1]));
+        gateInfoList->push_back(GateInfo("CLK", GateType::CLK,
+                                         &logicElementTextures[GateType::CLK],
+                                         &logicElementTextures[GateType::CLK]));
     }
 
     void init_OutlinedLogicTextures()
@@ -73,9 +76,14 @@ namespace LogicElements
         file_path = folder_path + "0.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[GateType::INPUT_0] = LoadTexture(full_path.c_str());
+
         file_path = folder_path + "1.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[GateType::INPUT_1] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "1.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[GateType::CLK] = LoadTexture(full_path.c_str());
     }
     void init_FilledLogicTextures()
     {
