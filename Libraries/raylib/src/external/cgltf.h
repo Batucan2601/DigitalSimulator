@@ -3523,7 +3523,7 @@ static int cgltf_parse_json_accessor_sparse(jsmntok_t const* tokens, int i, cons
 					out_sparse->indices_byte_offset = cgltf_json_to_size(tokens + i, json_chunk);
 					++i;
 				}
-				else if (cgltf_json_strcmp(tokens+i, json_chunk, "componentType") == 0)
+				else if (cgltf_json_strcmp(tokens+i, json_chunk, "CircuitElements::ComponentType") == 0)
 				{
 					++i;
 					out_sparse->indices_component_type = cgltf_json_to_component_type(tokens + i, json_chunk);
@@ -3617,7 +3617,7 @@ static int cgltf_parse_json_accessor(cgltf_options* options, jsmntok_t const* to
 					cgltf_json_to_size(tokens+i, json_chunk);
 			++i;
 		}
-		else if (cgltf_json_strcmp(tokens+i, json_chunk, "componentType") == 0)
+		else if (cgltf_json_strcmp(tokens+i, json_chunk, "CircuitElements::ComponentType") == 0)
 		{
 			++i;
 			out_accessor->component_type = cgltf_json_to_component_type(tokens + i, json_chunk);

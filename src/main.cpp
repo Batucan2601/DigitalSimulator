@@ -22,15 +22,15 @@ int main(void)
     std::string not_gate_logger = "NotLogger1";
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
-    auto gate1 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::AND,
+    auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
                                                                 and_gate_logger);
     auto gate2 =
-        LogicElements::LogicElementFactory::createGate(LogicElements::GateType::OR, or_gate_logger);
-    auto gate3 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::NOT,
+        LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::OR, or_gate_logger);
+    auto gate3 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOT,
                                                                 not_gate_logger);
-    auto gate4 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XAND,
+    auto gate4 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XAND,
                                                                 xand_gate_logger);
-    auto gate5 = LogicElements::LogicElementFactory::createGate(LogicElements::GateType::XOR,
+    auto gate5 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XOR,
                                                                 xor_gate_logger);
 
     gate1->setPosition(0, 100 - 250);

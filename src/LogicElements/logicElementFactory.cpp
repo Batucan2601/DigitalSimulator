@@ -2,8 +2,8 @@
 
 namespace LogicElements
 {
-    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , GateType type,  Signal A , Signal B , Signal Out );
-    std::shared_ptr<LogicGate> LogicElementFactory::createGate(GateType type,
+    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
+    std::shared_ptr<LogicGate> LogicElementFactory::createGate(CircuitElements::ComponentType type,
                                                                std::string logger_name)
     {
         auto gate = std::make_shared<LogicGate>(type, logger_name);
@@ -14,17 +14,18 @@ namespace LogicElements
         generate_logic_gate(gate, type, A, B, Out);
         return gate;
     }
-    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , GateType type,  Signal A , Signal B , Signal Out )
+    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )
     {
         switch (type)
         {
-            case GateType::AND:
+            case CircuitElements::ComponentType::AND:
                 gate->inputs.push_back(A);
                 gate->inputs.push_back(B);
                 gate->outputs.push_back(Out);
                 gate->setEvaluationFunction(
-                    [](LogicGate& g)
+                    [](Component& c)
                     {
+                        auto& g = static_cast<LogicGate&>(c); // downcast
                         auto& out = g.outputs[0];
                         for (auto const& val : g.inputs)
                         {
@@ -35,13 +36,14 @@ namespace LogicElements
                     });
                 break;
 
-            case GateType::OR:
+            case CircuitElements::ComponentType::OR:
                 gate->inputs.push_back(A);
                 gate->inputs.push_back(B);
                 gate->outputs.push_back(Out);
                 gate->setEvaluationFunction(
-                    [](LogicGate& g)
+                    [](Component& c)
                     {
+                        auto& g = static_cast<LogicGate&>(c); // downcast
                         auto& out = g.outputs[0];
                         for (auto const& val : g.inputs)
                         {
@@ -52,24 +54,26 @@ namespace LogicElements
                     });
                 break;
 
-            case GateType::NOT:
+            case CircuitElements::ComponentType::NOT:
                 A.name = "In";
                 gate->inputs.push_back(A);
                 gate->outputs.push_back(Out);
                 gate->setEvaluationFunction(
-                    [](LogicGate& g)
+                    [](Component& c)
                     {
+                        auto& g = static_cast<LogicGate&>(c); // downcast
                         g.outputs[0].val = !g.inputs[0].val;
                     });
                 break;
 
-            case GateType::XOR:
+            case CircuitElements::ComponentType::XOR:
                 gate->inputs.push_back(A);
                 gate->inputs.push_back(B);
                 gate->outputs.push_back(Out);
                 gate->setEvaluationFunction(
-                    [](LogicGate& g)
+                    [](Component& c)
                     {
+                        auto& g = static_cast<LogicGate&>(c); // downcast
                         auto& out = g.outputs[0];
                         for (auto const& val: g.inputs)
                         {
@@ -80,13 +84,14 @@ namespace LogicElements
                     });
                 break;
 
-            case GateType::XAND:
+            case CircuitElements::ComponentType::XAND:
                 gate->inputs.push_back(A);
                 gate->inputs.push_back(B);
                 gate->outputs.push_back(Out);
                 gate->setEvaluationFunction(
-                    [](LogicGate& g)
+                    [](Component& c)
                     {
+                        auto& g = static_cast<LogicGate&>(c); // downcast
                         // thi is NAND logic
                         auto& out = g.outputs[0];
                         bool allTrue = true;  // Assume all inputs are true initially.

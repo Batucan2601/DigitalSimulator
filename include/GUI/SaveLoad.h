@@ -29,8 +29,8 @@ namespace GUI
 
         void Draw(SP_Circuit circuit) override;
         void Update(SP_Circuit circuit) override;
-        void RenderSaveButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
-        void RenderLoadButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
+        void RenderSaveButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
+        void RenderLoadButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
 
       private:
         void ShowSaveWindow(SP_Circuit globalCircuit);

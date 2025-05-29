@@ -55,7 +55,14 @@ namespace jsonParser
 
         return circuit;
     }
-
+      void to_json(json& j, const Component& comp)
+    {
+        j = json{{"id", comp.getID()},  // Store ID
+                 {"type", comp.getType()},
+                 {"position", {{"x", comp.getPosition().x}, {"y", comp.getPosition().y}}},
+                 {"inputs", comp.getInputs()},
+                 {"outputs", comp.getOutputs()}};
+    }
     void saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath)
     {
         json j;
@@ -95,15 +102,25 @@ namespace jsonParser
             std::cerr << "Error: Could not open file for saving!" << std::endl;
         }
     }
+    template <typename T, std::enable_if_t<std::is_base_of_v<Component, T>, int> = 0>
+    void to_json(json& j, const T& comp)
+    {
+        j = json{{"id", comp.getID()},
+                 {"type", comp.getType()},
+                 {"position", {{"x", comp.getPosition().x}, {"y", comp.getPosition().y}}},
+                 {"inputs", comp.getInputs()},
+                 {"outputs", comp.getOutputs()}}; 
+    }
 
-    void to_json(json& j, const LogicElements::LogicGate& gate)
+  
+    /*void to_json(json& j, const LogicElements::LogicGate& gate)
     {
         j = json{{"id", gate.getID()},  // Store ID
                  {"type", gate.getType()},
                  {"position", {{"x", gate.getPosition().x}, {"y", gate.getPosition().y}}},
                  {"inputs", gate.getInputs()},
                  {"outputs", gate.getOutputs()}};
-    }
+    } */
 
     void to_json(json& j, const Vector2& v)
     {

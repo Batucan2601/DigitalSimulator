@@ -8,7 +8,7 @@
 namespace LogicElementsDraw
 {
 
-    void DrawGateElement(const std::shared_ptr<LogicElements::LogicGate> gate)
+    void DrawGateElement(const std::shared_ptr<Component> gate)
     {
         const Rectangle& bd = gate->bd;  // Bounding box of the gate
         float bd_width = bd.width;
@@ -128,26 +128,26 @@ namespace LogicElementsDraw
     {
         DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, AppSettings::appSettings.SPACING_SIZE, color);
     }
-    void DrawBoundaryBox(const std::shared_ptr<LogicElements::LogicGate> gate)
+    void DrawBoundaryBox(const std::shared_ptr<Component> gate)
     {
         Color color;
-        if (gate->m_type == LogicElements::GateType::AND)
+        if (gate->m_type == CircuitElements::ComponentType::AND)
         {
             color = GREEN;
         }
-        else if (gate->m_type == LogicElements::GateType::OR)
+        else if (gate->m_type == CircuitElements::ComponentType::OR)
         {
             color = BLUE;
         }
-        else if (gate->m_type == LogicElements::GateType::NOT)
+        else if (gate->m_type == CircuitElements::ComponentType::NOT)
         {
             color = RED;
         }
-        else if (gate->m_type == LogicElements::GateType::XOR)
+        else if (gate->m_type == CircuitElements::ComponentType::XOR)
         {
             color = YELLOW;
         }
-        else if (gate->m_type == LogicElements::GateType::XOR)
+        else if (gate->m_type == CircuitElements::ComponentType::XOR)
         {
             color = ORANGE;
         }
@@ -158,7 +158,7 @@ namespace LogicElementsDraw
 
         DrawRectangleLines(gate->bd.x, gate->bd.y, gate->bd.width, gate->bd.height, color);
     }
-    void DrawInOut(std::shared_ptr<LogicElements::LogicGate> gate)
+    void DrawInOut(std::shared_ptr<Component> gate)
     {
         for (size_t i = 0; i < gate->outputs.size(); i++)
         {

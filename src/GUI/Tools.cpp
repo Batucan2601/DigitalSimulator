@@ -8,7 +8,7 @@
 
 namespace GUI
 {
-    GUIToolsDragDrop dragDrop = {DragDropState::IDLE, LogicElements::GateType::NONE};
+    GUIToolsDragDrop dragDrop = {DragDropState::IDLE, CircuitElements::ComponentType::NONE};
 
     void Tools::Draw(SP_Circuit circuit)
     {
@@ -30,8 +30,9 @@ namespace GUI
 
             if (ImGui::TreeNodeEx("Logic Gates", node_flags))
             {
-                for (const auto& gateInfo : *LogicElements::gateInfoList)
+                for (const auto& gateInfo : *LogicElements::componentInfoList)
                 {
+                    // Render each gate button
                     RenderGateButton(gateInfo.name, gateInfo);
                 }
                 ImGui::TreePop();
@@ -39,15 +40,15 @@ namespace GUI
 
             if (ImGui::TreeNodeEx("Input/Output", node_flags))
             {
-                // Get the gate info where GateType is INPUT
-                auto it = std::find_if(LogicElements::gateInfoList->begin(),
-                                       LogicElements::gateInfoList->end(),
-                                       [](const LogicElements::GateInfo& gate)
+                // Get the gate info where CircuitElements::ComponentType is INPUT
+                auto it = std::find_if(LogicElements::componentInfoList->begin(),
+                                       LogicElements::componentInfoList->end(),
+                                       [](const CircuitElements::ComponentInfo& gate)
                                        {
-                                           return gate.type == LogicElements::GateType::INPUT;
+                                           return gate.type == CircuitElements::ComponentType::INPUT;
                                        });
 
-                if (it != LogicElements::gateInfoList->end())  // If found, render the button
+                if (it != LogicElements::componentInfoList->end())  // If found, render the button
                 {
                     RenderGateButton(it->name, *it);
                 }
@@ -75,19 +76,19 @@ namespace GUI
             // add the new circuit
             std::string new_gate = "or_gate_logger";
             std::shared_ptr<LogicElements::LogicGate> gate;
-            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.gateType, new_gate);
+            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.componentType, new_gate);
             circuit->addGate(gate);
 
-            if (GUI::dragDrop.gateType != LogicElements::GateType::NONE)
+            if (GUI::dragDrop.componentType != CircuitElements::ComponentType::NONE)
             {
                 circuit->gates[circuit->gates.size() - 1]->setPosition(
                     circuit->selected_wires.wire_hovering.x,
                     circuit->selected_wires.wire_hovering.y);
-                GUI::dragDrop.gateType = LogicElements::GateType::NONE;
+                GUI::dragDrop.componentType = CircuitElements::ComponentType::NONE;
             }
         }
     }
-    void Tools::RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo)
+    void Tools::RenderGateButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo)
     {
         float icon_size = 50.0f;
 
@@ -115,14 +116,14 @@ namespace GUI
         if (ImGui::BeginDragDropSource())
         {
             ImGui::SetDragDropPayload("IMAGE_DRAG", &gateInfo.type,
-                                      sizeof(LogicElements::GateType));
+                                      sizeof(CircuitElements::ComponentType));
 
             // Show the image as a preview while dragging.
             ImGui::Image(textureID, ImVec2(100, 100));
             ImGui::Text("Dragging: %s", gateName.c_str());
             ImGui::EndDragDropSource();
 
-            dragDrop.gateType = gateInfo.type;
+            dragDrop.componentType = gateInfo.type;
             dragDrop.state = DragDropState::DRAGGING;
         }
         // Handle Drag State

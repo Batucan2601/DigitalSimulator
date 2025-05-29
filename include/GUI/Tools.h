@@ -16,7 +16,7 @@ namespace GUI
     struct GUIToolsDragDrop
     {
         DragDropState state;
-        LogicElements::GateType gateType;
+        CircuitElements::ComponentType componentType;
     };
 
     class Tools : public BaseWindow
@@ -26,7 +26,8 @@ namespace GUI
 
         void Draw(SP_Circuit circuit) override;
         void Update(SP_Circuit circuit) override;
-        void RenderGateButton(const std::string& gateName, LogicElements::GateInfo gateInfo);
+        void RenderGateButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
+
     };
 
     extern GUIToolsDragDrop dragDrop;

@@ -20,10 +20,10 @@ namespace Controls
     void Controls_Mouse_Movements();
     void Controls_Handle_Continous(SP_Circuit circuit);
 
-    void HandleGateSelection(const std::shared_ptr<LogicElements::LogicGate>& gate,
+    void HandleGateSelection(const std::shared_ptr<Component>& gate,
                              const Vector2& mousePosition);
     void CheckGatePartClicked(SP_Circuit circuit,
-                              const std::shared_ptr<LogicElements::LogicGate>& gate,
+                              const std::shared_ptr<Component>& gate,
                               const Vector2& mousePosition,
                               CircuitElements::Connection& connection);
     Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,

@@ -13,39 +13,39 @@
 
 namespace LogicElements
 {
-    std::map<GateType, Texture> logicElementTextures;
-    std::shared_ptr<std::vector<GateInfo>> gateInfoList;
+    std::map<CircuitElements::ComponentType, Texture> logicElementTextures;
+    std::shared_ptr<std::vector<CircuitElements::ComponentInfo>> componentInfoList;
 
     void init_logicTextures()
     {
         init_OutlinedLogicTextures();
         init_FilledLogicTextures();
 
-        gateInfoList = std::make_shared<std::vector<GateInfo>>();
-        gateInfoList->push_back(GateInfo("AND Gate", GateType::AND,
-                                         &logicElementTextures[GateType::AND],
-                                         &logicElementTextures[GateType::AND_FILLED]));
-        gateInfoList->push_back(GateInfo("OR Gate", GateType::OR,
-                                         &logicElementTextures[GateType::OR],
-                                         &logicElementTextures[GateType::OR_FILLED]));
-        gateInfoList->push_back(GateInfo("NOT Gate", GateType::NOT,
-                                         &logicElementTextures[GateType::NOT],
-                                         &logicElementTextures[GateType::NOT_FILLED]));
-        gateInfoList->push_back(GateInfo("XOR Gate", GateType::XOR,
-                                         &logicElementTextures[GateType::XOR],
-                                         &logicElementTextures[GateType::XOR_FILLED]));
-        gateInfoList->push_back(GateInfo("XAND Gate", GateType::XAND,
-                                         &logicElementTextures[GateType::XAND],
-                                         &logicElementTextures[GateType::XAND_FILLED]));
-        gateInfoList->push_back(GateInfo("INPUT0 Gate", GateType::INPUT_0,
-                                         &logicElementTextures[GateType::INPUT_0],
-                                         &logicElementTextures[GateType::INPUT_0]));
-        gateInfoList->push_back(GateInfo("INPUT1 Gate", GateType::INPUT_1,
-                                         &logicElementTextures[GateType::INPUT_1],
-                                         &logicElementTextures[GateType::INPUT_1]));
-        gateInfoList->push_back(GateInfo("CLK", GateType::CLK,
-                                         &logicElementTextures[GateType::CLK],
-                                         &logicElementTextures[GateType::CLK]));
+        componentInfoList = std::make_shared<std::vector<CircuitElements::ComponentInfo>>();
+        componentInfoList->push_back(CircuitElements::ComponentInfo("AND Gate", CircuitElements::ComponentType::AND,
+                                         &logicElementTextures[CircuitElements::ComponentType::AND],
+                                         &logicElementTextures[CircuitElements::ComponentType::AND_FILLED]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("OR Gate", CircuitElements::ComponentType::OR,
+                                         &logicElementTextures[CircuitElements::ComponentType::OR],
+                                         &logicElementTextures[CircuitElements::ComponentType::OR_FILLED]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("NOT Gate", CircuitElements::ComponentType::NOT,
+                                         &logicElementTextures[CircuitElements::ComponentType::NOT],
+                                         &logicElementTextures[CircuitElements::ComponentType::NOT_FILLED]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("XOR Gate", CircuitElements::ComponentType::XOR,
+                                         &logicElementTextures[CircuitElements::ComponentType::XOR],
+                                         &logicElementTextures[CircuitElements::ComponentType::XOR_FILLED]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("XAND Gate", CircuitElements::ComponentType::XAND,
+                                         &logicElementTextures[CircuitElements::ComponentType::XAND],
+                                         &logicElementTextures[CircuitElements::ComponentType::XAND_FILLED]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("INPUT0 Gate", CircuitElements::ComponentType::INPUT_0,
+                                         &logicElementTextures[CircuitElements::ComponentType::INPUT_0],
+                                         &logicElementTextures[CircuitElements::ComponentType::INPUT_0]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("INPUT1 Gate", CircuitElements::ComponentType::INPUT_1,
+                                         &logicElementTextures[CircuitElements::ComponentType::INPUT_1],
+                                         &logicElementTextures[CircuitElements::ComponentType::INPUT_1]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("CLK", CircuitElements::ComponentType::CLK,
+                                         &logicElementTextures[CircuitElements::ComponentType::CLK],
+                                         &logicElementTextures[CircuitElements::ComponentType::CLK]));
     }
 
     void init_OutlinedLogicTextures()
@@ -55,35 +55,35 @@ namespace LogicElements
 
         file_path = folder_path + "and.png";  // Use relative path
         std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::AND] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::AND] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "or.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::OR] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::OR] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "not.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::NOT] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::NOT] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "xand.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::XOR] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::XOR] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::XAND] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::XAND] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "0.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::INPUT_0] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::INPUT_0] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "1.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::INPUT_1] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::INPUT_1] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "1.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::CLK] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::CLK] = LoadTexture(full_path.c_str());
     }
     void init_FilledLogicTextures()
     {
@@ -93,33 +93,33 @@ namespace LogicElements
 
         file_path = folder_path + "and.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::AND_FILLED] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::AND_FILLED] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "or.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::OR_FILLED] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::OR_FILLED] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "not.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::NOT_FILLED] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::NOT_FILLED] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "xand.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::XOR_FILLED] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::XOR_FILLED] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[GateType::XAND_FILLED] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::XAND_FILLED] = LoadTexture(full_path.c_str());
     }
 
-    LogicGate::LogicGate(GateType gateType, std::string& logger_name)
-        : m_type(gateType), m_logger(logger_name)
+    LogicGate::LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name)
+        : m_type(componentType), m_logger(logger_name)
     {
         static int nextId = 0;
         id = nextId++;  // Assign a unique ID
-        Component();
-        // type = gateType;
-        m_texture = logicElementTextures[gateType];
+        //Component();
+        // type = CircuitElements::ComponentType;
+        m_texture = logicElementTextures[componentType];
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
         InputResolver::RegisterHandler(this);
     }
@@ -199,15 +199,6 @@ namespace LogicElements
         return id;
     }
 
-    const std::vector<Signal>& LogicGate::getInputs() const
-    {
-        return inputs;
-    }
-
-    const std::vector<Signal>& LogicGate::getOutputs() const
-    {
-        return outputs;
-    }
 
     void LogicGate::setInput(const std::string& name, bool value)
     {
@@ -233,20 +224,7 @@ namespace LogicElements
         return false;
     }
 
-    void LogicGate::setEvaluationFunction(std::function<void(LogicGate&)> evalFunc)
-    {
-        evaluateFunction = evalFunc;
-    }
-
-    void LogicGate::evaluate()
-    {
-        if (evaluateFunction)
-        {
-            evaluateFunction(*this);
-        }
-    }
-
-    GateType LogicGate::getType() const
+    CircuitElements::ComponentType LogicGate::getType() const
     {
         return m_type;
     }
@@ -256,32 +234,10 @@ namespace LogicElements
         return m_texture;
     }
 
-    // GatePosition &LogicGate::getPositionManager()
-    // {
-    //     return m_position;
-    // }
-
-    void LogicGate::addObserver(GateObserver* observer)
-    {
-        observers.insert(observer);
-    }
-
-    void LogicGate::removeObserver(GateObserver* observer)
-    {
-        observers.erase(observer);
-    }
-
-    void LogicGate::notifyObservers()
-    {
-        for (auto observer : observers)
-        {
-            observer->onInputChanged();
-        }
-    }
 
     void LogicGate::onInputChanged()
     {
-        evaluate();  // Automatically reevaluate when input changes
+        this->evaluate();  // Automatically reevaluate when input changes
     }
 
     void LogicGate::OnInputEvent(const InputEvent& event)
@@ -355,15 +311,15 @@ namespace LogicElements
             return;
         }
         // if it is a inputgate
-        if (this->m_type == GateType::INPUT_0)
+        if (this->m_type == CircuitElements::ComponentType::INPUT_0)
         {
-            this->m_type = GateType::INPUT_1;
-            this->m_texture = logicElementTextures[GateType::INPUT_1];
+            this->m_type = CircuitElements::ComponentType::INPUT_1;
+            this->m_texture = logicElementTextures[CircuitElements::ComponentType::INPUT_1];
         }
-        else if (this->m_type == GateType::INPUT_1)
+        else if (this->m_type == CircuitElements::ComponentType::INPUT_1)
         {
-            this->m_type = GateType::INPUT_0;
-            this->m_texture = logicElementTextures[GateType::INPUT_0];
+            this->m_type = CircuitElements::ComponentType::INPUT_0;
+            this->m_texture = logicElementTextures[CircuitElements::ComponentType::INPUT_0];
         }
         // ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
@@ -429,7 +385,7 @@ namespace LogicElements
                 handler->is_connected = true;
                 if (!is_output && !is_input)
                 {
-                    std::shared_ptr<LogicGate> temp_ptr = handler->sourceGate;
+                    std::shared_ptr<LogicGate> temp_ptr = std::static_pointer_cast<LogicGate>(handler->sourceGate);
                     handler->sourceGate = handler->targetGate;
                     handler->targetGate = temp_ptr;
 

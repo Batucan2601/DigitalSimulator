@@ -28,9 +28,9 @@ namespace CircuitElements
     class Connection : public IInputHandler
     {
       public:
-        std::shared_ptr<LogicElements::LogicGate> sourceGate;
+        std::shared_ptr<Component> sourceGate;
         std::string sourceLogic;
-        std::shared_ptr<LogicElements::LogicGate> targetGate;
+        std::shared_ptr<Component> targetGate;
         std::string targetLogic;
         PhysicalConnection physCon;
         HoveringWire hovering{
@@ -69,15 +69,15 @@ namespace CircuitElements
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
         }
-        void addGate(std::shared_ptr<LogicElements::LogicGate> gate);
-        void addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
+        void addGate(std::shared_ptr<Component> gate);
+        void addConnection(std::shared_ptr<Component> sourceGate,
                            const std::string& sourceOutput,
-                           std::shared_ptr<LogicElements::LogicGate> targetGate,
+                           std::shared_ptr<Component> targetGate,
                            const std::string& targetInput);
         void evaluate();
         ClassLogger m_logger;
 
-        std::vector<std::shared_ptr<LogicElements::LogicGate>> gates;
+        std::vector<std::shared_ptr<Component>> gates;
         // std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
         std::vector<Connection> connections;
         // TODO

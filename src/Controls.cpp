@@ -49,7 +49,7 @@ namespace Controls
     std::string gui_circuit_logger = "GUICircuitLogger";
     static ClassLogger control_logger(control_logger_name);
     static auto selected_circuit = std::make_shared<CircuitElements::Circuit>(gui_circuit_logger);
-    std::vector<std::shared_ptr<LogicElements::LogicGate>> selected_logic_gate(1);
+    std::vector<std::shared_ptr<Component>> selected_logic_gate(1);
     static bool is_logic_selected = false;
     static Vector2 mouse_pos;
     Vector2 offset;
@@ -346,7 +346,7 @@ namespace Controls
             circuit->active_wire.is_visible = true;
         }
     }
-    void HandleGateSelection(const std::shared_ptr<LogicElements::LogicGate>& gate,
+    void HandleGateSelection(const std::shared_ptr<Component>& gate,
                              const Vector2& mousePosition)
     {
         selected_logic_gate[0] = gate;
@@ -355,7 +355,7 @@ namespace Controls
         offset.y = mousePosition.y - gate->bd.y;
     }
     void CheckGatePartClicked(SP_Circuit circuit,
-                              const std::shared_ptr<LogicElements::LogicGate>& gate,
+                              const std::shared_ptr<Component>& gate,
                               const Vector2& mousePosition, CircuitElements::Connection& connection)
     {
         (void)circuit;

@@ -6,16 +6,16 @@
 
 namespace CircuitElements
 {
-    void Circuit::addGate(std::shared_ptr<LogicElements::LogicGate> gate)
+    void Circuit::addGate(std::shared_ptr<Component> gate)
     {
         this->m_logger.info("Gate added to the circuit.");
         gate->circuit = this;
         gates.push_back(gate);
     }
 
-    void Circuit::addConnection(std::shared_ptr<LogicElements::LogicGate> sourceGate,
+    void Circuit::addConnection(std::shared_ptr<Component> sourceGate,
                                 const std::string& sourceOutput,
-                                std::shared_ptr<LogicElements::LogicGate> targetGate,
+                                std::shared_ptr<Component> targetGate,
                                 const std::string& targetInput)
     {
         this->m_logger.info("Connection added to the circuit.");

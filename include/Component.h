@@ -7,6 +7,8 @@
 #include <raylib.h>
 #include <string>
 #include <vector>
+#include "gateObserver.h"
+#include <unordered_set>
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -111,22 +113,74 @@ struct Signal
 namespace CircuitElements
 {
     class Circuit;
+    enum class ComponentType
+    {
+        NONE,
+        AND,
+        AND_FILLED,
+        OR,
+        OR_FILLED,
+        NOT,
+        NOT_FILLED,
+        XOR,
+        XOR_FILLED,
+        XAND,
+        XAND_FILLED,
+        INPUT,
+        INPUT_FILLED,
+        INPUT_0,
+        INPUT_1,
+        CLK
+    };
+
+    struct ComponentInfo
+    {
+        std::string name;
+        ComponentType type;             // Name of the gate (e.g., "AND Gate")
+        Texture* outlinedTexture;  // Default texture
+        Texture* filledTexture;    // Alternative texture (e.g., highlighted version)
+
+        ComponentInfo(std::string name, CircuitElements::ComponentType type, Texture* outlinedText, Texture* filledTex)
+            : name(name), type(std::move(type)), outlinedTexture(outlinedText),
+              filledTexture(filledTex)
+        {
+        }
+    };
 }
-class Component : public IInputHandler
+class Component : public LogicElements::GateObserver ,  public IInputHandler
 {
   public:
     Component() {};
     Component(std::string& fileName);
-    void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void OnInputEvent(const InputEvent& event) override;
+    void setInput(const std::string& name, bool value);
+    bool getOutput(const std::string& name) const;
+
+    void addObserver(LogicElements::GateObserver* observer);
+    void removeObserver(LogicElements::GateObserver* observer);
+    void notifyObservers();
+    const std::vector<Signal>& getInputs() const;
+    const std::vector<Signal>& getOutputs() const;
+    void setEvaluationFunction(std::function<void(Component&)> evalFunc);
+    void evaluate();
+
     Rectangle bd = {0, 0, 100, 100};  // bounding box
-    void setPosition(float x, float y)
-    {
-        bd.x = x;
-        bd.y = y;
-    };  // TODO: Implement this
+    int getID() const; 
+    Vector2 getPosition() const;
+    void setPosition(float x, float y);
+    CircuitElements::ComponentType getType() const;
+
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     CircuitElements::Circuit* circuit;
+    int id;
+    CircuitElements::ComponentType m_type;
+    Texture2D m_texture;
+    bool is_hovered = false; 
+    std::unordered_set<GateObserver*> observers;       // Stores registered observers
+
+    std::function<void(Component&)> evaluateFunction;  // Stores gate logic
+
+    
 };
 #endif

@@ -33261,7 +33261,7 @@ static ma_result ma_context_get_device_info__coreaudio(ma_context* pContext, ma_
         reported on a temporary I/O unit. The problem, however, is that this doesn't return a value for the sample rate which we need to
         retrieve from the AVAudioSession shared instance.
         */
-        desc.componentType = kAudioUnitType_Output;
+        desc.CircuitElements::ComponentType = kAudioUnitType_Output;
         desc.componentSubType = kAudioUnitSubType_RemoteIO;
         desc.componentManufacturer = kAudioUnitManufacturer_Apple;
         desc.componentFlags = 0;
@@ -34945,7 +34945,7 @@ static ma_result ma_context_init__coreaudio(ma_context* pContext, const ma_conte
     /* Audio component. */
     {
         AudioComponentDescription desc;
-        desc.componentType         = kAudioUnitType_Output;
+        desc.CircuitElements::ComponentType         = kAudioUnitType_Output;
     #if defined(MA_APPLE_DESKTOP)
         desc.componentSubType      = kAudioUnitSubType_HALOutput;
     #else
