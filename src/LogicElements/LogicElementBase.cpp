@@ -134,53 +134,14 @@ namespace LogicElements
     {
         // output
         // int no_of_grid_points = this->bd.width / AppSettings::appSettings.GRID_POINT_SIZE + 1;
-
-        if (this->outputs.size() == 1)
+        for (size_t i = 0; i < this->inputs.size(); i++)
         {
-            this->outputs[0].pos = {this->bd.x + this->bd.width, this->bd.y + this->bd.height / 2};
+            float x = this->bd.x;
+            float y = this->bd.y + (i * AppSettings::appSettings.SPACING_SIZE);
+            this->inputs[i].pos = {x, y};
         }
-        else if (this->outputs.size() > 1)
-        {
-            this->outputs[0].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + AppSettings::appSettings.SPACING_SIZE};
-            this->outputs[1].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + AppSettings::appSettings.SPACING_SIZE * 3};
-        }
-        if (this->outputs.size() > 2)
-        {
-            this->outputs[2].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + AppSettings::appSettings.SPACING_SIZE * 2};
-        }
-        if (this->outputs.size() > 3)
-        {
-            this->outputs[3].pos = {this->bd.x + this->bd.width,
-                                    this->bd.y + AppSettings::appSettings.SPACING_SIZE * 4};
-        }
-        if (this->outputs.size() > 4)
-        {
-            this->outputs[4].pos = {this->bd.x + this->bd.width, this->bd.y};
-        }
-        if (this->inputs.size() == 1)
-        {
-            this->inputs[0].pos = {this->bd.x, this->bd.y + this->bd.height / 2};
-        }
-        else if (this->inputs.size() > 1)
-        {
-            this->inputs[0].pos = {this->bd.x, this->bd.y + AppSettings::appSettings.SPACING_SIZE};
-            this->inputs[1].pos = {this->bd.x, this->bd.y + AppSettings::appSettings.SPACING_SIZE * 3};
-        }
-        if (this->inputs.size() > 2)
-        {
-            this->inputs[2].pos = {this->bd.x, this->bd.y + AppSettings::appSettings.SPACING_SIZE * 2};
-        }
-        if (this->inputs.size() > 3)
-        {
-            this->inputs[3].pos = {this->bd.x, this->bd.y + AppSettings::appSettings.SPACING_SIZE * 4};
-        }
-        if (this->inputs.size() > 4)
-        {
-            this->inputs[4].pos = {this->bd.x, this->bd.y};
-        }
+        this->outputs[0].pos = {this->bd.x + this->bd.width, this->bd.y + this->bd.height / 2};
+        std::cout << this->outputs[0].pos.x << " " << this->outputs[0].pos.y << std::endl;
     }
     void LogicGate::setPosition(float x, float y)
     {

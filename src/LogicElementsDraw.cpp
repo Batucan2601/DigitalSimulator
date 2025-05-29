@@ -169,7 +169,7 @@ namespace LogicElementsDraw
                              AppSettings::appSettings.IN_OUT_RECT_WIDTH, AppSettings::appSettings.IN_OUT_RECT_WIDTH};
             DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
         }
-        if (gate->is_hovered)
+        //if (gate->is_hovered)
         {
             for (size_t i = 0; i < gate->inputs.size(); i++)
             {
