@@ -113,8 +113,9 @@ namespace LogicElements
     }
 
     LogicGate::LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name)
-        : m_type(componentType), m_logger(logger_name)
+        : m_logger(logger_name)
     {
+        this->m_type = componentType;
         static int nextId = 0;
         id = nextId++;  // Assign a unique ID
         //Component();
@@ -144,18 +145,6 @@ namespace LogicElements
     }
 
 
-
-    CircuitElements::ComponentType LogicGate::getType() const
-    {
-        return m_type;
-    }
-
-    const Texture2D& LogicGate::getTexture() const
-    {
-        return m_texture;
-    }
-
-
     void LogicGate::onInputChanged()
     {
         this->evaluate();  // Automatically reevaluate when input changes
@@ -163,7 +152,6 @@ namespace LogicElements
 
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
-        std::cout << "LogicGate OnInputEvent called" << std::endl;
         if (event.type == InputType::Mouse)
         {
             if (event.mouseState == MouseEventState::LeftClick)
@@ -198,7 +186,6 @@ namespace LogicElements
 
         if (event.type == InputType::Keyboard)
         {
-            std::cout << "Keyboard event" << std::endl;
             if (event.keyState == KeyboardEvent::KeyPress)
             {
                 OnKeyPress(event);

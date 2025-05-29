@@ -178,7 +178,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     CircuitElements::Connection& possibleConnection);
     bool CheckMouseOnInOut(const Vector2& mousePosition,
     CircuitElements::Connection& connection);
-
+    const Texture2D& getTexture() const;
     Rectangle bd = {0, 0, 100, 100};  // bounding box
     int getID() const; 
     Vector2 getPosition() const;

@@ -550,3 +550,8 @@ bool Component::CheckMouseOnInOut(const Vector2& mousePosition,
     }
     return false;
 }
+
+const Texture2D& Component::getTexture() const 
+{
+    return m_texture;
+}
