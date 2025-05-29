@@ -46,14 +46,6 @@ namespace LogicElements
 
       protected:
         void OnLeftClick(const InputEvent& event) override;
-        void OnDown(const InputEvent& event) override;
-        void OnRelease(const InputEvent& event) override;
-        void OnMove(const InputEvent& event) override;
-        void OnRightClick(const InputEvent& event) override;
-        void OnEnter(const InputEvent& event) override;
-        void OnExit(const InputEvent& event) override;
-        void OnKeyPress(const InputEvent& event) override;
-
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
           void setInOutPositions() override;

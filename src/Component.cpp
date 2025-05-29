@@ -129,7 +129,6 @@ int Component::getID() const
 
 void Component::OnInputEvent(const InputEvent& event)
     {
-        std::cout << "COmponent::Oninptevent called" << std::endl;
         if (event.type == InputType::Mouse)
         {
             if (event.mouseState == MouseEventState::LeftClick)
@@ -164,7 +163,6 @@ void Component::OnInputEvent(const InputEvent& event)
 
         if (event.type == InputType::Keyboard)
         {
-            std::cout << "Keyboard event" << std::endl;
             if (event.keyState == KeyboardEvent::KeyPress)
             {
                 OnKeyPress(event);
