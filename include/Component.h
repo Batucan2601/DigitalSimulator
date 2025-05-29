@@ -181,6 +181,8 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler
 
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
 
+    private:
+    virtual void setInOutPositions() = 0;  // Pure virtual — must be implemented in derived classes
     
 };
 #endif

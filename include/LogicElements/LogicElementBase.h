@@ -56,7 +56,7 @@ namespace LogicElements
 
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
-          void setInOutPositions();
+          void setInOutPositions() override;
     };
 }  // namespace LogicElements
 

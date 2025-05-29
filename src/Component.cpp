@@ -48,6 +48,7 @@ void Component::setPosition(float x, float y)
 {
     this->bd.x = x;
     this->bd.y = y;
+    this->setInOutPositions();
 };  // TODO: Implement this
 
 Vector2 Component::getPosition() const
