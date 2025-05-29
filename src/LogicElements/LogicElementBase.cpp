@@ -9,7 +9,7 @@
 
 #include <Controls.h>
 #include <Util/Utils.h>
-
+#include "raylibHelper.h"
 
 namespace LogicElements
 {
@@ -141,7 +141,6 @@ namespace LogicElements
             this->inputs[i].pos = {x, y};
         }
         this->outputs[0].pos = {this->bd.x + this->bd.width, this->bd.y + this->bd.height / 2};
-        std::cout << this->outputs[0].pos.x << " " << this->outputs[0].pos.y << std::endl;
     }
     void LogicGate::setPosition(float x, float y)
     {
@@ -271,6 +270,7 @@ namespace LogicElements
         {
             return;
         }
+        RaylibHelper::Show(1);
         // if it is a inputgate
         if (this->m_type == CircuitElements::ComponentType::INPUT_0)
         {

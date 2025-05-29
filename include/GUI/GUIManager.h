@@ -15,7 +15,8 @@ class GUIManager
     void DrawGUI(SP_Circuit circuit);
 
     std::vector<std::unique_ptr<GUI::BaseWindow>> windows;
-
+    void Show(int index);
+    void Hide(int index);
   private:
     void DrawDemoWindow();
     void DrawDockingSpace();  // Draw the parent screen for the dockspace

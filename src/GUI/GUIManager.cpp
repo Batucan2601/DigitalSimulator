@@ -111,3 +111,14 @@ void GUIManager::Cleanup()
 {
     rlImGuiShutdown();  // Clean up ImGui resources if necessary
 }
+
+
+void GUIManager::Show(int index)
+{
+    windows[index]->Show();
+}
+
+void GUIManager::Hide(int index)
+{
+    windows[index]->Hide();
+}

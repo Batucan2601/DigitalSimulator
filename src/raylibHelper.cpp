@@ -50,3 +50,12 @@ void RaylibHelper::Close()
     imguiManager->Cleanup();
     CloseWindow();
 }
+void RaylibHelper::Show(int index)
+{
+    imguiManager->Show(index);
+}
+void RaylibHelper::Hide(int index)
+{
+    imguiManager->Hide(index);
+
+}
