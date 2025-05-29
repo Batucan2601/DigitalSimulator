@@ -1,9 +1,10 @@
 #pragma once
 #include "Component.h"
 
-class InputElemment : public Component
+class InputElement : public Component
 {
   public:
-    InputElemment(CircuitElements::ComponentType componentType); // Input 
+  InputElement(CircuitElements::ComponentType componentType); // Input 
+  void setInOutPositions();
 
 };
