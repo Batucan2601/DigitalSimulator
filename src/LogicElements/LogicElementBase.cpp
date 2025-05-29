@@ -142,47 +142,8 @@ namespace LogicElements
         }
         this->outputs[0].pos = {this->bd.x + this->bd.width, this->bd.y + this->bd.height / 2};
     }
-    void LogicGate::setPosition(float x, float y)
-    {
-        bd.x = x;
-        bd.y = y;
-        this->setInOutPositions();
-    }
-
-    Vector2 LogicGate::getPosition() const
-    {
-        return {bd.x, bd.y};
-    }
-
-    int LogicGate::getID() const
-    {
-        return id;
-    }
 
 
-    void LogicGate::setInput(const std::string& name, bool value)
-    {
-        for (auto& I : this->inputs)
-        {
-            if (I.name == name)
-            {
-                I.val = value;
-                notifyObservers();
-            }
-        }
-    }
-
-    bool LogicGate::getOutput(const std::string& name) const
-    {
-        for (auto& it : this->outputs)
-        {
-            if (it.name == name)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
     CircuitElements::ComponentType LogicGate::getType() const
     {
@@ -270,7 +231,7 @@ namespace LogicElements
         {
             return;
         }
-        RaylibHelper::Show(1);
+        RaylibHelper::Show(1); // shows logicGateInfo window
         // if it is a inputgate
         if (this->m_type == CircuitElements::ComponentType::INPUT_0)
         {

@@ -9,6 +9,7 @@
 #include <vector>
 #include "gateObserver.h"
 #include <unordered_set>
+#include "ClassLogger.h"
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -163,7 +164,6 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler
     const std::vector<Signal>& getOutputs() const;
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void evaluate();
-
     Rectangle bd = {0, 0, 100, 100};  // bounding box
     int getID() const; 
     Vector2 getPosition() const;

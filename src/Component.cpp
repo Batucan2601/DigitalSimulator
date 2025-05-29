@@ -44,11 +44,6 @@ void Component::OnInputEvent(const InputEvent& event)
     // TODO: Implement the event handling logic here.
 }
 
-int Component::getID() const
-{
-    return this->id;
-}
-
 void Component::setPosition(float x, float y)
 {
     this->bd.x = x;
@@ -126,4 +121,9 @@ void Component::evaluate()
     {
         evaluateFunction(*this);
     }
+}
+
+int Component::getID() const
+{
+    return id;
 }

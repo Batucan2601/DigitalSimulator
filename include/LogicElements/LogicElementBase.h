@@ -33,35 +33,13 @@ namespace LogicElements
         LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name);
         ~LogicGate();
 
-        void setInput(const std::string& name, bool value);
-        bool getOutput(const std::string& name) const;
-
-        const std::vector<Signal>& getInputs() const;
-        const std::vector<Signal>& getOutputs() const;
-
         GatePosition& getPositionManager();  // Access GatePosition
         CircuitElements::ComponentType getType() const;
         const Texture2D& getTexture() const;
-        int getID() const;
-
         CircuitElements::ComponentType m_type;
-
-
-
-        void setPosition(float x, float y);
         Vector2 getPosition() const;
-
-
         void onInputChanged() override;  // Override observer function
-
-        // protected:
-
-        // GatePosition m_position; // Manage position and bounding box
         ClassLogger m_logger;
-        //CircuitElements::Circuit* circuit;
-
-
-
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
@@ -79,8 +57,6 @@ namespace LogicElements
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
           void setInOutPositions();
-      private:
-        int id;
     };
 }  // namespace LogicElements
 
