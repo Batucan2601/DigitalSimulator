@@ -87,7 +87,7 @@ namespace CircuitElements
 
         bool is_GUIdragdropped = false;
         bool is_GUIdragdragging = false;
-        std::shared_ptr<LogicElements::LogicGate> hoveredGate;
+        std::shared_ptr<Component> hoveredGate;
     };
 
 }  // namespace CircuitElements

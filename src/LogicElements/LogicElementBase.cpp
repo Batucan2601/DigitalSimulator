@@ -163,6 +163,7 @@ namespace LogicElements
 
     void LogicGate::OnInputEvent(const InputEvent& event)
     {
+        std::cout << "LogicGate OnInputEvent called" << std::endl;
         if (event.type == InputType::Mouse)
         {
             if (event.mouseState == MouseEventState::LeftClick)
@@ -525,7 +526,7 @@ namespace LogicElements
         m_logger.info("Mouse entered the gate");
         if (this == InputResolver::getSelectedHandler())
         {
-            circuit->hoveredGate = shared_from_this();
+            circuit->hoveredGate = std::enable_shared_from_this<Component>::shared_from_this();
         }
     }
     void LogicGate::OnExit(const InputEvent& event)
@@ -565,7 +566,9 @@ namespace LogicElements
     bool LogicGate::CheckMouseOnInOut(const Vector2& mousePosition,
                                       CircuitElements::Connection& connection)
     {
-        std::shared_ptr<LogicGate> itself = shared_from_this();
+        std::cout << "CheckMouseOnInOut called" << std::endl;
+        std::shared_ptr<Component> itself = std::enable_shared_from_this<Component>::shared_from_this();
+        std::cout << "itself: " << itself.get() << std::endl;
         Rectangle rec;
         for (size_t i = 0; i < inputs.size(); i++)
         {

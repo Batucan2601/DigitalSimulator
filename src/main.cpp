@@ -46,13 +46,18 @@ int main(void)
     circuit->addGate(gate5);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
+    std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         AppSettings::appSettings.screenHeight = GetScreenHeight();
         AppSettings::appSettings.screenWidth = GetScreenWidth();
         // Update
+        std::cout << "before control  update." << std::endl;
         Controls::Controls_update(circuit);
+        std::cout << "control update." << std::endl;
+
         circuit->evaluate();
+        std::cout << "Circuit evaluated." << std::endl;
         // Draw
         RaylibHelper::BeginFrame();
         RaylibHelper::DrawGUI(circuit);

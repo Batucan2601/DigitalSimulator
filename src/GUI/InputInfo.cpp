@@ -1,7 +1,7 @@
-#include "GUI/InputInfo.h"
+/*#include "GUI/InputInfo.h"
 
 #include "Component.h"
-#include "LogicElements.h"
+#include "InputElement.h"
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
@@ -18,7 +18,7 @@ namespace GUI
             return;
         }
 
-        if (Component* d1 = dynamic_cast<Component*>(InputResolver::getSelectedHandler()))
+        if (InputElement* d1 = dynamic_cast<InputElement*>(InputResolver::getSelectedHandler()))
         {
             GUITools_BasicLogicDisplay_draw(d1);
         }
@@ -28,7 +28,7 @@ namespace GUI
         (void)circuit;
     }
    
-    void InputInfo::draw_Outputs(Component* logicGate)
+    void InputInfo::draw_Outputs(InputElement* logicGate)
     {
         if (ImGui::TreeNodeEx("Outputs"))
         {
@@ -57,7 +57,7 @@ namespace GUI
         }
     }
 
-    void InputInfo::change_connection_name(Component* logicGate, bool is_input,
+    void InputInfo::change_connection_name(InputElement* logicGate, bool is_input,
                                                std::string newName)
     {
         for (size_t i = 0; i < logicGate->circuit->connections.size(); i++)
@@ -81,7 +81,7 @@ namespace GUI
 
     // Global or static variables for the UI state and texture.
 
-    void InputInfo::GUITools_BasicLogicDisplay_draw(Component* logicGate)
+    void InputInfo::GUITools_BasicLogicDisplay_draw(InputElement* logicGate)
     {
         // Draw interactive windows first.
         float pos[2] = {logicGate->bd.x, logicGate->bd.y};
@@ -95,3 +95,5 @@ namespace GUI
     }
 
 }  // namespace GUI
+
+*/

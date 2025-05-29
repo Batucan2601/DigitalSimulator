@@ -14,4 +14,3 @@ void InputElement::setInOutPositions()
         this->outputs[i].pos = {x, y};
     }
 }
-

@@ -97,7 +97,6 @@ namespace Controls
         Controls_Mouse_Movements();
         Control_Keyboard_Event();
         Controls_Handle_Continous(selected_circuit);
-
         InputResolver::resolve();
     }
 

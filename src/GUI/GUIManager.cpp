@@ -19,7 +19,7 @@ void GUIManager::Init()
     windows.push_back(std::make_unique<GUI::LogicGateInfo>());
     windows.push_back(std::make_unique<GUI::SaveLoad>());
     windows.push_back(std::make_unique<GUI::Tools>());
-    windows.push_back(std::make_unique<GUI::InputInfo>());
+    //windows.push_back(std::make_unique<GUI::InputInfo>());
 
     // Initialize and add the editor window
     auto editor = std::make_unique<GUI::Editor>();

@@ -27,7 +27,7 @@ namespace LogicElements
     void init_logicTextures();
     void init_OutlinedLogicTextures();
     void init_FilledLogicTextures();
-    class LogicGate : public Component,public std::enable_shared_from_this<LogicGate>  // Inherit observer to get updates
+    class LogicGate : public Component // Inherit observer to get updates
     {
       public:
         LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name);
@@ -45,14 +45,14 @@ namespace LogicElements
             const Vector2& mousePosition, CircuitElements::Connection& connection);
 
       protected:
-        void OnLeftClick(const InputEvent& event);
-        void OnDown(const InputEvent& event);
-        void OnRelease(const InputEvent& event);
-        void OnMove(const InputEvent& event);
-        void OnRightClick(const InputEvent& event);
-        void OnEnter(const InputEvent& event);
-        void OnExit(const InputEvent& event);
-        void OnKeyPress(const InputEvent& event);
+        void OnLeftClick(const InputEvent& event) override;
+        void OnDown(const InputEvent& event) override;
+        void OnRelease(const InputEvent& event) override;
+        void OnMove(const InputEvent& event) override;
+        void OnRightClick(const InputEvent& event) override;
+        void OnEnter(const InputEvent& event) override;
+        void OnExit(const InputEvent& event) override;
+        void OnKeyPress(const InputEvent& event) override;
 
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);

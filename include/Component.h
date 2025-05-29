@@ -10,6 +10,12 @@
 #include "gateObserver.h"
 #include <unordered_set>
 #include "ClassLogger.h"
+#include <GatePosition.h>
+#include <filesystem>
+#include <functional>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -148,12 +154,16 @@ namespace CircuitElements
         }
     };
 }
-class Component : public LogicElements::GateObserver ,  public IInputHandler
+namespace CircuitElements {
+    class Connection;
+}
+
+class Component : public LogicElements::GateObserver ,  public IInputHandler , public std::enable_shared_from_this<Component>
 {
   public:
     Component() {};
     Component(std::string& fileName);
-    void OnInputEvent(const InputEvent& event) override;
+    virtual void OnInputEvent(const InputEvent& event) override;
     void setInput(const std::string& name, bool value);
     bool getOutput(const std::string& name) const;
 
@@ -164,6 +174,11 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler
     const std::vector<Signal>& getOutputs() const;
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
     void evaluate();
+    bool is_connection_clicked(const Vector2& mousePos,
+    CircuitElements::Connection& possibleConnection);
+    bool CheckMouseOnInOut(const Vector2& mousePosition,
+    CircuitElements::Connection& connection);
+
     Rectangle bd = {0, 0, 100, 100};  // bounding box
     int getID() const; 
     Vector2 getPosition() const;
@@ -180,9 +195,19 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
 
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
-
+    protected:
+        virtual void OnLeftClick(const InputEvent& event);
+        virtual void OnDown(const InputEvent& event);
+        virtual void OnRelease(const InputEvent& event);
+        virtual void OnMove(const InputEvent& event);
+        virtual void OnRightClick(const InputEvent& event);
+        virtual void OnEnter(const InputEvent& event);
+        virtual void OnExit(const InputEvent& event);
+        virtual void OnKeyPress(const InputEvent& event);
     private:
     virtual void setInOutPositions() = 0;  // Pure virtual — must be implemented in derived classes
+    std::shared_ptr<Component> hoveredGate;
+
     
 };
 #endif
