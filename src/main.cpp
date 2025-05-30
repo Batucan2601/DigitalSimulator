@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include "ComponentTextures.h"
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
 SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
@@ -15,7 +15,7 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     RaylibHelper::Init(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight, AppSettings::appSettings.targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
-    LogicElements::init_logicTextures();  // this should also be wrapped
+    LogicElements::comptextures_init_logicTextures();  // this should also be wrapped
     Controls::Controls_set_camera(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight);
     std::string and_gate_logger = "AndLogger1";
     std::string or_gate_logger = "OrLogger1";

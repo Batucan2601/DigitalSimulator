@@ -21,12 +21,6 @@ namespace CircuitElements
 namespace LogicElements
 {
     class Circuit; 
-    extern std::shared_ptr<std::vector<CircuitElements::ComponentInfo>> componentInfoList;
-    extern std::map<CircuitElements::ComponentType, Texture> logicElementTextures;
-
-    void init_logicTextures();
-    void init_OutlinedLogicTextures();
-    void init_FilledLogicTextures();
     class LogicGate : public Component // Inherit observer to get updates
     {
       public:

@@ -1,6 +1,7 @@
 #include "GUI/Tools.h"
 
 #include "LogicElements.h"
+#include "ComponentTextures.h"
 
 #include <imgui.h>
 #include <raylib.h>
