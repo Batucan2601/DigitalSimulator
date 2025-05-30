@@ -10,8 +10,8 @@ InputElement::InputElement()
 {
     this->m_type = CircuitElements::ComponentType::INPUT_0;  // Set type to INPUT_0
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
-    this->setPosition(0, 0);  // Initialize position
-    this->setInOutPositions();
+    //this->setPosition(0, 0);  // Initialize position
+    //this->setInOutPositions();
     InputResolver::RegisterHandler(this);
 }
 void InputElement::setInOutPositions()
@@ -41,11 +41,15 @@ void InputElement::setInOutPositions()
     {
         this->m_type = CircuitElements::ComponentType::INPUT_1;
         this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_1);
+        this->outputs[0].val = 1;  // Set output to true
+        this->notifyObservers();  // Notify observers of the change
     }
     else if (this->m_type == CircuitElements::ComponentType::INPUT_1)
     {
         this->m_type = CircuitElements::ComponentType::INPUT_0;
         this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
+        this->outputs[0].val = 0;  // Set output to true
+        this->notifyObservers();  // Notify observers of the change
     }
     // ok first look at the selected handler, check if it is a logic gate
     CircuitElements::Connection possibleConnection;

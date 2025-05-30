@@ -38,14 +38,14 @@ int main(void)
     gate3->setPosition(0, 300 - 250);
     gate4->setPosition(0, 400 - 250);
     gate5->setPosition(0, 500 - 250);
-    //in1->setPosition(0, 0);
+    in1->setPosition(0, 0);
 
     circuit->addGate(gate1);
     circuit->addGate(gate2);
     circuit->addGate(gate3);
     circuit->addGate(gate4);
     circuit->addGate(gate5);
-    //circuit->addGate(in1);
+    circuit->addGate(in1);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;
@@ -55,7 +55,7 @@ int main(void)
         AppSettings::appSettings.screenWidth = GetScreenWidth();
         // Update
         Controls::Controls_update(circuit);
-
+        std::cout << "after controls " << std::endl;
         circuit->evaluate();
         // Draw
         RaylibHelper::BeginFrame();

@@ -19,14 +19,11 @@ namespace LogicElements
         std::shared_ptr<Component> gate = std::make_shared<InputElement>();
         Signal Out("Out");
         gate->outputs.push_back(Out);
-        gate->m_type = CircuitElements::ComponentType::INPUT; // Set type to INPUT
-        gate->setEvaluationFunction(
-            [](Component& c)
-            {
-                auto& g = static_cast<InputElement&>(c); // downcast
-                g.outputs[0].val = g.inputs[0].val; // For input, output is the same as input
-            });
-        // types for actual logic gates
+        gate->m_type = CircuitElements::ComponentType::INPUT_0;
+        gate->setEvaluationFunction([](Component& c) {
+            auto& g = static_cast<InputElement&>(c);
+            g.outputs[0].val = (g.getType() == CircuitElements::ComponentType::INPUT_1) ? 1 : 0;
+        });
         return gate;
     }
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )

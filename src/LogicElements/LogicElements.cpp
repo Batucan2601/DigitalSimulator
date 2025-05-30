@@ -33,15 +33,20 @@ namespace CircuitElements
         bool stabilized = false;
         int iterations = 0;
         const int maxIterations = 100;  // Prevent infinite loops
-
+        int i = 0;
         while (!stabilized && iterations < maxIterations)
         {
             stabilized = true;
             for (auto& gate : gates)
             {
+                std::cout << " gate " << i++ << std::endl; 
                 gate->evaluate();
+                std::cout << " gate eval "<< std::endl; 
                 auto previousOutputs = gate->getOutputs();
+                std::cout << "after get outputs "<< std::endl; 
                 gate->evaluate();
+                std::cout << " gate second  eval "<< std::endl; 
+
                 if (gate->getOutputs() != previousOutputs)
                 {
                     stabilized = false;
