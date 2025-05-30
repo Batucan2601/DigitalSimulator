@@ -27,7 +27,6 @@ namespace LogicElements
         LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name);
         ~LogicGate();
         void onInputChanged() override;  // Override observer function
-        ClassLogger m_logger;
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);

@@ -113,14 +113,14 @@ namespace jsonParser
     }
 
   
-    /*void to_json(json& j, const LogicElements::LogicGate& gate)
+    void to_json(json& j, const LogicElements::LogicGate& gate)
     {
         j = json{{"id", gate.getID()},  // Store ID
                  {"type", gate.getType()},
                  {"position", {{"x", gate.getPosition().x}, {"y", gate.getPosition().y}}},
                  {"inputs", gate.getInputs()},
                  {"outputs", gate.getOutputs()}};
-    } */
+    } 
 
     void to_json(json& j, const Vector2& v)
     {

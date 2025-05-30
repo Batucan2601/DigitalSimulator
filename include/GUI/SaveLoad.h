@@ -17,6 +17,7 @@ namespace GUI
 {
     class SaveLoad : public BaseWindow
     {
+      public:
         enum class State
         {  // sorting for filetering of the file lsit
             STATE_IDLE,
@@ -24,7 +25,6 @@ namespace GUI
             STATE_LOAD
         };
 
-      public:
         SaveLoad() : BaseWindow("Save/Load") {}
 
         void Draw(SP_Circuit circuit) override;
@@ -32,7 +32,6 @@ namespace GUI
         void RenderSaveButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
         void RenderLoadButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
 
-      private:
         void ShowSaveWindow(SP_Circuit globalCircuit);
         void ShowLoadWindow();
 
