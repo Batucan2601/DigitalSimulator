@@ -4,7 +4,11 @@
 class InputElement : public Component
 {
   public:
-  InputElement(CircuitElements::ComponentType componentType); // Input 
+  InputElement(); // Input 
   void OnLeftClick(const InputEvent& event) override;
-  void setInOutPositions();
+  void OnInputEvent(const InputEvent& event) override;
+  void onInputChanged() override;  // Override observer function
+
+  private:
+  void setInOutPositions() override;
 };  

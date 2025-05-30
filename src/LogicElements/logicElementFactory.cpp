@@ -1,9 +1,9 @@
 #include "logicElementFactory.h"
-
+#include "InputElement.h"
 namespace LogicElements
 {
-    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
-    std::shared_ptr<LogicGate> LogicElementFactory::createGate(CircuitElements::ComponentType type,
+    static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
+    std::shared_ptr<Component> LogicElementFactory::createGate(CircuitElements::ComponentType type,
                                                                std::string logger_name)
     {
         auto gate = std::make_shared<LogicGate>(type, logger_name);
@@ -14,7 +14,22 @@ namespace LogicElements
         generate_logic_gate(gate, type, A, B, Out);
         return gate;
     }
-    static void generate_logic_gate( std::shared_ptr<LogicGate> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )
+    std::shared_ptr<Component> LogicElementFactory::createInput()
+    {
+        std::shared_ptr<Component> gate = std::make_shared<InputElement>();
+        Signal Out("Out");
+        gate->outputs.push_back(Out);
+        gate->m_type = CircuitElements::ComponentType::INPUT; // Set type to INPUT
+        gate->setEvaluationFunction(
+            [](Component& c)
+            {
+                auto& g = static_cast<InputElement&>(c); // downcast
+                g.outputs[0].val = g.inputs[0].val; // For input, output is the same as input
+            });
+        // types for actual logic gates
+        return gate;
+    }
+    static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )
     {
         switch (type)
         {

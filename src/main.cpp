@@ -4,7 +4,6 @@
 std::string circuit_logger = "CircuitLogger";
 SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
 
-
 int main(void)
 {
     AppSettings::appSettings.theme = AppSettings::Theme::DarkMode;
@@ -32,18 +31,21 @@ int main(void)
                                                                 xand_gate_logger);
     auto gate5 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XOR,
                                                                 xor_gate_logger);
-
+    auto in1 = LogicElements::LogicElementFactory::createInput();
+    
     gate1->setPosition(0, 100 - 250);
     gate2->setPosition(0, 200 - 250);
     gate3->setPosition(0, 300 - 250);
     gate4->setPosition(0, 400 - 250);
     gate5->setPosition(0, 500 - 250);
+    //in1->setPosition(0, 0);
 
     circuit->addGate(gate1);
     circuit->addGate(gate2);
     circuit->addGate(gate3);
     circuit->addGate(gate4);
     circuit->addGate(gate5);
+    //circuit->addGate(in1);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;

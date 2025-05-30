@@ -76,8 +76,7 @@ namespace GUI
 
             // add the new circuit
             std::string new_gate = "or_gate_logger";
-            std::shared_ptr<LogicElements::LogicGate> gate;
-            gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.componentType, new_gate);
+            auto gate = LogicElements::LogicElementFactory::createGate(GUI::dragDrop.componentType, new_gate);
             circuit->addGate(gate);
 
             if (GUI::dragDrop.componentType != CircuitElements::ComponentType::NONE)
