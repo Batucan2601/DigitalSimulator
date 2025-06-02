@@ -30,7 +30,9 @@ namespace LogicElements
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
-      protected:
+        ClassLogger m_logger;
+        
+        protected:
         void OnLeftClick(const InputEvent& event) override;
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);

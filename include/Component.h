@@ -193,7 +193,6 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     Texture2D m_texture;
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
-
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
     protected:
         virtual void OnLeftClick(const InputEvent& event);
