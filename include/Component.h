@@ -16,6 +16,7 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include "../Libraries/json.hpp"
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -194,6 +195,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
+    virtual nlohmann::json serialize() const = 0;
     protected:
         virtual void OnLeftClick(const InputEvent& event);
         virtual void OnDown(const InputEvent& event);

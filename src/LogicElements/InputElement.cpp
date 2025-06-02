@@ -183,3 +183,14 @@ void InputElement::OnInputEvent(const InputEvent& event)
         }
     }
 }
+
+nlohmann::json InputElement::serialize() const
+{
+    nlohmann::json j;
+    j["id"] = getID();
+    j["type"] = getType();
+    j["position"] = {{"x", getPosition().x}, {"y", getPosition().y}};
+    j["inputs"] = this->getInputs();
+    j["outputs"] = this->getOutputs();
+    return j;
+}

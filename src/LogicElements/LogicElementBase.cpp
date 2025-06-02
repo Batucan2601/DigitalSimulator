@@ -11,6 +11,7 @@
 #include <Controls.h>
 #include <Util/Utils.h>
 #include "raylibHelper.h"
+#include "JsonSerializer.h"
 
 namespace LogicElements
 {
@@ -252,5 +253,14 @@ namespace LogicElements
         }
         return false;
     }
+nlohmann::json LogicGate::serialize() const {
+    nlohmann::json j;
+    j["id"] = getID();
+    j["type"] = getType();
+    j["position"] = {{"x", getPosition().x}, {"y", getPosition().y}};
+    j["inputs"] = getInputs();
+    j["outputs"] = getOutputs();
+    return j;
+}
 
 }  // namespace LogicElements

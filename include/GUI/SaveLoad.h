@@ -32,11 +32,11 @@ namespace GUI
         void RenderSaveButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
         void RenderLoadButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
 
-        void ShowSaveWindow(SP_Circuit globalCircuit);
+        void ShowSaveWindow();
         void ShowLoadWindow();
 
-        void drawSaveWindow();
-        void drawLoadWindow();
+        void drawSaveWindow(SP_Circuit circuit);
+        void drawLoadWindow(SP_Circuit circuit);
         bool saveCircuit(std::string name);
         bool loadCircuit(std::string name);
 

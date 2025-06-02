@@ -98,7 +98,9 @@ namespace GUI
         createMenuItem("File/Load", false,
                        [this]()  // Capture 'this' here
                        {
-                           windows["Save/Load"]->ToggleVisibility();
+                            if (auto* saveWindow = dynamic_cast<GUI::SaveLoad*>(windows["Save/Load"])) {
+                                saveWindow->state = GUI::SaveLoad::State::STATE_LOAD;
+                            }
                        });
         createMenuItem("File/Exit", false,
                        []()

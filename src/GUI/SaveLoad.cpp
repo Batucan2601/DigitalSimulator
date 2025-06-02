@@ -13,10 +13,10 @@ namespace GUI
             case State::STATE_IDLE:
                 break;
             case State::STATE_SAVE:
-                drawSaveWindow();
+                drawSaveWindow(circuit);
                 break;
             case State::STATE_LOAD:
-                drawLoadWindow();
+                drawLoadWindow(circuit);
                 break;
             default:
                 break;
@@ -27,9 +27,8 @@ namespace GUI
     {
         (void)circuit;
     }
-    void SaveLoad::ShowSaveWindow(SP_Circuit globalCircuit)
+    void SaveLoad::ShowSaveWindow()
     {
-        localCircuit = globalCircuit;
         ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
         state = State::STATE_SAVE;
     }
@@ -40,7 +39,7 @@ namespace GUI
         state = State::STATE_LOAD;
     }
 
-    void SaveLoad::drawSaveWindow()
+    void SaveLoad::drawSaveWindow(SP_Circuit circuit)
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
@@ -53,6 +52,7 @@ namespace GUI
             if (ImGuiFileDialog::Instance()->IsOk())
             {
                 std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                localCircuit = circuit;
                 saveCircuit(filePath);
             }
             // Close the file dialog.
@@ -61,7 +61,7 @@ namespace GUI
         }
     }
 
-    void SaveLoad::drawLoadWindow()
+    void SaveLoad::drawLoadWindow(SP_Circuit circuit)
     {
         IGFD::FileDialogConfig config;
         config.flags = ImGuiFileDialogFlags_Modal;
@@ -72,6 +72,7 @@ namespace GUI
         {
             if (ImGuiFileDialog::Instance()->IsOk())
             {
+                localCircuit = circuit;
                 std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
                 loadCircuit(filePath);
             }
@@ -83,8 +84,7 @@ namespace GUI
 
     bool SaveLoad::saveCircuit(std::string fileName)
     {
-        std::cout << "Saving file to: " << fileName << std::endl;
-        jsonParser::saveCircuit(*localCircuit.get(), fileName);
+        jsonparser_saveCircuit(*localCircuit.get(), fileName);
         return true;
     }
 
@@ -92,7 +92,7 @@ namespace GUI
     {
         std::cout << "Loading file from: " << fileName << std::endl;
 
-        auto loaded_circuit = jsonParser::loadCircuit(fileName);
+        auto loaded_circuit = jsonparser_loadCircuit(fileName);
 
         setLoadedCircuit(loaded_circuit);
 
