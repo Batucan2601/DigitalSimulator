@@ -25,7 +25,7 @@ namespace CircuitElements
         c.sourceLogic = sourceOutput;
         c.targetGate = targetGate;
         c.targetLogic = targetInput;
-
+        c.circuit = this;
         this->connections.push_back(c);
     }
 
@@ -96,19 +96,19 @@ namespace CircuitElements
         // if hovering, create a new wire
         if (hovering.is_hovering)
         {
-            /*CircuitElements::Connection possibleConnection;
+            CircuitElements::Connection possibleConnection;
             possibleConnection.sourceGate = this->sourceGate;
             possibleConnection.sourceLogic = this->sourceLogic;
-            possibleConnection.circuit = this->circuit;
-            // if hits select it
-            circuit->addConnection(possibleConnection.sourceGate, possibleConnection.sourceLogic,
-            possibleConnection.targetGate, possibleConnection.targetLogic);
-            circuit->active_wire.is_visible = true;
-            circuit->active_wire.start = hovering.pos;
-            circuit->active_wire.end = hovering.pos; */
-            // InputResolver::RegisterHandler(static_cast<IInputHandler*>(&(circuit->active_wire)));
-            // InputResolver::setSelectedHandler((IInputHandler*)&circuit->connections[circuit->connections.size()
-            // - 1]);
+            circuit->addConnection(
+                possibleConnection.sourceGate, possibleConnection.sourceLogic,
+                possibleConnection.targetGate, possibleConnection.targetLogic);
+            this->circuit->active_wire.is_visible = true;
+            this->circuit->active_wire.start = hovering.pos;
+            this->circuit->active_wire.end = hovering.pos; 
+            InputResolver::RegisterHandler(
+                static_cast<IInputHandler*>(&(circuit->active_wire)));
+            InputResolver::setSelectedHandler(
+                (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
         }
     }
     void Connection::OnMove(const InputEvent& event)

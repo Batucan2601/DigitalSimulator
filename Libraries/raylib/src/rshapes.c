@@ -2208,12 +2208,6 @@ bool CheckCollisionPointRec(Vector2 point, Rectangle rec)
            (point.x <= (expanded.x + expanded.width)) &&
            (point.y >= expanded.y) &&
            (point.y <= (expanded.y + expanded.height));
-
-    //bool collision = false;
-//
-    //if ((point.x >= rec.x) && (point.x < (rec.x + rec.width)) && (point.y >= rec.y) && (point.y < (rec.y + rec.height))) collision = true;
-//
-    //return collision;
 }
 
 // Check if point is inside circle
