@@ -40,6 +40,9 @@ namespace LogicElements
         componentInfoList->push_back(CircuitElements::ComponentInfo("INPUT1 Gate", CircuitElements::ComponentType::INPUT_1,
                                          &logicElementTextures[CircuitElements::ComponentType::INPUT_1],
                                          &logicElementTextures[CircuitElements::ComponentType::INPUT_1]));
+         componentInfoList->push_back(CircuitElements::ComponentInfo("NOR Gate", CircuitElements::ComponentType::INPUT_1,
+                                         &logicElementTextures[CircuitElements::ComponentType::NOR],
+                                         &logicElementTextures[CircuitElements::ComponentType::NOR]));
         componentInfoList->push_back(CircuitElements::ComponentInfo("CLK", CircuitElements::ComponentType::CLK,
                                          &logicElementTextures[CircuitElements::ComponentType::CLK],
                                          &logicElementTextures[CircuitElements::ComponentType::CLK]));
@@ -72,6 +75,10 @@ namespace LogicElements
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::XAND] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "xor.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[CircuitElements::ComponentType::NOR] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "0.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();

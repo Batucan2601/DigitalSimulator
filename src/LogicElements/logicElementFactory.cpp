@@ -113,7 +113,23 @@ namespace LogicElements
                         g.outputs[0].val = !result;
                     });
                 break;
-
+            case CircuitElements::ComponentType::NOR:
+                gate->inputs.push_back(A);
+                gate->inputs.push_back(B);
+                gate->outputs.push_back(Out);
+                gate->setEvaluationFunction(
+                    [](Component& c)
+                    {
+                        auto& g = static_cast<LogicGate&>(c);
+                        bool result = false;
+                        for (const auto& val : g.inputs)
+                        {
+                            result = result || val.val;
+                            if (result) break;
+                        }
+                        g.outputs[0].val = !result;
+                    });
+                break;
             default:
                 break;
         }

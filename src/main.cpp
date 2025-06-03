@@ -21,7 +21,7 @@ int main(void)
     std::string not_gate_logger = "NotLogger1";
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
-    auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
+    /*auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
                                                                 and_gate_logger);
     auto gate2 =
         LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::OR, or_gate_logger);
@@ -30,22 +30,36 @@ int main(void)
     auto gate4 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XAND,
                                                                 xand_gate_logger);
     auto gate5 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XOR,
-                                                                xor_gate_logger);
+                                                                xor_gate_logger);*/
     auto in1 = LogicElements::LogicElementFactory::createInput();
+    auto in2 = LogicElements::LogicElementFactory::createInput();
     
-    gate1->setPosition(0, 100 - 250);
+    auto gate6 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XAND,
+                                                                xand_gate_logger);
+    auto gate7 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,xor_gate_logger);
+
+    /*gate1->setPosition(0, 100 - 250);
     gate2->setPosition(0, 200 - 250);
     gate3->setPosition(0, 300 - 250);
     gate4->setPosition(0, 400 - 250);
     gate5->setPosition(0, 500 - 250);
-    in1->setPosition(0, 0);
-
+    
     circuit->addGate(gate1);
     circuit->addGate(gate2);
     circuit->addGate(gate3);
     circuit->addGate(gate4);
     circuit->addGate(gate5);
+    circuit->addGate(in1);*/
+    
+    in1->setPosition(0, 0);
+    in2->setPosition(0, 100);
+
+    gate6->setPosition(0, 100 - 250);
+    gate7->setPosition(0, 100 - 350);
+    circuit->addGate(gate6);
+    circuit->addGate(gate7);
     circuit->addGate(in1);
+    circuit->addGate(in2);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;

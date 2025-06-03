@@ -134,6 +134,7 @@ namespace CircuitElements
         XOR_FILLED,
         XAND,
         XAND_FILLED,
+        NOR,
         INPUT,
         INPUT_FILLED,
         INPUT_0,
