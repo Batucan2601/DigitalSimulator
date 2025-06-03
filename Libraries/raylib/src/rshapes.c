@@ -2196,11 +2196,24 @@ Vector2 GetSplinePointBezierCubic(Vector2 startPos, Vector2 startControlPos, Vec
 // Check if point is inside rectangle
 bool CheckCollisionPointRec(Vector2 point, Rectangle rec)
 {
-    bool collision = false;
+    float margin = 4.0f;
+     Rectangle expanded = {
+        rec.x - margin,
+        rec.y - margin,
+        rec.width + 2 * margin,
+        rec.height + 2 * margin
+    };
 
-    if ((point.x >= rec.x) && (point.x < (rec.x + rec.width)) && (point.y >= rec.y) && (point.y < (rec.y + rec.height))) collision = true;
+    return (point.x >= expanded.x) &&
+           (point.x <= (expanded.x + expanded.width)) &&
+           (point.y >= expanded.y) &&
+           (point.y <= (expanded.y + expanded.height));
 
-    return collision;
+    //bool collision = false;
+//
+    //if ((point.x >= rec.x) && (point.x < (rec.x + rec.width)) && (point.y >= rec.y) && (point.y < (rec.y + rec.height))) collision = true;
+//
+    //return collision;
 }
 
 // Check if point is inside circle
