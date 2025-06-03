@@ -27,10 +27,41 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     {
         std::string logger = "LoggerName";
         auto gate = std::make_shared<LogicElements::LogicGate>(gateJson["type"], logger);
-        gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
-
         int id = gateJson["id"];
+        // Load inputs
+        if (gateJson.contains("inputs") && gateJson["inputs"].is_array()) {
+            for (const auto& inputJson : gateJson["inputs"]) {
+                Signal input;
+                input.name = inputJson.value("name", "");
+                input.val = inputJson.value("val", false);
+
+                if (inputJson.contains("position") && inputJson["position"].is_object()) {
+                    input.pos.x = inputJson["position"].value("x", 0.0f);
+                    input.pos.y = inputJson["position"].value("y", 0.0f);
+                }
+
+                gate->inputs.push_back(input);
+            }
+        }
+
+        // Load outputs
+        if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
+            for (const auto& outputJson : gateJson["outputs"]) {
+                Signal output;
+                output.name = outputJson.value("name", "");
+                output.val = outputJson.value("val", false);
+
+                if (outputJson.contains("position") && outputJson["position"].is_object()) {
+                    output.pos.x = outputJson["position"].value("x", 0.0f);
+                    output.pos.y = outputJson["position"].value("y", 0.0f);
+                }
+
+                gate->outputs.push_back(output);
+            }
+        }
+        gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
+        gate->circuit = circuit.get();
         circuit.get()->gates.push_back(gate);
     }
 
@@ -64,22 +95,15 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
 void jsonparser_saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath)
 {
     json j;
-    std::cout << "here "<< std::endl; 
     std::cout << circuit.gates.size() << std::endl;
     // Convert gates to JSON array
     json gatesArray = json::array();
-    std::cout << "before 1"<< std::endl; 
     for (const auto& gate : circuit.gates)
     {
-        std::cout << "before 2"<< std::endl; 
         if (gate)
         {
-            std::cout << "before 3"<< std::endl; 
             json gateJson;
-            std::cout << "before "<< std::endl; 
             to_json(gateJson, *gate);
-            std::cout << "after "<< std::endl; 
-
             gatesArray.push_back(gateJson);
         }
     }

@@ -90,8 +90,16 @@ namespace LogicElementsDraw
                                            circuit->connections[i].hovering.pos, GREEN);
             }
         }
-        DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
-                                   circuit->selected_wires.wire_hovering, GREEN);
+        if(! (circuit->selected_wires.wire_hovering.x > AppSettings::appSettings.screenWidth ||
+        circuit->selected_wires.wire_hovering.x < -AppSettings::appSettings.screenWidth ||
+        circuit->selected_wires.wire_hovering.y > AppSettings::appSettings.screenHeight ||
+        circuit->selected_wires.wire_hovering.y < -AppSettings::appSettings.screenHeight 
+        ))
+        {
+            DrawInteractableWirePoints(circuit->selected_wires.wire_hovering,
+                                       circuit->selected_wires.wire_hovering, GREEN);
+        }   
+        //DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
 
         // 3 - DrawActiveWire
         if (circuit->active_wire.is_visible)
