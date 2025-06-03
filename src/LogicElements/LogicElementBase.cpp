@@ -19,9 +19,6 @@ namespace LogicElements
         : m_logger(logger_name)
     {
         this->m_type = componentType;
-        static int nextId = 0;
-        id = nextId++;  // Assign a unique ID
-        //Component();
         // type = CircuitElements::ComponentType;
         m_texture = compTexture_getTexture(componentType);
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
@@ -124,7 +121,7 @@ namespace LogicElements
         }
         RaylibHelper::Show(1); // shows logicGateInfo window
         // if it is a inputgate
-        if (this->m_type == CircuitElements::ComponentType::INPUT_0)
+        /*if (this->m_type == CircuitElements::ComponentType::INPUT_0)
         {
             this->m_type = CircuitElements::ComponentType::INPUT_1;
             this->m_texture = logicElementTextures[CircuitElements::ComponentType::INPUT_1];
@@ -133,7 +130,7 @@ namespace LogicElements
         {
             this->m_type = CircuitElements::ComponentType::INPUT_0;
             this->m_texture = logicElementTextures[CircuitElements::ComponentType::INPUT_0];
-        }
+        } */
         // ok first look at the selected handler, check if it is a logic gate
         CircuitElements::Connection possibleConnection;
         if (!circuit->active_wire.is_visible)  // we are not building a connection

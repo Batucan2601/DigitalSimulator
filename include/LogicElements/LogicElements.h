@@ -75,6 +75,7 @@ namespace CircuitElements
                            std::shared_ptr<Component> targetGate,
                            const std::string& targetInput);
         void evaluate();
+        int giveNewId();
         ClassLogger m_logger;
 
         std::vector<std::shared_ptr<Component>> gates;
@@ -88,6 +89,8 @@ namespace CircuitElements
         bool is_GUIdragdropped = false;
         bool is_GUIdragdragging = false;
         std::shared_ptr<Component> hoveredGate;
+
+        int id; 
     };
 
 }  // namespace CircuitElements

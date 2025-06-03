@@ -10,6 +10,7 @@ namespace CircuitElements
     {
         this->m_logger.info("Gate added to the circuit.");
         gate->circuit = this;
+        gate->id = this->giveNewId();  // Assign a unique ID
         gates.push_back(gate);
     }
 
@@ -69,7 +70,12 @@ namespace CircuitElements
             throw std::runtime_error("Circuit evaluation did not stabilize.");
         }
     }
-
+    int Circuit::giveNewId()
+    {
+        int ret_id = this->id; 
+        this->id++;
+        return ret_id;
+    }
     void Connection::OnInputEvent(const InputEvent& event)
     {
         if (event.type == InputType::Mouse)

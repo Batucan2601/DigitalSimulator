@@ -20,7 +20,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     auto circuit = std::make_shared<CircuitElements::Circuit>(logger_name);
 
     // Map for fast lookup of gates by ID
-    std::unordered_map<int, std::shared_ptr<LogicElements::LogicGate>> gateMap;
+    std::unordered_map<int, std::shared_ptr<Component>> gateMap;
 
     // Load gates
     for (const auto& gateJson : j["gates"])
@@ -64,7 +64,31 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         gate->circuit = circuit.get();
         circuit.get()->gates.push_back(gate);
     }
+    for (const auto& gateJson : j["inputs"])
+    {
+        std::string logger = "LoggerName";
+        auto gate = std::make_shared<InputElement>();
+        int id = gateJson["id"];
+        // Load outputs
+        if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
+            for (const auto& outputJson : gateJson["outputs"]) {
+                Signal output;
+                output.name = outputJson.value("name", "");
+                output.val = outputJson.value("val", false);
 
+                if (outputJson.contains("position") && outputJson["position"].is_object()) {
+                    output.pos.x = outputJson["position"].value("x", 0.0f);
+                    output.pos.y = outputJson["position"].value("y", 0.0f);
+                }
+
+                gate->outputs.push_back(output);
+            }
+        }
+        gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
+        gateMap[id] = gate;  // Store gate in the map
+        gate->circuit = circuit.get();
+        circuit.get()->gates.push_back(gate);
+    }
     // Load connections
     for (const auto& connJson : j["connections"])
     {
@@ -80,6 +104,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         // Load wire positions
         CircuitElements::Connection& conn = circuit.get()->connections.back();
         conn.physCon.wires = connJson["wires"].get<std::vector<Vector2>>();
+        conn.is_connected = true;
     }
 
     return circuit;
@@ -98,16 +123,24 @@ void jsonparser_saveCircuit(const CircuitElements::Circuit& circuit, const std::
     std::cout << circuit.gates.size() << std::endl;
     // Convert gates to JSON array
     json gatesArray = json::array();
+    json inputsArray = json::array();
     for (const auto& gate : circuit.gates)
     {
-        if (gate)
+        json gateJson;
+        if (auto logicGate = std::dynamic_pointer_cast<LogicElements::LogicGate>(gate))
         {
-            json gateJson;
-            to_json(gateJson, *gate);
+            to_json(gateJson, *logicGate);
             gatesArray.push_back(gateJson);
         }
+        else if (auto inputElem = std::dynamic_pointer_cast<InputElement>(gate))
+        {
+            to_json(gateJson, *inputElem);
+            inputsArray.push_back(gateJson);
+        }
     }
+    
     j["gates"] = gatesArray;
+    j["inputs"] = inputsArray;
     // Convert connections to JSON array
     json connectionsArray = json::array();
     for (const auto& conn : circuit.connections)
