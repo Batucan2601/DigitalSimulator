@@ -37,14 +37,14 @@ namespace LogicElements
                 gate->setEvaluationFunction(
                     [](Component& c)
                     {
-                        auto& g = static_cast<LogicGate&>(c); // downcast
-                        auto& out = g.outputs[0];
-                        for (auto const& val : g.inputs)
+                        auto& g = static_cast<LogicGate&>(c);
+                        bool result = true;
+                        for (const auto& val : g.inputs)
                         {
-                            if (!out.val)
-                                break;
-                            out.val = out.val && val.val;
+                            result = result && val.val;
+                            if (!result) break;
                         }
+                        g.outputs[0].val = result;
                     });
                 break;
 
@@ -55,14 +55,14 @@ namespace LogicElements
                 gate->setEvaluationFunction(
                     [](Component& c)
                     {
-                        auto& g = static_cast<LogicGate&>(c); // downcast
-                        auto& out = g.outputs[0];
-                        for (auto const& val : g.inputs)
+                        auto& g = static_cast<LogicGate&>(c);
+                        bool result = false;
+                        for (const auto& val : g.inputs)
                         {
-                            if (out.val)
-                                break;
-                            out.val = out.val || val.val;
+                            result = result || val.val;
+                            if (result) break;
                         }
+                        g.outputs[0].val = result;
                     });
                 break;
 
@@ -73,8 +73,9 @@ namespace LogicElements
                 gate->setEvaluationFunction(
                     [](Component& c)
                     {
-                        auto& g = static_cast<LogicGate&>(c); // downcast
-                        g.outputs[0].val = !g.inputs[0].val;
+                        auto& g = static_cast<LogicGate&>(c);
+                        if (!g.inputs.empty())
+                            g.outputs[0].val = !g.inputs[0].val;
                     });
                 break;
 
@@ -85,14 +86,13 @@ namespace LogicElements
                 gate->setEvaluationFunction(
                     [](Component& c)
                     {
-                        auto& g = static_cast<LogicGate&>(c); // downcast
-                        auto& out = g.outputs[0];
-                        for (auto const& val: g.inputs)
+                        auto& g = static_cast<LogicGate&>(c);
+                        bool result = false;
+                        for (const auto& val : g.inputs)
                         {
-                            if (!out.val)
-                                break;
-                            out.val = out.val ^ val.val;
+                            result ^= val.val;
                         }
+                        g.outputs[0].val = result;
                     });
                 break;
 
@@ -103,19 +103,14 @@ namespace LogicElements
                 gate->setEvaluationFunction(
                     [](Component& c)
                     {
-                        auto& g = static_cast<LogicGate&>(c); // downcast
-                        // thi is NAND logic
-                        auto& out = g.outputs[0];
-                        bool allTrue = true;  // Assume all inputs are true initially.
-                        for (auto const& val: g.inputs)
+                        auto& g = static_cast<LogicGate&>(c);
+                        bool result = true;
+                        for (const auto& val : g.inputs)
                         {
-                            if (!val.val)
-                            {  // As soon as one input is false...
-                                allTrue = false;
-                                break;  // ...we can stop checking.
-                            }
+                            result = result && val.val;
+                            if (!result) break;
                         }
-                        out.val = !allTrue;  // NAND: output is true if any input is false.    }
+                        g.outputs[0].val = !result;
                     });
                 break;
 

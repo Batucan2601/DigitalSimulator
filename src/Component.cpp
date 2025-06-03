@@ -77,10 +77,11 @@ bool Component::getOutput(const std::string& name) const
     {
         if (it.name == name)
         {
-            return true;
+            return it.val;
         }
     }
-    return false;
+    std::cerr << "Output with name " << name << " not found!" << std::endl;
+    return false;  // Return false if the output is not found
 }
 void Component::addObserver(LogicElements::GateObserver* observer)
 {
@@ -294,8 +295,9 @@ void UpdateConnection(Component* gate)
             std::string name = c->sourceLogic;
             for (size_t j = 0; j < gate->outputs.size(); j++)
             {
-                if (name == gate->outputs[j].name)
+                if (name == gate->outputs[j].name && c->physCon.wires.size() > 0)
                 {
+                 
                     Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
                     Vector2 newPos = Utils::SnapToNearestGrid(rec);
                     Vector2 newLine =
