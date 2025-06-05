@@ -21,6 +21,10 @@ int main(void)
     std::string not_gate_logger = "NotLogger1";
     std::string xand_gate_logger = "XandLogger1";
     std::string xor_gate_logger = "XorLogger1";
+    std::string nor1_logger = "norLogger1";
+    std::string nor2_logger = "norLogger2";
+    std::string input1_logger = "Input1";
+    std::string input2_logger = "input2";
     /*auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
                                                                 and_gate_logger);
     auto gate2 =
@@ -31,12 +35,12 @@ int main(void)
                                                                 xand_gate_logger);
     auto gate5 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XOR,
                                                                 xor_gate_logger);*/
-    auto in1 = LogicElements::LogicElementFactory::createInput();
-    auto in2 = LogicElements::LogicElementFactory::createInput();
+    auto in1 = LogicElements::LogicElementFactory::createInput(input1_logger);
+    auto in2 = LogicElements::LogicElementFactory::createInput(input2_logger);
     
-    auto gate6 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::XAND,
-                                                                xand_gate_logger);
-    auto gate7 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,xor_gate_logger);
+    auto gate6 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,
+                                                                nor1_logger);
+    auto gate7 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,nor2_logger);
 
     /*gate1->setPosition(0, 100 - 250);
     gate2->setPosition(0, 200 - 250);
@@ -69,7 +73,6 @@ int main(void)
         AppSettings::appSettings.screenWidth = GetScreenWidth();
         // Update
         Controls::Controls_update(circuit);
-        std::cout << "after controls " << std::endl;
         circuit->evaluate();
         // Draw
         RaylibHelper::BeginFrame();

@@ -14,9 +14,9 @@ namespace LogicElements
         generate_logic_gate(gate, type, A, B, Out);
         return gate;
     }
-    std::shared_ptr<Component> LogicElementFactory::createInput()
+    std::shared_ptr<Component> LogicElementFactory::createInput(std::string logger_name)
     {
-        std::shared_ptr<Component> gate = std::make_shared<InputElement>();
+        std::shared_ptr<Component> gate = std::make_shared<InputElement>(logger_name);
         Signal Out("Out");
         gate->outputs.push_back(Out);
         gate->m_type = CircuitElements::ComponentType::INPUT_0;

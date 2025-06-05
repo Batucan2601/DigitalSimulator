@@ -67,7 +67,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     for (const auto& gateJson : j["inputs"])
     {
         std::string logger = "LoggerName";
-        auto gate = std::make_shared<InputElement>();
+        auto gate = std::make_shared<InputElement>(logger);
         int id = gateJson["id"];
         // Load outputs
         if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {

@@ -6,7 +6,8 @@
 
 static_assert(!std::is_abstract<InputElement>::value, "InputElement is abstract!");
 
-InputElement::InputElement()
+InputElement::InputElement(const std::string& logger_name)// Call base class constructor
+:Component(logger_name)
 {
     this->m_type = CircuitElements::ComponentType::INPUT_0;  // Set type to INPUT_0
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);

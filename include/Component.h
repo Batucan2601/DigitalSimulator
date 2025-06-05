@@ -16,6 +16,7 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include "ClassLogger.h"
 #include "../Libraries/json.hpp"
 // Enum to identify the type of input event.
 enum class InputType
@@ -163,7 +164,11 @@ namespace CircuitElements {
 class Component : public LogicElements::GateObserver ,  public IInputHandler , public std::enable_shared_from_this<Component>
 {
   public:
-    Component() {};
+    Component(const std::string& logger_name)
+    : m_logger(logger_name)
+    {
+        // You can initialize other fields if needed
+    }
     Component(std::string& fileName);
     virtual void OnInputEvent(const InputEvent& event) override;
     void setInput(const std::string& name, bool value);
@@ -186,7 +191,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     Vector2 getPosition() const;
     void setPosition(float x, float y);
     CircuitElements::ComponentType getType() const;
-
+    ClassLogger m_logger; 
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     CircuitElements::Circuit* circuit;

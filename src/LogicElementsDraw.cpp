@@ -52,6 +52,7 @@ namespace LogicElementsDraw
             {
                 continue;
             }
+            
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];
@@ -69,7 +70,19 @@ namespace LogicElementsDraw
                             break;
                         }
                     }
+                    if( circuit->connections[i].sourceGate->inputs.size() > 0 )
+                    {
+                         circuit->connections[i].sourceGate->m_logger.
+                    info("my inputs are {} {}" ,circuit->connections[i].sourceGate->inputs[0].val ,
+                    circuit->connections[i].sourceGate->inputs[1].val  );
+                    }
+                    circuit->connections[i].sourceGate->m_logger.
+                    info("The value is  {} ",val);
                     DrawLineEx(start, end, LINE_THICKNESS, val ? GREEN : BLACK);
+
+                    circuit->connections[i].sourceGate->m_logger.
+                    info("The value is  {} ",circuit->connections[i].sourceGate->outputs[0].val);
+                   
                 }
                 else
                 {
