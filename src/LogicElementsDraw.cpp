@@ -60,7 +60,7 @@ namespace LogicElementsDraw
                 // DrawLine();
                 if (circuit->connections[i].is_connected)
                 {
-                    bool val = false;
+                    SignalVal val = SignalVal::SIGNAL_0;
                     for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
                         if (circuit->connections[i].sourceGate->outputs[k].name ==
@@ -78,7 +78,26 @@ namespace LogicElementsDraw
                     }
                     circuit->connections[i].sourceGate->m_logger.
                     info("The value is  {} ",val);
-                    DrawLineEx(start, end, LINE_THICKNESS, val ? GREEN : BLACK);
+                    
+                    Color signalColor = BLACK;
+                    switch (val)
+                    {
+                    case SignalVal::SIGNAL_0:
+                        signalColor = BLACK;
+                        break; 
+                    case SignalVal::SIGNAL_1:
+                        signalColor = GREEN; 
+                        break; 
+                    case SignalVal::SIGNAL_X:
+                        signalColor = PURPLE; 
+                        break; 
+                    case SignalVal::SIGNAL_Z:
+                        signalColor = YELLOW;
+                        break; 
+                    default:
+                        throw("Signal type undefined");
+                    }
+                    DrawLineEx(start, end, LINE_THICKNESS, signalColor);
 
                     circuit->connections[i].sourceGate->m_logger.
                     info("The value is  {} ",circuit->connections[i].sourceGate->outputs[0].val);

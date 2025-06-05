@@ -59,7 +59,7 @@ CircuitElements::ComponentType Component::getType() const
     return m_type;
 }
 
-void Component::setInput(const std::string& name, bool value)
+void Component::setInput(const std::string& name, SignalVal value)
 {
     for (auto& I : this->inputs)
     {
@@ -71,7 +71,7 @@ void Component::setInput(const std::string& name, bool value)
     }
 }
 
-bool Component::getOutput(const std::string& name) const
+SignalVal Component::getOutput(const std::string& name) const
 {
     for (auto& it : this->outputs)
     {
@@ -81,7 +81,7 @@ bool Component::getOutput(const std::string& name) const
         }
     }
     std::cerr << "Output with name " << name << " not found!" << std::endl;
-    return false;  // Return false if the output is not found
+    return SignalVal::SIGNAL_X;  // Return false if the output is not found
 }
 void Component::addObserver(LogicElements::GateObserver* observer)
 {

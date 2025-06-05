@@ -4,6 +4,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include "Signal.h"
 #ifdef _WIN32
 #include <array>
 #endif
@@ -147,7 +148,17 @@ namespace utils
 
             return oss.str();
         }
-
+        inline std::string toString(SignalVal val )
+        {
+            switch (val)
+            {
+            case  SignalVal::SIGNAL_0: return "SIGNAL_0";
+            case  SignalVal::SIGNAL_1: return "SIGNAL_1";
+            case  SignalVal::SIGNAL_X: return "SIGNAL_X";
+            default:
+                return "UNKNOWN SIGNAL";
+            }
+        }
         template<typename T>
         std::string toString(const T& value)
         {

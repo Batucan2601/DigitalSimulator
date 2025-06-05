@@ -33,7 +33,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
             for (const auto& inputJson : gateJson["inputs"]) {
                 Signal input;
                 input.name = inputJson.value("name", "");
-                input.val = inputJson.value("val", false);
+                input.val = inputJson.value("val", SignalVal::SIGNAL_0);
 
                 if (inputJson.contains("position") && inputJson["position"].is_object()) {
                     input.pos.x = inputJson["position"].value("x", 0.0f);
@@ -49,7 +49,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
             for (const auto& outputJson : gateJson["outputs"]) {
                 Signal output;
                 output.name = outputJson.value("name", "");
-                output.val = outputJson.value("val", false);
+                output.val = outputJson.value("val", SignalVal::SIGNAL_0);
 
                 if (outputJson.contains("position") && outputJson["position"].is_object()) {
                     output.pos.x = outputJson["position"].value("x", 0.0f);
@@ -74,7 +74,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
             for (const auto& outputJson : gateJson["outputs"]) {
                 Signal output;
                 output.name = outputJson.value("name", "");
-                output.val = outputJson.value("val", false);
+                output.val = outputJson.value("val", SignalVal::SIGNAL_0);
 
                 if (outputJson.contains("position") && outputJson["position"].is_object()) {
                     output.pos.x = outputJson["position"].value("x", 0.0f);
@@ -210,7 +210,7 @@ void to_json(json& j, const Signal& signal)
 inline void from_json(const nlohmann::json& j, Signal& signal)
 {
     signal.name = j.at("name").get<std::string>();
-    signal.val = j.at("val").get<bool>();
+    signal.val = j.at("val").get<SignalVal>();
     signal.pos.x = j.at("position").at("x").get<float>();
     signal.pos.y = j.at("position").at("y").get<float>();
 }
