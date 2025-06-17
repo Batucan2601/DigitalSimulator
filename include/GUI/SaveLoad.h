@@ -39,6 +39,7 @@ namespace GUI
         void drawLoadWindow(SP_Circuit circuit);
         bool saveCircuit(std::string name);
         bool loadCircuit(std::string name);
+        bool loadSubCircuit(std::string fileName);
 
         State state = State::STATE_IDLE;
     };

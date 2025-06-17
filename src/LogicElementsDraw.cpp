@@ -3,6 +3,7 @@
 #include <chrono>  // High precision timing
 #include <iostream>
 #include <Util/Utils.h>
+#include <SubCircuit.h>
 
 
 namespace LogicElementsDraw
@@ -23,6 +24,20 @@ namespace LogicElementsDraw
         DrawTexturePro(gate->m_texture, source, dest, origin, 0.0f, WHITE);
     }
 
+    void DrawSubCircuit(const std::shared_ptr<SubcircuitComponent> subcircuit)
+    {
+         const Rectangle& bd = subcircuit->bd;  // Bounding box of the gate
+        float bd_width = bd.width;
+        float bd_height = bd.height;
+
+        Texture texture = subcircuit->m_texture;
+
+        Rectangle source = {0, 0, (float)texture.width, (float)texture.height};
+        Rectangle dest = {bd.x, bd.y, bd_width, bd_height};
+        Vector2 origin = {0, 0};  // Top-left corner as origin
+        DrawTexturePro(subcircuit->m_texture, source, dest, origin, 0.0f, WHITE);
+
+    }
     void DrawCircuit(const SP_Circuit circuit)
     {
         // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing

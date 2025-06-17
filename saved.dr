@@ -1,0 +1,160 @@
+{
+    "connections": [
+        {
+            "sourceGate": -842150449,
+            "sourceLogic": "Out",
+            "targetGate": -842150450,
+            "targetLogic": "B",
+            "wires": [
+                {
+                    "x": -225.0,
+                    "y": -25.0
+                },
+                {
+                    "x": -225.0,
+                    "y": -150.0
+                },
+                {
+                    "x": -175.0,
+                    "y": -150.0
+                },
+                {
+                    "x": -175.0,
+                    "y": -175.0
+                },
+                {
+                    "x": -175.0,
+                    "y": -150.0
+                }
+            ]
+        },
+        {
+            "sourceGate": -842150448,
+            "sourceLogic": "Out",
+            "targetGate": -842150451,
+            "targetLogic": "A",
+            "wires": [
+                {
+                    "x": -0.0,
+                    "y": 100.0
+                },
+                {
+                    "x": -0.0,
+                    "y": -150.0
+                }
+            ]
+        }
+    ],
+    "gates": [
+        {
+            "id": -842150451,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": 0.0,
+                        "y": -150.0
+                    },
+                    "val": true
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": 0.0,
+                        "y": -125.0
+                    },
+                    "val": false
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 100.0,
+                        "y": -100.0
+                    },
+                    "val": true
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": -150.0
+            },
+            "type": 9
+        },
+        {
+            "id": -842150450,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": -175.0,
+                        "y": -175.0
+                    },
+                    "val": false
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": -175.0,
+                        "y": -150.0
+                    },
+                    "val": true
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -75.0,
+                        "y": -125.0
+                    },
+                    "val": false
+                }
+            ],
+            "position": {
+                "x": -175.0,
+                "y": -175.0
+            },
+            "type": 11
+        }
+    ],
+    "inputs": [
+        {
+            "id": -842150449,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -225.0,
+                        "y": -25.0
+                    },
+                    "val": true
+                }
+            ],
+            "position": {
+                "x": -225.0,
+                "y": -25.0
+            },
+            "type": 15
+        },
+        {
+            "id": -842150448,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 0.0,
+                        "y": 100.0
+                    },
+                    "val": true
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": 100.0
+            },
+            "type": 15
+        }
+    ]
+}

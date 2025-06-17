@@ -98,5 +98,14 @@ namespace GUI
 
         return true;
     }
+     bool SaveLoad::loadSubCircuit(std::string fileName)
+    {
+        std::cout << "Loading file from: " << fileName << std::endl;
 
+        auto loaded_circuit = jsonparser_loadCircuit(fileName);
+
+        setLoadedCircuit(loaded_circuit);
+
+        return true;
+    }
 }  // namespace GUI
