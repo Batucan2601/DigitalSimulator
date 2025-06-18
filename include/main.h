@@ -17,5 +17,5 @@
 extern SP_Circuit circuit;
 
 void setLoadedCircuit(SP_Circuit loadedCircuit);
-
+void addComponent(std::shared_ptr<Component> c);
 #endif  // MAIN_H

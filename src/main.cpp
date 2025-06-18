@@ -88,3 +88,7 @@ void setLoadedCircuit(SP_Circuit loadedCircuit)
 {
     circuit = loadedCircuit;
 }
+void addComponent(std::shared_ptr<Component> c)
+{
+    circuit->addGate(c);
+}

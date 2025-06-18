@@ -1,6 +1,7 @@
 #include "GUI/SaveLoad.h"
 
 #include "main.h"
+#include "SubCircuit.h"
 namespace GUI
 {
     SP_Circuit localCircuit;
@@ -18,6 +19,8 @@ namespace GUI
             case State::STATE_LOAD:
                 drawLoadWindow(circuit);
                 break;
+            case State::STATE_LOADSUBCIRCUIT:
+                drawSubcircuitWindow(circuit);
             default:
                 break;
         }
@@ -37,6 +40,11 @@ namespace GUI
     {
         ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
         state = State::STATE_LOAD;
+    }
+    void SaveLoad::ShowLoadSubCircuitWindow()
+    {
+        ImGuiFileDialog::Instance()->Close();  // Ensure other dialogs are closed
+        state = State::STATE_LOADSUBCIRCUIT;
     }
 
     void SaveLoad::drawSaveWindow(SP_Circuit circuit)
@@ -81,7 +89,26 @@ namespace GUI
             state = State::STATE_IDLE;
         }
     }
-
+     void SaveLoad::drawSubcircuitWindow(SP_Circuit circuit)
+    {
+        IGFD::FileDialogConfig config;
+        config.flags = ImGuiFileDialogFlags_Modal;
+        config.path = std::filesystem::path(PROJECT_ROOT_DIR).string();
+        ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlgKey", "Load Circuit", ".dr", config);
+        // In your rendering loop, display and handle the dialog:
+        if (ImGuiFileDialog::Instance()->Display("LoadFileDlgKey"))
+        {
+            if (ImGuiFileDialog::Instance()->IsOk())
+            {
+                localCircuit = circuit;
+                std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+                loadSubCircuit(filePath);
+            }
+            // Close the file dialog.
+            ImGuiFileDialog::Instance()->Close();
+            state = State::STATE_IDLE;
+        }
+    }
     bool SaveLoad::saveCircuit(std::string fileName)
     {
         jsonparser_saveCircuit(*localCircuit.get(), fileName);
@@ -103,8 +130,12 @@ namespace GUI
         std::cout << "Loading file from: " << fileName << std::endl;
 
         auto loaded_circuit = jsonparser_loadCircuit(fileName);
-
-        setLoadedCircuit(loaded_circuit);
+        std::shared_ptr<SubcircuitComponent> ptr = std::make_shared<SubcircuitComponent>(loaded_circuit, "new_circuit");
+        ptr->bd.x = 120;
+        ptr->bd.y = 120;
+        ptr->bd.width = 100;
+        ptr->bd.height = 100;
+        addComponent(ptr);
 
         return true;
     }

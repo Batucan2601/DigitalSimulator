@@ -2,10 +2,16 @@
 #include "LogicElements.h"
 class SubcircuitComponent : public Component {
 public:
-    SubcircuitComponent(const CircuitElements::Circuit& inner, const std::string& name);
+    SubcircuitComponent(const SP_Circuit& inner, const std::string& name);
     //void evaluate() override;
     // Implement getInputs, getOutputs, etc. using internal Circuit
+    nlohmann::json serialize() const override;
+    void onInputChanged() override;  // Override observer function
+    void OnInputEvent(const InputEvent& event) override;
+  
+    private:
+    void setInOutPositions() override;
 
 private:
-    std::shared_ptr<CircuitElements::Circuit> internalCircuit;
+    SP_Circuit internalCircuit;
 };

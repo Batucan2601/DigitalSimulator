@@ -102,6 +102,13 @@ namespace GUI
                                 saveWindow->state = GUI::SaveLoad::State::STATE_LOAD;
                             }
                        });
+       createMenuItem("File/Load Subcircuit", false,
+                       [this]()  // Capture 'this' here
+                       {
+                            if (auto* saveWindow = dynamic_cast<GUI::SaveLoad*>(windows["Save/Load"])) {
+                                saveWindow->state = GUI::SaveLoad::State::STATE_LOADSUBCIRCUIT;
+                            }
+                       });
         createMenuItem("File/Exit", false,
                        []()
                        {

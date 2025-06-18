@@ -22,7 +22,8 @@ namespace GUI
         {  // sorting for filetering of the file lsit
             STATE_IDLE,
             STATE_SAVE,
-            STATE_LOAD
+            STATE_LOAD,
+            STATE_LOADSUBCIRCUIT,
         };
 
         SaveLoad() : BaseWindow("Save/Load") {}
@@ -34,9 +35,12 @@ namespace GUI
 
         void ShowSaveWindow();
         void ShowLoadWindow();
-
+        void ShowLoadSubCircuitWindow();
+        
+        void drawSubcircuitWindow(SP_Circuit circuit);
         void drawSaveWindow(SP_Circuit circuit);
         void drawLoadWindow(SP_Circuit circuit);
+        
         bool saveCircuit(std::string name);
         bool loadCircuit(std::string name);
         bool loadSubCircuit(std::string fileName);

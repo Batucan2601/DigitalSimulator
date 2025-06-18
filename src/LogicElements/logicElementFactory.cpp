@@ -1,5 +1,6 @@
 #include "logicElementFactory.h"
 #include "InputElement.h"
+#include "SubCircuit.h"
 namespace LogicElements
 {
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
