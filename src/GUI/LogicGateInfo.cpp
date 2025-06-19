@@ -2,10 +2,11 @@
 
 #include "Component.h"
 #include "LogicElements.h"
-
+#include "LogicElementBase.h"
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #include <raylib.h>
+#include <SubCircuit.h>
 
 namespace GUI
 {
@@ -115,18 +116,35 @@ namespace GUI
 
     // Global or static variables for the UI state and texture.
 
-    void LogicGateInfo::GUITools_BasicLogicDisplay_draw(Component* logicGate)
+    void LogicGateInfo::GUITools_BasicLogicDisplay_draw(Component* component)
     {
-        // Draw interactive windows first.
-        float pos[2] = {logicGate->bd.x, logicGate->bd.y};
+        float pos[2] = {component->bd.x, component->bd.y};
         ImGui::Begin("Logic Settings", &visible);
         ImGui::InputFloat2("Position", pos);
-        draw_Inputs(logicGate);
-        draw_Outputs(logicGate);
+
+        if (auto inputPtr = dynamic_cast<InputElement*>(component)) 
+        {
+            draw_Inputs(component);
+            // It's an Input
+        } 
+        else if (auto gatePtr = dynamic_cast<LogicElements::LogicGate*>(component)) 
+        {
+            draw_Inputs(component);
+            draw_Outputs(component);
+            // It's a LogicGate
+        }
+        else if (auto gatePtr = dynamic_cast<SubcircuitComponent*>(component)) 
+        {
+            draw_Inputs(component);
+            draw_Outputs(component);
+            // It's a LogicGate
+        }
+        // Draw interactive windows first.
+       
         ImGui::End();
 
-        logicGate->bd.x = pos[0];
-        logicGate->bd.y = pos[1];
+        component->bd.x = pos[0];
+        component->bd.y = pos[1];
     }
 
 }  // namespace GUI
