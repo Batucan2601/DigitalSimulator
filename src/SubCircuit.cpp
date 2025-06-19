@@ -1,7 +1,8 @@
 #include "Subcircuit.h"
 #include <ComponentTextures.h>
 
-SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std::string& name)
+SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std::string& logger_name)
+    :Component(logger_name)
 {
     this->internalCircuit = circuitRef;
     
