@@ -123,23 +123,8 @@ namespace Controls
 
     void Control_Keyboard_Event()
     {
-        if (selected_logic_gate.empty() || !selected_logic_gate[0])
-        {
-            // std::cerr << "Error: No selected logic gate!" << std::endl;
-            // control_logger.info("Error: No selected logic gate!");
-            return;
-        }
 
-        std::cout << "Keyboard event" << std::endl;
-
-        // Store the current position of the selected logic gate
-        float current_x = selected_logic_gate[0]->bd.x;
-        float current_y = selected_logic_gate[0]->bd.y;
-        // float gate_width = selected_logic_gate[0]->bd.width;
-        // float gate_height = selected_logic_gate[0]->bd.height;
-
-        Vector2 new_position = {current_x, current_y};
-
+        Vector2 new_position;
         // Adjust the position based on keyboard input
         // bool key_pressed = false;
         if (IsKeyPressed(KEY_UP))

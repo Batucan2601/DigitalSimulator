@@ -7,7 +7,7 @@ public:
     // Implement getInputs, getOutputs, etc. using internal Circuit
     nlohmann::json serialize() const override;
     void onInputChanged() override;  // Override observer function
-    void OnInputEvent(const InputEvent& event) override;
+    //void OnInputEvent(const InputEvent& event) override;
   
     private:
     void setInOutPositions() override;

@@ -74,56 +74,56 @@ void SubcircuitComponent::onInputChanged()
 {
     //this->evaluate();  // Automatically reevaluate when input changes
 }
-void SubcircuitComponent::OnInputEvent(const InputEvent& event)
-{
-    if (event.type == InputType::Mouse)
-    {
-        if (event.mouseState == MouseEventState::LeftClick)
-        {
-            OnLeftClick(event);
-        }
-        if (event.mouseState == MouseEventState::Release)
-        {
-            OnRelease(event);
-        }
-        if (event.mouseState == MouseEventState::RightClick)
-        {
-            OnRightClick(event);
-        }
-        if (event.mouseState == MouseEventState::Down)
-        {
-            OnDown(event);
-        }
-        if (event.mouseState == MouseEventState::Move)
-        {
-            OnMove(event);
-        }
-        if (event.mouseState == MouseEventState::Enter)
-        {
-            OnEnter(event);
-        }
-        if (event.mouseState == MouseEventState::Leave)
-        {
-            OnExit(event);
-        }
-    }
-
-    if (event.type == InputType::Keyboard)
-    {
-        if (event.keyState == KeyboardEvent::KeyPress)
-        {
-            OnKeyPress(event);
-        }
-        if (event.keyState == KeyboardEvent::KeyRelease)
-        {
-            // OnKeyRelease(event);
-        }
-        if (event.keyState == KeyboardEvent::KeyRepeat)
-        {
-            // OnKeyRepeat(event);
-        }
-    }
-}
+//void SubcircuitComponent::OnInputEvent(const InputEvent& event)
+//{
+//    if (event.type == InputType::Mouse)
+//    {
+//        if (event.mouseState == MouseEventState::LeftClick)
+//        {
+//            OnLeftClick(event);
+//        }
+//        if (event.mouseState == MouseEventState::Release)
+//        {
+//            OnRelease(event);
+//        }
+//        if (event.mouseState == MouseEventState::RightClick)
+//        {
+//            OnRightClick(event);
+//        }
+//        if (event.mouseState == MouseEventState::Down)
+//        {
+//            OnDown(event);
+//        }
+//        if (event.mouseState == MouseEventState::Move)
+//        {
+//            OnMove(event);
+//        }
+//        if (event.mouseState == MouseEventState::Enter)
+//        {
+//            OnEnter(event);
+//        }
+//        if (event.mouseState == MouseEventState::Leave)
+//        {
+//            OnExit(event);
+//        }
+//    }
+//
+//    if (event.type == InputType::Keyboard)
+//    {
+//        if (event.keyState == KeyboardEvent::KeyPress)
+//        {
+//            OnKeyPress(event);
+//        }
+//        if (event.keyState == KeyboardEvent::KeyRelease)
+//        {
+//            // OnKeyRelease(event);
+//        }
+//        if (event.keyState == KeyboardEvent::KeyRepeat)
+//        {
+//            // OnKeyRepeat(event);
+//        }
+//    }
+//}
 
 nlohmann::json SubcircuitComponent::serialize() const {
     nlohmann::json j;

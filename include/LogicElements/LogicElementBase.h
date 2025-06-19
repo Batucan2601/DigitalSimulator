@@ -29,13 +29,13 @@ namespace LogicElements
         LogicGate(CircuitElements::ComponentType componentType,const std::string& logger_name);
         ~LogicGate();
         void onInputChanged() override;  // Override observer function
-        void OnInputEvent(const InputEvent& event) override;
+        //void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
         //ClassLogger m_logger;
         nlohmann::json serialize() const override;
         protected:
-        void OnLeftClick(const InputEvent& event) override;
+        //void OnLeftClick(const InputEvent& event) override;
 
       private:
           bool is_connection_clicked(const Vector2& mousePos, CircuitElements::Connection& possibleConnection);
