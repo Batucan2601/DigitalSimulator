@@ -67,6 +67,7 @@ namespace LogicElementsDraw
             {
                 continue;
             }
+            
             for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
             {
                 Vector2 start = circuit->connections[i].physCon.wires[j];
@@ -74,7 +75,7 @@ namespace LogicElementsDraw
                 // DrawLine();
                 if (circuit->connections[i].is_connected)
                 {
-                    bool val = false;
+                    SignalVal val = SignalVal::SIGNAL_0;
                     for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
                         if (circuit->connections[i].sourceGate->outputs[k].name ==
@@ -84,7 +85,38 @@ namespace LogicElementsDraw
                             break;
                         }
                     }
-                    DrawLineEx(start, end, LINE_THICKNESS, val ? GREEN : BLACK);
+                    if( circuit->connections[i].sourceGate->inputs.size() > 0 )
+                    {
+                         circuit->connections[i].sourceGate->m_logger.
+                    info("my inputs are {} {}" ,circuit->connections[i].sourceGate->inputs[0].val ,
+                    circuit->connections[i].sourceGate->inputs[1].val  );
+                    }
+                    circuit->connections[i].sourceGate->m_logger.
+                    info("The value is  {} ",val);
+                    
+                    Color signalColor = BLACK;
+                    switch (val)
+                    {
+                    case SignalVal::SIGNAL_0:
+                        signalColor = BLACK;
+                        break; 
+                    case SignalVal::SIGNAL_1:
+                        signalColor = GREEN; 
+                        break; 
+                    case SignalVal::SIGNAL_X:
+                        signalColor = PURPLE; 
+                        break; 
+                    case SignalVal::SIGNAL_Z:
+                        signalColor = YELLOW;
+                        break; 
+                    default:
+                        throw("Signal type undefined");
+                    }
+                    DrawLineEx(start, end, LINE_THICKNESS, signalColor);
+
+                    circuit->connections[i].sourceGate->m_logger.
+                    info("The value is  {} ",circuit->connections[i].sourceGate->outputs[0].val);
+                   
                 }
                 else
                 {

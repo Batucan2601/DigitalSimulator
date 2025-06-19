@@ -16,7 +16,10 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include "ClassLogger.h"
+#include "Signal.h"
 #include "../Libraries/json.hpp"
+
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -106,17 +109,8 @@ class InputResolver
     static IInputHandler* selectedHandler;
     // You can keep additional helper functions if needed.
 };
-struct Signal
-{
-    std::string name;  // Optional: if you want to name each signal
-    bool val;          // The state of the signal
-    Vector2 pos;
-    Signal(const std::string& n = "", bool l = false) : name(n), val(l) {}
-    bool operator==(const Signal& other) const
-    {
-        return name == other.name && val == other.val;
-    }
-};
+
+
 
 namespace CircuitElements
 {
@@ -163,11 +157,15 @@ namespace CircuitElements {
 class Component : public LogicElements::GateObserver ,  public IInputHandler , public std::enable_shared_from_this<Component>
 {
   public:
-    Component() {};
+    Component(const std::string& logger_name)
+    : m_logger(logger_name)
+    {
+        // You can initialize other fields if needed
+    }
     Component(std::string& fileName);
     virtual void OnInputEvent(const InputEvent& event) override;
-    void setInput(const std::string& name, bool value);
-    bool getOutput(const std::string& name) const;
+    void setInput(const std::string& name, SignalVal value);
+    SignalVal getOutput(const std::string& name) const;
 
     void addObserver(LogicElements::GateObserver* observer);
     void removeObserver(LogicElements::GateObserver* observer);
@@ -186,7 +184,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     Vector2 getPosition() const;
     void setPosition(float x, float y);
     CircuitElements::ComponentType getType() const;
-
+    ClassLogger m_logger; 
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
     CircuitElements::Circuit* circuit;

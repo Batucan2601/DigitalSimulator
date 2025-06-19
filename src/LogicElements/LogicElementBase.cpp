@@ -15,8 +15,8 @@
 
 namespace LogicElements
 {
-    LogicGate::LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name)
-        : m_logger(logger_name)
+    LogicGate::LogicGate(CircuitElements::ComponentType componentType,const std::string& logger_name)
+     :Component(logger_name)
     {
         this->m_type = componentType;
         // type = CircuitElements::ComponentType;

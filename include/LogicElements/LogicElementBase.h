@@ -26,13 +26,13 @@ namespace LogicElements
     class LogicGate : public Component // Inherit observer to get updates
     {
       public:
-        LogicGate(CircuitElements::ComponentType componentType, std::string& logger_name);
+        LogicGate(CircuitElements::ComponentType componentType,const std::string& logger_name);
         ~LogicGate();
         void onInputChanged() override;  // Override observer function
         void OnInputEvent(const InputEvent& event) override;
         bool CheckMouseOnInOut(
             const Vector2& mousePosition, CircuitElements::Connection& connection);
-        ClassLogger m_logger;
+        //ClassLogger m_logger;
         nlohmann::json serialize() const override;
         protected:
         void OnLeftClick(const InputEvent& event) override;

@@ -34,20 +34,14 @@ namespace CircuitElements
         bool stabilized = false;
         int iterations = 0;
         const int maxIterations = 100;  // Prevent infinite loops
-        int i = 0;
         while (!stabilized && iterations < maxIterations)
         {
             stabilized = true;
             for (auto& gate : gates)
             {
-                std::cout << " gate " << i++ << std::endl; 
                 gate->evaluate();
-                std::cout << " gate eval "<< std::endl; 
                 auto previousOutputs = gate->getOutputs();
-                std::cout << "after get outputs "<< std::endl; 
                 gate->evaluate();
-                std::cout << " gate second  eval "<< std::endl; 
-
                 if (gate->getOutputs() != previousOutputs)
                 {
                     stabilized = false;
@@ -56,7 +50,7 @@ namespace CircuitElements
             // Then, update the inputs based on the connections.
             for (auto& conn : connections)
             {
-                bool sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
+                SignalVal sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
                 if (conn.targetLogic != "")
                 {
                     conn.targetGate->setInput(conn.targetLogic, sourceValue);

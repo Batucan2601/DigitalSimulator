@@ -11,7 +11,7 @@ namespace LogicElements
     {
       public:
       static std::shared_ptr<Component> createGate(CircuitElements::ComponentType type, std::string logger_name);
-      static std::shared_ptr<Component> createInput();
+      static std::shared_ptr<Component> createInput(std::string logger_name);
 
     };
 }  // namespace LogicElements
