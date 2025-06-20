@@ -124,7 +124,7 @@ namespace Controls
     void Control_Keyboard_Event()
     {
 
-        Vector2 new_position;
+        Vector2 new_position = {0,0};
         // Adjust the position based on keyboard input
         // bool key_pressed = false;
         if (IsKeyPressed(KEY_UP))

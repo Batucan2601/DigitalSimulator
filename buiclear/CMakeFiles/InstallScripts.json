@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/batuhan/Desktop/DigitalSimulator/buiclear/cmake_install.cmake",
+		"/home/batuhan/Desktop/DigitalSimulator/buiclear/Libraries/raylib/cmake_install.cmake",
+		"/home/batuhan/Desktop/DigitalSimulator/buiclear/Libraries/raylib/raylib/cmake_install.cmake",
+		"/home/batuhan/Desktop/DigitalSimulator/buiclear/Libraries/raylib/raylib/external/glfw/cmake_install.cmake",
+		"/home/batuhan/Desktop/DigitalSimulator/buiclear/Libraries/raylib/raylib/external/glfw/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

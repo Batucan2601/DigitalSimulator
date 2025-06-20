@@ -1,4 +1,3 @@
-#pragma once
 #include "GUI/GUIComponentEditor.h"
 #include <imgui.h>
 #include <memory>

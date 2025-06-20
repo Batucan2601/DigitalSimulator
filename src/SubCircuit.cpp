@@ -1,4 +1,4 @@
-#include "Subcircuit.h"
+#include "SubCircuit.h"
 #include <ComponentTextures.h>
 
 SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std::string& logger_name)

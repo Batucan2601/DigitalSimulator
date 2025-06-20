@@ -122,23 +122,18 @@ namespace GUI
         ImGui::Begin("Logic Settings", &visible);
         ImGui::InputFloat2("Position", pos);
 
-        if (auto inputPtr = dynamic_cast<InputElement*>(component)) 
-        {
+        if (dynamic_cast<InputElement*>(component)) {
             draw_Inputs(component);
-            // It's an Input
-        } 
-        else if (auto gatePtr = dynamic_cast<LogicElements::LogicGate*>(component)) 
-        {
+        }
+        else if (dynamic_cast<LogicElements::LogicGate*>(component)) {
             draw_Inputs(component);
             draw_Outputs(component);
-            // It's a LogicGate
         }
-        else if (auto gatePtr = dynamic_cast<SubcircuitComponent*>(component)) 
-        {
+        else if (dynamic_cast<SubcircuitComponent*>(component)) {
             draw_Inputs(component);
             draw_Outputs(component);
-            // It's a LogicGate
         }
+
         // Draw interactive windows first.
        
         ImGui::End();

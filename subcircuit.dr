@@ -1,0 +1,242 @@
+{
+    "connections": [
+        {
+            "sourceGate": 3,
+            "sourceLogic": "Out",
+            "targetGate": 0,
+            "targetLogic": "A",
+            "wires": [
+                {
+                    "x": -250.0,
+                    "y": -125.0
+                },
+                {
+                    "x": -50.0,
+                    "y": -125.0
+                },
+                {
+                    "x": -50.0,
+                    "y": -150.0
+                },
+                {
+                    "x": 0.0,
+                    "y": -150.0
+                }
+            ]
+        },
+        {
+            "sourceGate": 2,
+            "sourceLogic": "Out",
+            "targetGate": 1,
+            "targetLogic": "A",
+            "wires": [
+                {
+                    "x": -225.0,
+                    "y": -250.0
+                },
+                {
+                    "x": -225.0,
+                    "y": -275.0
+                },
+                {
+                    "x": 0.0,
+                    "y": -275.0
+                },
+                {
+                    "x": 0.0,
+                    "y": -250.0
+                }
+            ]
+        },
+        {
+            "sourceGate": 1,
+            "sourceLogic": "Out",
+            "targetGate": 0,
+            "targetLogic": "B",
+            "wires": [
+                {
+                    "x": 100.0,
+                    "y": -200.0
+                },
+                {
+                    "x": 100.0,
+                    "y": -125.0
+                },
+                {
+                    "x": -0.0,
+                    "y": -125.0
+                }
+            ]
+        },
+        {
+            "sourceGate": 3,
+            "sourceLogic": "Out",
+            "targetGate": -1,
+            "targetLogic": "",
+            "wires": []
+        },
+        {
+            "sourceGate": 0,
+            "sourceLogic": "Out",
+            "targetGate": -1,
+            "targetLogic": "",
+            "wires": []
+        },
+        {
+            "sourceGate": 1,
+            "sourceLogic": "Out",
+            "targetGate": 1,
+            "targetLogic": "B",
+            "wires": [
+                {
+                    "x": 100.0,
+                    "y": -100.0
+                },
+                {
+                    "x": -25.0,
+                    "y": -100.0
+                },
+                {
+                    "x": -25.0,
+                    "y": -225.0
+                },
+                {
+                    "x": 0.0,
+                    "y": -225.0
+                }
+            ]
+        },
+        {
+            "sourceGate": 3,
+            "sourceLogic": "Out",
+            "targetGate": -1,
+            "targetLogic": "",
+            "wires": [
+                {
+                    "x": -200.0,
+                    "y": -100.0
+                },
+                {
+                    "x": -175.0,
+                    "y": -100.0
+                },
+                {
+                    "x": -175.0,
+                    "y": -200.0
+                }
+            ]
+        }
+    ],
+    "gates": [
+        {
+            "id": 0,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": 0.0,
+                        "y": -150.0
+                    },
+                    "val": 1
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": 0.0,
+                        "y": -125.0
+                    },
+                    "val": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 100.0,
+                        "y": -100.0
+                    },
+                    "val": 0
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": -150.0
+            },
+            "type": 11
+        },
+        {
+            "id": 1,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": 0.0,
+                        "y": -250.0
+                    },
+                    "val": 0
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": 0.0,
+                        "y": -225.0
+                    },
+                    "val": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 100.0,
+                        "y": -200.0
+                    },
+                    "val": 1
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": -250.0
+            },
+            "type": 11
+        }
+    ],
+    "inputs": [
+        {
+            "id": 2,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -225.0,
+                        "y": -250.0
+                    },
+                    "val": 0
+                }
+            ],
+            "position": {
+                "x": -225.0,
+                "y": -250.0
+            },
+            "type": 14
+        },
+        {
+            "id": 3,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -250.0,
+                        "y": -125.0
+                    },
+                    "val": 1
+                }
+            ],
+            "position": {
+                "x": -250.0,
+                "y": -125.0
+            },
+            "type": 15
+        }
+    ]
+}

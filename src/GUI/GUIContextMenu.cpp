@@ -5,9 +5,9 @@
 
 namespace GUI
 {
-    static bool firstTime = true; 
     void ContextMenu::Draw(SP_Circuit circuit)
     {
+        circuit->m_logger.info("ContextMenu Draw called");
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
@@ -36,6 +36,6 @@ namespace GUI
     }
     void ContextMenu::Update(SP_Circuit circuit)
     {
-
+        circuit->m_logger.info("ContextMenu Update called");
     }
 }
