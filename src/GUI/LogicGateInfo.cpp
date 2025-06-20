@@ -108,12 +108,23 @@ namespace GUI
                     label = "Internal";
                     label  =  label + "##xx" + std::to_string(i);
                 }
-                else if(outputs.type == SignalType::INPUT)
+                else if(outputs.type == SignalType::OUTPUT)
                 {
                     ImGui::SameLine();
-                    label  = "Input";
+                    label  = "Output";
                     label  =  label + "##xx" + std::to_string(i);
                 }
+                if (ImGui::Button(label.c_str()))
+                {
+                    if(outputs.type == SignalType::INTERNAL)
+                    {
+                        outputs.type = SignalType::OUTPUT;
+                    }
+                    else if(outputs.type == SignalType::OUTPUT)
+                    {
+                        outputs.type = SignalType::INTERNAL;
+                    }
+                }   
                 i++;
             }
             static std::string new_output_name = "";

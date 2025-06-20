@@ -222,7 +222,13 @@ namespace LogicElementsDraw
             Rectangle rec = {pos.x - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
                              pos.y - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
                              AppSettings::appSettings.IN_OUT_RECT_WIDTH, AppSettings::appSettings.IN_OUT_RECT_WIDTH};
-            DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+            
+            Color recColor = BLUE;
+            if( gate->outputs[i].type == SignalType::OUTPUT )
+            {
+                recColor = RED; 
+            }
+            DrawRectangle(rec.x, rec.y, rec.width, rec.width, recColor);
         }
         //if (gate->is_hovered)
         {
@@ -232,8 +238,16 @@ namespace LogicElementsDraw
                 Rectangle rec = {pos.x - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
                                  pos.y - AppSettings::appSettings.IN_OUT_RECT_WIDTH / 2,
                                  AppSettings::appSettings.IN_OUT_RECT_WIDTH, AppSettings::appSettings.IN_OUT_RECT_WIDTH};
-                DrawRectangle(rec.x, rec.y, rec.width, rec.width, BLUE);
+               
+                Color recColor = BLUE;
+                if( gate->inputs[i].type == SignalType::INPUT )
+                {
+                    recColor = GREEN; 
+                }
+                DrawRectangle(rec.x, rec.y, rec.width, rec.width, recColor);
+            
             }
+            
         }
     }
 }  // namespace LogicElementsDraw
