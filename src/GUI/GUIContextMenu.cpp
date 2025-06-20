@@ -28,7 +28,27 @@ namespace GUI
             }
 
             if (ImGui::MenuItem("Delete")) {
-                std::cout << "Delete clicked" << std::endl;
+                IInputHandler* selectedHandler = InputResolver::getSelectedHandler();
+                {
+                    // remove the gate
+                    for (size_t i = 0; i < circuit->connections.size(); i++)
+                    {
+                        if (circuit->connections[i].sourceGate.get() == selectedHandler ||
+                            circuit->connections[i].targetGate.get() == selectedHandler)
+                        {
+                            circuit->connections.erase(circuit->connections.begin() + i);
+                            i--;
+                        }
+                    }
+                    for (size_t i = 0; i < circuit->gates.size(); i++)
+                    {
+                        if (circuit->gates[i].get() == selectedHandler)
+                        {
+                            circuit->gates.erase(circuit->gates.begin() + i);
+                            i--;
+                        }
+                    }
+                }
             }
 
             ImGui::EndPopup();
