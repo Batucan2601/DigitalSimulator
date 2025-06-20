@@ -8,6 +8,12 @@ enum class SignalVal
     SIGNAL_X,
     SIGNAL_Z
 };
+enum class SignalType
+{
+    INPUT,
+    OUTPUT,
+    INTERNAL
+};
 
 inline SignalVal signal_and(SignalVal a, SignalVal b )
 {
@@ -41,8 +47,9 @@ inline SignalVal signal_xor(SignalVal a, SignalVal b )
 struct Signal
 {
     std::string name;  // Optional: if you want to name each signal
-    SignalVal val;          // The state of the signal
     Vector2 pos;
+    SignalVal val;          // The state of the signal
+    SignalType type = SignalType::INTERNAL;  // Type of the signal (input, output, internal)
     Signal(const std::string& n = "", SignalVal l = SignalVal::SIGNAL_Z) : name(n), val(l) {}
     bool operator==(const Signal& other) const
     {

@@ -49,6 +49,31 @@ namespace GUI
                     logicGate->inputs.erase(logicGate->inputs.begin() + i);
                     logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
                 }
+                
+                if(inputs.type == SignalType::INTERNAL)
+                {
+                    ImGui::SameLine();
+                    label = "Internal";
+                    label  =  label + "##xx" + std::to_string(i);
+                }
+                else if(inputs.type == SignalType::INPUT)
+                {
+                    ImGui::SameLine();
+                    label  = "Input";
+                    label  =  label + "##xx" + std::to_string(i);
+                }
+                if (ImGui::Button(label.c_str()))
+                {
+                    if(inputs.type == SignalType::INTERNAL)
+                    {
+                        inputs.type = SignalType::INPUT;
+                    }
+                    else if(inputs.type == SignalType::INPUT)
+                    {
+                        inputs.type = SignalType::INTERNAL;
+                    }
+                }   
+
                 i++;
             }
             static std::string new_input_name = "";
@@ -77,6 +102,18 @@ namespace GUI
                 {
                     change_connection_name(logicGate, false, outputs.name);
                 }
+                if(outputs.type == SignalType::INTERNAL)
+                {
+                    ImGui::SameLine();
+                    label = "Internal";
+                    label  =  label + "##xx" + std::to_string(i);
+                }
+                else if(outputs.type == SignalType::INPUT)
+                {
+                    ImGui::SameLine();
+                    label  = "Input";
+                    label  =  label + "##xx" + std::to_string(i);
+                }
                 i++;
             }
             static std::string new_output_name = "";
@@ -88,6 +125,7 @@ namespace GUI
                 logicGate->setPosition(logicGate->bd.x, logicGate->bd.y);
                 new_output_name = "";
             }
+           
             ImGui::TreePop();
         }
     }
