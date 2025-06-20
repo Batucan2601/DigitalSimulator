@@ -3,6 +3,7 @@
 #include "LogicElements.h"
 #include "Util/Utils.h"
 #include "Controls.h"
+#include "raylibHelper.h"
 // Define static members.
 std::queue<InputEvent> InputResolver::queue;
 std::list<IInputHandler*>
@@ -278,7 +279,17 @@ void Component::OnLeftClick(const InputEvent& event)
 void Component::OnRightClick(const InputEvent& event)
 {
     (void)event;
-    InputResolver::setSelectedHandler(nullptr);
+
+    // check bb
+    Vector2 pos = {(float)event.pos.x, (float)event.pos.y};
+    bool isCol = CheckCollisionPointRec(pos, this->bd);
+    if (!isCol)
+    {
+        InputResolver::setSelectedHandler(nullptr);
+        return;
+    }
+    RaylibHelper::Show(4);
+
 }
 static Vector2 posBeforeDrag;
 static bool isFirst = true;
