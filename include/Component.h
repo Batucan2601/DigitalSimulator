@@ -158,9 +158,9 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
 {
   public:
     Component(const std::string& logger_name)
-    : m_logger(logger_name)
+    : m_logger(logger_name), m_name(logger_name)
     {
-        // You can initialize other fields if needed
+        
     }
     Component(std::string& fileName);
     virtual void OnInputEvent(const InputEvent& event) override;
@@ -191,6 +191,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     int id;
     CircuitElements::ComponentType m_type;
     Texture2D m_texture;
+    std::string m_name; // official name of component, e.g. "my Gate"
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
