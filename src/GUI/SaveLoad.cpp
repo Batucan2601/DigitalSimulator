@@ -131,10 +131,6 @@ namespace GUI
         
         auto loaded_circuit = jsonparser_loadCircuit(fileName);
         std::shared_ptr<SubcircuitComponent> ptr = std::make_shared<SubcircuitComponent>(loaded_circuit, "new_circuit");
-        ptr->bd.x = 120;
-        ptr->bd.y = 120;
-        ptr->bd.width = 100;
-        ptr->bd.height = 100;
         addComponent(ptr);
 
         return true;

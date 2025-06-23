@@ -5,6 +5,17 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
     :Component(logger_name)
 {
     this->internalCircuit = circuitRef;
+    for (size_t i = 0; i < this->internalCircuit->connections.size(); i++)
+    {
+        InputResolver::UnregisterHandler(
+            &this->internalCircuit->connections[i]);  // Unregister connections from the circuit
+        this->internalCircuit->connections[i].physCon.wires.clear();  // Clear the wires in the connection        
+    }
+    for (size_t i = 0; i < this->internalCircuit->gates.size(); i++)
+    {
+        InputResolver::UnregisterHandler(
+            this->internalCircuit->gates[i].get());  // Unregister connections from the circuit
+    }
     
     // with connections get the 
     for (size_t i = 0; i < this->internalCircuit->gates.size(); i++)
@@ -30,6 +41,7 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
     }
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
     InputResolver::RegisterHandler(this);
+    this->setInOutPositions();
 }
 void SubcircuitComponent::setInOutPositions()
 {
@@ -52,14 +64,15 @@ void SubcircuitComponent::connect_inputs()
 {
     for (size_t i = 0; i < this->inputs.size(); i++)
     {
-        this->inputs[i].val = this->inputs_ptr[i]->val;
+        //this->inputs[i].val = this->inputs_ptr[i]->val;
+        this->inputs_ptr[i]->val = this->inputs[i].val;
     }
 }
 void SubcircuitComponent::connect_outputs()
 {
     for (size_t i = 0; i < this->outputs.size(); i++)
     {
-        this->outputs[i].val = this->outputs_ptr[i]->val;
+        this->outputs_ptr[i]->val = this->outputs[i].val;
     }
 }
 void SubcircuitComponent::evaluate()
