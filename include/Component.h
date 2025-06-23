@@ -173,7 +173,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     const std::vector<Signal>& getInputs() const;
     const std::vector<Signal>& getOutputs() const;
     void setEvaluationFunction(std::function<void(Component&)> evalFunc);
-    void evaluate();
+    virtual void evaluate();
     bool is_connection_clicked(const Vector2& mousePos,
     CircuitElements::Connection& possibleConnection);
     bool CheckMouseOnInOut(const Vector2& mousePosition,
@@ -207,6 +207,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     private:
     virtual void setInOutPositions() = 0;  // Pure virtual — must be implemented in derived classes
     std::shared_ptr<Component> hoveredGate;
+
 
     
 };

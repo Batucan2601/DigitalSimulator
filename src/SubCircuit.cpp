@@ -15,6 +15,7 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
             {
                 Signal in = this->internalCircuit->gates[i]->inputs[j] ;
                 this->inputs.push_back(in);
+                this->inputs_ptr.push_back(&this->internalCircuit->gates[i]->inputs[j]);
             }
         }
         for (size_t j = 0; j < this->internalCircuit->gates[i]->outputs.size(); j++)
@@ -23,6 +24,7 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
             {
                 Signal out = this->internalCircuit->gates[i]->outputs[j] ;
                 this->outputs.push_back(out);
+                this->outputs_ptr.push_back(&this->internalCircuit->gates[i]->outputs[j]);
             }
         }
     }
@@ -46,9 +48,35 @@ void SubcircuitComponent::setInOutPositions()
         this->outputs[i].pos = {x, y};
     }
 }
+void SubcircuitComponent::connect_inputs()
+{
+    for (size_t i = 0; i < this->inputs.size(); i++)
+    {
+        this->inputs[i].val = this->inputs_ptr[i]->val;
+    }
+}
+void SubcircuitComponent::connect_outputs()
+{
+    for (size_t i = 0; i < this->outputs.size(); i++)
+    {
+        this->outputs[i].val = this->outputs_ptr[i]->val;
+    }
+}
+void SubcircuitComponent::evaluate()
+{
+    // Evaluate the internal circuit
+    if (internalCircuit)
+    {
+        this->connect_inputs();
+        internalCircuit->evaluate();
+        this->connect_outputs();
+    }
+    // Notify observers that the input has changed
+    notifyObservers();
+}
 void SubcircuitComponent::onInputChanged()
 {
-    //this->evaluate();  // Automatically reevaluate when input changes
+    this->evaluate();  // Automatically reevaluate when input changes
 }
 //void SubcircuitComponent::OnInputEvent(const InputEvent& event)
 //{
