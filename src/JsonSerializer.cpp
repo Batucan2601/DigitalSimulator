@@ -31,31 +31,14 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         // Load inputs
         if (gateJson.contains("inputs") && gateJson["inputs"].is_array()) {
             for (const auto& inputJson : gateJson["inputs"]) {
-                Signal input;
-                input.name = inputJson.value("name", "");
-                input.val = inputJson.value("val", SignalVal::SIGNAL_0);
-
-                if (inputJson.contains("position") && inputJson["position"].is_object()) {
-                    input.pos.x = inputJson["position"].value("x", 0.0f);
-                    input.pos.y = inputJson["position"].value("y", 0.0f);
-                }
-
+                Signal input = inputJson.get<Signal>();
                 gate->inputs.push_back(input);
             }
         }
-
         // Load outputs
-        if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
+       if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
             for (const auto& outputJson : gateJson["outputs"]) {
-                Signal output;
-                output.name = outputJson.value("name", "");
-                output.val = outputJson.value("val", SignalVal::SIGNAL_0);
-
-                if (outputJson.contains("position") && outputJson["position"].is_object()) {
-                    output.pos.x = outputJson["position"].value("x", 0.0f);
-                    output.pos.y = outputJson["position"].value("y", 0.0f);
-                }
-
+                Signal output = outputJson.get<Signal>();
                 gate->outputs.push_back(output);
             }
         }
@@ -204,6 +187,7 @@ void to_json(json& j, const Signal& signal)
 {
     j = json{{"name", signal.name},
                 {"val", signal.val},
+                {"type", signal.type},
                 {"position", {{"x", signal.pos.x}, {"y", signal.pos.y}}}};
 }
 
@@ -211,6 +195,7 @@ inline void from_json(const nlohmann::json& j, Signal& signal)
 {
     signal.name = j.at("name").get<std::string>();
     signal.val = j.at("val").get<SignalVal>();
+    signal.type = j.at("type").get<SignalType>();
     signal.pos.x = j.at("position").at("x").get<float>();
     signal.pos.y = j.at("position").at("y").get<float>();
 }

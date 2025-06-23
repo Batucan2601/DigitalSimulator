@@ -128,7 +128,7 @@ namespace GUI
      bool SaveLoad::loadSubCircuit(std::string fileName)
     {
         std::cout << "Loading file from: " << fileName << std::endl;
-
+        
         auto loaded_circuit = jsonparser_loadCircuit(fileName);
         std::shared_ptr<SubcircuitComponent> ptr = std::make_shared<SubcircuitComponent>(loaded_circuit, "new_circuit");
         ptr->bd.x = 120;
