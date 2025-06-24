@@ -17,7 +17,7 @@ namespace GUI
         void Update(SP_Circuit circuit) override;
         void draw_Inputs(Component* logicGate);
         void draw_Outputs(Component* logicGate);
-        void change_connection_name(Component* logicGate, bool is_input, std::string newName);
+        bool change_InOut_name(Component* logicGate, bool is_input, const std::string& oldName, const std::string& newName);
         void GUITools_BasicLogicDisplay_draw(Component* logicGate);
     };
 

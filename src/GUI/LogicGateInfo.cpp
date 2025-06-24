@@ -37,10 +37,23 @@ namespace GUI
             {
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
-                // Directly pass the reference to the string.
-                if (ImGui::InputText(label.c_str(), &inputs.name))
+                static char buf[128] = {0};
+                strncpy(buf, inputs.name.c_str(), sizeof(buf));
+                buf[sizeof(buf) - 1] = '\0';
+                if (ImGui::InputText(label.c_str(), buf, sizeof(buf)))
                 {
-                    change_connection_name(logicGate, true, inputs.name);
+                    bool is_change_connection_name = change_InOut_name(logicGate, true, inputs.name, buf);
+                    if (is_change_connection_name)
+                    {
+                        inputs.name = buf;  // Update the name in the inputs vector
+                    }
+                    else
+                    {
+                        ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Name already exists!");
+                        strncpy(buf, inputs.name.c_str(), sizeof(buf)); // Reset to original name
+                        inputs.name[sizeof(buf) - 1] = '\0'; // Ensure null termination
+                    }
+                    
                 }
                 ImGui::SameLine();
                 label = "X" + label;
@@ -97,10 +110,23 @@ namespace GUI
             {
                 // Create a unique identifier that doesn't show in the UI.
                 std::string label = "##xx" + std::to_string(i);
-                // Directly pass the reference to the string.
-                if (ImGui::InputText(label.c_str(), &outputs.name))
+                static char buf[128] = {0};
+                strncpy(buf, outputs.name.c_str(), sizeof(buf));
+                buf[sizeof(buf) - 1] = '\0';
+                if (ImGui::InputText(label.c_str(), buf, sizeof(buf)))
                 {
-                    change_connection_name(logicGate, false, outputs.name);
+                    bool is_change_connection_name = change_InOut_name(logicGate, true, outputs.name, buf);
+                    if (is_change_connection_name)
+                    {
+                        outputs.name = buf;  // Update the name in the inputs vector
+                    }
+                    else
+                    {
+                        ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Name already exists!");
+                        strncpy(buf, outputs.name.c_str(), sizeof(buf)); // Reset to original name
+                        outputs.name[sizeof(buf) - 1] = '\0'; // Ensure null termination
+                    }
+                    
                 }
                 if(outputs.type == SignalType::INTERNAL)
                 {
@@ -141,26 +167,37 @@ namespace GUI
         }
     }
 
-    void LogicGateInfo::change_connection_name(Component* logicGate, bool is_input,
-                                               std::string newName)
+    bool LogicGateInfo::change_InOut_name(Component* logicGate, bool is_input, const std::string& oldName, const std::string& newName)
     {
-        for (size_t i = 0; i < logicGate->circuit->connections.size(); i++)
+        // Update component's inputs or outputs
+        for (auto& signal : logicGate->inputs)
         {
-            if (logicGate->circuit->connections[i].sourceGate.get() == logicGate)
+            if (signal.name == newName)
             {
-                if (!is_input)  // output
-                {
-                    logicGate->circuit->connections[i].sourceLogic = newName;
-                }
-            }
-            if (logicGate->circuit->connections[i].targetGate.get() == logicGate)
-            {
-                if (is_input)  // output
-                {
-                    logicGate->circuit->connections[i].targetLogic = newName;
-                }
+                return false; 
             }
         }
+        for (auto& signal : logicGate->outputs)
+        {
+            if (signal.name == newName)
+            {
+                return false; 
+            }
+        }
+        // Update connections
+        for (auto& conn : logicGate->circuit->connections)
+        {
+            if (is_input && conn.targetGate.get() == logicGate && conn.targetLogic == oldName)
+            {
+                conn.targetLogic = newName;
+            }
+            else if (!is_input && conn.sourceGate.get() == logicGate && conn.sourceLogic == oldName)
+            {
+                conn.sourceLogic = newName;
+            }
+        }
+
+        return true;
     }
     static bool check_same_name(Component* component)
     {
