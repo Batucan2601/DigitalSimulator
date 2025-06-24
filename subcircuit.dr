@@ -1,6 +1,22 @@
 {
     "connections": [
         {
+            "sourceGate": 3,
+            "sourceLogic": "Out",
+            "targetGate": 0,
+            "targetLogic": "A",
+            "wires": [
+                {
+                    "x": -275.0,
+                    "y": -150.0
+                },
+                {
+                    "x": 0.0,
+                    "y": -150.0
+                }
+            ]
+        },
+        {
             "sourceGate": 2,
             "sourceLogic": "Out",
             "targetGate": 1,
@@ -8,31 +24,11 @@
             "wires": [
                 {
                     "x": -250.0,
-                    "y": -275.0
-                },
-                {
-                    "x": 0.0,
-                    "y": -275.0
+                    "y": -250.0
                 },
                 {
                     "x": 0.0,
                     "y": -250.0
-                }
-            ]
-        },
-        {
-            "sourceGate": 3,
-            "sourceLogic": "Out",
-            "targetGate": 0,
-            "targetLogic": "A",
-            "wires": [
-                {
-                    "x": -250.0,
-                    "y": -150.0
-                },
-                {
-                    "x": 0.0,
-                    "y": -150.0
                 }
             ]
         },
@@ -57,13 +53,6 @@
             ]
         },
         {
-            "sourceGate": 3,
-            "sourceLogic": "Out",
-            "targetGate": -1,
-            "targetLogic": "",
-            "wires": []
-        },
-        {
             "sourceGate": 0,
             "sourceLogic": "Out",
             "targetGate": 1,
@@ -74,17 +63,17 @@
                     "y": -100.0
                 },
                 {
-                    "x": -0.0,
+                    "x": 0.0,
                     "y": -100.0
                 },
                 {
-                    "x": -0.0,
+                    "x": 0.0,
                     "y": -225.0
                 }
             ]
         },
         {
-            "sourceGate": 1,
+            "sourceGate": 2,
             "sourceLogic": "Out",
             "targetGate": -1,
             "targetLogic": "",
@@ -98,7 +87,7 @@
                 {
                     "name": "A",
                     "position": {
-                        "x": -0.0,
+                        "x": 0.0,
                         "y": -150.0
                     },
                     "type": 0,
@@ -107,11 +96,11 @@
                 {
                     "name": "B",
                     "position": {
-                        "x": -0.0,
+                        "x": 0.0,
                         "y": -125.0
                     },
                     "type": 2,
-                    "val": 0
+                    "val": 1
                 }
             ],
             "outputs": [
@@ -126,7 +115,7 @@
                 }
             ],
             "position": {
-                "x": -0.0,
+                "x": 0.0,
                 "y": -150.0
             },
             "type": 11
@@ -141,7 +130,7 @@
                         "y": -250.0
                     },
                     "type": 0,
-                    "val": 1
+                    "val": 0
                 },
                 {
                     "name": "B",
@@ -161,7 +150,7 @@
                         "y": -200.0
                     },
                     "type": 1,
-                    "val": 0
+                    "val": 1
                 }
             ],
             "position": {
@@ -179,26 +168,7 @@
                     "name": "Out",
                     "position": {
                         "x": -250.0,
-                        "y": -275.0
-                    },
-                    "type": 2,
-                    "val": 1
-                }
-            ],
-            "position": {
-                "x": -250.0,
-                "y": -275.0
-            },
-            "type": 15
-        },
-        {
-            "id": 3,
-            "outputs": [
-                {
-                    "name": "Out",
-                    "position": {
-                        "x": -250.0,
-                        "y": -150.0
+                        "y": -250.0
                     },
                     "type": 2,
                     "val": 0
@@ -206,6 +176,25 @@
             ],
             "position": {
                 "x": -250.0,
+                "y": -250.0
+            },
+            "type": 14
+        },
+        {
+            "id": 3,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -275.0,
+                        "y": -150.0
+                    },
+                    "type": 2,
+                    "val": 0
+                }
+            ],
+            "position": {
+                "x": -275.0,
                 "y": -150.0
             },
             "type": 14

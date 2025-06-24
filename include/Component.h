@@ -192,6 +192,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     CircuitElements::ComponentType m_type;
     Texture2D m_texture;
     std::string m_name; // official name of component, e.g. "my Gate"
+    bool m_mark_for_deletion = false; // Flag to mark component for deletion
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic

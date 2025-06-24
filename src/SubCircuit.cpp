@@ -24,7 +24,8 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
         {
             if(this->internalCircuit->gates[i]->inputs[j].type == SignalType::INPUT)
             {
-                Signal in = this->internalCircuit->gates[i]->inputs[j] ;
+                this->internalCircuit->gates[i]->inputs[j].val = SignalVal::SIGNAL_0;  // Initialize input signals to Z state
+                Signal in = this->internalCircuit->gates[i]->inputs[j];
                 this->inputs.push_back(in);
                 this->inputs_ptr.push_back(&this->internalCircuit->gates[i]->inputs[j]);
             }
@@ -33,7 +34,8 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
         {
             if(this->internalCircuit->gates[i]->outputs[j].type == SignalType::OUTPUT)
             {
-                Signal out = this->internalCircuit->gates[i]->outputs[j] ;
+                this->internalCircuit->gates[i]->outputs[j].val = SignalVal::SIGNAL_0;  // Initialize output signals to Z state
+                Signal out = this->internalCircuit->gates[i]->outputs[j];
                 this->outputs.push_back(out);
                 this->outputs_ptr.push_back(&this->internalCircuit->gates[i]->outputs[j]);
             }
@@ -65,14 +67,14 @@ void SubcircuitComponent::connect_inputs()
     for (size_t i = 0; i < this->inputs.size(); i++)
     {
         //this->inputs[i].val = this->inputs_ptr[i]->val;
-        this->inputs_ptr[i]->val = this->inputs[i].val;
+        *this->inputs_ptr[i] = this->inputs[i];
     }
 }
 void SubcircuitComponent::connect_outputs()
 {
     for (size_t i = 0; i < this->outputs.size(); i++)
     {
-        this->outputs_ptr[i]->val = this->outputs[i].val;
+        *this->outputs_ptr[i] = this->outputs[i];
     }
 }
 void SubcircuitComponent::evaluate()

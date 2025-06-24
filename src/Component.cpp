@@ -42,7 +42,6 @@ void InputResolver::resolve()
         }
     }
 }
-
 void Component::setPosition(float x, float y)
 {
     this->bd.x = x;
@@ -504,24 +503,7 @@ void Component::OnKeyPress(const InputEvent& event)
     {
         if (this == InputResolver::getSelectedHandler())
         {
-            // remove the gate
-            for (size_t i = 0; i < circuit->connections.size(); i++)
-            {
-                if (circuit->connections[i].sourceGate.get() == this ||
-                    circuit->connections[i].targetGate.get() == this)
-                {
-                    circuit->connections.erase(circuit->connections.begin() + i);
-                    i--;
-                }
-            }
-            for (size_t i = 0; i < circuit->gates.size(); i++)
-            {
-                if (circuit->gates[i].get() == this)
-                {
-                    circuit->gates.erase(circuit->gates.begin() + i);
-                    i--;
-                }
-            }
+            this->m_mark_for_deletion = true; 
         }
     }
 }

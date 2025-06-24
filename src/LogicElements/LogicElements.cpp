@@ -29,6 +29,30 @@ namespace CircuitElements
         this->connections.push_back(c);
     }
 
+    void Circuit::removeComponent()
+    {
+        for (size_t i = 0; i < this->gates.size(); ++i)
+        {
+            if (this->gates[i]->m_mark_for_deletion)
+            {
+                // Remove associated connections
+                for (size_t j = 0; j < this->connections.size(); ++j)
+                {
+                    if (this->connections[j].sourceGate == this->gates[i] ||
+                        this->connections[j].targetGate == this->gates[i])
+                    {
+                        this->connections.erase(this->connections.begin() + j);
+                        j--;
+                    }
+                }
+
+                // Remove from gates
+                InputResolver::UnregisterHandler(this->gates[i].get());
+                this->gates.erase(this->gates.begin() + i);
+                i--;
+            }
+        }
+    }
     void Circuit::evaluate()
     {
         bool stabilized = false;
@@ -63,6 +87,9 @@ namespace CircuitElements
             // Handle infinite loop case
             throw std::runtime_error("Circuit evaluation did not stabilize.");
         }
+
+        this->removeComponent();  // Clean up gates marked for deletion
+
     }
     int Circuit::giveNewId()
     {
