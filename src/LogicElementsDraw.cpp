@@ -56,7 +56,6 @@ namespace LogicElementsDraw
             }
 
             DrawGateElement(gate);
-
             DrawInOut(gate);
         }
 

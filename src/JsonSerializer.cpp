@@ -1,5 +1,5 @@
 #include "JsonSerializer.h"
-
+#include "LogicElements/logicElementFactory.h"
 
 SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
 {
@@ -26,22 +26,27 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     for (const auto& gateJson : j["gates"])
     {
         std::string logger = "LoggerName";
-        auto gate = std::make_shared<LogicElements::LogicGate>(gateJson["type"], logger);
+        auto gate = LogicElements::LogicElementFactory::createGate(gateJson["type"], logger);
+        //gate->inputs.clear();
+        //gate->outputs.clear();
         int id = gateJson["id"];
         // Load inputs
+        int i = 0;
         if (gateJson.contains("inputs") && gateJson["inputs"].is_array()) {
             for (const auto& inputJson : gateJson["inputs"]) {
                 Signal input = inputJson.get<Signal>();
-                gate->inputs.push_back(input);
+                gate->inputs[i++] = (input);
             }
         }
         // Load outputs
+        i = 0;
        if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
             for (const auto& outputJson : gateJson["outputs"]) {
                 Signal output = outputJson.get<Signal>();
-                gate->outputs.push_back(output);
+                //gate->outputs.push_back(output);
+                gate->outputs[i++] = (output);
             }
-        }
+        } 
         gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
         gate->circuit = circuit.get();
