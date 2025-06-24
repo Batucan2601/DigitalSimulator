@@ -41,6 +41,7 @@ namespace CircuitElements
         bool is_connected = false;
         void OnInputEvent(const InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
+        void OnRightClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
     };
     class ActiveWire : public IInputHandler

@@ -2,6 +2,7 @@
 
 #include "Controls.h"
 #include <Util/Utils.h>
+#include <raylibHelper.h>
 
 
 namespace CircuitElements
@@ -105,6 +106,10 @@ namespace CircuitElements
             {
                 OnLeftClick(event);
             }
+            if (event.mouseState == MouseEventState::RightClick)
+            {
+                OnRightClick(event);
+            }
             if (event.mouseState == MouseEventState::Move)
             {
                 OnMove(event);
@@ -131,6 +136,26 @@ namespace CircuitElements
             InputResolver::setSelectedHandler(
                 (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
         }
+    }
+    void Connection::OnRightClick(const InputEvent& event)
+    {
+        // check bb
+        Vector2 pos = {(float)event.pos.x, (float)event.pos.y};
+        for (size_t i = 0; i < this->physCon.wires.size()-1; i++)
+        {
+            Vector2 start = this->physCon.wires[i];
+            Vector2 end = this->physCon.wires[i+1];
+            Rectangle bd = { std::min(start.x , end.x) , std::min(start.y , end.y) , 
+            std::abs(start.x - end.x) + 5 , std::abs(start.y - end.y) + 5 };
+            bool isCol = CheckCollisionPointRec(pos, bd);
+            if (isCol)
+            {
+                 InputResolver::setSelectedHandler(this);
+                 RaylibHelper::Show(4);
+                 return;
+            }
+        }
+        InputResolver::setSelectedHandler(nullptr);
     }
     void Connection::OnMove(const InputEvent& event)
     {

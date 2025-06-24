@@ -101,6 +101,12 @@ namespace GUI
             ImGui::TreePop();
         }
     }
+    void LogicGateInfo::draw_Connection(Component* connection)
+    {
+        //std::string source = connection->
+        //ImGui::Text()
+
+    }
     void LogicGateInfo::draw_Outputs(Component* logicGate)
     {
         if (ImGui::TreeNodeEx("Outputs"))
