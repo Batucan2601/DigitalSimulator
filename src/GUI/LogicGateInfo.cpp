@@ -162,15 +162,49 @@ namespace GUI
             }
         }
     }
+    static bool check_same_name(Component* component)
+    {
+        // This function checks if the names of inputs and outputs are unique.
+        // If not, it returns false.
+        // For now, we assume that the names are unique.
+        for (size_t i = 0; i < component->circuit->gates.size(); i++)
+        {
+            if (component->circuit->gates[i]->m_name == component->m_name &&
+                component->circuit->gates[i].get() != component)
+            {
+                ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Name already exists!");
+                return false;  // Name is not unique
+            }
+        }
+        
+        return true;
+    }
+    static void draw_name(Component* component)
+    {
+        static char buf[128] = {0};
+        strncpy(buf, component->m_name.c_str(), sizeof(buf));
+        buf[sizeof(buf) - 1] = '\0';
 
+        if (ImGui::InputText("Component name: ", buf, sizeof(buf))) {
+            
+            std::string old_name = component->m_name;
+            component->m_name = std::string(buf);
+
+            if (!check_same_name(component)) {
+                component->m_name = old_name;  // Revert
+                strncpy(buf, old_name.c_str(), sizeof(buf));
+                buf[sizeof(buf) - 1] = '\0';
+            }
+        }
+        check_same_name(component);
+    }
     // Global or static variables for the UI state and texture.
-
     void LogicGateInfo::GUITools_BasicLogicDisplay_draw(Component* component)
     {
         float pos[2] = {component->bd.x, component->bd.y};
         ImGui::Begin("Logic Settings", &visible);
+        draw_name(component);
         ImGui::InputFloat2("Position", pos);
-
         if (dynamic_cast<InputElement*>(component)) {
             draw_Inputs(component);
         }
@@ -182,9 +216,7 @@ namespace GUI
             draw_Inputs(component);
             draw_Outputs(component);
         }
-
         // Draw interactive windows first.
-       
         ImGui::End();
 
         component->bd.x = pos[0];
