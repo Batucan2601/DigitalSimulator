@@ -136,7 +136,7 @@ namespace CircuitElements
     {
         // check collision with physcons
         hovering.is_hovering = false;
-        for (size_t j = 0; j < this->physCon.wires.size() - 1; j++)
+        for (int j = 0; j < this->physCon.wires.size() - 1; j++)
         {
             Vector2 start = this->physCon.wires[j];
             Vector2 end = this->physCon.wires[j + 1];

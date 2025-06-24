@@ -187,11 +187,11 @@ namespace GUI
         // Update connections
         for (auto& conn : logicGate->circuit->connections)
         {
-            if (is_input && conn.targetGate.get() == logicGate && conn.targetLogic == oldName)
+            if (conn.targetGate.get() == logicGate && conn.targetLogic == oldName)
             {
                 conn.targetLogic = newName;
             }
-            else if (!is_input && conn.sourceGate.get() == logicGate && conn.sourceLogic == oldName)
+            else if ( conn.sourceGate.get() == logicGate && conn.sourceLogic == oldName)
             {
                 conn.sourceLogic = newName;
             }
