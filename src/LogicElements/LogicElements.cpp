@@ -160,8 +160,10 @@ namespace CircuitElements
     void Connection::OnMove(const InputEvent& event)
     {
         // check collision with physcons
+        size_t wireCount = this->physCon.wires.size();
+        if (wireCount < 1) return;  // Nothing to loop over 
         hovering.is_hovering = false;
-        for (int j = 0; j < this->physCon.wires.size() - 1; j++)
+        for (size_t j = 0; j < this->physCon.wires.size() - 1; j++)
         {
             Vector2 start = this->physCon.wires[j];
             Vector2 end = this->physCon.wires[j + 1];

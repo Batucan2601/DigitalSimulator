@@ -12,6 +12,7 @@ int main(void)
     // Initialization
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InputResolver::Init();
     RaylibHelper::Init(AppSettings::appSettings.screenWidth, AppSettings::appSettings.screenHeight, AppSettings::appSettings.targetFps,
                        "raylib [core] example - 2D camera drag with zoom");
     LogicElements::comptextures_init_logicTextures();  // this should also be wrapped

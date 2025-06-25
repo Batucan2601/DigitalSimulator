@@ -5,6 +5,7 @@
 
 namespace GUI
 {
+    bool is_popup_open = false; // Global variable to track popup state
     void ContextMenu::Draw(SP_Circuit circuit)
     {
         circuit->m_logger.info("ContextMenu Draw called");
@@ -13,10 +14,10 @@ namespace GUI
             ImGui::OpenPopup("ComponentContextMenu");
             visible = false; // reset immediately after opening
         }
-
         if (ImGui::BeginPopup("ComponentContextMenu"))
         {
             std::cout << "enter here" << std::endl;
+            is_popup_open = true; 
 
             if (ImGui::MenuItem("Edit")) {
                 std::cout << "Edit clicked" << std::endl;
@@ -50,9 +51,18 @@ namespace GUI
                     }
                 }
             }
-
             ImGui::EndPopup();
         }
+        else
+        {
+            if( is_popup_open)
+            {
+                is_popup_open = false;
+                InputResolver::Unblock();
+                //InputResolver::setSelectedHandler(nullptr); // Reset the selected handler
+            }
+        }
+       
     }
     void ContextMenu::Update(SP_Circuit circuit)
     {

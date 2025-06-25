@@ -82,6 +82,7 @@ class IInputHandler
 class InputResolver
 {
   public:
+    static void Init();
     // Add a new event to the queue.
     static void PushEvent(const InputEvent& event);
 
@@ -103,10 +104,23 @@ class InputResolver
         selectedHandler = handler;
     }
 
+    static bool isBlocked()
+    {
+        return m_blocked;
+    }
+    static void Block()
+    {
+        m_blocked = true;
+    }
+    static void Unblock()
+    {
+        m_blocked = false;
+    }
     static std::list<IInputHandler*> handlers;  // Collection of input handlers.
   private:
     static std::queue<InputEvent> queue;
     static IInputHandler* selectedHandler;
+    static bool m_blocked; 
     // You can keep additional helper functions if needed.
 };
 

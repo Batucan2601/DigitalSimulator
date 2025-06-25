@@ -9,6 +9,13 @@ std::queue<InputEvent> InputResolver::queue;
 std::list<IInputHandler*>
     InputResolver::handlers;  // I do not really know what thefuck that is about
 IInputHandler* InputResolver::selectedHandler = nullptr;
+bool InputResolver::m_blocked = false;
+void InputResolver::Init()
+{
+    queue = std::queue<InputEvent>();
+    selectedHandler = nullptr;
+    m_blocked = false;
+}
 void InputResolver::PushEvent(const InputEvent& event)
 {
     queue.push(event);
@@ -28,6 +35,7 @@ void InputResolver::UnregisterHandler(IInputHandler* handler)
 
 void InputResolver::resolve()
 {
+
     while (!queue.empty())
     {
         InputEvent event = queue.front();
@@ -35,7 +43,7 @@ void InputResolver::resolve()
         // Dispatch the event to all registered handlers.
         for (auto handler : handlers)
         {
-            if (handler)
+            if (handler && !m_blocked)
             {
                 handler->OnInputEvent(event);
             }

@@ -10,7 +10,6 @@
 
 namespace GUI
 {
-
     void LogicGateInfo::Draw(SP_Circuit circuit)
     {
         (void)circuit;
@@ -19,10 +18,8 @@ namespace GUI
             return;
         }
 
-        if (Component* d1 = dynamic_cast<Component*>(InputResolver::getSelectedHandler()))
-        {
-            GUITools_BasicLogicDisplay_draw(d1);
-        }
+        IInputHandler* handler = InputResolver::getSelectedHandler();
+        GUITools_BasicLogicDisplay_draw(handler);
     }
     void LogicGateInfo::Update(SP_Circuit circuit)
     {
@@ -42,7 +39,7 @@ namespace GUI
                 buf[sizeof(buf) - 1] = '\0';
                 if (ImGui::InputText(label.c_str(), buf, sizeof(buf)))
                 {
-                    bool is_change_connection_name = change_InOut_name(logicGate, true, inputs.name, buf);
+                    bool is_change_connection_name = change_InOut_name(logicGate, inputs.name, buf);
                     if (is_change_connection_name)
                     {
                         inputs.name = buf;  // Update the name in the inputs vector
@@ -101,12 +98,12 @@ namespace GUI
             ImGui::TreePop();
         }
     }
-    void LogicGateInfo::draw_Connection(Component* connection)
-    {
-        //std::string source = connection->
-        //ImGui::Text()
-
-    }
+    //void LogicGateInfo::draw_Connection(Component* connection)
+    //{
+    //    //std::string source = connection->
+    //    //ImGui::Text()
+//
+    //}
     void LogicGateInfo::draw_Outputs(Component* logicGate)
     {
         if (ImGui::TreeNodeEx("Outputs"))
@@ -121,7 +118,7 @@ namespace GUI
                 buf[sizeof(buf) - 1] = '\0';
                 if (ImGui::InputText(label.c_str(), buf, sizeof(buf)))
                 {
-                    bool is_change_connection_name = change_InOut_name(logicGate, true, outputs.name, buf);
+                    bool is_change_connection_name = change_InOut_name(logicGate, outputs.name, buf);
                     if (is_change_connection_name)
                     {
                         outputs.name = buf;  // Update the name in the inputs vector
@@ -173,7 +170,7 @@ namespace GUI
         }
     }
 
-    bool LogicGateInfo::change_InOut_name(Component* logicGate, bool is_input, const std::string& oldName, const std::string& newName)
+    bool LogicGateInfo::change_InOut_name(Component* logicGate, const std::string& oldName, const std::string& newName)
     {
         // Update component's inputs or outputs
         for (auto& signal : logicGate->inputs)
@@ -242,28 +239,49 @@ namespace GUI
         check_same_name(component);
     }
     // Global or static variables for the UI state and texture.
-    void LogicGateInfo::GUITools_BasicLogicDisplay_draw(Component* component)
+    void LogicGateInfo::GUITools_BasicLogicDisplay_draw(IInputHandler* component)
     {
-        float pos[2] = {component->bd.x, component->bd.y};
-        ImGui::Begin("Logic Settings", &visible);
-        draw_name(component);
-        ImGui::InputFloat2("Position", pos);
-        if (dynamic_cast<InputElement*>(component)) {
-            draw_Inputs(component);
-        }
-        else if (dynamic_cast<LogicElements::LogicGate*>(component)) {
-            draw_Inputs(component);
-            draw_Outputs(component);
-        }
-        else if (dynamic_cast<SubcircuitComponent*>(component)) {
-            draw_Inputs(component);
-            draw_Outputs(component);
-        }
-        // Draw interactive windows first.
-        ImGui::End();
+        if (auto comp = dynamic_cast<Component*>(component))
+        {
+            float pos[2] = {comp->bd.x, comp->bd.y};
+            ImGui::Begin("Logic Settings", &visible);
+            
+            draw_name(comp);
+            ImGui::InputFloat2("Position", pos);
 
-        component->bd.x = pos[0];
-        component->bd.y = pos[1];
+            if (dynamic_cast<InputElement*>(component)) {
+                draw_Inputs(comp);
+            }
+            else if (dynamic_cast<LogicElements::LogicGate*>(component)) {
+                draw_Inputs(comp);
+                draw_Outputs(comp);
+            }
+            else if (dynamic_cast<SubcircuitComponent*>(component)) {
+                draw_Inputs(comp);
+                draw_Outputs(comp);
+            }
+
+            ImGui::End();
+
+            comp->bd.x = pos[0];
+            comp->bd.y = pos[1];
+        }
+        else if (auto connection = dynamic_cast<CircuitElements::Connection*>(component))
+        {
+            if( connection->targetGate.get() == nullptr ||
+                connection->sourceGate.get() == nullptr)
+            {
+                return;  // If the connection is not valid, do not draw the settings.
+            }
+            ImGui::Begin("Connection Settings", &visible);
+            ImGui::Text("Source: %s", connection->sourceGate->m_name.c_str());
+            ImGui::Text("Source Output: %s", connection->sourceGate->m_name.c_str());
+            ImGui::Text("Target: %s", connection->targetGate->m_name.c_str());
+            ImGui::Text("Target Input: %s", connection->targetGate->m_name.c_str());
+            // Draw settings for connection...
+            ImGui::End();
+        }
+        
     }
 
 }  // namespace GUI

@@ -19,8 +19,8 @@ namespace GUI
         void draw_Outputs(Component* logicGate);
         void draw_Connection(Component* connection);
 
-        bool change_InOut_name(Component* logicGate, bool is_input, const std::string& oldName, const std::string& newName);
-        void GUITools_BasicLogicDisplay_draw(Component* logicGate);
+        bool change_InOut_name(Component* logicGate, const std::string& oldName, const std::string& newName);
+        void GUITools_BasicLogicDisplay_draw(IInputHandler* inputHandler);
     };
 
 }  // namespace GUI
