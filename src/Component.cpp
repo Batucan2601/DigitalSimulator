@@ -35,7 +35,6 @@ void InputResolver::UnregisterHandler(IInputHandler* handler)
 
 void InputResolver::resolve()
 {
-
     while (!queue.empty())
     {
         InputEvent event = queue.front();
@@ -292,7 +291,7 @@ void Component::OnRightClick(const InputEvent& event)
     bool isCol = CheckCollisionPointRec(pos, this->bd);
     if (!isCol)
     {
-        InputResolver::setSelectedHandler(nullptr);
+        //InputResolver::setSelectedHandler(nullptr);
         return;
     }
     RaylibHelper::Show(4);

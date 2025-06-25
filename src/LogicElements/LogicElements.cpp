@@ -197,7 +197,7 @@ namespace CircuitElements
     }
     void ActiveWire::OnInputEvent(const InputEvent& event)
     {
-        if (event.type == InputType::Mouse)
+        if (event.type == InputType::Mouse )
         {
             if (event.mouseState == MouseEventState::Move)
             {
