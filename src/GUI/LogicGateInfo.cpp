@@ -275,9 +275,9 @@ namespace GUI
             }
             ImGui::Begin("Connection Settings", &visible);
             ImGui::Text("Source: %s", connection->sourceGate->m_name.c_str());
-            ImGui::Text("Source Output: %s", connection->sourceGate->m_name.c_str());
+            ImGui::Text("Source Output: %s", connection->sourceLogic.c_str());
             ImGui::Text("Target: %s", connection->targetGate->m_name.c_str());
-            ImGui::Text("Target Input: %s", connection->targetGate->m_name.c_str());
+            ImGui::Text("Target Input: %s", connection->targetLogic.c_str());
             // Draw settings for connection...
             ImGui::End();
         }

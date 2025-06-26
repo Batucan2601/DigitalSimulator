@@ -1,6 +1,7 @@
 #include "logicElementFactory.h"
 #include "InputElement.h"
 #include "Component.h"
+#include "Clock.h"
 namespace LogicElements
 {
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
@@ -26,6 +27,11 @@ namespace LogicElements
             g.outputs[0].val = (g.getType() == CircuitElements::ComponentType::INPUT_1) ? SignalVal::SIGNAL_1 : SignalVal::SIGNAL_0;
         });
         return gate;
+    }
+    std::shared_ptr<Component> LogicElementFactory::createClock(std::string logger_name , unsigned int tickrate )
+    {
+        std::shared_ptr<Component> clk = std::make_shared<Clock>(logger_name ,tickrate);
+        return clk;
     }
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )
     {

@@ -42,6 +42,8 @@ int main(void)
     auto gate6 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,
                                                                 nor1_logger);
     auto gate7 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::NOR,nor2_logger);
+    
+    auto clk = LogicElements::LogicElementFactory::createClock(nor2_logger , 50);
 
     /*gate1->setPosition(0, 100 - 250);
     gate2->setPosition(0, 200 - 250);
@@ -65,6 +67,7 @@ int main(void)
     circuit->addGate(gate7);
     circuit->addGate(in1);
     circuit->addGate(in2);
+    circuit->addGate(clk);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
     std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;

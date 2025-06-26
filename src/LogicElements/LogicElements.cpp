@@ -3,7 +3,7 @@
 #include "Controls.h"
 #include <Util/Utils.h>
 #include <raylibHelper.h>
-
+#include "Clock.h"
 
 namespace CircuitElements
 {
@@ -59,6 +59,16 @@ namespace CircuitElements
         bool stabilized = false;
         int iterations = 0;
         const int maxIterations = 100;  // Prevent infinite loops
+        
+        
+        for (auto& component : gates)
+        {
+            if (auto clock = std::dynamic_pointer_cast<Clock>(component))
+            {
+                clock->evaluate(); // Simulate interrupt or hardware clock behavior
+            }
+        }
+
         while (!stabilized && iterations < maxIterations)
         {
             stabilized = true;

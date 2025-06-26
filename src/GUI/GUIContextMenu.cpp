@@ -28,15 +28,12 @@ namespace GUI
         if (ImGui::BeginPopup("ComponentContextMenu"))
         {
             InputResolver::Block();
-            std::cout << "enter here" << std::endl;
             is_popup_open = true; 
 
             if (ImGui::MenuItem("Edit")) {
-                std::cout << "Edit clicked" << std::endl;
             }
 
             if (ImGui::MenuItem("Properties")) {
-                std::cout << "properties" << std::endl;
                 RaylibHelper::Show(1);
             }
 
