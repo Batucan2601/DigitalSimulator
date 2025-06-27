@@ -24,7 +24,8 @@ namespace LogicElements
         gate->m_type = CircuitElements::ComponentType::INPUT_0;
         gate->setEvaluationFunction([](Component& c) {
             auto& g = static_cast<InputElement&>(c);
-            g.outputs[0].val = (g.getType() == CircuitElements::ComponentType::INPUT_1) ? SignalVal::SIGNAL_1 : SignalVal::SIGNAL_0;
+            g.outputs[0].val = std::vector<SignalVal>(1, SignalVal::SIGNAL_0); // Default to SIGNAL_0
+            g.outputs[0].val[0] = (g.getType() == CircuitElements::ComponentType::INPUT_1) ? SignalVal::SIGNAL_1 : SignalVal::SIGNAL_0;
         });
         return gate;
     }
@@ -45,11 +46,11 @@ namespace LogicElements
                     [](Component& c)
                     {
                         auto& g = static_cast<LogicGate&>(c);
-                        SignalVal result = SignalVal::SIGNAL_1;
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_1);
                         for (const auto& val : g.inputs)
                         {
                             result =  signal_and(result , val.val);
-                            if (result == SignalVal::SIGNAL_0) break;
+                            //if (result == SignalVal::SIGNAL_0) break;
                         }
                         g.outputs[0].val = result;
                     });
@@ -63,11 +64,11 @@ namespace LogicElements
                     [](Component& c)
                     {
                         auto& g = static_cast<LogicGate&>(c);
-                        SignalVal result = SignalVal::SIGNAL_0;
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_0);
                         for (const auto& val : g.inputs)
                         {
                             result =  signal_or(result , val.val);
-                            if (result == SignalVal::SIGNAL_1) break;
+                            //if (result == SignalVal::SIGNAL_1) break;
                         }
                         g.outputs[0].val = result;
                     });
@@ -94,7 +95,7 @@ namespace LogicElements
                     [](Component& c)
                     {
                         auto& g = static_cast<LogicGate&>(c);
-                        SignalVal result = SignalVal::SIGNAL_0;
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_0);
                         for (const auto& val : g.inputs)
                         {
                             result = signal_xor(result , val.val );
@@ -111,11 +112,11 @@ namespace LogicElements
                     [](Component& c)
                     {
                         auto& g = static_cast<LogicGate&>(c);
-                        SignalVal result = SignalVal::SIGNAL_1;
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_1);
                         for (const auto& val : g.inputs)
                         {
                             result = signal_and(result , val.val);
-                            if (result == SignalVal::SIGNAL_0) break;
+                            //if (result == SignalVal::SIGNAL_0) break;
                         }
                         g.outputs[0].val = signal_not(result);
                     });
@@ -128,11 +129,11 @@ namespace LogicElements
                     [](Component& c)
                     {
                         auto& g = static_cast<LogicGate&>(c);
-                        SignalVal result = SignalVal::SIGNAL_0;
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_0);
                         for (const auto& val : g.inputs)
                         {
                             result = signal_or(result, val.val);
-                            if (result == SignalVal::SIGNAL_0) break;
+                            //if (result == SignalVal::SIGNAL_0) break;
                         }
                         g.outputs[0].val = signal_not(result);
                     });

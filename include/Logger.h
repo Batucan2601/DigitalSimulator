@@ -148,6 +148,31 @@ namespace utils
 
             return oss.str();
         }
+        inline std::string toString(Signal s )
+        {
+            std::ostringstream oss;
+            oss << "Signal(name: " << s.name << ", pos: (" << s.pos.x << ", " << s.pos.y
+                << "), val: [";
+            for (size_t i = 0; i < s.val.size(); ++i)
+            {
+                oss << toString(s.val[i]);
+                if (i < s.val.size() - 1)
+                    oss << ", ";
+            }
+            oss << "], type: " << static_cast<int>(s.type) << ")";
+            return oss.str();
+        }
+        inline std::string toString(std::vector<SignalVal> s )
+        {
+            std::ostringstream oss;
+            for (size_t i = 0; i < s.size(); ++i)
+            {
+                oss << toString(s[i]);
+                if (i < s.size() - 1)
+                    oss << ", ";
+            }
+            return oss.str();
+        }
         inline std::string toString(SignalVal val )
         {
             switch (val)

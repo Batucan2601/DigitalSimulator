@@ -42,14 +42,14 @@ void InputElement::OnLeftClick(const InputEvent& event)
    {
        this->m_type = CircuitElements::ComponentType::INPUT_1;
        this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_1);
-       this->outputs[0].val = SignalVal::SIGNAL_1;  // Set output to true
+       this->outputs[0].val.resize(1 ,  SignalVal::SIGNAL_1);  // Set output to true
        this->notifyObservers();  // Notify observers of the change
    }
    else if (this->m_type == CircuitElements::ComponentType::INPUT_1)
    {
        this->m_type = CircuitElements::ComponentType::INPUT_0;
        this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
-       this->outputs[0].val = SignalVal::SIGNAL_0;  // Set output to true
+       this->outputs[0].val.resize(1 ,  SignalVal::SIGNAL_0);  // Set output to true
        this->notifyObservers();  // Notify observers of the change
    }
    // ok first look at the selected handler, check if it is a logic gate

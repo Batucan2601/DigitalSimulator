@@ -53,7 +53,7 @@ void Clock::setInOutPositions()
 }
 void Clock::reset()
 {
-    this->outputs[0].val = SignalVal::SIGNAL_0; // Reset output to 0
+    std::fill(this->outputs[0].val.begin(), this->outputs[0].val.end(),SignalVal::SIGNAL_0);  // Set all elements to 42
 }
 
 nlohmann::json Clock::serialize() const {

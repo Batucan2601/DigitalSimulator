@@ -74,7 +74,7 @@ namespace LogicElementsDraw
                 // DrawLine();
                 if (circuit->connections[i].is_connected)
                 {
-                    SignalVal val = SignalVal::SIGNAL_0;
+                    std::vector<SignalVal> val;
                     for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
                         if (circuit->connections[i].sourceGate->outputs[k].name ==
@@ -86,15 +86,15 @@ namespace LogicElementsDraw
                     }
                     if( circuit->connections[i].sourceGate->inputs.size() > 0 )
                     {
-                         circuit->connections[i].sourceGate->m_logger.
-                    info("my inputs are {} {}" ,circuit->connections[i].sourceGate->inputs[0].val ,
-                    circuit->connections[i].sourceGate->inputs[1].val  );
+                    //circuit->connections[i].sourceGate->m_logger.
+                    //info("my inputs are {} {}" ,circuit->connections[i].sourceGate->inputs[0].val ,
+                    //circuit->connections[i].sourceGate->inputs[1].val  );
                     }
-                    circuit->connections[i].sourceGate->m_logger.
-                    info("The value is  {} ",val);
+                    //circuit->connections[i].sourceGate->m_logger.
+                    //info("The value is  {} ",val);
                     
                     Color signalColor = BLACK;
-                    switch (val)
+                    switch (val[0])
                     {
                     case SignalVal::SIGNAL_0:
                         signalColor = BLACK;

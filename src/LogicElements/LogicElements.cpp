@@ -85,7 +85,7 @@ namespace CircuitElements
             // Then, update the inputs based on the connections.
             for (auto& conn : connections)
             {
-                SignalVal sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
+                std::vector<SignalVal> sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
                 if (conn.targetLogic != "")
                 {
                     conn.targetGate->setInput(conn.targetLogic, sourceValue);

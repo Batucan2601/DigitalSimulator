@@ -178,9 +178,8 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     }
     Component(std::string& fileName);
     virtual void OnInputEvent(const InputEvent& event) override;
-    void setInput(const std::string& name, SignalVal value);
-    SignalVal getOutput(const std::string& name) const;
-
+    void setInput(const std::string& name, std::vector<SignalVal>  value);
+    std::vector<SignalVal> getOutput(const std::string& name) const;
     void addObserver(LogicElements::GateObserver* observer);
     void removeObserver(LogicElements::GateObserver* observer);
     void notifyObservers();

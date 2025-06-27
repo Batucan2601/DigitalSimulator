@@ -278,6 +278,9 @@ namespace GUI
             ImGui::Text("Source Output: %s", connection->sourceLogic.c_str());
             ImGui::Text("Target: %s", connection->targetGate->m_name.c_str());
             ImGui::Text("Target Input: %s", connection->targetLogic.c_str());
+            ImGui::Text("Bus Size: %s", connection->targetLogic.c_str());
+            ImGui::Text("Bus value: %s", connection->targetLogic.c_str());
+            
             // Draw settings for connection...
             ImGui::End();
         }
