@@ -82,7 +82,18 @@ namespace GUI
                     {
                         inputs.type = SignalType::INTERNAL;
                     }
-                }   
+                } 
+                
+                ImGui::SameLine();
+                //ImGui::InputInt("Bus size", &inputs.val[0].width);
+                int busSize = inputs.val.size();  // Start with current size
+                std::string busSizeLabel = "Bus size##" + std::to_string(i);
+                ImGui::InputInt(busSizeLabel.c_str(), &busSize);
+
+                if (busSize < 0)
+                    busSize = 0;  // Prevent negative size
+
+                inputs.val.resize(busSize);
 
                 i++;
             }

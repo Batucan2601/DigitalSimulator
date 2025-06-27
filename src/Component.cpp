@@ -293,6 +293,7 @@ void Component::OnRightClick(const InputEvent& event)
         //InputResolver::setSelectedHandler(nullptr);
         return;
     }
+    InputResolver::setSelectedHandler((IInputHandler*)this);
     RaylibHelper::Show(4);
 
 }
