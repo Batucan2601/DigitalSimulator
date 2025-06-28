@@ -94,9 +94,22 @@ namespace GUI
                     busSize = 0;  // Prevent negative size
 
                 inputs.val.resize(busSize);
-
+                
                 i++;
             }
+            if (dynamic_cast<LogicElements::LogicGate*>(logicGate)) 
+            {
+                for(int i = 0; i < (int)logicGate->inputs.size()-1; i++)
+                {
+                    if(logicGate->inputs[i].val.size() != 
+                    logicGate->inputs[i+1].val.size() )
+                    {
+                        ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Bus size mismatch!");
+                        //logicGate->inputs[i].val.resize(logicGate->inputs[i+1].val.size());
+                    }
+                }
+            }
+
             static std::string new_input_name = "";
             ImGui::InputText("Name", &new_input_name);
             if (ImGui::Button("Insert"))
@@ -164,7 +177,17 @@ namespace GUI
                     {
                         outputs.type = SignalType::INTERNAL;
                     }
-                }   
+                }
+
+                int busSize = outputs.val.size();  // Start with current size
+                std::string busSizeLabel = "Bus size##" + std::to_string(i);
+                ImGui::InputInt(busSizeLabel.c_str(), &busSize);
+
+                if (busSize < 0)
+                    busSize = 0;  // Prevent negative size
+
+                outputs.val.resize(busSize);
+
                 i++;
             }
             static std::string new_output_name = "";
@@ -289,9 +312,26 @@ namespace GUI
             ImGui::Text("Source Output: %s", connection->sourceLogic.c_str());
             ImGui::Text("Target: %s", connection->targetGate->m_name.c_str());
             ImGui::Text("Target Input: %s", connection->targetLogic.c_str());
-            ImGui::Text("Bus Size: %s", connection->targetLogic.c_str());
-            ImGui::Text("Bus value: %s", connection->targetLogic.c_str());
-            
+            int inputIndex = connection->sourceGate->getOutputByName(connection->sourceLogic); 
+            int outputIndex = connection->targetGate->getInputByName(connection->targetLogic);
+            int inputSize = connection->targetGate->inputs[outputIndex].val.size();
+            int outputSize = connection->sourceGate->outputs[inputIndex].val.size();
+            if (inputIndex < 0 || outputIndex < 0)
+            {
+                ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Invalid connection!");
+                ImGui::End();
+                return; 
+            } 
+            else if(inputSize != outputSize )
+            {
+                ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Input and Output sizes do not match!");
+                ImGui::End();
+                return; 
+            }
+            ImGui::Text("Bus Size: %d", inputSize);
+            //ImGui::Text("Bus value: %s", connection->targetLogic.c_str());
+            std::string s = connection->sourceGate->outputs[inputIndex].toString();
+            ImGui::Text("Connection Value: %s", s.c_str());
             // Draw settings for connection...
             ImGui::End();
         }

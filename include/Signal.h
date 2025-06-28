@@ -50,7 +50,7 @@ inline std::vector<SignalVal> signal_and(std::vector<SignalVal> a, std::vector<S
 {
     if( a.size() != b.size() )
     {
-        throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
+    //    throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
     }
     std::vector<SignalVal> result(a.size(), SignalVal::SIGNAL_Z);
     for (size_t i = 0; i <a.size() ; i++)
@@ -64,7 +64,7 @@ inline std::vector<SignalVal> signal_or(std::vector<SignalVal> a, std::vector<Si
 {
     if( a.size() != b.size() )
     {
-        throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
+    //    throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
     }
     std::vector<SignalVal> result(a.size(), SignalVal::SIGNAL_Z);
     for (size_t i = 0; i <a.size() ; i++)
@@ -88,7 +88,7 @@ inline std::vector<SignalVal> signal_xor(std::vector<SignalVal> a, std::vector<S
 {
     if( a.size() != b.size() )
     {
-        throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
+    //    throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
     }
     std::vector<SignalVal> result(a.size(), SignalVal::SIGNAL_Z);
     for (size_t i = 0; i <a.size() ; i++)
@@ -114,6 +114,22 @@ struct Signal
     bool operator==(const Signal& other) const
     {
         return name == other.name && val == other.val;
+    }
+
+    std::string toString() const
+    {
+        std::string result = "";
+        for (const auto& v : val)
+        {
+            switch (v)
+            {
+                case SignalVal::SIGNAL_0: result += "0 "; break;
+                case SignalVal::SIGNAL_1: result += "1 "; break;
+                case SignalVal::SIGNAL_X: result += "X "; break;
+                case SignalVal::SIGNAL_Z: result += "Z "; break;
+            }
+        }
+        return result;
     }
 };
 

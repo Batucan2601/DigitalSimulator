@@ -196,6 +196,8 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     int getID() const; 
     Vector2 getPosition() const;
     void setPosition(float x, float y);
+    int getInputByName(std::string name) const;
+    int getOutputByName(std::string name) const;
     CircuitElements::ComponentType getType() const;
     ClassLogger m_logger; 
     std::vector<Signal> inputs;

@@ -129,6 +129,30 @@ void Component::evaluate()
     }
 }
 
+int Component::getInputByName(std::string name) const
+{
+    for (size_t i = 0; i < inputs.size(); i++)
+    {
+        if (inputs[i].name == name)
+        {
+            return i;
+        }
+    }
+    return -1;  // Return -1 if the input is not found
+}
+
+int Component::getOutputByName(std::string name) const
+{
+    for (size_t i = 0; i < outputs.size(); i++)
+    {
+        if (outputs[i].name == name)
+        {
+            return i;
+        }
+    }
+    return -1;  // Return -1 if the input is not found
+}
+
 int Component::getID() const
 {
     return id;
