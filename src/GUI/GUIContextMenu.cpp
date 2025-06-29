@@ -27,7 +27,7 @@ namespace GUI
         }
         if (ImGui::BeginPopup("ComponentContextMenu"))
         {
-            InputResolver::Block();
+            //InputResolver::Block();
             is_popup_open = true; 
 
             if (ImGui::MenuItem("Edit")) {
