@@ -39,6 +39,7 @@ namespace GUI
 
             if (ImGui::MenuItem("Delete")) {
                 IInputHandler* selectedHandler = InputResolver::getSelectedHandler();
+                if(dynamic_cast<Component*>(selectedHandler))
                 {
                     // remove the gate
                     for (size_t i = 0; i < circuit->connections.size(); i++)
@@ -56,6 +57,21 @@ namespace GUI
                         {
                             circuit->gates.erase(circuit->gates.begin() + i);
                             i--;
+                        }
+                    }
+                    InputResolver::UnregisterHandler(selectedHandler);
+                }
+                else if (dynamic_cast<CircuitElements::Connection*>(selectedHandler))
+                {
+                    // remove the connection
+                    for (size_t i = 0; i < circuit->connections.size(); i++)
+                    {
+
+                        if (&circuit->connections[i] == selectedHandler )
+                        {
+                            circuit->connections.erase(circuit->connections.begin() + i);
+                            InputResolver::UnregisterHandler(selectedHandler);
+                            break; 
                         }
                     }
                 }
