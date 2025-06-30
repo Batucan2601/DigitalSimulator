@@ -62,7 +62,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
             for (const auto& outputJson : gateJson["outputs"]) {
                 Signal output;
                 output.name = outputJson.value("name", "");
-                //output.val = outputJson.value("val", SignalVal::SIGNAL_0);
+                output.val = outputJson.value("val", std::vector<SignalVal>{SignalVal::SIGNAL_Z});
                 // find a way to convert SignalVal to vector<SignalVal>
                 if (outputJson.contains("position") && outputJson["position"].is_object()) {
                     output.pos.x = outputJson["position"].value("x", 0.0f);
