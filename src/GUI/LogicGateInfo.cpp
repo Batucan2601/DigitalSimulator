@@ -284,7 +284,7 @@ namespace GUI
             ImGui::InputFloat2("Position", pos);
 
             if (dynamic_cast<InputElement*>(component)) {
-                draw_Inputs(comp);
+                draw_Outputs(comp);
             }
             else if (dynamic_cast<LogicElements::LogicGate*>(component)) {
                 draw_Inputs(comp);
