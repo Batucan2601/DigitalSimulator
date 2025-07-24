@@ -5,6 +5,23 @@
 namespace LogicElements
 {
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
+    std::shared_ptr<Component> LogicElementFactory::createComponent(CircuitElements::ComponentType type,
+                                                               std::string logger_name)
+    {
+        if( type == CircuitElements::ComponentType::INPUT ||
+            type == CircuitElements::ComponentType::INPUT_0 ||
+            type == CircuitElements::ComponentType::INPUT_1 )
+        {
+            return createInput(logger_name);
+        }
+        if( type == CircuitElements::ComponentType::CLK )
+        {
+            return createClock(logger_name, 1000); // Default tick rate of 1000 
+        }
+        return createGate(type, logger_name);        
+    }
+    
+    
     std::shared_ptr<Component> LogicElementFactory::createGate(CircuitElements::ComponentType type,
                                                                std::string logger_name)
     {

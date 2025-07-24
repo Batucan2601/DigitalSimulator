@@ -13,6 +13,7 @@ namespace LogicElements
       static std::shared_ptr<Component> createGate(CircuitElements::ComponentType type, std::string logger_name);
       static std::shared_ptr<Component> createInput(std::string logger_name);
       static std::shared_ptr<Component> createClock(std::string logger_name , unsigned int tickrate);
+      static std::shared_ptr<Component> createComponent(CircuitElements::ComponentType type, std::string logger_name);
     };
 }  // namespace LogicElements
 
