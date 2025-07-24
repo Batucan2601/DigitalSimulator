@@ -75,23 +75,28 @@ namespace LogicElementsDraw
                 if (circuit->connections[i].is_connected)
                 {
                     std::vector<SignalVal> val;
+                    int outSize = 0;
+                    int inSize = 0;
                     for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
                     {
                         if (circuit->connections[i].sourceGate->outputs[k].name ==
                             circuit->connections[i].sourceLogic)
                         {
                             val = circuit->connections[i].sourceGate->outputs[k].val;
+                            outSize = circuit->connections[i].sourceGate->outputs[k].val.size();
                             break;
                         }
                     }
-                    if( circuit->connections[i].sourceGate->inputs.size() > 0 )
+                    for (size_t k = 0; k < circuit->connections[i].targetGate->inputs.size(); k++)
                     {
-                    //circuit->connections[i].sourceGate->m_logger.
-                    //info("my inputs are {} {}" ,circuit->connections[i].sourceGate->inputs[0].val ,
-                    //circuit->connections[i].sourceGate->inputs[1].val  );
+                        if (circuit->connections[i].targetGate->inputs[k].name ==
+                            circuit->connections[i].targetLogic)
+                        {
+                            val = circuit->connections[i].targetGate->inputs[k].val;
+                            inSize = circuit->connections[i].targetGate->inputs[k].val.size();
+                            break;
+                        }
                     }
-                    //circuit->connections[i].sourceGate->m_logger.
-                    //info("The value is  {} ",val);
                     
                     Color signalColor = BLACK;
                     switch (val[0])
@@ -110,6 +115,10 @@ namespace LogicElementsDraw
                         break; 
                     default:
                         throw("Signal type undefined");
+                    }
+                    if( outSize != inSize)
+                    {
+                        signalColor = BLUE;
                     }
                     DrawLineEx(start, end, LINE_THICKNESS, signalColor);
 
