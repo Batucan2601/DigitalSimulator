@@ -1,9 +1,10 @@
 #include "main.h"
 #include "ComponentTextures.h"
+#include "CircuitController.h"
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
 SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
-
+CircuitController circuitController(circuit_logger);
 int main(void)
 {
     AppSettings::appSettings.theme = AppSettings::Theme::DarkMode;
@@ -26,6 +27,9 @@ int main(void)
     std::string nor2_logger = "norLogger2";
     std::string input1_logger = "Input1";
     std::string input2_logger = "input2";
+
+
+
     /*auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
                                                                 and_gate_logger);
     auto gate2 =
