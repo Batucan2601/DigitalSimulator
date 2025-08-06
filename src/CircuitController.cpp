@@ -4,13 +4,19 @@ CircuitController::CircuitController(std::string logger_name)
     : circuit(std::make_shared<CircuitElements::Circuit>(logger_name)),
       undoManager(std::make_unique<Command::UndoManager>())
 {
-
+    InputResolver::RegisterHandler(this);
 }
 
 SP_Circuit CircuitController::getCircuit() const
 {
     return circuit;
 }
+void CircuitController::setCircuit(SP_Circuit circuit)
+{
+    this->circuit = circuit;
+    this->circuit->m_logger.info("Circuit set in CircuitController.");
+}
+
 
 void CircuitController::addComponent(std::shared_ptr<Component> component)
 {
@@ -18,6 +24,7 @@ void CircuitController::addComponent(std::shared_ptr<Component> component)
     {
         circuit->addGate(component);
         undoManager->execute(std::make_unique<Command::AddComponentCommand>(circuit, component));
+        component->controller = shared_from_this();  // Set the controller for the component
     }
 }
 
@@ -41,5 +48,30 @@ void CircuitController::moveComponent(std::shared_ptr<Component> component, Vect
         auto moveCommand = std::make_unique<Command::MoveComponentCommand>(component, oldPosition, newPosition);
         moveCommand->redo();  // Move the component to the new position
         undoManager->execute(std::move(moveCommand));
+    }
+}
+
+
+
+void CircuitController::OnKeyPress(const InputEvent& event)
+{
+    if (event.keyCode == KeyboardKey::KEY_Z && event.keyState == KeyboardEvent::KeyPress)
+    {
+        undoManager->undo();
+        circuit->m_logger.info("Undo last action.");
+    }
+    else if (event.keyCode == KeyboardKey::KEY_Y && event.keyState == KeyboardEvent::KeyPress)
+    {
+        undoManager->redo();
+        circuit->m_logger.info("Redo last action.");
+    }
+}
+
+
+void CircuitController::OnInputEvent(const InputEvent& event)
+{
+    if (event.type == InputType::Keyboard)
+    {
+        OnKeyPress(event);
     }
 }

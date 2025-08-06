@@ -536,6 +536,7 @@ void Component::OnKeyPress(const InputEvent& event)
         {
             this->m_mark_for_deletion = true; 
         }
+        this->controller->removeComponent(this->shared_from_this());
     }
 }
 

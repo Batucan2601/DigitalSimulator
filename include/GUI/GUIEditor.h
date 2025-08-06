@@ -34,7 +34,8 @@ namespace GUI
         Editor() : BaseWindow("Editor") {}
 
         void Draw(SP_Circuit circuit) override;
-        void Update(SP_Circuit circuit) override;
+        void Update(std::shared_ptr<CircuitController> circuit) override;
+
 
 
         void Init(int width, int height);

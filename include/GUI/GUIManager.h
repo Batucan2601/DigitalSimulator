@@ -3,12 +3,13 @@
 
 #include "GUI/BaseWindow.h"
 #include "LogicElements.h"
+#include "CircuitController.h"
 class GUIManager
 {
   public:
     void Init();                    // Initialize ImGui styles and other GUI components
     void Draw(SP_Circuit circuit);  // Draw all GUI elements, including menu bar and logic
-    void Update(SP_Circuit circuit); // Update all GUI elements.
+    void Update(std::shared_ptr<CircuitController> circuit); // Update all GUI elements.
 
     void Cleanup();                 // Cleanup resources if necessary
 

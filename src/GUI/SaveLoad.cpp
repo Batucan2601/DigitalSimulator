@@ -26,7 +26,7 @@ namespace GUI
         }
     }
 
-    void SaveLoad::Update(SP_Circuit circuit)
+    void SaveLoad::Update(std::shared_ptr<CircuitController> circuit)
     {
         (void)circuit;
     }

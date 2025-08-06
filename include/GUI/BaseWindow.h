@@ -4,7 +4,7 @@
 #include "appSettings.h"
 #include "common_types.h"
 #include "imgui.h"
-
+#include "CircuitController.h"
 #include <functional>
 
 namespace GUI
@@ -15,7 +15,7 @@ namespace GUI
         virtual ~BaseWindow() = default;
 
         virtual void Draw(SP_Circuit circuit) = 0;  // Default parameter-less version
-        virtual void Update(SP_Circuit circuit) = 0;
+        virtual void Update(std::shared_ptr<CircuitController> circuitController) = 0;
 
         virtual bool IsVisible() const
         {

@@ -54,11 +54,11 @@ void GUIManager::Draw(SP_Circuit circuit)
     DrawDemoWindow();
 }
 
-void GUIManager::Update(SP_Circuit circuit)
+void GUIManager::Update(std::shared_ptr<CircuitController> circuitController)
 {
     for (auto& window : windows)
     {
-        window->Update(circuit);
+        window->Update(circuitController);
     }
 }
 

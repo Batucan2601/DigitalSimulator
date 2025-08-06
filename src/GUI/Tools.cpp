@@ -59,31 +59,37 @@ namespace GUI
         ImGui::End();
     }
     Vector2 mouse_pos;
-    void Tools::Update(SP_Circuit circuit)
+    void Tools::Update(std::shared_ptr<CircuitController> circuitController)
     {
         if (GUI::dragDrop.state == GUI::DragDropState::DRAGGING)
         {
             mouse_pos = AppSettings::appSettings.mousePos;
             Rectangle rec = {mouse_pos.x, mouse_pos.y, 0, 0};
             Vector2 pos = Utils::SnapToNearestGrid(rec);
-            circuit->selected_wires.wire_hovering = pos;
-            circuit->is_GUIdragdragging = true;
+            circuitController->getCircuit()->selected_wires.wire_hovering = pos;
+            circuitController->getCircuit()->is_GUIdragdragging = true;
         }
-        if (circuit->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
+        if (circuitController->getCircuit()->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
         {
-            circuit->is_GUIdragdropped = true;
-            circuit->is_GUIdragdragging = false;
+            circuitController->getCircuit()->is_GUIdragdropped = true;
+            circuitController->getCircuit()->is_GUIdragdragging = false;
 
             // add the new circuit
             std::string new_gate = "or_gate_logger";
             auto gate = LogicElements::LogicElementFactory::createComponent(GUI::dragDrop.componentType, new_gate);
-            circuit->addGate(gate);
-
+            //circuit->addGate(gate);
+            circuitController->addComponent(gate);
             if (GUI::dragDrop.componentType != CircuitElements::ComponentType::NONE)
             {
-                circuit->gates[circuit->gates.size() - 1]->setPosition(
-                    circuit->selected_wires.wire_hovering.x,
-                    circuit->selected_wires.wire_hovering.y);
+                
+                //Vector2 newpos = {circuitController->getCircuit()->selected_wires.wire_hovering.x,
+                //circuitController->getCircuit()->selected_wires.wire_hovering.y};
+                //circuitController->moveComponent(circuitController->getCircuit()->gates
+                //[circuitController->getCircuit()->gates.size() - 1],  ,  );
+
+                circuitController->getCircuit()->gates[circuitController->getCircuit()->gates.size() - 1]->setPosition(
+                    circuitController->getCircuit()->selected_wires.wire_hovering.x,
+                    circuitController->getCircuit()->selected_wires.wire_hovering.y);
                 GUI::dragDrop.componentType = CircuitElements::ComponentType::NONE;
             }
         }

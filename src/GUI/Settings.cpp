@@ -51,7 +51,7 @@ namespace GUI
         }
     }
 
-    void Settings::Update(SP_Circuit circuit)  
+    void Settings::Update(std::shared_ptr<CircuitController> circuit)  
     {
         (void)circuit;
     }

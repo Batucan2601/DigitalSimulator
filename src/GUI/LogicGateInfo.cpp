@@ -21,7 +21,7 @@ namespace GUI
         IInputHandler* handler = InputResolver::getSelectedHandler();
         GUITools_BasicLogicDisplay_draw(handler);
     }
-    void LogicGateInfo::Update(SP_Circuit circuit)
+    void LogicGateInfo::Update(std::shared_ptr<CircuitController> circuit)
     {
         (void)circuit;
     }

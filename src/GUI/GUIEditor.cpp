@@ -68,7 +68,7 @@ namespace GUI
                              });
         EndTextureMode();
     }
-    void Editor::Update(SP_Circuit circuit)
+    void Editor::Update(std::shared_ptr<CircuitController> circuit)
     {
 	(void)circuit;
     }

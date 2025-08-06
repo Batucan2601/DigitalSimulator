@@ -41,9 +41,9 @@ void RaylibHelper::DrawGUI(SP_Circuit circuit)
 {
     imguiManager->DrawGUI(circuit);
 }
-void RaylibHelper::Update(SP_Circuit circuit)
+void RaylibHelper::Update(std::shared_ptr<CircuitController> circuitController)
 {
-    imguiManager->Update(circuit);
+    imguiManager->Update(circuitController);
 }
 void RaylibHelper::Close()
 {

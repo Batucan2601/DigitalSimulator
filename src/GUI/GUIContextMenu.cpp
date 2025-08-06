@@ -89,8 +89,8 @@ namespace GUI
         }
        
     }
-    void ContextMenu::Update(SP_Circuit circuit)
+    void ContextMenu::Update(std::shared_ptr<CircuitController> circuitController)            
     {
-        circuit->m_logger.info("ContextMenu Update called");
+        circuitController->getCircuit()->m_logger.info("ContextMenu Update called");
     }
 }

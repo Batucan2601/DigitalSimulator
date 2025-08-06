@@ -10,7 +10,8 @@ namespace GUI
             visible = false;
         }
         void Draw(SP_Circuit circuit) override;
-        void Update(SP_Circuit circuit) override;
+        void Update(std::shared_ptr<CircuitController> circuitController) override;
+        
     };
 }
 

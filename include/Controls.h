@@ -4,13 +4,13 @@
 #include "LogicElements.h"
 #include "common_types.h"
 #include "raylib.h"
-
+#include "CircuitController.h"
 #include <cmath>
 
 namespace Controls
 {
     void Controls_set_camera(unsigned int screen_width, unsigned int screen_height);
-    void Controls_update(SP_Circuit circuit);
+    void Controls_update(std::shared_ptr<CircuitController> circuit);
 
     bool is_grid_occupied(SP_Circuit circuit, Vector2 nearest_grid_point);
     Camera2D Controls_get_camera();

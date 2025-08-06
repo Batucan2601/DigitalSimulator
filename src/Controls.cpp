@@ -9,7 +9,7 @@
 #include "logicElementFactory.h"
 #include "raylib.h"
 #include "raylibHelper.h"
-
+#include "CircuitController.h"
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -64,7 +64,7 @@ namespace Controls
         camera.zoom = 1.0f;                      // Default zoom
     }
 
-    void Controls_update(SP_Circuit circuit)
+    void Controls_update(std::shared_ptr<CircuitController> circuitController)
     {
         // Drag camera with the left mouse button
         if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
@@ -91,7 +91,7 @@ namespace Controls
         AppSettings::appSettings.mousePos = mouse_pos;
 
         // get data
-        selected_circuit = circuit;
+        selected_circuit = circuitController->getCircuit();
 
         Controls_Mouse_click();
         Controls_Mouse_Movements();

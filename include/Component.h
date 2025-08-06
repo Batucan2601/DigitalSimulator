@@ -20,6 +20,7 @@
 #include "Signal.h"
 #include "../Libraries/json.hpp"
 
+class CircuitController;
 // Enum to identify the type of input event.
 enum class InputType
 {
@@ -211,6 +212,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
+    std::shared_ptr<CircuitController> controller; // Pointer to the CircuitController for managing circuit operations
     virtual nlohmann::json serialize() const = 0;
     protected:
         virtual void OnLeftClick(const InputEvent& event);

@@ -3,8 +3,8 @@
 #include "CircuitController.h"
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
-SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
-CircuitController circuitController(circuit_logger);
+//SP_Circuit circuit = std::make_shared<CircuitElements::Circuit>(circuit_logger);
+std::shared_ptr<CircuitController> circuitController;
 int main(void)
 {
     AppSettings::appSettings.theme = AppSettings::Theme::DarkMode;
@@ -28,7 +28,7 @@ int main(void)
     std::string input1_logger = "Input1";
     std::string input2_logger = "input2";
 
-
+    circuitController = std::make_shared<CircuitController>(circuit_logger);
 
     /*auto gate1 = LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,
                                                                 and_gate_logger);
@@ -67,27 +67,27 @@ int main(void)
 
     gate6->setPosition(0, 100 - 250);
     gate7->setPosition(0, 100 - 350);
-    circuit->addGate(gate6);
-    circuit->addGate(gate7);
-    circuit->addGate(in1);
-    circuit->addGate(in2);
-    circuit->addGate(clk);
+
+    circuitController->addComponent(gate6);
+    circuitController->addComponent(gate7);
+    circuitController->addComponent(in1);
+    circuitController->addComponent(in2);
+    circuitController->addComponent(clk);
     // Main game loop
     // GUIEditor::Init(appSettings.screenWidth, appSettings.screenHeight);
-    std::cout << "Circuit created with " << circuit->gates.size() << " gates." << std::endl;
     while (!RaylibHelper::ShouldClose())  // Detect window close button or ESC key
     {
         AppSettings::appSettings.screenHeight = GetScreenHeight();
         AppSettings::appSettings.screenWidth = GetScreenWidth();
         // Update
-        Controls::Controls_update(circuit);
-        circuit->evaluate();
+        Controls::Controls_update(circuitController);
+        circuitController->getCircuit()->evaluate();
         // Draw
         RaylibHelper::BeginFrame();
-        RaylibHelper::DrawGUI(circuit);
+        RaylibHelper::DrawGUI(circuitController->getCircuit());
         RaylibHelper::EndFrame();
         //update each GUI object 
-        RaylibHelper::Update(circuit);
+        RaylibHelper::Update(circuitController);
     }
 
     // De-Initialization
@@ -97,9 +97,9 @@ int main(void)
 
 void setLoadedCircuit(SP_Circuit loadedCircuit)
 {
-    circuit = loadedCircuit;
+    circuitController->setCircuit(loadedCircuit);
 }
 void addComponent(std::shared_ptr<Component> c)
 {
-    circuit->addGate(c);
+    circuitController->addComponent(c);
 }

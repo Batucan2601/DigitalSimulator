@@ -29,7 +29,7 @@ namespace GUI
         SaveLoad() : BaseWindow("Save/Load") {}
 
         void Draw(SP_Circuit circuit) override;
-        void Update(SP_Circuit circuit) override;
+        void Update(std::shared_ptr<CircuitController> circuit) override;
         void RenderSaveButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
         void RenderLoadButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
 

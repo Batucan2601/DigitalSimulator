@@ -183,7 +183,7 @@ namespace GUI
         }
         this->circuit = circuit;
     }
-    void GUIMenuBar::Update(SP_Circuit circuit)
+    void GUIMenuBar::Update(std::shared_ptr<CircuitController> circuit)
     {
         (void)circuit;
     }
