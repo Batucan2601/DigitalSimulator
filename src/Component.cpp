@@ -1,4 +1,5 @@
 #include "Component.h"
+#include "Commands.h"
 #include "appSettings.h"
 #include "LogicElements.h"
 #include "Util/Utils.h"
@@ -486,7 +487,7 @@ void Component::OnRelease(const InputEvent& event)
             rec.x = v.x + dif.x;
             rec.y = v.y + dif.y;
             Vector2 v = Utils::SnapToNearestGrid(rec);
-            this->setPosition(v.x, v.y);
+            this->controller->moveComponent( shared_from_this(), posBeforeDrag, v);
         }
         isFirst = true;
         isDragging = false;
