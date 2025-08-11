@@ -2,6 +2,8 @@
 
 #include "main.h"
 #include "SubCircuit.h"
+#include "raylib.h"
+#include "JsonSerializer.h"
 namespace GUI
 {
     SP_Circuit localCircuit;
@@ -29,6 +31,17 @@ namespace GUI
     void SaveLoad::Update(std::shared_ptr<CircuitController> circuit)
     {
         (void)circuit;
+        if (IsKeyPressed(KEY_S) &&IsKeyDown(KEY_LEFT_CONTROL))
+        {
+            if(circuit->getCircuit()->file_path != "")
+            {
+                //just save
+                jsonparser_saveCircuit(*circuit->getCircuit(),circuit->getCircuit()->file_path );
+                return;
+            }
+            this->state = State::STATE_SAVE;
+        }
+        
     }
     void SaveLoad::ShowSaveWindow()
     {

@@ -18,7 +18,7 @@ class InputElement;
 
 using json = nlohmann::json;
 
-void jsonparser_saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath);
+void jsonparser_saveCircuit(CircuitElements::Circuit& circuit, const std::string& filePath);
 SP_Circuit jsonparser_loadCircuit(const std::string& filePath);
 
 // Explicitly declare to_json functions

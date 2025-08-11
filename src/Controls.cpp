@@ -133,66 +133,7 @@ namespace Controls
         event.keyState = KeyboardEvent::KeyPress;
         event.keyCode = key;
         InputResolver::PushEvent(event);
-
         return; 
-        Vector2 new_position = {0,0};
-        // Adjust the position based on keyboard input
-        // bool key_pressed = false;
-        if (IsKeyPressed(KEY_UP))
-        {
-            // key_pressed = true;
-            new_position.y -= AppSettings::appSettings.SPACING_SIZE;
-        }
-        if (IsKeyPressed(KEY_DOWN))
-        {
-            // key_pressed = true;
-            new_position.y += AppSettings::appSettings.SPACING_SIZE;
-        }
-        if (IsKeyPressed(KEY_LEFT))
-        {
-            // key_pressed = true;
-            new_position.x -= AppSettings::appSettings.SPACING_SIZE;
-        }
-        if (IsKeyPressed(KEY_RIGHT))
-        {
-            // key_pressed = true;
-            new_position.x += AppSettings::appSettings.SPACING_SIZE;
-        }
-        if (IsKeyPressed(KEY_ESCAPE))
-        {
-            is_logic_selected = false;  // kills wiring process for sure everytime
-            // circuit->active_wire.is_visible = false;
-        }
-
-        if (IsKeyPressed(KEY_DELETE))
-        {
-            InputEvent event;
-            event.type = InputType::Keyboard;
-            event.keyState = KeyboardEvent::KeyPress;
-            event.keyCode = KEY_DELETE;
-            InputResolver::PushEvent(event);
-            std::cout << "Key pressed: DELETE" << std::endl;
-            // // delete the selected gate
-            // for (size_t i = 0; i < circuit->gates.size(); i++)
-            // {
-            //     if (circuit->gates[i] == selected_logic_gate[0])
-            //     {
-            //         circuit->gates.erase(circuit->gates.begin() + i);
-            //         break;
-            //     }
-            // }
-            // // delete the connections
-            // for (size_t i = 0; i < circuit->connections.size(); i++)
-            // {
-            //     // if (circuit->connections[i].sourceGate == selected_logic_gate[0] ||
-            //     //     circuit->connections[i].targetGate == selected_logic_gate[0])
-            //     {
-            //         circuit->connections.erase(circuit->connections.begin() + i);
-            //         i--;
-            //     }
-            // }
-            // selected_logic_gate[0] = nullptr;
-        }
     }
 
     Rectangle CalculateRegion(Rectangle rect, float xStartRatio, float xEndRatio, float yStartRatio,

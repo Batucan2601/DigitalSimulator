@@ -1,0 +1,139 @@
+{
+    "connections": [],
+    "gates": [
+        {
+            "id": 1449297060,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": -275.0,
+                        "y": 75.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": -275.0,
+                        "y": 100.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": -175.0,
+                        "y": 125.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                }
+            ],
+            "position": {
+                "x": -275.0,
+                "y": 75.0
+            },
+            "type": 11
+        },
+        {
+            "id": 1449297061,
+            "inputs": [
+                {
+                    "name": "A",
+                    "position": {
+                        "x": 0.0,
+                        "y": -250.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                },
+                {
+                    "name": "B",
+                    "position": {
+                        "x": 0.0,
+                        "y": -225.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 100.0,
+                        "y": -200.0
+                    },
+                    "type": 2,
+                    "val": [
+                        3
+                    ]
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": -250.0
+            },
+            "type": 11
+        }
+    ],
+    "inputs": [
+        {
+            "id": 1449297062,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "type": 2,
+                    "val": [
+                        0
+                    ]
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "type": 14
+        },
+        {
+            "id": 1449297063,
+            "outputs": [
+                {
+                    "name": "Out",
+                    "position": {
+                        "x": 0.0,
+                        "y": 100.0
+                    },
+                    "type": 2,
+                    "val": [
+                        0
+                    ]
+                }
+            ],
+            "position": {
+                "x": 0.0,
+                "y": 100.0
+            },
+            "type": 14
+        }
+    ]
+}

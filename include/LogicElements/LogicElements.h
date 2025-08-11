@@ -90,7 +90,7 @@ namespace CircuitElements
         bool is_GUIdragdropped = false;
         bool is_GUIdragdragging = false;
         std::shared_ptr<Component> hoveredGate;
-
+        std::string file_path; 
         int id;
         private:
         void removeComponent();

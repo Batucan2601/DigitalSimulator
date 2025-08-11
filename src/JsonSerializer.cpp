@@ -17,8 +17,10 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     file >> j;
     file.close();
 
+    
     auto circuit = std::make_shared<CircuitElements::Circuit>(logger_name);
 
+    circuit->file_path = filePath;
     // Map for fast lookup of gates by ID
     std::unordered_map<int, std::shared_ptr<Component>> gateMap;
 
@@ -105,7 +107,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
                 {"inputs", comp.getInputs()},
                 {"outputs", comp.getOutputs()}};
 }*/
-void jsonparser_saveCircuit(const CircuitElements::Circuit& circuit, const std::string& filePath)
+void jsonparser_saveCircuit( CircuitElements::Circuit& circuit, const std::string& filePath)
 {
     json j;
     std::cout << circuit.gates.size() << std::endl;
@@ -150,6 +152,7 @@ void jsonparser_saveCircuit(const CircuitElements::Circuit& circuit, const std::
     {
         std::cerr << "Error: Could not open file for saving!" << std::endl;
     }
+    circuit.file_path = (std::string)filePath;
 }
 
 void to_json(json& j, const LogicElements::LogicGate& gate)
