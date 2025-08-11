@@ -2,6 +2,8 @@
 #include "CircuitController.h"
 #include "ComponentTextures.h"
 #include "raylibHelper.h"
+#include <cstddef>
+#include <memory>
 // Create a circuit and add both gates.
 std::string circuit_logger = "CircuitLogger";
 // SP_Circuit circuit =
@@ -106,6 +108,10 @@ int main(void) {
 
 void setLoadedCircuit(SP_Circuit loadedCircuit) {
   circuitController->setCircuit(loadedCircuit);
+  for (size_t i = 0; i < loadedCircuit->gates.size(); i++) 
+  {
+    loadedCircuit->gates[i]->controller = circuitController;
+  }
 }
 void addComponent(std::shared_ptr<Component> c) {
   circuitController->addComponent(c);
