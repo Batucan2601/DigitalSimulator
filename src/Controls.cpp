@@ -123,7 +123,18 @@ namespace Controls
 
     void Control_Keyboard_Event()
     {
+        int key = GetKeyPressed();  // Returns 0 if no key was pressed this frame
+        if( key == 0 )
+        {
+            return; 
+        }
+        InputEvent event;
+        event.type = InputType::Keyboard;
+        event.keyState = KeyboardEvent::KeyPress;
+        event.keyCode = key;
+        InputResolver::PushEvent(event);
 
+        return; 
         Vector2 new_position = {0,0};
         // Adjust the position based on keyboard input
         // bool key_pressed = false;

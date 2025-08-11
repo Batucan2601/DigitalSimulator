@@ -72,7 +72,8 @@ namespace Command
         }
 
         void redo() override {
-            circuit->gates.push_back(gate);
+            circuit->addGate(gate);
+            //circuit->gates.push_back(gate);
         }
 
     private:
@@ -87,7 +88,7 @@ namespace Command
 
         void undo() override 
         {
-            circuit->gates.push_back(gate);
+            circuit->addGate(gate);
         }
 
         void redo() override {

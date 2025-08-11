@@ -22,7 +22,7 @@ void CircuitController::addComponent(std::shared_ptr<Component> component)
 {
     if (component)
     {
-        circuit->addGate(component);
+        //circuit->addGate(component);
         undoManager->execute(std::make_unique<Command::AddComponentCommand>(circuit, component));
         component->controller = shared_from_this();  // Set the controller for the component
     }
@@ -30,12 +30,13 @@ void CircuitController::addComponent(std::shared_ptr<Component> component)
 
 void CircuitController::removeComponent(std::shared_ptr<Component> component)
 {
-    if (component)
+    if (component && component->m_mark_for_deletion)
     {
         // Create a command to remove the component
         auto removeCommand = std::make_unique<Command::RemoveComponentCommand>(circuit, component);
-        removeCommand->undo();  // Remove the component from the circuit
+        //removeCommand->undo();  // Remove the component from the circuit
         undoManager->execute(std::move(removeCommand));
+        component->m_mark_for_deletion = false;
     }
 }
 
@@ -65,6 +66,8 @@ void CircuitController::OnKeyPress(const InputEvent& event)
         undoManager->redo();
         circuit->m_logger.info("Redo last action.");
     }
+    std::cout << "Pressed key code: " << event.keyCode << std::endl;
+
 }
 
 
