@@ -10,9 +10,9 @@
 
 namespace GUI
 {
-    void LogicGateInfo::Draw(SP_Circuit circuit)
+    void LogicGateInfo::Draw(std::shared_ptr<CircuitController> circuitController )
     {
-        (void)circuit;
+        (void)circuitController;
         if (!visible)
         {
             return;

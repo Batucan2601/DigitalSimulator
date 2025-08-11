@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <sstream>
 #include "../ImGuiFileDialog/ImGuiFileDialog.h"
+#include "common_types.h"
 namespace GUI
 {
 
@@ -171,8 +172,9 @@ namespace GUI
             this->action();
         }
     }
-    void GUIMenuBar::Draw(SP_Circuit circuit)
+    void GUIMenuBar::Draw(std::shared_ptr<CircuitController> circuitController)
     {
+        SP_Circuit circuit = circuitController->getCircuit();
         if (ImGui::BeginMainMenuBar())
         {
             for (auto& item : this->menuList)

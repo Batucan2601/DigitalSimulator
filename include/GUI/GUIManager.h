@@ -8,12 +8,12 @@ class GUIManager
 {
   public:
     void Init();                    // Initialize ImGui styles and other GUI components
-    void Draw(SP_Circuit circuit);  // Draw all GUI elements, including menu bar and logic
+    void Draw(std::shared_ptr<CircuitController> circuit);  // Draw all GUI elements, including menu bar and logic
     void Update(std::shared_ptr<CircuitController> circuit); // Update all GUI elements.
 
     void Cleanup();                 // Cleanup resources if necessary
 
-    void DrawGUI(SP_Circuit circuit);
+    void DrawGUI(std::shared_ptr<CircuitController> circuitController);
 
     std::vector<std::unique_ptr<GUI::BaseWindow>> windows;
     void Show(int index);

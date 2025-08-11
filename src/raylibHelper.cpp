@@ -37,9 +37,9 @@ void RaylibHelper::Draw2D(const Camera2D& camera, const std::function<void()>& d
     EndMode2D();
 }
 
-void RaylibHelper::DrawGUI(SP_Circuit circuit)
+void RaylibHelper::DrawGUI(std::shared_ptr<CircuitController> circuitController)
 {
-    imguiManager->DrawGUI(circuit);
+    imguiManager->DrawGUI(circuitController);
 }
 void RaylibHelper::Update(std::shared_ptr<CircuitController> circuitController)
 {

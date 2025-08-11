@@ -2,9 +2,9 @@
 
 namespace GUI
 {
-    void Settings::Draw(SP_Circuit circuit)
+    void Settings::Draw(std::shared_ptr<CircuitController> circuitController )
     {
-        (void)circuit;
+        (void)circuitController;
         if (!visible)
         {
             return;

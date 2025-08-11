@@ -43,7 +43,7 @@ namespace GUI
       public:
         GUIMenuBar() : BaseWindow("Toolbar") {};
         std::vector<std::pair<std::string, std::unique_ptr<GUIBaseMenu>>> menuList;
-        void Draw(SP_Circuit circuit);
+        void Draw(std::shared_ptr<CircuitController> circuit);
         void Update(std::shared_ptr<CircuitController> circuit) override;
         SP_Circuit circuit;
         std::unordered_map<std::string, GUI::BaseWindow*> windows;

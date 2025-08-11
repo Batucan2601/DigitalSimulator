@@ -1,4 +1,5 @@
 #include "GUIContextMenu.h"
+#include "common_types.h"
 #include <imgui.h>
 #include <raylibHelper.h>
 #include <imgui_internal.h>
@@ -16,12 +17,12 @@ namespace GUI
         }
     }
     bool is_popup_open = false; // Global variable to track popup state
-    void ContextMenu::Draw(SP_Circuit circuit)
+    void ContextMenu::Draw(std::shared_ptr<CircuitController> circuitController)
     {
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
-            unregister_active_wire(circuit);
+            unregister_active_wire(circuitController->getCircuit());
             visible = false; // reset immediately after opening
         }
         if (ImGui::BeginPopup("ComponentContextMenu"))
@@ -35,12 +36,11 @@ namespace GUI
             if (ImGui::MenuItem("Properties")) {
                 RaylibHelper::Show(1);
             }
-
+            SP_Circuit circuit = circuitController->getCircuit();
             if (ImGui::MenuItem("Delete")) {
                 IInputHandler* selectedHandler = InputResolver::getSelectedHandler();
                 if(dynamic_cast<Component*>(selectedHandler))
                 {
-                    
                     // remove the gate
                     for (size_t i = 0; i < circuit->connections.size(); i++)
                     {

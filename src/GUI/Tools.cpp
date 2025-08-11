@@ -11,9 +11,9 @@ namespace GUI
 {
     GUIToolsDragDrop dragDrop = {DragDropState::IDLE, CircuitElements::ComponentType::NONE};
 
-    void Tools::Draw(SP_Circuit circuit)
+    void Tools::Draw(std::shared_ptr<CircuitController> circuitController )
     {
-        (void)circuit;
+        (void)circuitController;
         if (!visible)
         {
             return;

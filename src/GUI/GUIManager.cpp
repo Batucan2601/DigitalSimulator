@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <rlImGui.h>
 #include "appSettings.h"
+#include "common_types.h"
 #include <GUIContextMenu.h>
 
 void GUIManager::Init()
@@ -45,11 +46,12 @@ void GUIManager::Init()
     }
 }
 
-void GUIManager::Draw(SP_Circuit circuit)
+void GUIManager::Draw(std::shared_ptr<CircuitController> circuitController)
 {
+    //SP_Circuit circuit = circuitController->getCircuit();
     for (auto& window : windows)
     {
-        window->Draw(circuit);
+        window->Draw(circuitController);
     }
     DrawDemoWindow();
 }
@@ -101,12 +103,12 @@ void GUIManager::AddWindow(Args&&... args)
     windows.push_back(std::make_unique<T>(std::forward<Args>(args)...));
 }
 
-void GUIManager::DrawGUI(SP_Circuit circuit)
+void GUIManager::DrawGUI(std::shared_ptr<CircuitController> circuitController )
 {
     rlImGuiBegin();
     DrawDockingSpace();
 
-    Draw(circuit);
+    Draw(circuitController);
 
     rlImGuiEnd();
 }

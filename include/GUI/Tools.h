@@ -24,7 +24,7 @@ namespace GUI
       public:
         Tools() : BaseWindow("Tools") {}
 
-        void Draw(SP_Circuit circuit) override;
+        void Draw(std::shared_ptr<CircuitController> circuit) override;
         void Update(std::shared_ptr<CircuitController> circuit) override;
         void RenderGateButton(const std::string& gateName, CircuitElements::ComponentInfo gateInfo);
 

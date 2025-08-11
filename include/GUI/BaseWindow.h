@@ -14,7 +14,7 @@ namespace GUI
       public:
         virtual ~BaseWindow() = default;
 
-        virtual void Draw(SP_Circuit circuit) = 0;  // Default parameter-less version
+        virtual void Draw(std::shared_ptr<CircuitController> circuit) = 0;  // Default parameter-less version
         virtual void Update(std::shared_ptr<CircuitController> circuitController) = 0;
 
         virtual bool IsVisible() const

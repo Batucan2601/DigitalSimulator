@@ -1,5 +1,6 @@
 #include "GUI/SaveLoad.h"
 
+#include "common_types.h"
 #include "main.h"
 #include "SubCircuit.h"
 #include "raylib.h"
@@ -8,9 +9,9 @@ namespace GUI
 {
     SP_Circuit localCircuit;
 
-    void SaveLoad::Draw(SP_Circuit circuit)
+    void SaveLoad::Draw(std::shared_ptr<CircuitController> circuitController)
     {
-        (void)circuit;
+        SP_Circuit circuit = circuitController->getCircuit();
         switch (state)
         {
             case State::STATE_IDLE:

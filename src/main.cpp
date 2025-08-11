@@ -96,7 +96,7 @@ int main(void) {
     circuitController->getCircuit()->evaluate();
     // Draw
     RaylibHelper::BeginFrame();
-    RaylibHelper::DrawGUI(circuitController->getCircuit());
+    RaylibHelper::DrawGUI(circuitController);
     RaylibHelper::EndFrame();
     // update each GUI object
     RaylibHelper::Update(circuitController);

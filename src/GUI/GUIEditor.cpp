@@ -1,4 +1,5 @@
 #include "GUI/GUIEditor.h"
+#include "common_types.h"
 
 #include <rlImGui.h>
 namespace GUI
@@ -10,7 +11,7 @@ namespace GUI
         visible = true;
     }
 
-    void Editor::Draw(SP_Circuit circuit)
+    void Editor::Draw(std::shared_ptr<CircuitController> circuitController)
     {
         if (!visible)
         {
@@ -48,6 +49,7 @@ namespace GUI
         BeginTextureMode(m_editor_render.renderTexture);
         ClearBackground(AppSettings::appSettings.theme == AppSettings::Theme::DarkMode ? GRAY : WHITE);
 
+        SP_Circuit circuit = circuitController->getCircuit();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
         RaylibHelper::Draw2D(Controls::Controls_get_camera(),
                              [circuit]()
