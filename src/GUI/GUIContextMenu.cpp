@@ -18,7 +18,6 @@ namespace GUI
     bool is_popup_open = false; // Global variable to track popup state
     void ContextMenu::Draw(SP_Circuit circuit)
     {
-        circuit->m_logger.info("ContextMenu Draw called");
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
@@ -41,6 +40,7 @@ namespace GUI
                 IInputHandler* selectedHandler = InputResolver::getSelectedHandler();
                 if(dynamic_cast<Component*>(selectedHandler))
                 {
+                    
                     // remove the gate
                     for (size_t i = 0; i < circuit->connections.size(); i++)
                     {
@@ -91,6 +91,6 @@ namespace GUI
     }
     void ContextMenu::Update(std::shared_ptr<CircuitController> circuitController)            
     {
-        circuitController->getCircuit()->m_logger.info("ContextMenu Update called");
+        (*circuitController);
     }
 }
