@@ -8,16 +8,16 @@ Clock::Clock(const std::string& name, unsigned int tickRate)
     m_logger.info("Clock created with name: " + name + " and tick rate: " + std::to_string(tickRate));
     ns = 1e9 / tick_rate;
     Signal Clk("clk", SignalVal::SIGNAL_0);
+    this->bd.width = 70; 
+    this->bd.height = 120; 
     this->outputs.push_back(Clk); // Add output signal for clock
     Signal Reset("reset", SignalVal::SIGNAL_0);
     this->inputs.push_back(Reset); // Add reset input signal
-    this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_1);
+    this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::CLK);
     this->m_type = CircuitElements::ComponentType::CLK; // Set type to CLK
     setInOutPositions();
-
     InputResolver::RegisterHandler(this);
 
-    // crea
 }
 void Clock::evaluate()
 {

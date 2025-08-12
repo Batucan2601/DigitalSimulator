@@ -22,6 +22,7 @@ namespace AppSettings
 
         bool isDrawingBoundaryBox = false;
         bool showDemoWindow = false;
+        bool isShownNames = false; 
         int SPACING_SIZE = 25;
         int MOUSE_SELECTION_OFFSET = SPACING_SIZE / 2;
         float GRID_POINT_SIZE = 3;

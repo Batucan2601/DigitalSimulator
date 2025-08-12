@@ -77,6 +77,8 @@ namespace CircuitElements
                            const std::string& targetInput);
         void evaluate();
         int giveNewId();
+        bool removeConnection(int index);
+        bool removeConnection(Connection* con);
         ClassLogger m_logger;
 
         std::vector<std::shared_ptr<Component>> gates;

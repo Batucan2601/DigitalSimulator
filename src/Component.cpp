@@ -343,7 +343,7 @@ void UpdateConnection(Component* gate)
                     Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
                     Vector2 newPos = Utils::SnapToNearestGrid(rec);
                     Vector2 newLine =
-                        Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
+                    Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
                     c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
                     if (!(newLine.x == c->physCon.wires[0].x &&
                             newLine.y == c->physCon.wires[0].y))

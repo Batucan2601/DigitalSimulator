@@ -1,4 +1,6 @@
 #include "LogicElementsDraw.h"
+#include "appSettings.h"
+#include "raylib.h"
 
 #include <chrono>  // High precision timing
 #include <iostream>
@@ -38,6 +40,11 @@ namespace LogicElementsDraw
         DrawTexturePro(subcircuit->m_texture, source, dest, origin, 0.0f, WHITE);
 
     }
+    void DrawComponentName(std::shared_ptr<Component> comp)
+    {
+        DrawText(comp->m_name.c_str(), comp->bd.x + comp->bd.width/4, comp->bd.y, 10, BLACK);
+        //DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint)    
+    }
     void DrawCircuit(const SP_Circuit circuit)
     {
         // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
@@ -54,7 +61,10 @@ namespace LogicElementsDraw
             {
                 DrawBoundaryBox(gate);
             }
-
+            if( AppSettings::appSettings.isShownNames)
+            {
+                DrawComponentName(gate);
+            }
             DrawGateElement(gate);
             DrawInOut(gate);
         }

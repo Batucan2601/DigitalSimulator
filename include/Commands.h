@@ -1,7 +1,9 @@
 #pragma once
 #include <stack>
 #include <memory>
+#include "Component.h"
 #include "LogicElements/LogicElements.h"
+#include "common_types.h"
 
 namespace Command
 { 
@@ -9,6 +11,7 @@ namespace Command
         virtual void undo() = 0;
         virtual void redo() = 0;
         virtual ~ICommand() {}
+        std::vector<CircuitElements::Connection> connection;
     };
 
     class UndoManager {
@@ -73,7 +76,6 @@ namespace Command
 
         void redo() override {
             circuit->addGate(gate);
-            //circuit->gates.push_back(gate);
         }
 
     private:
@@ -84,11 +86,25 @@ namespace Command
     class RemoveComponentCommand : public ICommand {
     public:
         RemoveComponentCommand(SP_Circuit c, std::shared_ptr<Component> g)
-            : circuit(c), gate(g) {}
+            : circuit(c), gate(g)
+        {
+            // get the connections
+            for(size_t i = 0; i < c->connections.size() ; i++ )
+            {
+                if( c->connections[i].sourceGate == g || c->connections[i].targetGate == g )
+                {
+                    this->connection.push_back(c->connections[i]);
+                }
+            }
+        }
 
         void undo() override 
         {
             circuit->addGate(gate);
+            for (size_t i =0; i < this->connection.size(); i++ ) 
+            {
+                this->circuit->connections.push_back(this->connection[i]);
+            }
         }
 
         void redo() override {
@@ -101,6 +117,25 @@ namespace Command
                     break;
                 }
             }
+            std::vector<int> indices;
+            for(size_t i = 0; i < circuit->connections.size() ; i++ )
+            {
+                if( circuit->connections[i].sourceGate == this->gate || circuit->connections[i].targetGate == this->gate )
+                {
+                    indices.push_back(i);
+                }
+            }
+            //erase
+            if( indices.size() == 0)
+            {
+                return; 
+            }
+            for(int i =indices.size()-1; i >= 0 ; i-- ) 
+            {
+                circuit->removeConnection(indices[i]);
+            }
+
+
         }
 
     private:
@@ -110,19 +145,44 @@ namespace Command
 
     class MoveComponentCommand : public ICommand {
     public:
-        MoveComponentCommand(std::shared_ptr<Component> g, Vector2 oldPos, Vector2 newPos)
-            : gate(g), from(oldPos), to(newPos) {}
-
-        void undo() override {
-            gate->setPosition(from.x, from.y);
+        MoveComponentCommand(SP_Circuit circuit ,std::shared_ptr<Component> g, Vector2 oldPos, Vector2 newPos)
+            :circuit(circuit), gate(g), from(oldPos), to(newPos) 
+        {
+            for (size_t i = 0; i < this->circuit->connections.size() ; i++) 
+            {
+                if(this->circuit->connections[i].sourceGate == gate ||
+                   this->circuit->connections[i].targetGate == gate)
+                {
+                    this->indices.push_back(i);
+                }
+            }
         }
 
-        void redo() override {
+        void undo() override 
+        {
+            gate->setPosition(from.x, from.y);
+            for (int i = 0; i < (int)this->indices.size(); i++) 
+            {
+                CircuitElements::Connection* c = &this->circuit->connections[this->indices[i]];
+                for (int j = 0; j < (int)c->physCon.wires.size(); j++ ) 
+                {
+                    if( c->physCon.wires[j] == this->from)
+                    {
+                        c->physCon.wires.erase(c->physCon.wires.begin() + j ,c->physCon.wires.end() );
+                    }
+                }
+            }
+        }
+
+        void redo() override 
+        {
             gate->setPosition(to.x, to.y);
         }
 
     private:
+        SP_Circuit circuit; 
         std::shared_ptr<Component> gate;
+        std::vector<size_t> indices; // for connections
         Vector2 from;
         Vector2 to;
     };

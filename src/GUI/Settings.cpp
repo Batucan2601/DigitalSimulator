@@ -19,7 +19,9 @@ namespace GUI
             ImGui::Checkbox("Draw Boundary Box", &AppSettings::appSettings.isDrawingBoundaryBox);
 
             // Checkbox: Show Demo Window
-            ImGui::Checkbox("Show Demo Window", &AppSettings::appSettings.showDemoWindow);
+            //ImGui::Checkbox("Show Demo Window", &AppSettings::appSettings.showDemoWindow);
+
+            ImGui::Checkbox("Show Component Names", &AppSettings::appSettings.isShownNames);
 
             ImGui::NewLine();
             ImGui::Text("Grid Spacing:");

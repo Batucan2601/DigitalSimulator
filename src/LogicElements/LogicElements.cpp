@@ -54,6 +54,28 @@ namespace CircuitElements
             }
         }
     }
+    bool Circuit::removeConnection(int index)
+    {
+        if( index >= (int)this->connections.size())
+        {
+            return false; 
+        }
+        InputResolver::UnregisterHandler((IInputHandler*)&this->connections[index]);
+        this->connections.erase(this->connections.begin() + index );
+        return true; 
+    }
+    bool Circuit::removeConnection(Connection* con)
+    {
+        for (int i = 0; i < (int)this->connections.size() ;  i++ ) 
+        {
+            if( con->sourceGate == this->connections[i].sourceGate &&
+            con->targetGate == this->connections[i].targetGate)
+            {
+                removeConnection(i);
+            }
+        }
+        return false; 
+    }
     void Circuit::evaluate()
     {
         bool stabilized = false;

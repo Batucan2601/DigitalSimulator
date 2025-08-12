@@ -88,7 +88,7 @@ namespace LogicElements
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::INPUT_1] = LoadTexture(full_path.c_str());
 
-        file_path = folder_path + "1.png";  // Use relative path
+        file_path = folder_path + "clk.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::CLK] = LoadTexture(full_path.c_str());
     }

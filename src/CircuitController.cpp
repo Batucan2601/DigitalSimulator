@@ -46,7 +46,7 @@ void CircuitController::moveComponent(std::shared_ptr<Component> component, Vect
     if (component)
     {
         // Create a command to move the component
-        auto moveCommand = std::make_unique<Command::MoveComponentCommand>(component, oldPosition, newPosition);
+        auto moveCommand = std::make_unique<Command::MoveComponentCommand>(circuit, component, oldPosition, newPosition);
         moveCommand->redo();  // Move the component to the new position
         undoManager->execute(std::move(moveCommand));
     }
