@@ -362,7 +362,11 @@ void UpdateConnection(Component* gate)
                 {
                     Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
                     Vector2 newPos = Utils::SnapToNearestGrid(rec);
-                    size_t last_index = c->physCon.wires.size() - 1;
+                    int last_index = c->physCon.wires.size() - 1;
+                    if( last_index < 0 )
+                    {
+                        return;
+                    }
                     Vector2 newLine =
                         Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
                     c->physCon.wires.push_back(newLine);

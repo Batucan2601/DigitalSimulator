@@ -178,7 +178,7 @@ namespace Command
                         }
                     }
                 }
-                else if(c->targetGate == gate)
+                else //(c->targetGate == gate)
                 {
                     for (size_t j = 0; j < c->targetGate->inputs.size(); j++)
                     {
@@ -188,10 +188,6 @@ namespace Command
                             break; 
                         }
                     }
-                }
-                else
-                {
-                    assert("this is impossible");
                 }
                 Vector2 posDif = {this->to.x - this->from.x ,this->to.y - this->from.y };
                 Vector2 oldWirePos = {newWirePos.x - posDif.x ,newWirePos.y - posDif.y};
@@ -205,8 +201,6 @@ namespace Command
                         return; 
                     }
                 }
-                //if not erased 
-
             }
         }
 
