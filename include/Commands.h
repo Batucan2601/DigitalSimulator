@@ -2,6 +2,7 @@
 #include <stack>
 #include <memory>
 #include "Component.h"
+#include "Controls.h"
 #include "LogicElements/LogicElements.h"
 #include "common_types.h"
 
@@ -161,16 +162,51 @@ namespace Command
         void undo() override 
         {
             gate->setPosition(from.x, from.y);
+            
             for (int i = 0; i < (int)this->indices.size(); i++) 
             {
                 CircuitElements::Connection* c = &this->circuit->connections[this->indices[i]];
-                for (int j = 0; j < (int)c->physCon.wires.size(); j++ ) 
+                Vector2 newWirePos; 
+                if( c->sourceGate == gate)
                 {
-                    if( c->physCon.wires[j] == this->from)
+                    for (size_t j = 0; j < c->sourceGate->outputs.size(); j++)
                     {
-                        c->physCon.wires.erase(c->physCon.wires.begin() + j ,c->physCon.wires.end() );
+                        if( c->sourceGate->outputs[j] == c->sourceLogic)
+                        {
+                            newWirePos = c->sourceGate->outputs[j].pos;
+                            break; 
+                        }
                     }
                 }
+                else if(c->targetGate == gate)
+                {
+                    for (size_t j = 0; j < c->targetGate->inputs.size(); j++)
+                    {
+                        if( c->targetGate->inputs[j] == c->targetLogic)
+                        {
+                            newWirePos = c->targetGate->inputs[j].pos;
+                            break; 
+                        }
+                    }
+                }
+                else
+                {
+                    assert("this is impossible");
+                }
+                Vector2 posDif = {this->to.x - this->from.x ,this->to.y - this->from.y };
+                Vector2 oldWirePos = {newWirePos.x - posDif.x ,newWirePos.y - posDif.y};
+                for (size_t j = 0; j < c->physCon.wires.size(); j++)
+                {
+                    if( std::abs(c->physCon.wires[j].x -oldWirePos.x) <= AppSettings::appSettings.SPACING_SIZE 
+                        || std::abs(c->physCon.wires[j].y -oldWirePos.y) <= AppSettings::appSettings.SPACING_SIZE)
+                    {
+                        c->physCon.wires.erase(c->physCon.wires.begin() + j  , c->physCon.wires.end() );
+                        //isErased = true;
+                        return; 
+                    }
+                }
+                //if not erased 
+
             }
         }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "LogicElements/LogicElements.h"
 #include "Commands.h"
+
 class CircuitController : public IInputHandler, public std::enable_shared_from_this<CircuitController>{
     public:
         CircuitController(std::string logger_name = "circuit");

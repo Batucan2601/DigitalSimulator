@@ -173,7 +173,7 @@ namespace CircuitElements
     {
         // check bb
         Vector2 pos = {(float)event.pos.x, (float)event.pos.y};
-        for (size_t i = 0; i < this->physCon.wires.size()-1; i++)
+        for (int i = 0; i < (int)this->physCon.wires.size()-1; i++)
         {
             Vector2 start = this->physCon.wires[i];
             Vector2 end = this->physCon.wires[i+1];

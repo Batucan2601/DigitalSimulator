@@ -4,9 +4,9 @@
 #include "LogicElements.h"
 #include "common_types.h"
 #include "raylib.h"
-#include "CircuitController.h"
 #include <cmath>
 
+class CircuitController;
 namespace Controls
 {
     void Controls_set_camera(unsigned int screen_width, unsigned int screen_height);
