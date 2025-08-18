@@ -56,6 +56,36 @@ namespace Command
     };
 
 
+    class AddConnectionCommand : public ICommand
+    {
+        public:
+        AddConnectionCommand(SP_Circuit c, std::shared_ptr<Component> srcComp,
+        std::shared_ptr<Component> targetComp, std::string sourceString , std::string targetString)
+            : circuit(c), srcComp(srcComp), targetComp(targetComp), sourceString(sourceString),
+            targetString(targetString) {
+                conIndex = -1;
+            }
+
+        void undo() override 
+        {
+            InputResolver::UnregisterHandler((IInputHandler*)&circuit->connections[conIndex]);
+            circuit->connections.erase(circuit->connections.begin() + conIndex);
+        }
+
+        void redo() override {
+            circuit->addConnection(srcComp ,sourceString, targetComp , targetString);
+            conIndex = circuit->connections.size()-1;
+        }
+
+    private:
+        SP_Circuit circuit;
+        std::shared_ptr<Component> srcComp;
+        std::shared_ptr<Component> targetComp;
+        std::string sourceString;
+        std::string targetString;
+        int conIndex; 
+    };
+
     class AddComponentCommand : public ICommand {
     public:
         AddComponentCommand(SP_Circuit c, std::shared_ptr<Component> g)

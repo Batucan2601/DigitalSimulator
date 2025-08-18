@@ -11,6 +11,8 @@ class CircuitController : public IInputHandler, public std::enable_shared_from_t
         void removeComponent(std::shared_ptr<Component> component);
         void moveComponent(std::shared_ptr<Component> component , Vector2 oldPosition,
         Vector2 newPosition);
+        void addConnection( std::shared_ptr<Component> srcComp,
+        std::shared_ptr<Component> targetComp, std::string sourceString , std::string targetString);
     protected:
         virtual void OnKeyPress(const InputEvent& event);
         virtual void OnInputEvent(const InputEvent& event);

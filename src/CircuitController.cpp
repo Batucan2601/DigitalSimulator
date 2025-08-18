@@ -28,6 +28,12 @@ void CircuitController::addComponent(std::shared_ptr<Component> component)
     }
 }
 
+void CircuitController::addConnection( std::shared_ptr<Component> srcComp,
+        std::shared_ptr<Component> targetComp, std::string sourceString , std::string targetString)
+{
+    undoManager->execute(std::make_unique<Command::AddConnectionCommand>(circuit , srcComp, targetComp , sourceString,
+    targetString));
+}
 void CircuitController::removeComponent(std::shared_ptr<Component> component)
 {
     if (component && component->m_mark_for_deletion)

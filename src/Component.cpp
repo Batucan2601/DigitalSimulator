@@ -237,9 +237,11 @@ void Component::OnLeftClick(const InputEvent& event)
         {
             // if hits select it
             // possibleConnection.circuit = this->circuit;
-            circuit->addConnection(
+            controller->addConnection(possibleConnection.sourceGate, possibleConnection.targetGate,
+                possibleConnection.sourceLogic, possibleConnection.targetLogic);
+            /*circuit->addConnection(
                 possibleConnection.sourceGate, possibleConnection.sourceLogic,
-                possibleConnection.targetGate, possibleConnection.targetLogic);
+                possibleConnection.targetGate, possibleConnection.targetLogic);*/
             circuit->active_wire.is_visible = true;
             circuit->active_wire.start = pos;
             circuit->active_wire.end = pos;
