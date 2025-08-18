@@ -130,7 +130,7 @@ namespace CircuitElements
         this->id++;
         return ret_id;
     }
-    void Connection::OnInputEvent(const InputEvent& event)
+    void Connection::OnInputEvent(InputEvent& event)
     {
         if (event.type == InputType::Mouse)
         {
@@ -227,7 +227,7 @@ namespace CircuitElements
             }
         }
     }
-    void ActiveWire::OnInputEvent(const InputEvent& event)
+    void ActiveWire::OnInputEvent(InputEvent& event)
     {
         if (event.type == InputType::Mouse )
         {

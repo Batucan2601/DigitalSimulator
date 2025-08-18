@@ -2,14 +2,20 @@
 
 CircuitController::CircuitController(std::string logger_name)
     : circuit(std::make_shared<CircuitElements::Circuit>(logger_name)),
-      undoManager(std::make_unique<Command::UndoManager>())
+      undoManager(std::make_unique<Command::UndoManager>()),
+      multiSelection(std::make_shared<SelectionTool>(circuit))
 {
     InputResolver::RegisterHandler(this);
+    InputResolver::RegisterHandler((IInputHandler*)multiSelection.get());
 }
 
 SP_Circuit CircuitController::getCircuit() const
 {
     return circuit;
+}
+std::shared_ptr<SelectionTool> CircuitController::getMultiSelector() const
+{
+    return multiSelection;
 }
 void CircuitController::setCircuit(SP_Circuit circuit)
 {
@@ -77,7 +83,7 @@ void CircuitController::OnKeyPress(const InputEvent& event)
 }
 
 
-void CircuitController::OnInputEvent(const InputEvent& event)
+void CircuitController::OnInputEvent( InputEvent& event)
 {
     if (event.type == InputType::Keyboard)
     {

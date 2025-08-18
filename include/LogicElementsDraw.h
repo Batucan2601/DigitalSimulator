@@ -4,14 +4,14 @@
 #include "LogicElements.h"
 #include "appSettings.h"
 #include "raylib.h"
-
+#include "CircuitController.h"
 #include <common_types.h>
 #include <math.h>
 
 #define IS_DRAWING_BOUNDARY_BOX true  // TODO: this should be in userspace
 namespace LogicElementsDraw
 {
-    void DrawCircuit(const SP_Circuit circuit);
+    void DrawCircuit(std::shared_ptr<CircuitController> circuit);
     void DrawGateElement(const std::shared_ptr<Component> gate);
 
     // Helper drawing functions

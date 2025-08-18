@@ -153,7 +153,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::LeftClick;
-        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
+        event.pos = {mousePosition.x, mousePosition.y};
         InputResolver::PushEvent(event);
         return;
         bool gateSelected = false;
@@ -216,7 +216,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Enter;
-        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
+        event.pos = {mousePosition.x, mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -227,7 +227,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Leave;
-        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
+        event.pos = {mousePosition.x, mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -236,7 +236,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::RightClick;
-        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
+        event.pos = {mousePosition.x, mousePosition.y};
         InputResolver::PushEvent(event);
 
         is_logic_selected = false;  // kills wiring process for sure everytime
@@ -336,7 +336,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Down;
-        event.pos = {(int)mousePosition.x, (int)mousePosition.y};
+        event.pos = {mousePosition.x, mousePosition.y};
         InputResolver::PushEvent(event);
     }
 
@@ -347,7 +347,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Release;
-        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
+        event.pos = {mouse_pos.x, mouse_pos.y};
         InputResolver::PushEvent(event);
     }
 
@@ -356,7 +356,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Move;
-        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
+        event.pos = {mouse_pos.x, mouse_pos.y};
         InputResolver::PushEvent(event);
     }
 
@@ -368,7 +368,7 @@ namespace Controls
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::Move;
-        event.pos = {(int)mouse_pos.x, (int)mouse_pos.y};
+        event.pos = {mouse_pos.x, mouse_pos.y};
         InputResolver::PushEvent(event);
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))

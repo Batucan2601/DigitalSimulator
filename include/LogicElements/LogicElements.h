@@ -39,7 +39,7 @@ namespace CircuitElements
                             // causes a crash when rendering the is_hovering wires in the circuit
         Circuit* circuit;   // = nullptr;
         bool is_connected = false;
-        void OnInputEvent(const InputEvent& event) override;
+        void OnInputEvent(InputEvent& event) override;
         void OnLeftClick(const InputEvent& event);
         void OnRightClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
@@ -50,7 +50,7 @@ namespace CircuitElements
         Vector2 start;
         Vector2 end;
         bool is_visible;
-        void OnInputEvent(const InputEvent& event) override;
+        void OnInputEvent( InputEvent& event) override;
 
       private:
         void OnMove(const InputEvent& event);

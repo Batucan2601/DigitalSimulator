@@ -52,11 +52,7 @@ enum class KeyboardEvent
 };
 
 // Structure representing a 2D coordinate.
-struct MousePosition
-{
-    int x;
-    int y;
-};
+
 
 // Structure to hold details for a unified input event.
 struct InputEvent
@@ -64,9 +60,11 @@ struct InputEvent
     InputType type = InputType::None;
     // For mouse events
     MouseEventState mouseState = MouseEventState::None;
-    MousePosition pos = {0, 0};
+    Vector2 pos = {0, 0};
     // For keyboard events
     KeyboardEvent keyState = KeyboardEvent::None;
+    bool shift=false, ctrl=false, alt=false;
+    bool consumed = false; // if no component got that
     int keyCode = 0;
 };
 
@@ -77,7 +75,7 @@ class IInputHandler
     virtual ~IInputHandler() = default;
 
     // Handles any input event, whether mouse or keyboard.
-    virtual void OnInputEvent(const InputEvent& event) = 0;
+    virtual void OnInputEvent(InputEvent& event) = 0;
 };
 
 class InputResolver
@@ -178,7 +176,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
         
     }
     Component(std::string& fileName);
-    virtual void OnInputEvent(const InputEvent& event) override;
+    virtual void OnInputEvent(InputEvent& event) override;
     void setInput(const std::string& name, std::vector<SignalVal>  value);
     std::vector<SignalVal> getOutput(const std::string& name) const;
     void addObserver(LogicElements::GateObserver* observer);
@@ -216,7 +214,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     virtual nlohmann::json serialize() const = 0;
     protected:
         virtual void OnLeftClick(const InputEvent& event);
-        virtual void OnDown(const InputEvent& event);
+        virtual void OnDown(InputEvent& event);
         virtual void OnRelease(const InputEvent& event);
         virtual void OnMove(const InputEvent& event);
         virtual void OnRightClick(const InputEvent& event);

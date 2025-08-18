@@ -45,13 +45,14 @@ namespace LogicElementsDraw
         DrawText(comp->m_name.c_str(), comp->bd.x + comp->bd.width/4, comp->bd.y, 10, BLACK);
         //DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint)    
     }
-    void DrawCircuit(const SP_Circuit circuit)
+    void DrawCircuit( std::shared_ptr<CircuitController> circuitController)
     {
         // auto start = std::chrono::high_resolution_clock::now();  // ✅ Start timing
         // auto end = std::chrono::high_resolution_clock::now();  // ✅ End timing
         // double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
-
+        SP_Circuit circuit = circuitController->getCircuit();
+        //SP_Circuit circuit = ; 
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)
         {
@@ -191,6 +192,9 @@ namespace LogicElementsDraw
                                circuit->selected_wires.wire_hovering.y, AppSettings::appSettings.SLICE_SIZE,
                                AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
+
+        circuitController->getMultiSelector()->DrawOverlay();
+
         if (circuit->is_GUIdragdropped)
         {
             circuit->is_GUIdragdropped = false;
@@ -200,7 +204,7 @@ namespace LogicElementsDraw
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)
     {
         DrawPointAcross(start, end, WIRE_INTERACT_POINT_SIZE, AppSettings::appSettings.SPACING_SIZE, color);
-    }
+    }  
     void DrawBoundaryBox(const std::shared_ptr<Component> gate)
     {
         Color color;

@@ -159,7 +159,7 @@ int Component::getID() const
     return id;
 }
 
-void Component::OnInputEvent(const InputEvent& event)
+void Component::OnInputEvent(InputEvent& event)
     {
         if (event.type == InputType::Mouse)
         {
@@ -424,7 +424,7 @@ void ReducePhysicalWires(Component* gate)
         }
     }
 }
-void Component::OnDown(const InputEvent& event)
+void Component::OnDown(InputEvent& event)
 {
     if (this == InputResolver::getSelectedHandler())
     {
@@ -442,6 +442,7 @@ void Component::OnDown(const InputEvent& event)
                 return;
             }
         }
+        event.consumed = true; 
         Rectangle rec = {event.pos.x + dif.x, event.pos.y + dif.y, 0, 0};
         this->setPosition(rec.x, rec.y);
         if (isFirst)
