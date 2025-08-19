@@ -432,8 +432,11 @@ void ReducePhysicalWires(Component* gate)
 }
 void Component::OnDown(InputEvent& event)
 {
-    if (this == InputResolver::getSelectedHandler()[0] 
-    && InputResolver::getSelectedHandler().size() == 1)
+    if(InputResolver::getSelectedHandler().size() != 1 )
+    {
+        return; 
+    }
+    if (this == InputResolver::getSelectedHandler()[0])
     {
         Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
 
@@ -449,7 +452,7 @@ void Component::OnDown(InputEvent& event)
                 return;
             }
         }
-        event.consumed = true; 
+        event.consumed = true;
         Rectangle rec = {event.pos.x + dif.x, event.pos.y + dif.y, 0, 0};
         this->setPosition(rec.x, rec.y);
         if (isFirst)
@@ -466,8 +469,11 @@ void Component::OnDown(InputEvent& event)
 void Component::OnRelease(const InputEvent& event)
 {
     // if only one selected. 
-    if (this == InputResolver::getSelectedHandler()[0] &&
-    InputResolver::getSelectedHandler().size() == 1 )
+    if( InputResolver::getSelectedHandler().size() != 1 )
+    {
+        return; 
+    }
+    if (this == InputResolver::getSelectedHandler()[0] )
     {
         if (!isDragging)
         {

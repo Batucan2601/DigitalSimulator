@@ -10,7 +10,29 @@
 
 namespace LogicElementsDraw
 {
-
+    void DrawSelected()
+    {
+        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler();
+        if( handlers.size() > 0 )
+        {
+            if (auto handler = dynamic_cast<Component*>(handlers[0]))
+            {
+                std::cout << handler->bd.x << std::endl; 
+            }
+        }
+        // if( handlers.size() > 0 )
+        // {
+        //     for (size_t i = 0; i < handlers.size(); i++)
+        //     {
+        //         if (auto handler = dynamic_cast<Component*>(handlers[i]))
+        //         {
+        //             DrawRectangleLines(handler->bd.x , handler->bd.y ,handler->bd.width ,handler->bd.height , GREEN );
+        //         }
+        //     }
+        // }
+        
+        
+    }
     void DrawGateElement(const std::shared_ptr<Component> gate)
     {
         const Rectangle& bd = gate->bd;  // Bounding box of the gate
@@ -193,6 +215,7 @@ namespace LogicElementsDraw
                                AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
 
+        //DrawSelected();
         circuitController->getMultiSelector()->DrawOverlay();
 
         if (circuit->is_GUIdragdropped)

@@ -27,14 +27,17 @@ public:
                 curScreen   = startScreen;
                 mode = decideMode(e);
                 e.consumed = true; // capture
+                std::cout << " 1 " << std::endl; 
             }
         }
-        else if (dragging && e.mouseState == MouseEventState::Move) 
+        else if (dragging && e.mouseState == MouseEventState::Move   ) 
         {
             curScreen = toVec2(e.pos);
-            std::vector<int> indices = getHitIndices(startScreen , curScreen);
-            
+            std::vector<IInputHandler*> components = getHitComponents(startScreen , curScreen);
+            InputResolver::setSelectedHandler(components);
             e.consumed = true;
+            std::cout << " 2 " << std::endl; 
+
         }
         else if (dragging && e.mouseState == MouseEventState::Release) 
         {
@@ -42,6 +45,7 @@ public:
             commit();
             dragging = false;
             e.consumed = true;
+                std::cout << " 3 " << std::endl; 
         }
     }
 
@@ -91,15 +95,15 @@ private:
         }
         return false; 
     }
-    std::vector<int> getHitIndices(const Vector2& startPos , const Vector2& curPos)
+    std::vector<IInputHandler*> getHitComponents(const Vector2& startPos , const Vector2& curPos)
     {
-        std::vector<int> indices; 
+        std::vector<IInputHandler*> indices; 
         Rectangle cur = { startPos.x , startPos.y , curPos.x - startPos.x , curPos.y - startPos.y};
         for (size_t i=0;i < circuit->gates.size(); i++){
             auto b = circuit->gates[i]->bd;
             if (intersects(cur , b))
             {
-                indices.push_back((int)i);
+                indices.push_back((IInputHandler*)&circuit->gates[i]);
             }
         }   
         return indices;
