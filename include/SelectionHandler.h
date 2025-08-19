@@ -32,6 +32,8 @@ public:
         else if (dragging && e.mouseState == MouseEventState::Move) 
         {
             curScreen = toVec2(e.pos);
+            std::vector<int> indices = getHitIndices(startScreen , curScreen);
+            
             e.consumed = true;
         }
         else if (dragging && e.mouseState == MouseEventState::Release) 
@@ -67,18 +69,21 @@ private:
 
     static Vector2 toVec2(const Vector2& p){ return {(float)p.x,(float)p.y}; }
 
-    Rectangle rectFromPts(Vector2 a, Vector2 b) const {
+    Rectangle rectFromPts(Vector2 a, Vector2 b) const 
+    {
         Rectangle r;
         r.x=std::min(a.x,b.x); r.y=std::min(a.y,b.y);
         r.width = std::abs(a.x-b.x); r.height=std::abs(a.y-b.y);
         return r;
     }
-    SelMode decideMode(const InputEvent& e) const {
+    SelMode decideMode(const InputEvent& e) const 
+    {
         if (e.shift) return SelMode::Add;
         if (e.ctrl)  return SelMode::Toggle;
         return SelMode::Replace;
     }
-    bool hitAnyComponent(const Vector2& screenPos) const {
+    bool hitAnyComponent(const Vector2& screenPos) const 
+    {
         for (size_t i=0;i < circuit->gates.size(); i++){
             auto b = circuit->gates[i]->bd;
             if (screenPos.x>=b.x && screenPos.x<=b.x+b.width 
@@ -86,11 +91,26 @@ private:
         }
         return false; 
     }
-    static bool intersects(const Rectangle& A, const Rectangle& B){
+    std::vector<int> getHitIndices(const Vector2& startPos , const Vector2& curPos)
+    {
+        std::vector<int> indices; 
+        Rectangle cur = { startPos.x , startPos.y , curPos.x - startPos.x , curPos.y - startPos.y};
+        for (size_t i=0;i < circuit->gates.size(); i++){
+            auto b = circuit->gates[i]->bd;
+            if (intersects(cur , b))
+            {
+                indices.push_back((int)i);
+            }
+        }   
+        return indices;
+    }
+    static bool intersects(const Rectangle& A, const Rectangle& B)
+    {
         return !(A.x > B.x+B.width || A.x+A.width < B.x ||
                  A.y > B.y+B.height|| A.y+A.height< B.y);
     }
-    void commit() {
+    void commit() 
+    {
         // Rectangle wr = worldRect();
         // // tıklama sayma eşiği (tek tık gibi davranmak için)
         // if (wr.width*wr.height < 4.0f) return;
