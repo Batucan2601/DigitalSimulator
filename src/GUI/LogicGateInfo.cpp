@@ -18,8 +18,11 @@ namespace GUI
             return;
         }
 
-        IInputHandler* handler = InputResolver::getSelectedHandler();
-        GUITools_BasicLogicDisplay_draw(handler);
+        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler();
+        if(handlers.size() == 1 )
+        {
+            GUITools_BasicLogicDisplay_draw(handlers[0]);
+        }
     }
     void LogicGateInfo::Update(std::shared_ptr<CircuitController> circuit)
     {

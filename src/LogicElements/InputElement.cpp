@@ -70,18 +70,22 @@ void InputElement::OnLeftClick(const InputEvent& event)
            circuit->active_wire.end = pos;
            InputResolver::RegisterHandler(
                static_cast<IInputHandler*>(&(circuit->active_wire)));
-           InputResolver::setSelectedHandler(
-               (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+           std::vector<IInputHandler*> handler =  {&circuit->connections[circuit->connections.size() - 1]};
+            InputResolver::setSelectedHandler(handler);
        }
        else  // select the gate
        {
-           InputResolver::setSelectedHandler((IInputHandler*)this);
+           InputResolver::setSelectedHandler(std::vector<IInputHandler*>{});
        }
        return;
    }
    // check if a connection already selected.
+   if( InputResolver::getSelectedHandler().size() != 1 )
+   {
+        return;
+   }
    if (auto handler =
-           dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()))
+           dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0]))
    {
        if (this->is_connection_clicked(pos, possibleConnection))
        {

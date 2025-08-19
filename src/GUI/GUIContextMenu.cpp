@@ -38,7 +38,12 @@ namespace GUI
             }
             SP_Circuit circuit = circuitController->getCircuit();
             if (ImGui::MenuItem("Delete")) {
-                IInputHandler* selectedHandler = InputResolver::getSelectedHandler();
+                std::vector<IInputHandler*> selectedHandlerVec = InputResolver::getSelectedHandler();
+                IInputHandler* selectedHandler; 
+                if(selectedHandlerVec.size() == 1  )
+                {
+                    selectedHandler = selectedHandlerVec[0];
+                }
                 if(dynamic_cast<Component*>(selectedHandler))
                 {
                     // remove the gate

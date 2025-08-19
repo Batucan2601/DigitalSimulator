@@ -94,11 +94,11 @@ class InputResolver
     // Process all queued events.
     static void resolve();
 
-    static IInputHandler* getSelectedHandler()
+    static std::vector<IInputHandler*> getSelectedHandler()
     {
         return selectedHandler;
     }
-    static void setSelectedHandler(IInputHandler* handler)
+    static void setSelectedHandler(std::vector<IInputHandler*> handler)
     {
         selectedHandler = handler;
     }
@@ -118,7 +118,7 @@ class InputResolver
     static std::list<IInputHandler*> handlers;  // Collection of input handlers.
   private:
     static std::queue<InputEvent> queue;
-    static IInputHandler* selectedHandler;
+    static std::vector<IInputHandler*> selectedHandler;
     static bool m_blocked; 
     // You can keep additional helper functions if needed.
 };

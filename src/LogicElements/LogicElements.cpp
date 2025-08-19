@@ -165,8 +165,10 @@ namespace CircuitElements
             this->circuit->active_wire.end = hovering.pos; 
             InputResolver::RegisterHandler(
                 static_cast<IInputHandler*>(&(circuit->active_wire)));
+            
+            std::vector<IInputHandler*> handler = {&circuit->connections[circuit->connections.size() - 1]};
             InputResolver::setSelectedHandler(
-                (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+                handler);
         }
     }
     void Connection::OnRightClick(const InputEvent& event)
@@ -182,12 +184,12 @@ namespace CircuitElements
             bool isCol = CheckCollisionPointRec(pos, bd);
             if (isCol)
             {
-                 InputResolver::setSelectedHandler(this);
+                 InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
                  RaylibHelper::Show(4);
                  return;
             }
         }
-        InputResolver::setSelectedHandler(nullptr);
+        InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
     }
     void Connection::OnMove(const InputEvent& event)
     {
@@ -254,7 +256,12 @@ namespace CircuitElements
     void ActiveWire::OnLeftClick(const InputEvent& event)
     {
         (void)event;
-        if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler()))
+        
+        if( InputResolver::getSelectedHandler().size() !=  1)
+        {
+            return; 
+        }
+        if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler()[0]))
         {
             if (this->start.x == this->end.x && this->start.y == this->end.y)
             {
@@ -280,14 +287,15 @@ namespace CircuitElements
             if (d1->is_connected)
             {
                 this->is_visible = false;
-                InputResolver::setSelectedHandler(nullptr);
+                InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
             }
         }
     }
     void ActiveWire::OnRightClick(const InputEvent& event)
     {
         (void)event;
-        if (this == (InputResolver::getSelectedHandler()))
+        if (this == (InputResolver::getSelectedHandler()[0])
+        && InputResolver::getSelectedHandler().size() == 1)
         {
             InputResolver::UnregisterHandler(this);
         }

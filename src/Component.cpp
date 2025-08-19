@@ -9,12 +9,11 @@
 std::queue<InputEvent> InputResolver::queue;
 std::list<IInputHandler*>
     InputResolver::handlers;  // I do not really know what thefuck that is about
-IInputHandler* InputResolver::selectedHandler = nullptr;
+std::vector<IInputHandler*> InputResolver::selectedHandler;
 bool InputResolver::m_blocked = false;
 void InputResolver::Init()
 {
     queue = std::queue<InputEvent>();
-    selectedHandler = nullptr;
     m_blocked = false;
 }
 void InputResolver::PushEvent(const InputEvent& event)
@@ -247,18 +246,24 @@ void Component::OnLeftClick(const InputEvent& event)
             circuit->active_wire.end = pos;
             InputResolver::RegisterHandler(
                 static_cast<IInputHandler*>(&(circuit->active_wire)));
-            InputResolver::setSelectedHandler(
-                (IInputHandler*)&circuit->connections[circuit->connections.size() - 1]);
+            std::vector<IInputHandler*>  handler = {&circuit->connections[circuit->connections.size() - 1]};
+             
+            InputResolver::setSelectedHandler(handler);
         }
         else  // select the gate
         {
-            InputResolver::setSelectedHandler((IInputHandler*)this);
+            std::vector<IInputHandler*>  handler = {this};
+            InputResolver::setSelectedHandler(handler);
         }
         return;
     }
     // check if a connection already selected.
+    if( InputResolver::getSelectedHandler().size() != 1 )
+    {
+        return;
+    }
     if (auto handler =
-            dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()))
+            dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0]))
     {
         if (this->is_connection_clicked(pos, possibleConnection))
         {
@@ -320,7 +325,8 @@ void Component::OnRightClick(const InputEvent& event)
         //InputResolver::setSelectedHandler(nullptr);
         return;
     }
-    InputResolver::setSelectedHandler((IInputHandler*)this);
+    std::vector<IInputHandler*> handler = {this}; 
+    InputResolver::setSelectedHandler(handler);
     RaylibHelper::Show(4);
 
 }
@@ -426,7 +432,8 @@ void ReducePhysicalWires(Component* gate)
 }
 void Component::OnDown(InputEvent& event)
 {
-    if (this == InputResolver::getSelectedHandler())
+    if (this == InputResolver::getSelectedHandler()[0] 
+    && InputResolver::getSelectedHandler().size() == 1)
     {
         Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
 
@@ -458,8 +465,9 @@ void Component::OnDown(InputEvent& event)
 
 void Component::OnRelease(const InputEvent& event)
 {
-
-    if (this == InputResolver::getSelectedHandler())
+    // if only one selected. 
+    if (this == InputResolver::getSelectedHandler()[0] &&
+    InputResolver::getSelectedHandler().size() == 1 )
     {
         if (!isDragging)
         {
@@ -524,8 +532,9 @@ void Component::OnEnter(const InputEvent& event)
 {
     // update the circuit->hoveredGate with this object
     (void)event;
-
-    if (this == InputResolver::getSelectedHandler())
+ 
+    if (this == InputResolver::getSelectedHandler()[0] &&
+        InputResolver::getSelectedHandler().size() == 1 )
     {
         circuit->hoveredGate = shared_from_this();
     }
@@ -540,9 +549,13 @@ void Component::OnKeyPress(const InputEvent& event)
 {
     if (event.keyCode == KeyboardKey::KEY_DELETE)
     {
-        if (this == InputResolver::getSelectedHandler())
+        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler(); 
+        for (size_t i = 0; i < handlers.size(); i++)
         {
-            this->m_mark_for_deletion = true; 
+            if (this == handlers[i])
+            {
+                this->m_mark_for_deletion = true; 
+            }
         }
         this->controller->removeComponent(this->shared_from_this());
     }
