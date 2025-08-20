@@ -15,9 +15,12 @@ public:
         : circuit(circuit) {}
 
     void OnInputEvent(InputEvent& e) {
-        if (e.type != InputType::Mouse) return;
-
-        if (!dragging && e.mouseState == MouseEventState::Down && !e.consumed) 
+        if (e.type != InputType::Mouse)
+        {
+            return;
+        }
+        if (!dragging && e.mouseState == MouseEventState::Down && !e.consumed
+        && InputResolver::getDragMode() != DragMode::MarqueeSelecting ) 
         {
             // boş alan tespiti
             if (!hitAnyComponent(e.pos)) 
@@ -27,16 +30,17 @@ public:
                 curScreen   = startScreen;
                 mode = decideMode(e);
                 e.consumed = true; // capture
-                std::cout << " 1 " << std::endl; 
             }
+            InputResolver::setDragMode(DragMode::MarqueeSelecting);
         }
-        else if (dragging && e.mouseState == MouseEventState::Move   ) 
+        else if (dragging && e.mouseState == MouseEventState::Move && 
+        InputResolver::getDragMode() == DragMode::MarqueeSelecting ) 
         {
             curScreen = toVec2(e.pos);
             std::vector<IInputHandler*> components = getHitComponents(startScreen , curScreen);
             InputResolver::setSelectedHandler(components);
             e.consumed = true;
-            std::cout << " 2 " << std::endl; 
+            InputResolver::setDragMode(DragMode::MarqueeSelecting);
 
         }
         else if (dragging && e.mouseState == MouseEventState::Release) 
@@ -45,7 +49,7 @@ public:
             commit();
             dragging = false;
             e.consumed = true;
-                std::cout << " 3 " << std::endl; 
+            InputResolver::setDragMode(DragMode::Normal);
         }
     }
 

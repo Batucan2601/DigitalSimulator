@@ -15,12 +15,12 @@ void InputResolver::Init()
 {
     queue = std::queue<InputEvent>();
     m_blocked = false;
+    setDragMode(DragMode::Normal);
 }
 void InputResolver::PushEvent(const InputEvent& event)
 {
     queue.push(event);
 }
-
 void InputResolver::RegisterHandler(IInputHandler* handler)
 {
     // Optionally check if the handler is already registered.
@@ -31,6 +31,25 @@ void InputResolver::UnregisterHandler(IInputHandler* handler)
 {
     // Remove handler from the vector.
     handlers.erase(std::remove(handlers.begin(), handlers.end(), handler), handlers.end());
+}
+
+std::vector<IInputHandler*> InputResolver::getSelectedHandler()
+{
+    return selectedHandler;
+}
+
+void InputResolver::setSelectedHandler(std::vector<IInputHandler*> handler)
+{
+    selectedHandler = handler;
+}
+
+DragMode InputResolver::getDragMode()
+{
+    return dragMode; 
+}
+void InputResolver::setDragMode(DragMode dMode)
+{
+    dragMode = dMode; 
 }
 
 void InputResolver::resolve()
@@ -439,7 +458,6 @@ void Component::OnDown(InputEvent& event)
     if (this == InputResolver::getSelectedHandler()[0])
     {
         Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
-
         if (!isDragging)
         {
             if (CheckCollisionPointRec(mousePos, this->bd))
@@ -452,6 +470,7 @@ void Component::OnDown(InputEvent& event)
                 return;
             }
         }
+        InputResolver::setDragMode(DragMode::DraggingSelection);
         event.consumed = true;
         Rectangle rec = {event.pos.x + dif.x, event.pos.y + dif.y, 0, 0};
         this->setPosition(rec.x, rec.y);
@@ -479,6 +498,7 @@ void Component::OnRelease(const InputEvent& event)
         {
             return;
         }
+        InputResolver::setDragMode(DragMode::Normal);
         Rectangle rec = {(float)event.pos.x, (float)event.pos.y, 0, 0};
         Vector2 v = Utils::SnapToNearestGrid(rec);
         bool is_other_gate_exist = false;

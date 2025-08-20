@@ -75,7 +75,7 @@ void InputElement::OnLeftClick(const InputEvent& event)
        }
        else  // select the gate
        {
-           InputResolver::setSelectedHandler(std::vector<IInputHandler*>{});
+           InputResolver::setSelectedHandler(std::vector<IInputHandler*>{this});
        }
        return;
    }

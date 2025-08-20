@@ -51,8 +51,8 @@ enum class KeyboardEvent
     KeyRepeat
 };
 
-// Structure representing a 2D coordinate.
-
+// Structure representing a 2pD coordinate.
+enum class DragMode { Normal, MarqueeSelecting, DraggingSelection };
 
 // Structure to hold details for a unified input event.
 struct InputEvent
@@ -94,14 +94,13 @@ class InputResolver
     // Process all queued events.
     static void resolve();
 
-    static std::vector<IInputHandler*> getSelectedHandler()
-    {
-        return selectedHandler;
-    }
-    static void setSelectedHandler(std::vector<IInputHandler*> handler)
-    {
-        selectedHandler = handler;
-    }
+    static std::vector<IInputHandler*> getSelectedHandler();
+    
+    static void setSelectedHandler(std::vector<IInputHandler*> handler);
+    
+    static DragMode getDragMode();
+
+    static void setDragMode(DragMode dMode);
 
     static bool isBlocked()
     {
@@ -119,6 +118,7 @@ class InputResolver
   private:
     static std::queue<InputEvent> queue;
     static std::vector<IInputHandler*> selectedHandler;
+    inline static DragMode dragMode; 
     static bool m_blocked; 
     // You can keep additional helper functions if needed.
 };
