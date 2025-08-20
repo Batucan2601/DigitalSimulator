@@ -243,6 +243,19 @@ void Component::OnLeftClick(const InputEvent& event)
     bool isCol = CheckCollisionPointRec(pos, this->bd);
     if (!isCol)
     {
+        //check yourself, 
+        //and clear it 
+        //this block unselects itself.
+        std::vector<IInputHandler*> activeHandlers = InputResolver::getSelectedHandler(); 
+        for (size_t i = 0; i < activeHandlers.size(); i++)
+        {
+            if( activeHandlers[i] == this)
+            {
+                activeHandlers.erase(activeHandlers.begin() + i );
+                break; 
+            }
+        }
+        InputResolver::setSelectedHandler(activeHandlers);
         return;
     }
     // ok first look at the selected handler, check if it is a logic gate

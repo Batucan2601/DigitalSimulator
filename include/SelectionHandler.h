@@ -22,6 +22,7 @@ public:
         if (!dragging && e.mouseState == MouseEventState::Down && !e.consumed
         && InputResolver::getDragMode() != DragMode::MarqueeSelecting ) 
         {
+            //InputResolver::setSelectedHandler(std::vector<IInputHandler*>{});
             // boş alan tespiti
             if (!hitAnyComponent(e.pos)) 
             {
@@ -33,7 +34,7 @@ public:
             }
             InputResolver::setDragMode(DragMode::MarqueeSelecting);
         }
-        else if (dragging && e.mouseState == MouseEventState::Move && 
+        else if (dragging && e.mouseState == MouseEventState::Down && 
         InputResolver::getDragMode() == DragMode::MarqueeSelecting ) 
         {
             curScreen = toVec2(e.pos);
@@ -41,7 +42,6 @@ public:
             InputResolver::setSelectedHandler(components);
             e.consumed = true;
             InputResolver::setDragMode(DragMode::MarqueeSelecting);
-
         }
         else if (dragging && e.mouseState == MouseEventState::Release) 
         {
@@ -107,7 +107,7 @@ private:
             auto b = circuit->gates[i]->bd;
             if (intersects(cur , b))
             {
-                indices.push_back((IInputHandler*)&circuit->gates[i]);
+                indices.push_back((IInputHandler*)circuit->gates[i].get());
             }
         }   
         return indices;

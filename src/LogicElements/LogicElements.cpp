@@ -294,7 +294,7 @@ namespace CircuitElements
     void ActiveWire::OnRightClick(const InputEvent& event)
     {
         (void)event;
-        if( InputResolver::getSelectedHandler().size() == 1 )
+        if( InputResolver::getSelectedHandler().size() != 1 )
         {
             return; 
         }

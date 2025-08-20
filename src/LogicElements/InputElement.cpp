@@ -34,6 +34,16 @@ void InputElement::OnLeftClick(const InputEvent& event)
    bool isCol = CheckCollisionPointRec(pos, this->bd);
    if (!isCol)
    {
+    std::vector<IInputHandler*> activeHandlers = InputResolver::getSelectedHandler(); 
+        for (size_t i = 0; i < activeHandlers.size(); i++)
+        {
+            if( activeHandlers[i] == this)
+            {
+                activeHandlers.erase(activeHandlers.begin() + i );
+                break; 
+            }
+        }
+        InputResolver::setSelectedHandler(activeHandlers);
        return;
    }
    //RaylibHelper::Show(1); // shows logicGateInfo window

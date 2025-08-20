@@ -136,6 +136,8 @@ namespace Command
             {
                 this->circuit->connections.push_back(this->connection[i]);
             }
+            InputResolver::RegisterHandler(gate.get());
+
         }
 
         void redo() override {
@@ -157,16 +159,27 @@ namespace Command
                 }
             }
             //erase
-            if( indices.size() == 0)
+            if( indices.size() != 0)
             {
-                return; 
-            }
-            for(int i =indices.size()-1; i >= 0 ; i-- ) 
-            {
-                circuit->removeConnection(indices[i]);
+                for(int i =indices.size()-1; i >= 0 ; i-- ) 
+                {
+                    circuit->removeConnection(indices[i]);
+                }
             }
 
-
+            InputResolver::UnregisterHandler(gate.get());
+            
+            std::vector<IInputHandler*> selectedHandler = InputResolver::getSelectedHandler();
+            
+            for (size_t i = 0; i < selectedHandler.size(); i++)
+            {
+                if( selectedHandler[i] == gate.get())
+                {
+                    selectedHandler.erase(selectedHandler.begin() + i );          
+                    break; 
+                }
+            }
+            InputResolver::setSelectedHandler(selectedHandler);
         }
 
     private:
