@@ -10,29 +10,44 @@
 
 namespace LogicElementsDraw
 {
-    void DrawSelected()
+   void DrawSelected()
+{
+    const auto handlers = InputResolver::getSelectedHandler();
+    if (handlers.empty()) return;
+
+    for (IInputHandler* h : handlers)
     {
-        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler();
-        if( handlers.size() > 0 )
+        // Components (have a Rectangle bd)
+        if (auto* comp = dynamic_cast<Component*>(h))
         {
-            if (auto handler = dynamic_cast<Component*>(handlers[0]))
-            {
-                std::cout << handler->bd.x << std::endl; 
-            }
+            // Draw with float-safe API
+            DrawRectangleLinesEx(comp->bd, 1.0f, GREEN);
+            continue;
         }
-        // if( handlers.size() > 0 )
-        // {
-        //     for (size_t i = 0; i < handlers.size(); i++)
-        //     {
-        //         if (auto handler = dynamic_cast<Component*>(handlers[i]))
-        //         {
-        //             DrawRectangleLines(handler->bd.x , handler->bd.y ,handler->bd.width ,handler->bd.height , GREEN );
-        //         }
-        //     }
-        // }
-        
-        
+
+        // (Optional) highlight wires too
+        if (auto* con = dynamic_cast<CircuitElements::Connection*>(h))
+        {
+            // Example: draw the connection’s wire segments if you want
+            for (size_t i = 1; i < con->physCon.wires.size(); ++i)
+            {
+                const Vector2 a = con->physCon.wires[i-1];
+                const Vector2 b = con->physCon.wires[i];
+                DrawLineV(a, b, GREEN);
+            }
+            continue;
+        }
+
+        if (auto* aw = dynamic_cast<CircuitElements::ActiveWire*>(h))
+        {
+            if (aw->is_visible) DrawLineV(aw->start, aw->end, GREEN);
+            continue;
+        }
+
+        // else: unknown handler type; ignore or log
     }
+}
+
     void DrawGateElement(const std::shared_ptr<Component> gate)
     {
         const Rectangle& bd = gate->bd;  // Bounding box of the gate
@@ -215,7 +230,7 @@ namespace LogicElementsDraw
                                AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
 
-        //DrawSelected();
+        DrawSelected();
         circuitController->getMultiSelector()->DrawOverlay();
 
         if (circuit->is_GUIdragdropped)

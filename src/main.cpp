@@ -79,7 +79,7 @@ int main(void) {
 
   gate6->setPosition(0, 100 - 250);
   gate7->setPosition(0, 100 - 350);
-
+  clk->setPosition(100 , 100);
   circuitController->addComponent(gate6);
   circuitController->addComponent(gate7);
   circuitController->addComponent(in1);
