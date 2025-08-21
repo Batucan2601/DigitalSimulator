@@ -46,7 +46,6 @@ public:
         else if (dragging && e.mouseState == MouseEventState::Release) 
         {
             curScreen = toVec2(e.pos);
-            commit();
             dragging = false;
             e.consumed = true;
             InputResolver::setDragMode(DragMode::Normal);

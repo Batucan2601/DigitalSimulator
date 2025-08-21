@@ -91,6 +91,7 @@ class InputResolver
     // Unregister an input handler (optional but useful).
     static void UnregisterHandler(IInputHandler* handler);
 
+    static bool isStillRegistered(IInputHandler* handler);
     // Process all queued events.
     static void resolve();
 
@@ -101,7 +102,7 @@ class InputResolver
     static DragMode getDragMode();
 
     static void setDragMode(DragMode dMode);
-
+    
     static bool isBlocked()
     {
         return m_blocked;

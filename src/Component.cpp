@@ -32,7 +32,10 @@ void InputResolver::UnregisterHandler(IInputHandler* handler)
     // Remove handler from the vector.
     handlers.erase(std::remove(handlers.begin(), handlers.end(), handler), handlers.end());
 }
-
+bool InputResolver::isStillRegistered(IInputHandler* handler)
+{
+ return std::find(handlers.begin(),handlers.end() , handler) != handlers.end();
+}
 std::vector<IInputHandler*> InputResolver::getSelectedHandler()
 {
     return selectedHandler;
@@ -58,10 +61,11 @@ void InputResolver::resolve()
     {
         InputEvent event = queue.front();
         queue.pop();
+        auto snapshot = handlers; 
         // Dispatch the event to all registered handlers.
-        for (auto handler : handlers)
+        for (auto handler : snapshot)
         {
-            if (handler && !m_blocked)
+            if(isStillRegistered(handler) && !m_blocked)
             {
                 handler->OnInputEvent(event);
             }
