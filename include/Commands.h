@@ -103,9 +103,7 @@ namespace Command
                     break;
                 }
             }
-            
         }
-
         void redo() override {
             circuit->addGate(gate);
         }

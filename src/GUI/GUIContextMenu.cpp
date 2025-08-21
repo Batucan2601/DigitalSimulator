@@ -13,6 +13,7 @@ namespace GUI
             if (*it == &circuit->active_wire)
             {
                 InputResolver::UnregisterHandler(*it);
+                break;
             }
         }
     }
