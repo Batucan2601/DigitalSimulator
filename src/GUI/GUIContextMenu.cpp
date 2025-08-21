@@ -6,24 +6,13 @@
 
 namespace GUI
 {
-    static void unregister_active_wire(SP_Circuit circuit)
-    {
-        for (auto it = InputResolver::handlers.begin(); it != InputResolver::handlers.end(); ++it)
-        {
-            if (*it == &circuit->active_wire)
-            {
-                InputResolver::UnregisterHandler(*it);
-                break;
-            }
-        }
-    }
     bool is_popup_open = false; // Global variable to track popup state
     void ContextMenu::Draw(std::shared_ptr<CircuitController> circuitController)
     {
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
-            unregister_active_wire(circuitController->getCircuit());
+            InputResolver::UnregisterHandler((IInputHandler*)&circuitController->getCircuit()->active_wire);
             visible = false; // reset immediately after opening
         }
         if (ImGui::BeginPopup("ComponentContextMenu"))
