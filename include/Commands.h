@@ -98,6 +98,7 @@ namespace Command
                 /* code */
                 if (circuit->gates[i]->getID() == gate->getID())
                 {
+                    InputResolver::UnregisterHandler((IInputHandler*)circuit->gates[i].get());
                     circuit->gates.erase(circuit->gates.begin() + i);
                     break;
                 }

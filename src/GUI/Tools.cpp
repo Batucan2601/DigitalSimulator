@@ -68,12 +68,13 @@ namespace GUI
             Vector2 pos = Utils::SnapToNearestGrid(rec);
             circuitController->getCircuit()->selected_wires.wire_hovering = pos;
             circuitController->getCircuit()->is_GUIdragdragging = true;
+            InputResolver::setDragMode(DragMode::DraggingSelection);
         }
         if (circuitController->getCircuit()->is_GUIdragdragging && GUI::dragDrop.state == GUI::DragDropState::IDLE)
         {
             circuitController->getCircuit()->is_GUIdragdropped = true;
             circuitController->getCircuit()->is_GUIdragdragging = false;
-
+            InputResolver::setDragMode(DragMode::Normal);
             // add the new circuit
             std::string new_gate = "or_gate_logger";
             auto gate = LogicElements::LogicElementFactory::createComponent(GUI::dragDrop.componentType, new_gate);
@@ -87,10 +88,16 @@ namespace GUI
                 //circuitController->moveComponent(circuitController->getCircuit()->gates
                 //[circuitController->getCircuit()->gates.size() - 1],  ,  );
 
-                circuitController->getCircuit()->gates[circuitController->getCircuit()->gates.size() - 1]->setPosition(
+                /*circuitController->getCircuit()->gates[circuitController->getCircuit()->gates.size() - 1]->setPosition(
                     circuitController->getCircuit()->selected_wires.wire_hovering.x,
-                    circuitController->getCircuit()->selected_wires.wire_hovering.y);
-                GUI::dragDrop.componentType = CircuitElements::ComponentType::NONE;
+                    circuitController->getCircuit()->selected_wires.wire_hovering.y); */
+                GUI::dragDrop.componentType = CircuitElements::ComponentType::NONE; 
+                    
+                circuitController->moveComponent(circuitController->getCircuit()->gates[circuitController->getCircuit()->gates.size() - 1],
+                Vector2{0,0} , Vector2{circuitController->getCircuit()->selected_wires.wire_hovering.x,
+                    circuitController->getCircuit()->selected_wires.wire_hovering.y});
+                InputResolver::setDragMode(DragMode::Normal);
+                    
             }
         }
     }
