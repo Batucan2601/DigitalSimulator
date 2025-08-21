@@ -89,6 +89,10 @@ namespace LogicElementsDraw
         // double elapsed = std::chrono::duration<double, std::milli>(end - start).count();
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
         SP_Circuit circuit = circuitController->getCircuit();
+        
+        DrawSelected();
+        circuitController->getMultiSelector()->DrawOverlay();
+        
         //SP_Circuit circuit = ; 
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)
@@ -230,8 +234,7 @@ namespace LogicElementsDraw
                                AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
 
-        DrawSelected();
-        circuitController->getMultiSelector()->DrawOverlay();
+
 
         if (circuit->is_GUIdragdropped)
         {
