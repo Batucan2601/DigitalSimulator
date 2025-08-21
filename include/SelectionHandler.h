@@ -20,7 +20,7 @@ public:
             return;
         }
         if (!dragging && e.mouseState == MouseEventState::Down && !e.consumed
-        && InputResolver::getDragMode() != DragMode::MarqueeSelecting ) 
+        && InputResolver::getDragMode() == DragMode::Normal  ) 
         {
             //InputResolver::setSelectedHandler(std::vector<IInputHandler*>{});
             // boş alan tespiti
@@ -31,8 +31,8 @@ public:
                 curScreen   = startScreen;
                 mode = decideMode(e);
                 e.consumed = true; // capture
+                InputResolver::setDragMode(DragMode::MarqueeSelecting);
             }
-            InputResolver::setDragMode(DragMode::MarqueeSelecting);
         }
         else if (dragging && e.mouseState == MouseEventState::Down && 
         InputResolver::getDragMode() == DragMode::MarqueeSelecting ) 

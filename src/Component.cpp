@@ -472,7 +472,7 @@ void Component::OnDown(InputEvent& event)
     {
         return; 
     }
-    if (this == InputResolver::getSelectedHandler()[0])
+    if (this == InputResolver::getSelectedHandler()[0] && InputResolver::getDragMode() != DragMode::MarqueeSelecting)
     {
         Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
         if (!isDragging)
