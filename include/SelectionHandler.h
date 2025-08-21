@@ -101,7 +101,9 @@ private:
     std::vector<IInputHandler*> getHitComponents(const Vector2& startPos , const Vector2& curPos)
     {
         std::vector<IInputHandler*> indices; 
-        Rectangle cur = { startPos.x , startPos.y , curPos.x - startPos.x , curPos.y - startPos.y};
+        //Rectangle cur = { startPos.x , startPos.y , curPos.x - startPos.x , curPos.y - startPos.y};
+        Rectangle cur = { std::min(startPos.x,curPos.x) ,std::min( startPos.y , curPos.y), std::abs(curPos.x - startPos.x)
+        , std::abs(curPos.y - startPos.y)};
         for (size_t i=0;i < circuit->gates.size(); i++){
             auto b = circuit->gates[i]->bd;
             if (intersects(cur , b))
