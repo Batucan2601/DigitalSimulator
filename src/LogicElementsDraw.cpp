@@ -95,8 +95,7 @@ namespace LogicElementsDraw
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
         SP_Circuit circuit = circuitController->getCircuit();
         
-        DrawSelected();
-        circuitController->getMultiSelector()->DrawOverlay();
+        
         
         //SP_Circuit circuit = ; 
         // 1 - Draw gates
@@ -238,13 +237,13 @@ namespace LogicElementsDraw
                                circuit->selected_wires.wire_hovering.y, AppSettings::appSettings.SLICE_SIZE,
                                AppSettings::appSettings.SLICE_SIZE, BLUE);
         }
-
-
-
         if (circuit->is_GUIdragdropped)
         {
             circuit->is_GUIdragdropped = false;
         }
+
+        DrawSelected();
+        circuitController->getMultiSelector()->DrawOverlay();
     }
 
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)

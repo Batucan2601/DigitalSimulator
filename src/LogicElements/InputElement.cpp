@@ -88,7 +88,8 @@ void InputElement::OnLeftClick(const InputEvent& event)
        }
        else  // select the gate
        {
-           InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
+            std::vector<std::weak_ptr<IInputHandler>> weak_vec = {shared_from_this()};
+           InputResolver::setSelectedHandler(weak_vec);
        }
        return;
    }
