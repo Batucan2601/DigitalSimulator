@@ -7,9 +7,9 @@
 #include "raylibHelper.h"
 // Define static members.
 std::queue<InputEvent> InputResolver::queue;
-std::list<IInputHandler*>
+std::list<std::weak_ptr<IInputHandler>>
     InputResolver::handlers;  // I do not really know what thefuck that is about
-std::vector<IInputHandler*> InputResolver::selectedHandler;
+std::vector<std::weak_ptr<IInputHandler>> InputResolver::selectedHandler;
 bool InputResolver::m_blocked = false;
 void InputResolver::Init()
 {
@@ -21,27 +21,34 @@ void InputResolver::PushEvent(const InputEvent& event)
 {
     queue.push(event);
 }
-void InputResolver::RegisterHandler(IInputHandler* handler)
+void InputResolver::RegisterHandler(std::weak_ptr<IInputHandler> handler)
 {
     // Optionally check if the handler is already registered.
     handlers.push_back(handler);
 }
 
-void InputResolver::UnregisterHandler(IInputHandler* handler)
+void InputResolver::UnregisterHandler(std::weak_ptr<IInputHandler> handler)
 {
     // Remove handler from the vector.
-    handlers.erase(std::remove(handlers.begin(), handlers.end(), handler), handlers.end());
+    handlers.remove_if([&](const std::weak_ptr<IInputHandler>& w) {
+    return !w.expired() && !handler.expired() &&
+           w.lock().get() == handler.lock().get();});
 }
-bool InputResolver::isStillRegistered(IInputHandler* handler)
+bool InputResolver::isStillRegistered(std::weak_ptr<IInputHandler> handler)
 {
- return std::find(handlers.begin(),handlers.end() , handler) != handlers.end();
+// return std::find(handlers.begin(),handlers.end() , handler) != handlers.end();
+ bool isRegistered =  std::find_if(handlers.begin(), handlers.end(),
+    [&](const std::weak_ptr<IInputHandler>& w) {
+        return !w.owner_before(handler) && !handler.owner_before(w);
+    }) != handlers.end();
+ return  isRegistered;
 }
-std::vector<IInputHandler*> InputResolver::getSelectedHandler()
+std::vector<std::weak_ptr<IInputHandler>> InputResolver::getSelectedHandler()
 {
     return selectedHandler;
 }
 
-void InputResolver::setSelectedHandler(std::vector<IInputHandler*> handler)
+void InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>> handler)
 {
     selectedHandler = handler;
 }
@@ -65,9 +72,9 @@ void InputResolver::resolve()
         // Dispatch the event to all registered handlers.
         for (auto handler : snapshot)
         {
-            if(isStillRegistered(handler) && !m_blocked)
+            if(isStillRegistered(handler) && !m_blocked && handler.lock())
             {
-                handler->OnInputEvent(event);
+                handler.lock().get()->OnInputEvent(event);
             }
         }
     }
@@ -250,10 +257,11 @@ void Component::OnLeftClick(const InputEvent& event)
         //check yourself, 
         //and clear it 
         //this block unselects itself.
-        std::vector<IInputHandler*> activeHandlers = InputResolver::getSelectedHandler(); 
+        std::vector<std::weak_ptr<IInputHandler>> activeHandlers = InputResolver::getSelectedHandler(); 
         for (size_t i = 0; i < activeHandlers.size(); i++)
         {
-            if( activeHandlers[i] == this)
+            
+            if( activeHandlers[i].lock() && activeHandlers[i].lock().get() == this)
             {
                 activeHandlers.erase(activeHandlers.begin() + i );
                 break; 
@@ -264,7 +272,7 @@ void Component::OnLeftClick(const InputEvent& event)
     }
     // ok first look at the selected handler, check if it is a logic gate
     CircuitElements::Connection possibleConnection;
-    if (!circuit->active_wire.is_visible)  // we are not building a connection
+    if (!circuit->active_wire->is_visible)  // we are not building a connection
     {
         // it cannot be a connection end
         // it can be a connection start, or gate select
@@ -277,18 +285,17 @@ void Component::OnLeftClick(const InputEvent& event)
             /*circuit->addConnection(
                 possibleConnection.sourceGate, possibleConnection.sourceLogic,
                 possibleConnection.targetGate, possibleConnection.targetLogic);*/
-            circuit->active_wire.is_visible = true;
-            circuit->active_wire.start = pos;
-            circuit->active_wire.end = pos;
-            InputResolver::RegisterHandler(
-                static_cast<IInputHandler*>(&(circuit->active_wire)));
-            std::vector<IInputHandler*>  handler = {&circuit->connections[circuit->connections.size() - 1]};
+            circuit->active_wire->is_visible = true;
+            circuit->active_wire->start = pos;
+            circuit->active_wire->end = pos;
+            InputResolver::RegisterHandler((circuit->active_wire));
+            std::vector<std::weak_ptr<IInputHandler>>  handler = {circuit->connections[circuit->connections.size() - 1]};
              
             InputResolver::setSelectedHandler(handler);
         }
         else  // select the gate
         {
-            std::vector<IInputHandler*>  handler = {this};
+            std::vector<std::weak_ptr<IInputHandler>>  handler = {shared_from_this()};
             InputResolver::setSelectedHandler(handler);
         }
         return;
@@ -298,8 +305,12 @@ void Component::OnLeftClick(const InputEvent& event)
     {
         return;
     }
+    if(!InputResolver::getSelectedHandler()[0].lock() )
+    {
+        return;
+    }
     if (auto handler =
-            dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0]))
+            dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0].lock().get()))
     {
         if (this->is_connection_clicked(pos, possibleConnection))
         {
@@ -342,9 +353,7 @@ void Component::OnLeftClick(const InputEvent& event)
                 handler->sourceLogic = handler->targetLogic;
                 handler->targetLogic = temp_str;
             }
-
-            InputResolver::RegisterHandler(static_cast<IInputHandler*>(
-                &circuit->connections[circuit->connections.size() - 1]));
+            InputResolver::RegisterHandler(circuit->connections[circuit->connections.size() - 1]);
         }
     }
     
@@ -361,7 +370,7 @@ void Component::OnRightClick(const InputEvent& event)
         //InputResolver::setSelectedHandler(nullptr);
         return;
     }
-    std::vector<IInputHandler*> handler = {this}; 
+    std::vector<std::weak_ptr<IInputHandler>> handler = {shared_from_this()}; 
     InputResolver::setSelectedHandler(handler);
     RaylibHelper::Show(4);
 
@@ -375,7 +384,7 @@ void UpdateConnection(Component* gate)
 {
     for (size_t i = 0; i < gate->circuit->connections.size(); i++)
     {
-        CircuitElements::Connection* c = &gate->circuit->connections[i];
+        CircuitElements::Connection* c = gate->circuit->connections[i].get();
         if (c->sourceGate.get() == gate)
         {
             std::string name = c->sourceLogic;
@@ -428,7 +437,7 @@ void ReducePhysicalWires(Component* gate)
 {
     for (size_t i = 0; i < gate->circuit->connections.size(); i++)
     {
-        CircuitElements::Connection* c = &gate->circuit->connections[i];
+        CircuitElements::Connection* c = gate->circuit->connections[i].get();
         if (c->sourceGate.get() == gate || c->targetGate.get() == gate)
         {
             std::vector<unsigned int> indices_destroyed;
@@ -472,7 +481,11 @@ void Component::OnDown(InputEvent& event)
     {
         return; 
     }
-    if (this == InputResolver::getSelectedHandler()[0] && InputResolver::getDragMode() != DragMode::MarqueeSelecting)
+    if(!InputResolver::getSelectedHandler()[0].lock() )
+    {
+        return;
+    }
+    if (this == InputResolver::getSelectedHandler()[0].lock().get() && InputResolver::getDragMode() != DragMode::MarqueeSelecting)
     {
         Vector2 mousePos = {(float)event.pos.x, (float)event.pos.y};
         if (!isDragging)
@@ -505,11 +518,15 @@ void Component::OnDown(InputEvent& event)
 void Component::OnRelease(const InputEvent& event)
 {
     // if only one selected. 
-    if( InputResolver::getSelectedHandler().size() != 1 )
+    if( InputResolver::getSelectedHandler().size() != 1)
     {
         return; 
     }
-    if (this == InputResolver::getSelectedHandler()[0] )
+    if( !InputResolver::getSelectedHandler()[0].lock())
+    {
+        return; 
+    }
+    if (this == InputResolver::getSelectedHandler()[0].lock().get() )
     {
         if (!isDragging)
         {
@@ -521,7 +538,11 @@ void Component::OnRelease(const InputEvent& event)
         bool is_other_gate_exist = false;
         for (auto val : InputResolver::handlers)
         {
-            if (auto handler = dynamic_cast<Component*>(val))
+            if( !val.lock())
+            {
+                continue; 
+            }
+            if (auto handler = dynamic_cast<Component*>(val.lock().get()))
             {
                 if (handler == this)
                 {
@@ -575,8 +596,12 @@ void Component::OnEnter(const InputEvent& event)
 {
     // update the circuit->hoveredGate with this object
     (void)event;
- 
-    if (this == InputResolver::getSelectedHandler()[0] &&
+    
+    if(!InputResolver::getSelectedHandler()[0].lock() )
+    {
+        return; 
+    }
+    if (this == InputResolver::getSelectedHandler()[0].lock().get() &&
         InputResolver::getSelectedHandler().size() == 1 )
     {
         circuit->hoveredGate = shared_from_this();
@@ -592,10 +617,10 @@ void Component::OnKeyPress(const InputEvent& event)
 {
     if (event.keyCode == KeyboardKey::KEY_DELETE)
     {
-        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler(); 
+        std::vector<std::weak_ptr<IInputHandler>> handlers = InputResolver::getSelectedHandler(); 
         for (size_t i = 0; i < handlers.size(); i++)
         {
-            if (this == handlers[i])
+            if (this == handlers[i].lock().get())
             {
                 this->m_mark_for_deletion = true; 
             }

@@ -16,7 +16,6 @@ Clock::Clock(const std::string& name, unsigned int tickRate)
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::CLK);
     this->m_type = CircuitElements::ComponentType::CLK; // Set type to CLK
     setInOutPositions();
-    InputResolver::RegisterHandler(this);
 
 }
 void Clock::evaluate()

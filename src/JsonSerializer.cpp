@@ -92,7 +92,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         }
 
         // Load wire positions
-        CircuitElements::Connection& conn = circuit.get()->connections.back();
+        CircuitElements::Connection& conn = *circuit.get()->connections.back();
         conn.physCon.wires = connJson["wires"].get<std::vector<Vector2>>();
         conn.is_connected = true;
     }
@@ -136,7 +136,7 @@ void jsonparser_saveCircuit( CircuitElements::Circuit& circuit, const std::strin
     for (const auto& conn : circuit.connections)
     {
         json connJson;
-        to_json(connJson, conn);
+        to_json(connJson, *conn.get());
         connectionsArray.push_back(connJson);
     }
     j["connections"] = connectionsArray;

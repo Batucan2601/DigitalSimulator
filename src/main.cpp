@@ -35,7 +35,8 @@ int main(void) {
   std::string input1_logger = "Input1";
   std::string input2_logger = "input2";
 
-  circuitController = std::make_shared<CircuitController>(circuit_logger);
+  circuitController = CircuitController::create(circuit_logger);
+  //std::make_shared<CircuitController>(circuit_logger);
 
   /*auto gate1 =
   LogicElements::LogicElementFactory::createGate(CircuitElements::ComponentType::AND,

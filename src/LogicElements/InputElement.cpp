@@ -13,7 +13,6 @@ InputElement::InputElement(const std::string& logger_name)// Call base class con
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
     //this->setPosition(0, 0);  // Initialize position
     //this->setInOutPositions();
-    InputResolver::RegisterHandler(this);
 }
 void InputElement::setInOutPositions()
 {
@@ -34,10 +33,14 @@ void InputElement::OnLeftClick(const InputEvent& event)
    bool isCol = CheckCollisionPointRec(pos, this->bd);
    if (!isCol)
    {
-    std::vector<IInputHandler*> activeHandlers = InputResolver::getSelectedHandler(); 
+    std::vector<std::weak_ptr<IInputHandler>> activeHandlers = InputResolver::getSelectedHandler(); 
         for (size_t i = 0; i < activeHandlers.size(); i++)
         {
-            if( activeHandlers[i] == this)
+            if( !activeHandlers[i].lock() )
+            {
+                continue; 
+            }
+            if( activeHandlers[i].lock().get() == this)
             {
                 activeHandlers.erase(activeHandlers.begin() + i );
                 break; 
@@ -64,7 +67,7 @@ void InputElement::OnLeftClick(const InputEvent& event)
    }
    // ok first look at the selected handler, check if it is a logic gate
    CircuitElements::Connection possibleConnection;
-   if (!circuit->active_wire.is_visible)  // we are not building a connection
+   if (!circuit->active_wire->is_visible)  // we are not building a connection
    {
        // it cannot be a connection end
        // it can be a connection start, or gate select
@@ -75,27 +78,31 @@ void InputElement::OnLeftClick(const InputEvent& event)
            circuit->addConnection(
                possibleConnection.sourceGate, possibleConnection.sourceLogic,
                possibleConnection.targetGate, possibleConnection.targetLogic);
-           circuit->active_wire.is_visible = true;
-           circuit->active_wire.start = pos;
-           circuit->active_wire.end = pos;
-           InputResolver::RegisterHandler(
-               static_cast<IInputHandler*>(&(circuit->active_wire)));
-           std::vector<IInputHandler*> handler =  {&circuit->connections[circuit->connections.size() - 1]};
-            InputResolver::setSelectedHandler(handler);
+           circuit->active_wire->is_visible = true;
+           circuit->active_wire->start = pos;
+           circuit->active_wire->end = pos;
+
+           InputResolver::RegisterHandler(circuit->active_wire);
+           std::vector<std::weak_ptr<IInputHandler>> vec = {circuit->connections[circuit->connections.size() - 1]};
+           InputResolver::setSelectedHandler(vec);
        }
        else  // select the gate
        {
-           InputResolver::setSelectedHandler(std::vector<IInputHandler*>{this});
+           InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
        }
        return;
    }
    // check if a connection already selected.
-   if( InputResolver::getSelectedHandler().size() != 1 )
+   if( InputResolver::getSelectedHandler().size() != 1  )
    {
         return;
    }
+   if( !InputResolver::getSelectedHandler()[0].lock())
+   {
+    return;
+   }
    if (auto handler =
-           dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0]))
+           dynamic_cast<CircuitElements::Connection*>(InputResolver::getSelectedHandler()[0].lock().get()))
    {
        if (this->is_connection_clicked(pos, possibleConnection))
        {
@@ -138,9 +145,7 @@ void InputElement::OnLeftClick(const InputEvent& event)
                handler->sourceLogic = handler->targetLogic;
                handler->targetLogic = temp_str;
            }
-
-           InputResolver::RegisterHandler(static_cast<IInputHandler*>(
-               &circuit->connections[circuit->connections.size() - 1]));
+           InputResolver::RegisterHandler(circuit->connections[circuit->connections.size() - 1]);
        }
    }
 }

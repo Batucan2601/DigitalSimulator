@@ -38,7 +38,7 @@ public:
         InputResolver::getDragMode() == DragMode::MarqueeSelecting ) 
         {
             curScreen = toVec2(e.pos);
-            std::vector<IInputHandler*> components = getHitComponents(startScreen , curScreen);
+            std::vector<std::weak_ptr<IInputHandler>> components = getHitComponents(startScreen , curScreen);
             InputResolver::setSelectedHandler(components);
             e.consumed = true;
             InputResolver::setDragMode(DragMode::MarqueeSelecting);
@@ -98,9 +98,9 @@ private:
         }
         return false; 
     }
-    std::vector<IInputHandler*> getHitComponents(const Vector2& startPos , const Vector2& curPos)
+    std::vector<std::weak_ptr<IInputHandler>> getHitComponents(const Vector2& startPos , const Vector2& curPos)
     {
-        std::vector<IInputHandler*> indices; 
+        std::vector<std::weak_ptr<IInputHandler>> indices; 
         //Rectangle cur = { startPos.x , startPos.y , curPos.x - startPos.x , curPos.y - startPos.y};
         Rectangle cur = { std::min(startPos.x,curPos.x) ,std::min( startPos.y , curPos.y), std::abs(curPos.x - startPos.x)
         , std::abs(curPos.y - startPos.y)};
@@ -108,7 +108,7 @@ private:
             auto b = circuit->gates[i]->bd;
             if (intersects(cur , b))
             {
-                indices.push_back((IInputHandler*)circuit->gates[i].get());
+                indices.push_back(circuit->gates[i]);
             }
         }   
         return indices;

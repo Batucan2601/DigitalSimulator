@@ -12,7 +12,7 @@ namespace GUI
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
-            InputResolver::UnregisterHandler((IInputHandler*)&circuitController->getCircuit()->active_wire);
+            InputResolver::UnregisterHandler(circuitController->getCircuit()->active_wire);
             visible = false; // reset immediately after opening
         }
         if (ImGui::BeginPopup("ComponentContextMenu"))
@@ -28,19 +28,19 @@ namespace GUI
             }
             SP_Circuit circuit = circuitController->getCircuit();
             if (ImGui::MenuItem("Delete")) {
-                std::vector<IInputHandler*> selectedHandlerVec = InputResolver::getSelectedHandler();
-                IInputHandler* selectedHandler; 
+                std::vector<std::weak_ptr<IInputHandler>> selectedHandlerVec = InputResolver::getSelectedHandler();
+                std::shared_ptr<IInputHandler> selectedHandler; 
                 if(selectedHandlerVec.size() == 1  )
                 {
-                    selectedHandler = selectedHandlerVec[0];
+                    selectedHandler = selectedHandlerVec[0].lock();
                 }
-                if(dynamic_cast<Component*>(selectedHandler))
+                if(dynamic_cast<Component*>(selectedHandler.get()))
                 {
                     // remove the gate
                     for (size_t i = 0; i < circuit->connections.size(); i++)
                     {
-                        if (circuit->connections[i].sourceGate.get() == selectedHandler ||
-                            circuit->connections[i].targetGate.get() == selectedHandler)
+                        if (circuit->connections[i].get()->sourceGate.get() == selectedHandler.get() ||
+                            circuit->connections[i].get()->targetGate.get() == selectedHandler.get())
                         {
                             circuit->connections.erase(circuit->connections.begin() + i);
                             i--;
@@ -48,7 +48,7 @@ namespace GUI
                     }
                     for (size_t i = 0; i < circuit->gates.size(); i++)
                     {
-                        if (circuit->gates[i].get() == selectedHandler)
+                        if (circuit->gates[i].get() == selectedHandler.get())
                         {
                             circuit->gates.erase(circuit->gates.begin() + i);
                             i--;
@@ -56,13 +56,13 @@ namespace GUI
                     }
                     InputResolver::UnregisterHandler(selectedHandler);
                 }
-                else if (dynamic_cast<CircuitElements::Connection*>(selectedHandler))
+                else if (dynamic_cast<CircuitElements::Connection*>(selectedHandler.get()))
                 {
                     // remove the connection
                     for (size_t i = 0; i < circuit->connections.size(); i++)
                     {
 
-                        if (&circuit->connections[i] == selectedHandler )
+                        if (circuit->connections[i].get() == selectedHandler.get() )
                         {
                             circuit->connections.erase(circuit->connections.begin() + i);
                             InputResolver::UnregisterHandler(selectedHandler);

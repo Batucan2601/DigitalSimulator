@@ -7,14 +7,14 @@ namespace Utils
     {
         for (int i = 0; i < (int)circuit->connections.size(); i++)
         {
-            if (circuit->connections[i].physCon.wires.size() == 0)
+            if (circuit->connections[i].get()->physCon.wires.size() == 0)
             {
                 continue; 
             }
-            for (int j = 0; j < (int)circuit->connections[i].physCon.wires.size() - 1; j++)
+            for (int j = 0; j < (int)circuit->connections[i].get()->physCon.wires.size() - 1; j++)
             {
-                Vector2 start = circuit->connections[i].physCon.wires[j];
-                Vector2 end = circuit->connections[i].physCon.wires[j + 1];
+                Vector2 start = circuit->connections[i].get()->physCon.wires[j];
+                Vector2 end = circuit->connections[i].get()->physCon.wires[j + 1];
                 Rectangle col = {0, 0, 0, 0};
 
                 if (std::abs(end.x - start.x) < AppSettings::appSettings.SPACING_SIZE)
@@ -31,7 +31,7 @@ namespace Utils
                 }
                 if (CheckCollisionPointRec(mousePosition, col))
                 {
-                    con = circuit->connections[i];
+                    con = *circuit->connections[i].get();
                     return true;
                 }
             }

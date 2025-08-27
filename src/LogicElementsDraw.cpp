@@ -15,8 +15,13 @@ namespace LogicElementsDraw
     const auto handlers = InputResolver::getSelectedHandler();
     if (handlers.empty()) return;
 
-    for (IInputHandler* h : handlers)
+    for ( int i = 0; i < (int)handlers.size(); i++)
     {
+        if(!handlers[i].lock())
+        {
+            continue;
+        }
+        IInputHandler* h = handlers[i].lock().get();
         // Components (have a Rectangle bd)
         if (auto* comp = dynamic_cast<Component*>(h))
         {
@@ -114,38 +119,38 @@ namespace LogicElementsDraw
         // 2 - Draw connections
         for (size_t i = 0; i < circuit->connections.size(); i++)
         {
-            if (circuit->connections[i].physCon.wires.size() == 0)
+            if (circuit->connections[i].get()->physCon.wires.size() == 0)
             {
                 continue;
             }
             
-            for (size_t j = 0; j < circuit->connections[i].physCon.wires.size() - 1; j++)
+            for (size_t j = 0; j < circuit->connections[i].get()->physCon.wires.size() - 1; j++)
             {
-                Vector2 start = circuit->connections[i].physCon.wires[j];
-                Vector2 end = circuit->connections[i].physCon.wires[j + 1];
+                Vector2 start = circuit->connections[i].get()->physCon.wires[j];
+                Vector2 end = circuit->connections[i].get()->physCon.wires[j + 1];
                 // DrawLine();
-                if (circuit->connections[i].is_connected)
+                if (circuit->connections[i].get()->is_connected)
                 {
                     std::vector<SignalVal> val;
                     int outSize = 0;
                     int inSize = 0;
-                    for (size_t k = 0; k < circuit->connections[i].sourceGate->outputs.size(); k++)
+                    for (size_t k = 0; k < circuit->connections[i].get()->sourceGate->outputs.size(); k++)
                     {
-                        if (circuit->connections[i].sourceGate->outputs[k].name ==
-                            circuit->connections[i].sourceLogic)
+                        if (circuit->connections[i].get()->sourceGate->outputs[k].name ==
+                            circuit->connections[i].get()->sourceLogic)
                         {
-                            val = circuit->connections[i].sourceGate->outputs[k].val;
-                            outSize = circuit->connections[i].sourceGate->outputs[k].val.size();
+                            val = circuit->connections[i].get()->sourceGate->outputs[k].val;
+                            outSize = circuit->connections[i].get()->sourceGate->outputs[k].val.size();
                             break;
                         }
                     }
-                    for (size_t k = 0; k < circuit->connections[i].targetGate->inputs.size(); k++)
+                    for (size_t k = 0; k < circuit->connections[i].get()->targetGate->inputs.size(); k++)
                     {
-                        if (circuit->connections[i].targetGate->inputs[k].name ==
-                            circuit->connections[i].targetLogic)
+                        if (circuit->connections[i].get()->targetGate->inputs[k].name ==
+                            circuit->connections[i].get()->targetLogic)
                         {
-                            val = circuit->connections[i].targetGate->inputs[k].val;
-                            inSize = circuit->connections[i].targetGate->inputs[k].val.size();
+                            val = circuit->connections[i].get()->targetGate->inputs[k].val;
+                            inSize = circuit->connections[i].get()->targetGate->inputs[k].val.size();
                             break;
                         }
                     }
@@ -174,8 +179,8 @@ namespace LogicElementsDraw
                     }
                     DrawLineEx(start, end, LINE_THICKNESS, signalColor);
 
-                    circuit->connections[i].sourceGate->m_logger.
-                    info("The value is  {} ",circuit->connections[i].sourceGate->outputs[0].val);
+                    circuit->connections[i].get()->sourceGate->m_logger.
+                    info("The value is  {} ",circuit->connections[i].get()->sourceGate->outputs[0].val);
                    
                 }
                 else
@@ -191,10 +196,10 @@ namespace LogicElementsDraw
         // color green the selected wires
         for (size_t i = 0; i < circuit->connections.size(); i++)
         {
-            if (circuit->connections[i].hovering.is_hovering)
+            if (circuit->connections[i].get()->hovering.is_hovering)
             {
-                DrawInteractableWirePoints(circuit->connections[i].hovering.pos,
-                                           circuit->connections[i].hovering.pos, GREEN);
+                DrawInteractableWirePoints(circuit->connections[i].get()->hovering.pos,
+                                           circuit->connections[i].get()->hovering.pos, GREEN);
             }
         }
         if(! (circuit->selected_wires.wire_hovering.x > AppSettings::appSettings.screenWidth ||
@@ -209,22 +214,22 @@ namespace LogicElementsDraw
         //DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
 
         // 3 - DrawActiveWire
-        if (circuit->active_wire.is_visible)
+        if (circuit->active_wire->is_visible)
         {
-            Rectangle rec = {circuit->active_wire.start.x, circuit->active_wire.start.y, 0, 0};
-            circuit->active_wire.start = Utils::SnapToNearestGrid(rec);
-            rec = {circuit->active_wire.end.x, circuit->active_wire.end.y, 0, 0};
-            circuit->active_wire.end = Utils::SnapToNearestGrid(rec);
+            Rectangle rec = {circuit->active_wire->start.x, circuit->active_wire->start.y, 0, 0};
+            circuit->active_wire->start = Utils::SnapToNearestGrid(rec);
+            rec = {circuit->active_wire->end.x, circuit->active_wire->end.y, 0, 0};
+            circuit->active_wire->end = Utils::SnapToNearestGrid(rec);
 
-            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire.start,
-                                                                      circuit->active_wire.end);
-            DrawLine(circuit->active_wire.start.x, circuit->active_wire.start.y, straight_line.x,
+            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire->start,
+                                                                      circuit->active_wire->end);
+            DrawLine(circuit->active_wire->start.x, circuit->active_wire->start.y, straight_line.x,
                      straight_line.y, GREEN);
-            DrawLine(straight_line.x, straight_line.y, circuit->active_wire.end.x,
-                     circuit->active_wire.end.y, GREEN);
+            DrawLine(straight_line.x, straight_line.y, circuit->active_wire->end.x,
+                     circuit->active_wire->end.y, GREEN);
 
-            DrawInteractableWirePoints(circuit->active_wire.start, straight_line, GREEN);
-            DrawInteractableWirePoints(straight_line, circuit->active_wire.end, GREEN);
+            DrawInteractableWirePoints(circuit->active_wire->start, straight_line, GREEN);
+            DrawInteractableWirePoints(straight_line, circuit->active_wire->end, GREEN);
         }
 
         if (circuit->is_GUIdragdragging)

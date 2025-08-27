@@ -5,8 +5,8 @@ CircuitController::CircuitController(std::string logger_name)
       undoManager(std::make_unique<Command::UndoManager>()),
       multiSelection(std::make_shared<SelectionTool>(circuit))
 {
-    InputResolver::RegisterHandler(this);
-    InputResolver::RegisterHandler((IInputHandler*)multiSelection.get());
+    //InputResolver::RegisterHandler(shared_from_this());
+    //InputResolver::RegisterHandler(multiSelection);
 }
 
 SP_Circuit CircuitController::getCircuit() const

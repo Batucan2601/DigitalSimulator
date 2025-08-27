@@ -12,7 +12,7 @@ namespace Command
         virtual void undo() = 0;
         virtual void redo() = 0;
         virtual ~ICommand() {}
-        std::vector<CircuitElements::Connection> connection;
+        std::vector<std::shared_ptr<CircuitElements::Connection>> connection;
     };
 
     class UndoManager {
@@ -68,7 +68,9 @@ namespace Command
 
         void undo() override 
         {
-            InputResolver::UnregisterHandler((IInputHandler*)&circuit->connections[conIndex]);
+            std::shared_ptr<CircuitElements::Connection> con = 
+            circuit->connections[conIndex];
+            InputResolver::UnregisterHandler(con);
             circuit->connections.erase(circuit->connections.begin() + conIndex);
         }
 
@@ -98,7 +100,7 @@ namespace Command
                 /* code */
                 if (circuit->gates[i]->getID() == gate->getID())
                 {
-                    InputResolver::UnregisterHandler((IInputHandler*)circuit->gates[i].get());
+                    InputResolver::UnregisterHandler(circuit->gates[i]);
                     circuit->gates.erase(circuit->gates.begin() + i);
                     break;
                 }
@@ -121,7 +123,7 @@ namespace Command
             // get the connections
             for(size_t i = 0; i < c->connections.size() ; i++ )
             {
-                if( c->connections[i].sourceGate == g || c->connections[i].targetGate == g )
+                if( c->connections[i].get()->sourceGate == g || c->connections[i].get()->targetGate == g )
                 {
                     this->connection.push_back(c->connections[i]);
                 }
@@ -135,7 +137,7 @@ namespace Command
             {
                 this->circuit->connections.push_back(this->connection[i]);
             }
-            InputResolver::RegisterHandler(gate.get());
+            InputResolver::RegisterHandler(gate);
 
         }
 
@@ -152,7 +154,8 @@ namespace Command
             std::vector<int> indices;
             for(size_t i = 0; i < circuit->connections.size() ; i++ )
             {
-                if( circuit->connections[i].sourceGate == this->gate || circuit->connections[i].targetGate == this->gate )
+                if( circuit->connections[i].get()->sourceGate == this->gate || 
+                circuit->connections[i].get()->targetGate == this->gate )
                 {
                     indices.push_back(i);
                 }
@@ -166,13 +169,13 @@ namespace Command
                 }
             }
 
-            InputResolver::UnregisterHandler(gate.get());
+            InputResolver::UnregisterHandler(gate);
             
-            std::vector<IInputHandler*> selectedHandler = InputResolver::getSelectedHandler();
+            std::vector<std::weak_ptr<IInputHandler>> selectedHandler = InputResolver::getSelectedHandler();
             
             for (size_t i = 0; i < selectedHandler.size(); i++)
             {
-                if( selectedHandler[i] == gate.get())
+                if( selectedHandler[i].lock() == gate)
                 {
                     selectedHandler.erase(selectedHandler.begin() + i );          
                     break; 
@@ -193,8 +196,8 @@ namespace Command
         {
             for (size_t i = 0; i < this->circuit->connections.size() ; i++) 
             {
-                if(this->circuit->connections[i].sourceGate == gate ||
-                   this->circuit->connections[i].targetGate == gate)
+                if(this->circuit->connections[i].get()->sourceGate == gate ||
+                   this->circuit->connections[i].get()->targetGate == gate)
                 {
                     this->indices.push_back(i);
                 }
@@ -207,7 +210,7 @@ namespace Command
             
             for (int i = 0; i < (int)this->indices.size(); i++) 
             {
-                CircuitElements::Connection* c = &this->circuit->connections[this->indices[i]];
+                CircuitElements::Connection* c = this->circuit->connections[this->indices[i]].get();
                 Vector2 newWirePos; 
                 if( c->sourceGate == gate)
                 {

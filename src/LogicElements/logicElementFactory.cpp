@@ -31,6 +31,7 @@ namespace LogicElements
         Signal Out("Out");
         // types for actual logic gates
         generate_logic_gate(gate, type, A, B, Out);
+        InputResolver::RegisterHandler(gate);
         return gate;
     }
     std::shared_ptr<Component> LogicElementFactory::createInput(std::string logger_name)
@@ -44,11 +45,13 @@ namespace LogicElements
             g.outputs[0].val = std::vector<SignalVal>(1, SignalVal::SIGNAL_0); // Default to SIGNAL_0
             g.outputs[0].val[0] = (g.getType() == CircuitElements::ComponentType::INPUT_1) ? SignalVal::SIGNAL_1 : SignalVal::SIGNAL_0;
         });
+        InputResolver::RegisterHandler(gate);
         return gate;
     }
     std::shared_ptr<Component> LogicElementFactory::createClock(std::string logger_name , unsigned int tickrate )
     {
         std::shared_ptr<Component> clk = std::make_shared<Clock>(logger_name ,tickrate);
+        InputResolver::RegisterHandler(clk);
         return clk;
     }
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )

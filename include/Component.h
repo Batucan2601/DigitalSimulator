@@ -86,18 +86,18 @@ class InputResolver
     static void PushEvent(const InputEvent& event);
 
     // Register an input handler.
-    static void RegisterHandler(IInputHandler* handler);
+    static void RegisterHandler(std::weak_ptr<IInputHandler> handler);
 
     // Unregister an input handler (optional but useful).
-    static void UnregisterHandler(IInputHandler* handler);
+    static void UnregisterHandler(std::weak_ptr<IInputHandler> handler);
 
-    static bool isStillRegistered(IInputHandler* handler);
+    static bool isStillRegistered(std::weak_ptr<IInputHandler> handler);
     // Process all queued events.
     static void resolve();
 
-    static std::vector<IInputHandler*> getSelectedHandler();
+    static std::vector<std::weak_ptr<IInputHandler>> getSelectedHandler();
     
-    static void setSelectedHandler(std::vector<IInputHandler*> handler);
+    static void setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>> handler);
     
     static DragMode getDragMode();
 
@@ -115,10 +115,10 @@ class InputResolver
     {
         m_blocked = false;
     }
-    static std::list<IInputHandler*> handlers;  // Collection of input handlers.
+    static std::list<std::weak_ptr<IInputHandler>> handlers;  // Collection of input handlers.
   private:
     static std::queue<InputEvent> queue;
-    static std::vector<IInputHandler*> selectedHandler;
+    static std::vector<std::weak_ptr<IInputHandler>> selectedHandler;
     inline static DragMode dragMode; 
     static bool m_blocked; 
     // You can keep additional helper functions if needed.

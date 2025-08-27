@@ -7,14 +7,15 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
     this->internalCircuit = circuitRef;
     for (size_t i = 0; i < this->internalCircuit->connections.size(); i++)
     {
-        InputResolver::UnregisterHandler(
-            &this->internalCircuit->connections[i]);  // Unregister connections from the circuit
-        this->internalCircuit->connections[i].physCon.wires.clear();  // Clear the wires in the connection        
+        std::shared_ptr<CircuitElements::Connection> con = this->internalCircuit->connections[i];
+        std::vector<std::weak_ptr<CircuitElements::Connection>> vec = {this->internalCircuit->connections[i]};
+        InputResolver::UnregisterHandler(con);  // Unregister connections from the circuit
+        this->internalCircuit->connections[i].get()->physCon.wires.clear();  // Clear the wires in the connection        
     }
     for (size_t i = 0; i < this->internalCircuit->gates.size(); i++)
     {
         InputResolver::UnregisterHandler(
-            this->internalCircuit->gates[i].get());  // Unregister connections from the circuit
+            this->internalCircuit->gates[i]);  // Unregister connections from the circuit
     }
     
     // with connections get the 
@@ -42,7 +43,7 @@ SubcircuitComponent::SubcircuitComponent(const SP_Circuit& circuitRef, const std
         }
     }
     this->m_texture = LogicElements::compTexture_getTexture(CircuitElements::ComponentType::INPUT_0);
-    InputResolver::RegisterHandler(this);
+    InputResolver::RegisterHandler(shared_from_this());
     this->setInOutPositions();
 }
 void SubcircuitComponent::setInOutPositions()

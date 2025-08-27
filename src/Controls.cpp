@@ -174,8 +174,8 @@ namespace Controls
                     if (is_logic_selected)
                     {
                         Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                        circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
-                        circuit->active_wire.is_visible = true;
+                        circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
+                        circuit->active_wire->is_visible = true;
                     }
                     break;
                 }
@@ -188,8 +188,8 @@ namespace Controls
                 if (is_logic_selected)  // this section checks what happens when you touch a wire
                 {
                     Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                    circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
-                    circuit->active_wire.is_visible = true;
+                    circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
+                    circuit->active_wire->is_visible = true;
                     // get which line it belongs to
                     CircuitElements::Connection new_connection;
                     new_connection.sourceGate = con.sourceGate;
@@ -240,19 +240,19 @@ namespace Controls
         InputResolver::PushEvent(event);
 
         is_logic_selected = false;  // kills wiring process for sure everytime
-        circuit->active_wire.is_visible = false;
+        circuit->active_wire->is_visible = false;
     }
     void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition)
     {
         Rectangle mockRec = {mousePosition.x, mousePosition.y, 0, 0};
         Vector2 nearest_grid_point = Utils::SnapToNearestGrid(mockRec);
         Vector2 wire_prev =
-            circuit->connections[circuit->connections.size() - 1].physCon.wires
-                [circuit->connections[circuit->connections.size() - 1].physCon.wires.size() - 1];
+            circuit->connections[circuit->connections.size() - 1].get()->physCon.wires
+                [circuit->connections[circuit->connections.size() - 1].get()->physCon.wires.size() - 1];
         Vector2 straight_line = Generate_straight_lines(wire_prev, nearest_grid_point);
-        circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(
+        circuit->connections[circuit->connections.size() - 1].get()->physCon.wires.push_back(
             straight_line);
-        circuit->connections[circuit->connections.size() - 1].physCon.wires.push_back(
+        circuit->connections[circuit->connections.size() - 1].get()->physCon.wires.push_back(
             nearest_grid_point);
 
         // finish if we hit logic gates
@@ -264,13 +264,13 @@ namespace Controls
                 CheckGatePartClicked(circuit, gate, mousePosition, connection_end);
                 if (connection_end.sourceLogic != "")  // not intitialized
                 {
-                    circuit->connections[circuit->connections.size() - 1].targetGate =
+                    circuit->connections[circuit->connections.size() - 1].get()->targetGate =
                         connection_end.sourceGate;
-                    circuit->connections[circuit->connections.size() - 1].targetLogic =
+                    circuit->connections[circuit->connections.size() - 1].get()->targetLogic =
                         connection_end.sourceLogic;
-                    circuit->connections[circuit->connections.size() - 1].is_connected = true;
+                    circuit->connections[circuit->connections.size() - 1].get()->is_connected = true;
                     is_logic_selected = false;
-                    circuit->active_wire.is_visible = false;
+                    circuit->active_wire->is_visible = false;
                 }
                 break;
             }
@@ -278,8 +278,8 @@ namespace Controls
         if (is_logic_selected)
         {
             Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-            circuit->active_wire.start = Utils::SnapToNearestGrid(pos);
-            circuit->active_wire.is_visible = true;
+            circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
+            circuit->active_wire->is_visible = true;
         }
     }
     void HandleGateSelection(const std::shared_ptr<Component>& gate,

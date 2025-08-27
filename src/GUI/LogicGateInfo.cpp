@@ -18,10 +18,10 @@ namespace GUI
             return;
         }
 
-        std::vector<IInputHandler*> handlers = InputResolver::getSelectedHandler();
-        if(handlers.size() == 1 )
+        std::vector<std::weak_ptr<IInputHandler>> handlers = InputResolver::getSelectedHandler();
+        if(handlers.size() == 1 && handlers[0].lock())
         {
-            GUITools_BasicLogicDisplay_draw(handlers[0]);
+            GUITools_BasicLogicDisplay_draw(handlers[0].lock().get());
         }
     }
     void LogicGateInfo::Update(std::shared_ptr<CircuitController> circuit)
@@ -227,13 +227,13 @@ namespace GUI
         // Update connections
         for (auto& conn : logicGate->circuit->connections)
         {
-            if (conn.targetGate.get() == logicGate && conn.targetLogic == oldName)
+            if (conn.get()->targetGate.get() == logicGate && conn.get()->targetLogic == oldName)
             {
-                conn.targetLogic = newName;
+                conn.get()->targetLogic = newName;
             }
-            else if ( conn.sourceGate.get() == logicGate && conn.sourceLogic == oldName)
+            else if ( conn.get()->sourceGate.get() == logicGate && conn.get()->sourceLogic == oldName)
             {
-                conn.sourceLogic = newName;
+                conn.get()->sourceLogic = newName;
             }
         }
 

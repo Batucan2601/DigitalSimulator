@@ -21,15 +21,27 @@ namespace CircuitElements
                                 const std::string& targetInput)
     {
         this->m_logger.info("Connection added to the circuit.");
-        Connection c;
-        c.sourceGate = sourceGate;
-        c.sourceLogic = sourceOutput;
-        c.targetGate = targetGate;
-        c.targetLogic = targetInput;
-        c.circuit = this;
+        std::shared_ptr<Connection> c = std::make_shared<Connection>();
+        c->sourceGate = sourceGate;
+        c->sourceLogic = sourceOutput;
+        c->targetGate = targetGate;
+        c->targetLogic = targetInput;
+        c->circuit = this;
+
+
         this->connections.push_back(c);
     }
+    std::shared_ptr<Connection> Circuit::getConnectionPtr(Connection* conn) {
+        if (!conn) {
+            throw std::invalid_argument("Null pointer passed to getConnectionPtr");
+        }
 
+        // Dummy shared_ptr that owns nothing
+        std::shared_ptr<Connection> owner(nullptr, [](Connection*){});
+
+        // Aliasing constructor: shares ownership with 'owner' but points to conn
+        return std::shared_ptr<Connection>(owner, conn);
+    }
     void Circuit::removeComponent()
     {
         for (size_t i = 0; i < this->gates.size(); ++i)
@@ -39,8 +51,8 @@ namespace CircuitElements
                 // Remove associated connections
                 for (size_t j = 0; j < this->connections.size(); ++j)
                 {
-                    if (this->connections[j].sourceGate == this->gates[i] ||
-                        this->connections[j].targetGate == this->gates[i])
+                    if (this->connections[j].get()->sourceGate == this->gates[i] ||
+                        this->connections[j].get()->targetGate == this->gates[i])
                     {
                         this->connections.erase(this->connections.begin() + j);
                         j--;
@@ -48,7 +60,7 @@ namespace CircuitElements
                 }
 
                 // Remove from gates
-                InputResolver::UnregisterHandler(this->gates[i].get());
+                InputResolver::UnregisterHandler(this->gates[i]);
                 this->gates.erase(this->gates.begin() + i);
                 i--;
             }
@@ -60,7 +72,8 @@ namespace CircuitElements
         {
             return false; 
         }
-        InputResolver::UnregisterHandler((IInputHandler*)&this->connections[index]);
+        std::shared_ptr<Connection> con =   this->connections[index];
+        InputResolver::UnregisterHandler(con);
         this->connections.erase(this->connections.begin() + index );
         return true; 
     }
@@ -68,8 +81,8 @@ namespace CircuitElements
     {
         for (int i = 0; i < (int)this->connections.size() ;  i++ ) 
         {
-            if( con->sourceGate == this->connections[i].sourceGate &&
-            con->targetGate == this->connections[i].targetGate)
+            if( con->sourceGate == this->connections[i].get()->sourceGate &&
+            con->targetGate == this->connections[i].get()->targetGate)
             {
                 removeConnection(i);
             }
@@ -107,10 +120,10 @@ namespace CircuitElements
             // Then, update the inputs based on the connections.
             for (auto& conn : connections)
             {
-                std::vector<SignalVal> sourceValue = conn.sourceGate->getOutput(conn.sourceLogic);
-                if (conn.targetLogic != "")
+                std::vector<SignalVal> sourceValue = conn.get()->sourceGate->getOutput(conn.get()->sourceLogic);
+                if (conn.get()->targetLogic != "")
                 {
-                    conn.targetGate->setInput(conn.targetLogic, sourceValue);
+                    conn.get()->targetGate->setInput(conn.get()->targetLogic, sourceValue);
                 }
             }
             iterations++;
@@ -160,15 +173,13 @@ namespace CircuitElements
             circuit->addConnection(
                 possibleConnection.sourceGate, possibleConnection.sourceLogic,
                 possibleConnection.targetGate, possibleConnection.targetLogic);
-            this->circuit->active_wire.is_visible = true;
-            this->circuit->active_wire.start = hovering.pos;
-            this->circuit->active_wire.end = hovering.pos; 
-            InputResolver::RegisterHandler(
-                static_cast<IInputHandler*>(&(circuit->active_wire)));
+            this->circuit->active_wire->is_visible = true;
+            this->circuit->active_wire->start = hovering.pos;
+            this->circuit->active_wire->end = hovering.pos; 
+            InputResolver::RegisterHandler((circuit->active_wire));
             
-            std::vector<IInputHandler*> handler = {&circuit->connections[circuit->connections.size() - 1]};
-            InputResolver::setSelectedHandler(
-                handler);
+            std::vector<std::weak_ptr<IInputHandler>> handler = {circuit->connections[circuit->connections.size() - 1]};
+            InputResolver::setSelectedHandler(handler);
         }
     }
     void Connection::OnRightClick(const InputEvent& event)
@@ -184,12 +195,12 @@ namespace CircuitElements
             bool isCol = CheckCollisionPointRec(pos, bd);
             if (isCol)
             {
-                 InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
+                 InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
                  RaylibHelper::Show(4);
                  return;
             }
         }
-        InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
+        InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
     }
     void Connection::OnMove(const InputEvent& event)
     {
@@ -257,11 +268,16 @@ namespace CircuitElements
     {
         (void)event;
         
-        if( InputResolver::getSelectedHandler().size() !=  1)
+        if( InputResolver::getSelectedHandler().size() !=  1 )
         {
             return; 
         }
-        if (Connection* d1 = dynamic_cast<Connection*>(InputResolver::getSelectedHandler()[0]))
+        if( !InputResolver::getSelectedHandler()[0].lock())
+        {
+            return; 
+        }
+        IInputHandler* selectedHandler = (InputResolver::getSelectedHandler()[0].lock().get());
+        if (Connection* d1 = dynamic_cast<Connection*>(selectedHandler))
         {
             if (this->start.x == this->end.x && this->start.y == this->end.y)
             {
@@ -287,21 +303,25 @@ namespace CircuitElements
             if (d1->is_connected)
             {
                 this->is_visible = false;
-                InputResolver::setSelectedHandler(std::vector<IInputHandler*>());
+                InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
             }
         }
     }
     void ActiveWire::OnRightClick(const InputEvent& event)
     {
         (void)event;
-        if( InputResolver::getSelectedHandler().size() != 1 )
+        if( InputResolver::getSelectedHandler().size() != 1)
         {
             return; 
         }
-        if (this == (InputResolver::getSelectedHandler()[0])
+        if(!InputResolver::getSelectedHandler()[0].lock() )
+        {
+            return;
+        }
+        if (this == (InputResolver::getSelectedHandler()[0].lock().get())
         )
         {
-            InputResolver::UnregisterHandler(this);
+            InputResolver::UnregisterHandler(shared_from_this());
         }
     }
 }  // namespace CircuitElements

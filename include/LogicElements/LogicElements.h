@@ -44,7 +44,7 @@ namespace CircuitElements
         void OnRightClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
     };
-    class ActiveWire : public IInputHandler
+    class ActiveWire : public IInputHandler , public std::enable_shared_from_this<ActiveWire>
     {
       public:
         Vector2 start;
@@ -69,12 +69,15 @@ namespace CircuitElements
         {
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
+            this->active_wire  = std::make_shared<ActiveWire>();
         }
         void addGate(std::shared_ptr<Component> gate);
         void addConnection(std::shared_ptr<Component> sourceGate,
                            const std::string& sourceOutput,
                            std::shared_ptr<Component> targetGate,
                            const std::string& targetInput);
+
+        std::shared_ptr<Connection> getConnectionPtr(Connection* conn);
         void evaluate();
         int giveNewId();
         bool removeConnection(int index);
@@ -83,10 +86,10 @@ namespace CircuitElements
 
         std::vector<std::shared_ptr<Component>> gates;
         // std::shared_ptr<std::vector<LogicElements::LogicGate> gates;
-        std::vector<Connection> connections;
+        std::vector<std::shared_ptr<Connection>> connections;
         // TODO
         // this might be moved to a better data structure
-        ActiveWire active_wire = {};
+        std::shared_ptr<ActiveWire> active_wire;
         SelectedWires selected_wires;
 
         bool is_GUIdragdropped = false;

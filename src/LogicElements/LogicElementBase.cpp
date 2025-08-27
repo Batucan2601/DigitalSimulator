@@ -22,7 +22,6 @@ namespace LogicElements
         // type = CircuitElements::ComponentType;
         m_texture = compTexture_getTexture(componentType);
         m_logger.info("LogicGate created as type: " + std::to_string(static_cast<int>(m_type)));
-        InputResolver::RegisterHandler(this);
     }
 
     LogicGate::~LogicGate()
