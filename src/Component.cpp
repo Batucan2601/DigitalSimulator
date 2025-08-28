@@ -272,6 +272,9 @@ void Component::OnLeftClick(const InputEvent& event)
     }
     // ok first look at the selected handler, check if it is a logic gate
     CircuitElements::Connection possibleConnection;
+    
+    auto controller = CircuitController::getInstance();
+    auto circuit = CircuitController::getInstance()->getCircuit();
     if (!circuit->active_wire->is_visible)  // we are not building a connection
     {
         // it cannot be a connection end
@@ -382,9 +385,11 @@ Vector2 dif;
 
 void UpdateConnection(Component* gate)
 {
-    for (size_t i = 0; i < gate->circuit->connections.size(); i++)
+    auto controller = CircuitController::getInstance();
+    auto circuit = CircuitController::getInstance()->getCircuit();
+    for (size_t i = 0; i < circuit->connections.size(); i++)
     {
-        CircuitElements::Connection* c = gate->circuit->connections[i].get();
+        CircuitElements::Connection* c = circuit->connections[i].get();
         if (c->sourceGate.get() == gate)
         {
             std::string name = c->sourceLogic;
@@ -435,9 +440,11 @@ void UpdateConnection(Component* gate)
 }
 void ReducePhysicalWires(Component* gate)
 {
-    for (size_t i = 0; i < gate->circuit->connections.size(); i++)
+    auto controller = CircuitController::getInstance();
+    auto circuit = CircuitController::getInstance()->getCircuit();
+    for (size_t i = 0; i < circuit->connections.size(); i++)
     {
-        CircuitElements::Connection* c = gate->circuit->connections[i].get();
+        CircuitElements::Connection* c = circuit->connections[i].get();
         if (c->sourceGate.get() == gate || c->targetGate.get() == gate)
         {
             std::vector<unsigned int> indices_destroyed;
@@ -566,7 +573,7 @@ void Component::OnRelease(const InputEvent& event)
             rec.x = v.x + dif.x;
             rec.y = v.y + dif.y;
             Vector2 v = Utils::SnapToNearestGrid(rec);
-            this->controller->moveComponent( shared_from_this(), posBeforeDrag, v);
+            CircuitController::getInstance()->moveComponent( shared_from_this(), posBeforeDrag, v);
         }
         isFirst = true;
         isDragging = false;
@@ -597,6 +604,7 @@ void Component::OnEnter(const InputEvent& event)
     // update the circuit->hoveredGate with this object
     (void)event;
     
+    
     if(!InputResolver::getSelectedHandler()[0].lock() )
     {
         return; 
@@ -604,7 +612,8 @@ void Component::OnEnter(const InputEvent& event)
     if (this == InputResolver::getSelectedHandler()[0].lock().get() &&
         InputResolver::getSelectedHandler().size() == 1 )
     {
-        circuit->hoveredGate = shared_from_this();
+        
+        CircuitController::getInstance()->getCircuit()->hoveredGate = shared_from_this();
     }
 }
 void Component::OnExit(const InputEvent& event)
@@ -625,7 +634,7 @@ void Component::OnKeyPress(const InputEvent& event)
                 this->m_mark_for_deletion = true; 
             }
         }
-        this->controller->removeComponent(this->shared_from_this());
+        CircuitController::getInstance()->removeComponent(this->shared_from_this());
     }
 }
 

@@ -67,6 +67,8 @@ void InputElement::OnLeftClick(const InputEvent& event)
    }
    // ok first look at the selected handler, check if it is a logic gate
    CircuitElements::Connection possibleConnection;
+   auto controller = CircuitController::getInstance();
+   auto circuit = CircuitController::getInstance()->getCircuit();
    if (!circuit->active_wire->is_visible)  // we are not building a connection
    {
        // it cannot be a connection end

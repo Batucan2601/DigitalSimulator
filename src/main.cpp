@@ -35,7 +35,7 @@ int main(void) {
   std::string input1_logger = "Input1";
   std::string input2_logger = "input2";
 
-  circuitController = CircuitController::create(circuit_logger);
+  circuitController = CircuitController::getInstance(circuit_logger);
   //std::make_shared<CircuitController>(circuit_logger);
 
   /*auto gate1 =
@@ -109,10 +109,6 @@ int main(void) {
 
 void setLoadedCircuit(SP_Circuit loadedCircuit) {
   circuitController->setCircuit(loadedCircuit);
-  for (size_t i = 0; i < loadedCircuit->gates.size(); i++) 
-  {
-    loadedCircuit->gates[i]->controller = circuitController;
-  }
 }
 void addComponent(std::shared_ptr<Component> c) {
   circuitController->addComponent(c);

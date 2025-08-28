@@ -4,12 +4,17 @@
 #include "SelectionHandler.h"
 class CircuitController : public IInputHandler, public std::enable_shared_from_this<CircuitController>{
     public:
-    static std::shared_ptr<CircuitController> create(std::string logger_name) {
-        auto controller = std::shared_ptr<CircuitController>(
-            new CircuitController(logger_name)
-        );
-        controller->postInit();
-        return controller;
+
+    static std::shared_ptr<CircuitController> getInstance(std::string logger_name = "circuit") {
+        static std::shared_ptr<CircuitController> instance{new CircuitController(logger_name)};
+            static bool initialized = false;
+
+            if (!initialized) {
+                instance->postInit();
+                initialized = true;
+            }
+
+            return instance;
         }
         void postInit() {
         InputResolver::RegisterHandler(shared_from_this());

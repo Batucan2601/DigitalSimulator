@@ -225,7 +225,9 @@ namespace GUI
             }
         }
         // Update connections
-        for (auto& conn : logicGate->circuit->connections)
+        auto controller = CircuitController::getInstance();
+        auto circuit = CircuitController::getInstance()->getCircuit();
+        for (auto& conn : circuit->connections)
         {
             if (conn.get()->targetGate.get() == logicGate && conn.get()->targetLogic == oldName)
             {
@@ -244,10 +246,12 @@ namespace GUI
         // This function checks if the names of inputs and outputs are unique.
         // If not, it returns false.
         // For now, we assume that the names are unique.
-        for (size_t i = 0; i < component->circuit->gates.size(); i++)
+        auto controller = CircuitController::getInstance();
+        auto circuit = CircuitController::getInstance()->getCircuit();
+        for (size_t i = 0; i < circuit->gates.size(); i++)
         {
-            if (component->circuit->gates[i]->m_name == component->m_name &&
-                component->circuit->gates[i].get() != component)
+            if (circuit->gates[i]->m_name == component->m_name &&
+                circuit->gates[i].get() != component)
             {
                 ImGui::TextColored({1.0f, 0.0f, 0.0f, 1.0f}, "Name already exists!");
                 return false;  // Name is not unique

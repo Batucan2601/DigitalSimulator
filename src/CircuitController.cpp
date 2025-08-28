@@ -5,8 +5,6 @@ CircuitController::CircuitController(std::string logger_name)
       undoManager(std::make_unique<Command::UndoManager>()),
       multiSelection(std::make_shared<SelectionTool>(circuit))
 {
-    //InputResolver::RegisterHandler(shared_from_this());
-    //InputResolver::RegisterHandler(multiSelection);
 }
 
 SP_Circuit CircuitController::getCircuit() const
@@ -30,7 +28,6 @@ void CircuitController::addComponent(std::shared_ptr<Component> component)
     {
         //circuit->addGate(component);
         undoManager->execute(std::make_unique<Command::AddComponentCommand>(circuit, component));
-        component->controller = shared_from_this();  // Set the controller for the component
     }
 }
 

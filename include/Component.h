@@ -202,7 +202,6 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     ClassLogger m_logger; 
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;
-    CircuitElements::Circuit* circuit;
     int id;
     CircuitElements::ComponentType m_type;
     Texture2D m_texture;
@@ -211,7 +210,6 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     bool is_hovered = false; 
     std::unordered_set<GateObserver*> observers;       // Stores registered observers
     std::function<void(Component&)> evaluateFunction;  // Stores gate logic
-    std::shared_ptr<CircuitController> controller; // Pointer to the CircuitController for managing circuit operations
     virtual nlohmann::json serialize() const = 0;
     protected:
         virtual void OnLeftClick(const InputEvent& event);

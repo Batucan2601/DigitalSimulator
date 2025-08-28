@@ -1,5 +1,6 @@
 #include "JsonSerializer.h"
 #include "LogicElements/logicElementFactory.h"
+#include "CircuitController.h"
 
 SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
 {
@@ -25,6 +26,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     std::unordered_map<int, std::shared_ptr<Component>> gateMap;
 
     // Load gates
+    auto controller = CircuitController::getInstance();
     for (const auto& gateJson : j["gates"])
     {
         std::string logger = "LoggerName";
@@ -51,7 +53,6 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         } 
         gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
-        gate->circuit = circuit.get();
         circuit.get()->gates.push_back(gate);
     }
     for (const auto& gateJson : j["inputs"])
@@ -76,7 +77,6 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         }
         gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
-        gate->circuit = circuit.get();
         circuit.get()->gates.push_back(gate);
     }
     // Load connections
@@ -96,7 +96,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         conn.physCon.wires = connJson["wires"].get<std::vector<Vector2>>();
         conn.is_connected = true;
     }
-
+    controller->setCircuit(circuit);
     return circuit;
 }
 /*void to_json(json& j, const Component& comp)

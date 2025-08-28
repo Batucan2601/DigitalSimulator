@@ -10,7 +10,6 @@ namespace CircuitElements
     void Circuit::addGate(std::shared_ptr<Component> gate)
     {
         this->m_logger.info("Gate added to the circuit.");
-        gate->circuit = this;
         gate->id = this->giveNewId();  // Assign a unique ID
         gates.push_back(gate);
     }
