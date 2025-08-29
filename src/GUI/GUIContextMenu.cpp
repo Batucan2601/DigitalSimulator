@@ -12,7 +12,7 @@ namespace GUI
         if (visible) // only true on the frame right-click happens
         {
             ImGui::OpenPopup("ComponentContextMenu");
-            InputResolver::UnregisterHandler(circuitController->getCircuit()->active_wire);
+            InputResolver::UnregisterHandler(circuitController->getCircuit()->active_wire->getInstance());
             visible = false; // reset immediately after opening
         }
         if (ImGui::BeginPopup("ComponentContextMenu"))

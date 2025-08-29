@@ -44,18 +44,25 @@ namespace CircuitElements
         void OnRightClick(const InputEvent& event);
         void OnMove(const InputEvent& event);
     };
-    class ActiveWire : public IInputHandler , public std::enable_shared_from_this<ActiveWire>
+    class ActiveWire : public IInputHandler, public std::enable_shared_from_this<ActiveWire>
     {
       public:
-        Vector2 start;
-        Vector2 end;
-        bool is_registered; 
-        void OnInputEvent( InputEvent& event) override;
+          Vector2 start;
+          Vector2 end;
+          bool is_registered;
+
+          void OnInputEvent(InputEvent& event) override;
+
+          static std::shared_ptr<ActiveWire> getInstance() {
+              static std::shared_ptr<ActiveWire> instance(new ActiveWire());
+              return instance;
+          }
 
       private:
-        void OnMove(const InputEvent& event);
-        void OnLeftClick(const InputEvent& event);
-        void OnRightClick(const InputEvent& event);
+          ActiveWire() = default;  // force singleton usage
+          void OnMove(const InputEvent& event);
+          void OnLeftClick(const InputEvent& event);
+          void OnRightClick(const InputEvent& event);
     };
     struct SelectedWires
     {
@@ -69,7 +76,7 @@ namespace CircuitElements
         {
             this->hoveredGate = nullptr;
             this->connections.reserve(1000);
-            this->active_wire  = std::make_shared<ActiveWire>();
+            this->active_wire = ActiveWire::getInstance();
         }
         void addGate(std::shared_ptr<Component> gate);
         void addConnection(std::shared_ptr<Component> sourceGate,

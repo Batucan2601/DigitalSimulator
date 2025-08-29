@@ -69,7 +69,7 @@ void InputElement::OnLeftClick(const InputEvent& event)
    CircuitElements::Connection possibleConnection;
    auto controller = CircuitController::getInstance();
    auto circuit = CircuitController::getInstance()->getCircuit();
-   if (!circuit->active_wire->is_registered)  // we are not building a connection
+   if (!circuit->active_wire->getInstance()->is_registered)  // we are not building a connection
    {
        // it cannot be a connection end
        // it can be a connection start, or gate select
@@ -80,10 +80,10 @@ void InputElement::OnLeftClick(const InputEvent& event)
            circuit->addConnection(
                possibleConnection.sourceGate, possibleConnection.sourceLogic,
                possibleConnection.targetGate, possibleConnection.targetLogic);
-           circuit->active_wire->is_registered = true;
-           circuit->active_wire->start = pos;
-           circuit->active_wire->end = pos;
-           InputResolver::RegisterHandler(circuit->active_wire);
+           circuit->active_wire->getInstance()->is_registered = true;
+           circuit->active_wire->getInstance()->start = pos;
+           circuit->active_wire->getInstance()->end = pos;
+           InputResolver::RegisterHandler(circuit->active_wire->getInstance());
            std::vector<std::weak_ptr<IInputHandler>> vec = {circuit->connections[circuit->connections.size() - 1]};
            InputResolver::setSelectedHandler(vec);
        }

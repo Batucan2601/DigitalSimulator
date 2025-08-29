@@ -210,22 +210,24 @@ namespace LogicElementsDraw
         //DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
 
         // 3 - DrawActiveWire
-        if (circuit->active_wire->is_registered)
+        if (circuit->active_wire->getInstance()->is_registered)
         {
-            Rectangle rec = {circuit->active_wire->start.x, circuit->active_wire->start.y, 0, 0};
-            circuit->active_wire->start = Utils::SnapToNearestGrid(rec);
-            rec = {circuit->active_wire->end.x, circuit->active_wire->end.y, 0, 0};
-            circuit->active_wire->end = Utils::SnapToNearestGrid(rec);
+            Rectangle rec = {circuit->active_wire->getInstance()->start.x, 
+            circuit->active_wire->getInstance()->start.y, 0, 0};
+            circuit->active_wire->getInstance()->start = Utils::SnapToNearestGrid(rec);
+            rec = {circuit->active_wire->getInstance()->end.x, 
+            circuit->active_wire->getInstance()->end.y, 0, 0};
+            circuit->active_wire->getInstance()->end = Utils::SnapToNearestGrid(rec);
 
-            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire->start,
-                                                                      circuit->active_wire->end);
-            DrawLine(circuit->active_wire->start.x, circuit->active_wire->start.y, straight_line.x,
-                     straight_line.y, GREEN);
-            DrawLine(straight_line.x, straight_line.y, circuit->active_wire->end.x,
-                     circuit->active_wire->end.y, GREEN);
+            Vector2 straight_line = Controls::Generate_straight_lines(circuit->active_wire->getInstance()->start,
+                                                                      circuit->active_wire->getInstance()->end);
+            DrawLine(circuit->active_wire->getInstance()->start.x, circuit->active_wire->getInstance()->start.y,
+             straight_line.x,straight_line.y, GREEN);
+            DrawLine(straight_line.x, straight_line.y, circuit->active_wire->getInstance()->end.x,
+                     circuit->active_wire->getInstance()->end.y, GREEN);
 
-            DrawInteractableWirePoints(circuit->active_wire->start, straight_line, GREEN);
-            DrawInteractableWirePoints(straight_line, circuit->active_wire->end, GREEN);
+            DrawInteractableWirePoints(circuit->active_wire->getInstance()->start, straight_line, GREEN);
+            DrawInteractableWirePoints(straight_line, circuit->active_wire->getInstance()->end, GREEN);
         }
 
         if (circuit->is_GUIdragdragging)

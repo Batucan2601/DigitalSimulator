@@ -276,7 +276,7 @@ void Component::OnLeftClick(const InputEvent& event)
     
     auto controller = CircuitController::getInstance();
     auto circuit = CircuitController::getInstance()->getCircuit();
-    if (!circuit->active_wire->is_registered)  // we are not building a connection
+    if (!circuit->active_wire->getInstance()->is_registered)  // we are not building a connection
     {
         // it cannot be a connection end
         // it can be a connection start, or gate select
@@ -289,10 +289,10 @@ void Component::OnLeftClick(const InputEvent& event)
             /*circuit->addConnection(
                 possibleConnection.sourceGate, possibleConnection.sourceLogic,
                 possibleConnection.targetGate, possibleConnection.targetLogic);*/
-            circuit->active_wire->is_registered = true;
-            circuit->active_wire->start = pos;
-            circuit->active_wire->end = pos;
-            InputResolver::RegisterHandler((circuit->active_wire));
+            circuit->active_wire->getInstance()->is_registered = true;
+            circuit->active_wire->getInstance()->start = pos;
+            circuit->active_wire->getInstance()->end = pos;
+            InputResolver::RegisterHandler((circuit->active_wire->getInstance()));
             std::vector<std::weak_ptr<IInputHandler>>  handler = {circuit->connections[circuit->connections.size() - 1]};
              
             InputResolver::setSelectedHandler(handler);
@@ -396,55 +396,7 @@ void UpdateConnection(Component* gate)
         Vector2 posEnd = c->targetGate->inputs[ c->targetGate->getInputByName(c->targetLogic) ].pos;
         Vector2 pos  = Controls::Generate_straight_lines(posStart , posEnd);
         c->physCon.wires = std::vector<Vector2>{posStart , pos , posEnd};
-        //Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
     }
-    //     if (c->sourceGate.get() == gate)
-    //     {
-    //         std::string name = c->sourceLogic;
-    //         for (size_t j = 0; j < gate->outputs.size(); j++)
-    //         {
-    //             if (name == gate->outputs[j].name && c->physCon.wires.size() > 0)
-    //             {
-                 
-    //                 Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
-    //                 Vector2 newPos = Utils::SnapToNearestGrid(rec);
-    //                 Vector2 newLine =
-    //                 Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
-    //                 c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
-    //                 if (!(newLine.x == c->physCon.wires[0].x &&
-    //                         newLine.y == c->physCon.wires[0].y))
-    //                 {
-    //                     c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     if (c->targetGate.get() == gate)
-    //     {
-    //         std::string name = c->targetLogic;
-    //         for (size_t j = 0; j < gate->inputs.size(); j++)
-    //         {
-    //             if (name == gate->inputs[j].name)
-    //             {
-    //                 Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
-    //                 Vector2 newPos = Utils::SnapToNearestGrid(rec);
-    //                 int last_index = c->physCon.wires.size() - 1;
-    //                 if( last_index < 0 )
-    //                 {
-    //                     return;
-    //                 }
-    //                 Vector2 newLine =
-    //                     Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
-    //                 c->physCon.wires.push_back(newLine);
-    //                 if (!(newLine.x == c->physCon.wires[last_index].x &&
-    //                         newLine.y == c->physCon.wires[last_index].y))
-    //                 {
-    //                     c->physCon.wires.push_back(newPos);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
 void ReducePhysicalWires(Component* gate)
 {

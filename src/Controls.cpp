@@ -174,9 +174,9 @@ namespace Controls
                     if (is_logic_selected)
                     {
                         Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                        circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-                        circuit->active_wire->is_registered = true;
-                        InputResolver::RegisterHandler(circuit->active_wire);
+                        circuit->active_wire->getInstance()->start = Utils::SnapToNearestGrid(pos);
+                        circuit->active_wire->getInstance()->is_registered = true;
+                        InputResolver::RegisterHandler(circuit->active_wire->getInstance());
                     }
                     break;
                 }
@@ -189,9 +189,9 @@ namespace Controls
                 if (is_logic_selected)  // this section checks what happens when you touch a wire
                 {
                     Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-                    circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-                    circuit->active_wire->is_registered = true;
-                    InputResolver::RegisterHandler(circuit->active_wire);
+                    circuit->active_wire->getInstance()->start = Utils::SnapToNearestGrid(pos);
+                    circuit->active_wire->getInstance()->is_registered = true;
+                    InputResolver::RegisterHandler(circuit->active_wire->getInstance());
                     // get which line it belongs to
                     CircuitElements::Connection new_connection;
                     new_connection.sourceGate = con.sourceGate;
@@ -272,8 +272,8 @@ namespace Controls
                         connection_end.sourceLogic;
                     circuit->connections[circuit->connections.size() - 1].get()->is_connected = true;
                     is_logic_selected = false;
-                    circuit->active_wire->is_registered = false;
-                    InputResolver::UnregisterHandler(circuit->active_wire);
+                    circuit->active_wire->getInstance()->is_registered = false;
+                    InputResolver::UnregisterHandler(circuit->active_wire->getInstance());
                 }
                 break;
             }
@@ -281,9 +281,9 @@ namespace Controls
         if (is_logic_selected)
         {
             Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
-            circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-            circuit->active_wire->is_registered = true;
-            InputResolver::RegisterHandler(circuit->active_wire);
+            circuit->active_wire->getInstance()->start = Utils::SnapToNearestGrid(pos);
+            circuit->active_wire->getInstance()->is_registered = true;
+            InputResolver::RegisterHandler(circuit->active_wire->getInstance());
         }
     }
     void HandleGateSelection(const std::shared_ptr<Component>& gate,

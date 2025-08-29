@@ -164,7 +164,11 @@ namespace CircuitElements
     {
         (void)event;
         // if hovering, create a new wire
-        if (hovering.is_hovering && !this->circuit->active_wire->is_registered)
+        Connection temp;
+        bool isOnOut = this->sourceGate->CheckMouseOnInOut(event.pos ,temp );
+        bool isOnIn = this->targetGate->CheckMouseOnInOut(event.pos ,temp );
+        if (hovering.is_hovering && !this->circuit->active_wire->getInstance()->is_registered
+        && !isOnIn && !isOnOut)
         {
             CircuitElements::Connection possibleConnection;
             possibleConnection.sourceGate = this->sourceGate;
@@ -172,10 +176,10 @@ namespace CircuitElements
             CircuitController::getInstance()->addConnection(
                 possibleConnection.sourceGate,possibleConnection.targetGate,
                  possibleConnection.sourceLogic,possibleConnection.targetLogic);
-            this->circuit->active_wire->is_registered = true;
-            this->circuit->active_wire->start = hovering.pos;
-            this->circuit->active_wire->end = hovering.pos; 
-            InputResolver::RegisterHandler((circuit->active_wire));
+            this->circuit->active_wire->getInstance()->is_registered = true;
+            this->circuit->active_wire->getInstance()->start = hovering.pos;
+            this->circuit->active_wire->getInstance()->end = hovering.pos; 
+            InputResolver::RegisterHandler((circuit->active_wire->getInstance()));
             
             std::vector<std::weak_ptr<IInputHandler>> handler = {circuit->connections[circuit->connections.size() - 1]};
             InputResolver::setSelectedHandler(handler);
