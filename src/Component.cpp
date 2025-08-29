@@ -386,58 +386,65 @@ Vector2 dif;
 
 void UpdateConnection(Component* gate)
 {
+    (void) gate; 
     auto controller = CircuitController::getInstance();
     auto circuit = CircuitController::getInstance()->getCircuit();
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
         CircuitElements::Connection* c = circuit->connections[i].get();
-        if (c->sourceGate.get() == gate)
-        {
-            std::string name = c->sourceLogic;
-            for (size_t j = 0; j < gate->outputs.size(); j++)
-            {
-                if (name == gate->outputs[j].name && c->physCon.wires.size() > 0)
-                {
-                 
-                    Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
-                    Vector2 newPos = Utils::SnapToNearestGrid(rec);
-                    Vector2 newLine =
-                    Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
-                    c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
-                    if (!(newLine.x == c->physCon.wires[0].x &&
-                            newLine.y == c->physCon.wires[0].y))
-                    {
-                        c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
-                    }
-                }
-            }
-        }
-        if (c->targetGate.get() == gate)
-        {
-            std::string name = c->targetLogic;
-            for (size_t j = 0; j < gate->inputs.size(); j++)
-            {
-                if (name == gate->inputs[j].name)
-                {
-                    Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
-                    Vector2 newPos = Utils::SnapToNearestGrid(rec);
-                    int last_index = c->physCon.wires.size() - 1;
-                    if( last_index < 0 )
-                    {
-                        return;
-                    }
-                    Vector2 newLine =
-                        Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
-                    c->physCon.wires.push_back(newLine);
-                    if (!(newLine.x == c->physCon.wires[last_index].x &&
-                            newLine.y == c->physCon.wires[last_index].y))
-                    {
-                        c->physCon.wires.push_back(newPos);
-                    }
-                }
-            }
-        }
+        Vector2 posStart = c->sourceGate->outputs[ c->sourceGate->getOutputByName(c->sourceLogic) ].pos;
+        Vector2 posEnd = c->targetGate->inputs[ c->targetGate->getInputByName(c->targetLogic) ].pos;
+        Vector2 pos  = Controls::Generate_straight_lines(posStart , posEnd);
+        c->physCon.wires = std::vector<Vector2>{posStart , pos , posEnd};
+        //Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
     }
+    //     if (c->sourceGate.get() == gate)
+    //     {
+    //         std::string name = c->sourceLogic;
+    //         for (size_t j = 0; j < gate->outputs.size(); j++)
+    //         {
+    //             if (name == gate->outputs[j].name && c->physCon.wires.size() > 0)
+    //             {
+                 
+    //                 Rectangle rec = {gate->outputs[j].pos.x, gate->outputs[j].pos.y, 0, 0};
+    //                 Vector2 newPos = Utils::SnapToNearestGrid(rec);
+    //                 Vector2 newLine =
+    //                 Controls::Generate_straight_lines(newPos, c->physCon.wires[0]);
+    //                 c->physCon.wires.insert(c->physCon.wires.begin(), newPos);
+    //                 if (!(newLine.x == c->physCon.wires[0].x &&
+    //                         newLine.y == c->physCon.wires[0].y))
+    //                 {
+    //                     c->physCon.wires.insert(c->physCon.wires.begin() + 1, newLine);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     if (c->targetGate.get() == gate)
+    //     {
+    //         std::string name = c->targetLogic;
+    //         for (size_t j = 0; j < gate->inputs.size(); j++)
+    //         {
+    //             if (name == gate->inputs[j].name)
+    //             {
+    //                 Rectangle rec = {gate->inputs[j].pos.x, gate->inputs[j].pos.y, 0, 0};
+    //                 Vector2 newPos = Utils::SnapToNearestGrid(rec);
+    //                 int last_index = c->physCon.wires.size() - 1;
+    //                 if( last_index < 0 )
+    //                 {
+    //                     return;
+    //                 }
+    //                 Vector2 newLine =
+    //                     Controls::Generate_straight_lines(newPos, c->physCon.wires[last_index]);
+    //                 c->physCon.wires.push_back(newLine);
+    //                 if (!(newLine.x == c->physCon.wires[last_index].x &&
+    //                         newLine.y == c->physCon.wires[last_index].y))
+    //                 {
+    //                     c->physCon.wires.push_back(newPos);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 void ReducePhysicalWires(Component* gate)
 {

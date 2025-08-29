@@ -199,7 +199,7 @@ namespace Command
                 if(this->circuit->connections[i].get()->sourceGate == gate ||
                    this->circuit->connections[i].get()->targetGate == gate)
                 {
-                    this->indices.push_back(i);
+                    this->connectionsPtr.push_back(this->circuit->connections[i]);
                 }
             }
         }
@@ -208,44 +208,14 @@ namespace Command
         {
             gate->setPosition(from.x, from.y);
             
-            for (int i = 0; i < (int)this->indices.size(); i++) 
+            for (int i = 0; i < (int)this->connectionsPtr.size(); i++) 
             {
-                CircuitElements::Connection* c = this->circuit->connections[this->indices[i]].get();
-                Vector2 newWirePos; 
-                if( c->sourceGate == gate)
-                {
-                    for (size_t j = 0; j < c->sourceGate->outputs.size(); j++)
-                    {
-                        if( c->sourceGate->outputs[j] == c->sourceLogic)
-                        {
-                            newWirePos = c->sourceGate->outputs[j].pos;
-                            break; 
-                        }
-                    }
-                }
-                else //(c->targetGate == gate)
-                {
-                    for (size_t j = 0; j < c->targetGate->inputs.size(); j++)
-                    {
-                        if( c->targetGate->inputs[j] == c->targetLogic)
-                        {
-                            newWirePos = c->targetGate->inputs[j].pos;
-                            break; 
-                        }
-                    }
-                }
-                Vector2 posDif = {this->to.x - this->from.x ,this->to.y - this->from.y };
-                Vector2 oldWirePos = {newWirePos.x - posDif.x ,newWirePos.y - posDif.y};
-                for (size_t j = 0; j < c->physCon.wires.size(); j++)
-                {
-                    if( std::abs(c->physCon.wires[j].x -oldWirePos.x) <= AppSettings::appSettings.SPACING_SIZE 
-                        || std::abs(c->physCon.wires[j].y -oldWirePos.y) <= AppSettings::appSettings.SPACING_SIZE)
-                    {
-                        c->physCon.wires.erase(c->physCon.wires.begin() + j  , c->physCon.wires.end() );
-                        //isErased = true;
-                        return; 
-                    }
-                }
+                CircuitElements::Connection* c = this->connectionsPtr[i].lock().get();
+                
+                Vector2 posStart = c->sourceGate->outputs[ c->sourceGate->getOutputByName(c->sourceLogic) ].pos;
+                Vector2 posEnd = c->targetGate->inputs[ c->targetGate->getInputByName(c->targetLogic) ].pos;
+                Vector2 pos  = Controls::Generate_straight_lines(posStart , posEnd);
+                c->physCon.wires = std::vector<Vector2>{posStart , pos , posEnd};
             }
         }
 
@@ -257,7 +227,7 @@ namespace Command
     private:
         SP_Circuit circuit; 
         std::shared_ptr<Component> gate;
-        std::vector<size_t> indices; // for connections
+        std::vector<std::weak_ptr<CircuitElements::Connection>> connectionsPtr; // for connections
         Vector2 from;
         Vector2 to;
     };
