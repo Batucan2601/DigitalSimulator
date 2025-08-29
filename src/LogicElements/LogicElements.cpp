@@ -164,15 +164,15 @@ namespace CircuitElements
     {
         (void)event;
         // if hovering, create a new wire
-        if (hovering.is_hovering)
+        if (hovering.is_hovering && !this->circuit->active_wire->is_registered)
         {
             CircuitElements::Connection possibleConnection;
             possibleConnection.sourceGate = this->sourceGate;
             possibleConnection.sourceLogic = this->sourceLogic;
-            circuit->addConnection(
-                possibleConnection.sourceGate, possibleConnection.sourceLogic,
-                possibleConnection.targetGate, possibleConnection.targetLogic);
-            this->circuit->active_wire->is_visible = true;
+            CircuitController::getInstance()->addConnection(
+                possibleConnection.sourceGate,possibleConnection.targetGate,
+                 possibleConnection.sourceLogic,possibleConnection.targetLogic);
+            this->circuit->active_wire->is_registered = true;
             this->circuit->active_wire->start = hovering.pos;
             this->circuit->active_wire->end = hovering.pos; 
             InputResolver::RegisterHandler((circuit->active_wire));
@@ -278,6 +278,7 @@ namespace CircuitElements
         IInputHandler* selectedHandler = (InputResolver::getSelectedHandler()[0].lock().get());
         if (Connection* d1 = dynamic_cast<Connection*>(selectedHandler))
         {
+            std::cout << " selecting with  active wire " << std::endl;  
             if (this->start.x == this->end.x && this->start.y == this->end.y)
             {
                 return;
@@ -301,7 +302,8 @@ namespace CircuitElements
 
             if (d1->is_connected)
             {
-                this->is_visible = false;
+                this->is_registered = false;
+                InputResolver::UnregisterHandler(shared_from_this());
                 InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
             }
         }
@@ -317,9 +319,14 @@ namespace CircuitElements
         {
             return;
         }
-        if (this == (InputResolver::getSelectedHandler()[0].lock().get())
-        )
+        IInputHandler* selectedHandler = (InputResolver::getSelectedHandler()[0].lock().get());
+        if (Connection* d1 = dynamic_cast<Connection*>(selectedHandler))
         {
+            d1->physCon.wires.clear();
+        }
+        if (this->is_registered)
+        {
+            this->is_registered = false;
             InputResolver::UnregisterHandler(shared_from_this());
         }
     }

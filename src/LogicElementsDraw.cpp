@@ -45,7 +45,7 @@ namespace LogicElementsDraw
 
         if (auto* aw = dynamic_cast<CircuitElements::ActiveWire*>(h))
         {
-            if (aw->is_visible) DrawLineV(aw->start, aw->end, GREEN);
+            if (aw->is_registered) DrawLineV(aw->start, aw->end, GREEN);
             continue;
         }
 
@@ -95,7 +95,8 @@ namespace LogicElementsDraw
         // std::cout << "Time taken to draw gate: " << elapsed << " ms" << std::endl;
         SP_Circuit circuit = circuitController->getCircuit();
         
-        
+        DrawSelected();
+        circuitController->getMultiSelector()->DrawOverlay();        
         
         //SP_Circuit circuit = ; 
         // 1 - Draw gates
@@ -176,11 +177,7 @@ namespace LogicElementsDraw
                     {
                         signalColor = BLUE;
                     }
-                    DrawLineEx(start, end, LINE_THICKNESS, signalColor);
-
-                    circuit->connections[i].get()->sourceGate->m_logger.
-                    info("The value is  {} ",circuit->connections[i].get()->sourceGate->outputs[0].val);
-                   
+                    DrawLineEx(start, end, LINE_THICKNESS, signalColor);                   
                 }
                 else
                 {
@@ -213,7 +210,7 @@ namespace LogicElementsDraw
         //DrawInteractableWirePoints(circuit->selected_wires.wire_hovering, circuit->selected_wires.wire_hovering, GREEN);
 
         // 3 - DrawActiveWire
-        if (circuit->active_wire->is_visible)
+        if (circuit->active_wire->is_registered)
         {
             Rectangle rec = {circuit->active_wire->start.x, circuit->active_wire->start.y, 0, 0};
             circuit->active_wire->start = Utils::SnapToNearestGrid(rec);
@@ -242,8 +239,7 @@ namespace LogicElementsDraw
             circuit->is_GUIdragdropped = false;
         }
 
-        DrawSelected();
-        circuitController->getMultiSelector()->DrawOverlay();
+
     }
 
     void DrawInteractableWirePoints(Vector2 start, Vector2 end, Color color)

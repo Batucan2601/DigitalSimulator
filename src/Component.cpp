@@ -25,6 +25,7 @@ void InputResolver::RegisterHandler(std::weak_ptr<IInputHandler> handler)
 {
     // Optionally check if the handler is already registered.
     handlers.push_back(handler);
+    
 }
 
 void InputResolver::UnregisterHandler(std::weak_ptr<IInputHandler> handler)
@@ -275,7 +276,7 @@ void Component::OnLeftClick(const InputEvent& event)
     
     auto controller = CircuitController::getInstance();
     auto circuit = CircuitController::getInstance()->getCircuit();
-    if (!circuit->active_wire->is_visible)  // we are not building a connection
+    if (!circuit->active_wire->is_registered)  // we are not building a connection
     {
         // it cannot be a connection end
         // it can be a connection start, or gate select
@@ -288,7 +289,7 @@ void Component::OnLeftClick(const InputEvent& event)
             /*circuit->addConnection(
                 possibleConnection.sourceGate, possibleConnection.sourceLogic,
                 possibleConnection.targetGate, possibleConnection.targetLogic);*/
-            circuit->active_wire->is_visible = true;
+            circuit->active_wire->is_registered = true;
             circuit->active_wire->start = pos;
             circuit->active_wire->end = pos;
             InputResolver::RegisterHandler((circuit->active_wire));

@@ -175,7 +175,8 @@ namespace Controls
                     {
                         Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
                         circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-                        circuit->active_wire->is_visible = true;
+                        circuit->active_wire->is_registered = true;
+                        InputResolver::RegisterHandler(circuit->active_wire);
                     }
                     break;
                 }
@@ -189,7 +190,8 @@ namespace Controls
                 {
                     Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
                     circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-                    circuit->active_wire->is_visible = true;
+                    circuit->active_wire->is_registered = true;
+                    InputResolver::RegisterHandler(circuit->active_wire);
                     // get which line it belongs to
                     CircuitElements::Connection new_connection;
                     new_connection.sourceGate = con.sourceGate;
@@ -233,6 +235,7 @@ namespace Controls
 
     void HandleMouseRightClick(SP_Circuit& circuit, const Vector2& mousePosition)
     {
+        (void)circuit; 
         InputEvent event;
         event.type = InputType::Mouse;
         event.mouseState = MouseEventState::RightClick;
@@ -240,7 +243,6 @@ namespace Controls
         InputResolver::PushEvent(event);
 
         is_logic_selected = false;  // kills wiring process for sure everytime
-        circuit->active_wire->is_visible = false;
     }
     void HandleLogicWiring(SP_Circuit circuit, const Vector2& mousePosition)
     {
@@ -270,7 +272,8 @@ namespace Controls
                         connection_end.sourceLogic;
                     circuit->connections[circuit->connections.size() - 1].get()->is_connected = true;
                     is_logic_selected = false;
-                    circuit->active_wire->is_visible = false;
+                    circuit->active_wire->is_registered = false;
+                    InputResolver::UnregisterHandler(circuit->active_wire);
                 }
                 break;
             }
@@ -279,7 +282,8 @@ namespace Controls
         {
             Rectangle pos = {mousePosition.x, mousePosition.y, 0, 0};
             circuit->active_wire->start = Utils::SnapToNearestGrid(pos);
-            circuit->active_wire->is_visible = true;
+            circuit->active_wire->is_registered = true;
+            InputResolver::RegisterHandler(circuit->active_wire);
         }
     }
     void HandleGateSelection(const std::shared_ptr<Component>& gate,

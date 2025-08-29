@@ -49,7 +49,7 @@ namespace CircuitElements
       public:
         Vector2 start;
         Vector2 end;
-        bool is_visible;
+        bool is_registered; 
         void OnInputEvent( InputEvent& event) override;
 
       private:

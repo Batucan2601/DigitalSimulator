@@ -22,6 +22,11 @@ public:
         if (!dragging && e.mouseState == MouseEventState::Down && !e.consumed
         && InputResolver::getDragMode() == DragMode::Normal  ) 
         {
+            if(circuit->active_wire->is_registered)
+            {
+                circuit->active_wire->is_registered =  false; 
+                InputResolver::UnregisterHandler(circuit->active_wire);
+            }
             //InputResolver::setSelectedHandler(std::vector<IInputHandler*>{});
             // boş alan tespiti
             if (!hitAnyComponent(e.pos)) 
