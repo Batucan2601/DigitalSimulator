@@ -575,6 +575,7 @@ void Component::OnRelease(const InputEvent& event)
         if (is_other_gate_exist)
         {
             this->setPosition(posBeforeDrag.x, posBeforeDrag.y);
+            UpdateConnection(this);
         }
         else
         {
