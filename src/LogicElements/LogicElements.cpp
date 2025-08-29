@@ -314,6 +314,21 @@ namespace CircuitElements
     }
     void ActiveWire::OnRightClick(const InputEvent& event)
     {
+        if (this->is_registered)
+        {
+            this->is_registered = false;
+            InputResolver::UnregisterHandler(shared_from_this());
+        }
+        //destroy every half baked connection
+        std::vector<std::shared_ptr<Connection>> cons = CircuitController::getInstance()->getCircuit()->connections;   
+        for (size_t i = 0; i < cons.size(); i++)
+        {
+            if(cons[i].get()->sourceGate == nullptr ||  cons[i].get()->targetGate == nullptr )
+            {
+                CircuitController::getInstance()->getCircuit()->removeConnection(cons[i].get());
+            }
+        }
+        
         (void)event;
         if( InputResolver::getSelectedHandler().size() != 1)
         {
@@ -328,10 +343,6 @@ namespace CircuitElements
         {
             d1->physCon.wires.clear();
         }
-        if (this->is_registered)
-        {
-            this->is_registered = false;
-            InputResolver::UnregisterHandler(shared_from_this());
-        }
+        
     }
 }  // namespace CircuitElements

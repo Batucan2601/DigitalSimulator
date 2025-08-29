@@ -45,7 +45,7 @@ void Clock::setInOutPositions()
         this->outputs[i].pos = {x, y};
     }
     //reset
-    float x = this->bd.x + this->bd.width / 2;
+    float x = this->bd.x + AppSettings::appSettings.SPACING_SIZE;
     float y = this->bd.y;
     this->inputs[0].pos = {x, y};  // Reset input positions
     
