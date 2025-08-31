@@ -25,6 +25,7 @@ class CircuitController : public IInputHandler, public std::enable_shared_from_t
         void setCircuit(SP_Circuit circuit);
         void addComponent(std::shared_ptr<Component> component);
         void removeComponent(std::shared_ptr<Component> component);
+        void removeConnection( std::shared_ptr<CircuitElements::Connection> component);
         void moveComponent(std::shared_ptr<Component> component , Vector2 oldPosition,
         Vector2 newPosition);
         void addConnection( std::shared_ptr<Component> srcComp,

@@ -64,8 +64,7 @@ namespace GUI
 
                         if (circuit->connections[i].get() == selectedHandler.get() )
                         {
-                            circuit->connections.erase(circuit->connections.begin() + i);
-                            InputResolver::UnregisterHandler(selectedHandler);
+                            CircuitController::getInstance()->removeConnection(circuit->connections[i]);
                             break; 
                         }
                     }

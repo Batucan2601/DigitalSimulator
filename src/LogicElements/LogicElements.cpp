@@ -198,7 +198,8 @@ namespace CircuitElements
             bool isCol = CheckCollisionPointRec(pos, bd);
             if (isCol)
             {
-                 InputResolver::setSelectedHandler(std::vector<std::weak_ptr<IInputHandler>>());
+                 std::vector<std::weak_ptr<IInputHandler>> handlers = {shared_from_this()};
+                 InputResolver::setSelectedHandler(handlers);
                  RaylibHelper::Show(4);
                  return;
             }

@@ -49,6 +49,12 @@ void CircuitController::removeComponent(std::shared_ptr<Component> component)
     }
 }
 
+void CircuitController::removeConnection( std::shared_ptr<CircuitElements::Connection> connection)
+{
+    auto removeCommand = std::make_unique<Command::RemoveConnectionCommand>(circuit, connection);
+    undoManager->execute(std::move(removeCommand));
+}
+
 
 void CircuitController::moveComponent(std::shared_ptr<Component> component, Vector2 oldPosition, Vector2 newPosition)
 {

@@ -25,7 +25,7 @@ namespace CircuitElements
     {
         std::vector<Vector2> wires;
     };
-    class Connection : public IInputHandler
+    class Connection : public IInputHandler , public std::enable_shared_from_this<Connection>
     {
       public:
         std::shared_ptr<Component> sourceGate;

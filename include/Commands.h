@@ -54,6 +54,37 @@ namespace Command
             while (!stack.empty()) stack.pop();
         }
     };
+    class RemoveConnectionCommand : public ICommand
+    {
+        public:
+        RemoveConnectionCommand(SP_Circuit c,
+        std::weak_ptr<CircuitElements::Connection> con )
+        {
+            this->con = *con.lock().get();
+            this->conPtr = con.lock();
+            this->c = c;
+        }
+         void redo() override 
+        {
+            InputResolver::UnregisterHandler(this->conPtr);
+            c->removeConnection(this->conPtr.get());
+        }
+
+        void undo() override 
+        {
+            
+            c->addConnection(con.sourceGate,con.sourceLogic ,
+            con.targetGate , con.targetLogic);
+            
+            InputResolver::RegisterHandler(c->connections[c->connections.size()-1]);
+            c->connections[c->connections.size()-1].get()->physCon = con.physCon;
+            c->connections[c->connections.size()-1].get()->is_connected = true; 
+        }
+        private: 
+        CircuitElements::Connection con;
+        std::shared_ptr<CircuitElements::Connection> conPtr;
+        SP_Circuit c; 
+    };
 
 
     class AddConnectionCommand : public ICommand
