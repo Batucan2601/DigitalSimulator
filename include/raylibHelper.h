@@ -8,6 +8,7 @@
 #include <common_types.h>
 #include <functional>
 
+
 class RaylibHelper
 {
   public:
@@ -18,8 +19,8 @@ class RaylibHelper
     static void Draw2D(const Camera2D& camera, const std::function<void()>& drawFn);
     static void DrawGUI(std::shared_ptr<CircuitController> circuitController);
     static void Update(std::shared_ptr<CircuitController> circuit);
-    static void Show(int index);
-    static void Hide(int index);
+    static void Show(GUIWindowType index);
+    static void Hide(GUIWindowType index);
 
 
     static void Close();

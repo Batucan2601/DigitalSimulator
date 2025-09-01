@@ -200,7 +200,7 @@ namespace CircuitElements
             {
                  std::vector<std::weak_ptr<IInputHandler>> handlers = {shared_from_this()};
                  InputResolver::setSelectedHandler(handlers);
-                 RaylibHelper::Show(4);
+                 RaylibHelper::Show(GUIWindowType::ContextMenu);
                  return;
             }
         }

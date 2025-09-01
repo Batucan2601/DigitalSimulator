@@ -376,7 +376,7 @@ void Component::OnRightClick(const InputEvent& event)
     }
     std::vector<std::weak_ptr<IInputHandler>> handler = {shared_from_this()}; 
     InputResolver::setSelectedHandler(handler);
-    RaylibHelper::Show(4);
+    RaylibHelper::Show(GUIWindowType::ContextMenu);
 
 }
 static Vector2 posBeforeDrag;

@@ -4,6 +4,16 @@
 #include "GUI/BaseWindow.h"
 #include "LogicElements.h"
 #include "CircuitController.h"
+
+enum class GUIWindowType
+{
+    Settings,
+    LogicGateInfo,
+    SaveLoad,
+    Tools,
+    ContextMenu,
+};
+
 class GUIManager
 {
   public:
@@ -16,8 +26,8 @@ class GUIManager
     void DrawGUI(std::shared_ptr<CircuitController> circuitController);
 
     std::vector<std::unique_ptr<GUI::BaseWindow>> windows;
-    void Show(int index);
-    void Hide(int index);
+    void Show(GUIWindowType index);
+    void Hide(GUIWindowType index);
   private:
     void DrawDemoWindow();
     void DrawDockingSpace();  // Draw the parent screen for the dockspace

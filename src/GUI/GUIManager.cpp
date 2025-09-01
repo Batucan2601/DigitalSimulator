@@ -119,12 +119,12 @@ void GUIManager::Cleanup()
 }
 
 
-void GUIManager::Show(int index)
+void GUIManager::Show(GUIWindowType index)
 {
-    windows[index]->Show();
+    windows[static_cast<int>(index)]->Show();
 }
 
-void GUIManager::Hide(int index)
+void GUIManager::Hide(GUIWindowType index)
 {
-    windows[index]->Hide();
+    windows[static_cast<int>(index)]->Hide();
 }

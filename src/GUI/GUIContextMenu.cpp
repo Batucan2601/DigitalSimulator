@@ -25,7 +25,7 @@ namespace GUI
 
             if (ImGui::MenuItem("Properties")) {
                 
-                RaylibHelper::Show(1);
+                RaylibHelper::Show(GUIWindowType::LogicGateInfo);
             }
             SP_Circuit circuit = circuitController->getCircuit();
             if (ImGui::MenuItem("Delete")) {
