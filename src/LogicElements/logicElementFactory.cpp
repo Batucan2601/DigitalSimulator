@@ -123,7 +123,22 @@ namespace LogicElements
                         g.outputs[0].val = result;
                     });
                 break;
-
+            case CircuitElements::ComponentType::XNOR:
+                gate->inputs.push_back(A);
+                gate->inputs.push_back(B);
+                gate->outputs.push_back(Out);
+                gate->setEvaluationFunction(
+                    [](Component& c)
+                    {
+                        auto& g = static_cast<LogicGate&>(c);
+                        std::vector<SignalVal> result = std::vector<SignalVal>(g.inputs[0].val.size(), SignalVal::SIGNAL_0);
+                        for (const auto& val : g.inputs)
+                        {
+                            result = signal_xnor(result , val.val );
+                        }
+                        g.outputs[0].val = result;
+                    });
+                break;
             case CircuitElements::ComponentType::XAND:
                 gate->inputs.push_back(A);
                 gate->inputs.push_back(B);

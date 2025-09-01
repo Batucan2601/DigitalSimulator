@@ -24,6 +24,7 @@ namespace GUI
             }
 
             if (ImGui::MenuItem("Properties")) {
+                
                 RaylibHelper::Show(1);
             }
             SP_Circuit circuit = circuitController->getCircuit();

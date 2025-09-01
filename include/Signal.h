@@ -45,6 +45,13 @@ inline SignalVal signal_xor(SignalVal a, SignalVal b )
     if( a ==  b) return SignalVal::SIGNAL_0;
     return SignalVal::SIGNAL_1;
 }
+inline SignalVal signal_xnor(SignalVal a, SignalVal b )
+{
+    if( a == SignalVal::SIGNAL_Z ||  b == SignalVal::SIGNAL_Z) return SignalVal::SIGNAL_Z;
+    if( a == SignalVal::SIGNAL_X ||  b == SignalVal::SIGNAL_X ) return SignalVal::SIGNAL_X;
+    if( a ==  b) return SignalVal::SIGNAL_1;
+    return SignalVal::SIGNAL_0;
+}
 
 inline std::vector<SignalVal> signal_and(std::vector<SignalVal> a, std::vector<SignalVal> b )
 {
@@ -98,6 +105,19 @@ inline std::vector<SignalVal> signal_xor(std::vector<SignalVal> a, std::vector<S
     return result;
 }
 
+inline std::vector<SignalVal> signal_xnor(std::vector<SignalVal> a, std::vector<SignalVal> b )
+{
+    if( a.size() != b.size() )
+    {
+    //    throw std::invalid_argument("Signal vectors must be of the same size for AND operation.");
+    }
+    std::vector<SignalVal> result(a.size(), SignalVal::SIGNAL_Z);
+    for (size_t i = 0; i <a.size() ; i++)
+    {
+        result[i] = (signal_xnor(a[i], b[i]));
+    }
+    return result;
+}
 
 struct Signal
 {

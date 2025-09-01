@@ -34,6 +34,9 @@ namespace LogicElements
         componentInfoList->push_back(CircuitElements::ComponentInfo("XAND Gate", CircuitElements::ComponentType::XAND,
                                          &logicElementTextures[CircuitElements::ComponentType::XAND],
                                          &logicElementTextures[CircuitElements::ComponentType::XAND_FILLED]));
+         componentInfoList->push_back(CircuitElements::ComponentInfo("XNOR Gate", CircuitElements::ComponentType::XNOR,
+                                         &logicElementTextures[CircuitElements::ComponentType::XNOR],
+                                         &logicElementTextures[CircuitElements::ComponentType::XNOR]));
         componentInfoList->push_back(CircuitElements::ComponentInfo("INPUT0 Gate", CircuitElements::ComponentType::INPUT_0,
                                          &logicElementTextures[CircuitElements::ComponentType::INPUT_0],
                                          &logicElementTextures[CircuitElements::ComponentType::INPUT_0]));
@@ -56,11 +59,11 @@ namespace LogicElements
         std::string folder_path = "assets/gates/outlined_gates/";  // Use relative path
         std::string file_path;
 
-        file_path = folder_path + "and.png";  // Use relative path
+        file_path = folder_path + "newand.png";  // Use relative path
         std::string full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::AND] = LoadTexture(full_path.c_str());
 
-        file_path = folder_path + "or.png";  // Use relative path
+        file_path = folder_path + "newor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::OR] = LoadTexture(full_path.c_str());
 
@@ -74,7 +77,11 @@ namespace LogicElements
 
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
-        logicElementTextures[CircuitElements::ComponentType::XAND] = LoadTexture(full_path.c_str());
+        logicElementTextures[CircuitElements::ComponentType::XOR] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "xnor.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[CircuitElements::ComponentType::XNOR] = LoadTexture(full_path.c_str());
 
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
@@ -117,5 +124,9 @@ namespace LogicElements
         file_path = folder_path + "xor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::XAND_FILLED] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "xnor.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[CircuitElements::ComponentType::XNOR_FILLED] = LoadTexture(full_path.c_str());
     }
 }
