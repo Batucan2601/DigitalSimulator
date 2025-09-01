@@ -149,7 +149,9 @@ namespace CircuitElements
         INPUT_FILLED,
         INPUT_0,
         INPUT_1,
-        CLK
+        CLK,
+        MUX,
+        DECODER,
     };
 
     struct ComponentInfo

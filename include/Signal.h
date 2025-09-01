@@ -16,7 +16,14 @@ enum class SignalType
     INTERNAL
 };
 
-
+inline void signal_leftshift(std::vector<SignalVal>& a  )
+{
+    a.push_back(SignalVal::SIGNAL_0);
+}
+inline void signal_rightshift(std::vector<SignalVal>& a  )
+{
+    a.insert(a.begin(),SignalVal::SIGNAL_0 );
+}
 inline SignalVal signal_and(SignalVal a, SignalVal b )
 {
     if( a == SignalVal::SIGNAL_Z ||  b == SignalVal::SIGNAL_Z) return SignalVal::SIGNAL_Z;

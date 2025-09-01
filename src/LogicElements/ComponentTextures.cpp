@@ -49,6 +49,9 @@ namespace LogicElements
         componentInfoList->push_back(CircuitElements::ComponentInfo("CLK", CircuitElements::ComponentType::CLK,
                                          &logicElementTextures[CircuitElements::ComponentType::CLK],
                                          &logicElementTextures[CircuitElements::ComponentType::CLK]));
+        componentInfoList->push_back(CircuitElements::ComponentInfo("Mux", CircuitElements::ComponentType::MUX,
+                                         &logicElementTextures[CircuitElements::ComponentType::MUX],
+                                         &logicElementTextures[CircuitElements::ComponentType::MUX]));
     }
     Texture2D compTexture_getTexture(CircuitElements::ComponentType type )
     {
@@ -98,6 +101,11 @@ namespace LogicElements
         file_path = folder_path + "clk.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::CLK] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "mux.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[CircuitElements::ComponentType::MUX] = LoadTexture(full_path.c_str());
+        
     }
     void init_FilledLogicTextures()
     {
@@ -128,5 +136,9 @@ namespace LogicElements
         file_path = folder_path + "xnor.png";  // Use relative path
         full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
         logicElementTextures[CircuitElements::ComponentType::XNOR_FILLED] = LoadTexture(full_path.c_str());
+
+        file_path = folder_path + "mux.png";  // Use relative path
+        full_path = (std::filesystem::path(PROJECT_ROOT_DIR) / file_path).string();
+        logicElementTextures[CircuitElements::ComponentType::MUX] = LoadTexture(full_path.c_str());
     }
 }

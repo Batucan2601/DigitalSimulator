@@ -2,6 +2,43 @@
 #include "appSettings.h"
 namespace Utils
 {
+    int SignalValToBit()
+    {
+        return -1;
+    }
+    int BitsToDecimal(const std::vector<SignalVal>& bits, bool msbFirst ) 
+    {
+        int value = 0;
+
+        if (msbFirst) 
+        {
+            // Left-to-right: [MSB, ..., LSB]
+            for (auto b : bits) 
+            {
+                value <<= 1;  // shift left (multiply by 2)
+                if (b == SignalVal::SIGNAL_1) value |= 1;
+                else if (b == SignalVal::SIGNAL_X || b == SignalVal::SIGNAL_Z) {
+                    // handle unknowns — here we just stop, or could throw
+                    return -1; // or mark as invalid
+                }
+            }
+
+        } 
+        else 
+        {
+            // Right-to-left: [LSB, ..., MSB]
+            for (size_t i = 0; i < bits.size(); i++) 
+            {
+                if (bits[i] == SignalVal::SIGNAL_1) {
+                    value |= (1 << i);
+                } else if (bits[i] == SignalVal::SIGNAL_X || bits[i] == SignalVal::SIGNAL_Z) {
+                    // same handling for unknowns
+                    return -1; 
+                }
+            }
+        }
+        return value; 
+    }
 	bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
                        CircuitElements::Connection& con)
     {

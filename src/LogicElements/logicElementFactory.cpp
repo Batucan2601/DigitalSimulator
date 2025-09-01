@@ -2,6 +2,8 @@
 #include "InputElement.h"
 #include "Component.h"
 #include "Clock.h"
+#include "Combinational.h"
+#include "Util/Utils.h"
 namespace LogicElements
 {
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out );
@@ -17,6 +19,14 @@ namespace LogicElements
         if( type == CircuitElements::ComponentType::CLK )
         {
             return createClock(logger_name, 1000); // Default tick rate of 1000 
+        }
+        if( type == CircuitElements::ComponentType::MUX)
+        {   
+            return createMux(logger_name);
+        }
+        if( type == CircuitElements::ComponentType::DECODER)
+        {
+
         }
         return createGate(type, logger_name);        
     }
@@ -53,6 +63,50 @@ namespace LogicElements
         std::shared_ptr<Component> clk = std::make_shared<Clock>(logger_name ,tickrate);
         InputResolver::RegisterHandler(clk);
         return clk;
+    }
+
+
+    std::shared_ptr<Component> LogicElementFactory::createMux(std::string logger_name)
+    {
+        std::shared_ptr<Component> mux = std::make_shared<Combinational>(CircuitElements::ComponentType::MUX , logger_name);
+        Signal A,B,Enable,Out; 
+        A.name = "A";
+        B.name = "B";
+        Enable.name = "Enable";
+        Out.name = "Out";
+        mux->inputs.push_back(A);
+        mux->inputs.push_back(B);
+        mux->inputs.push_back(Enable);
+        mux->outputs.push_back(Out);
+        mux->setEvaluationFunction(
+                    [](Component& c)
+                    {
+                        auto& g = static_cast<Combinational&>(c);
+                        Signal enable  =  g.inputs[g.getInputByName("Enable")];
+                        // this is for MSB, dont forget
+                        int dec = Utils::BitsToDecimal(enable.val ,  true );
+                        if(dec != -1 )
+                        {
+                            g.outputs[0].val = g.inputs[dec].val; // need to consider that aenable shall stay at the end.
+                        }
+                    });
+        InputResolver::RegisterHandler(mux);
+        return mux;
+    }
+    std::shared_ptr<Component> LogicElementFactory::createDecoder(std::string logger_name)
+    {
+        std::shared_ptr<Component> decoder 
+        = std::make_shared<Combinational>(CircuitElements::ComponentType::DECODER , logger_name);
+        Signal input[2];
+        Signal out[4];
+        decoder->inputs.push_back(input[0]);
+        decoder->inputs.push_back(input[1]);
+        decoder->inputs.push_back(out[0]);
+        decoder->inputs.push_back(out[1]);
+        decoder->inputs.push_back(out[2]);
+        decoder->inputs.push_back(out[3]);
+        InputResolver::RegisterHandler(decoder);
+        return decoder;
     }
     static void generate_logic_gate( std::shared_ptr<Component> gate , CircuitElements::ComponentType type,  Signal A , Signal B , Signal Out )
     {

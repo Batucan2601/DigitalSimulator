@@ -7,6 +7,7 @@ namespace Utils
     bool CheckNearWire(SP_Circuit circuit, const Vector2& mousePosition,
                        CircuitElements::Connection& con);
     Vector2 SnapToNearestGrid(const Rectangle& rect);
+    int BitsToDecimal(const std::vector<SignalVal>& bits, bool msbFirst = true);
 
 }
 
