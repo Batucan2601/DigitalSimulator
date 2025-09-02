@@ -396,7 +396,8 @@ void UpdateConnection(Component* gate)
         CircuitElements::Connection* c = circuit->connections[i].get();
         int outputIndex = c->sourceGate->getOutputByName(c->sourceLogic);
         int inputIndex = c->targetGate->getInputByName(c->targetLogic);
-        if( outputIndex == -1 || inputIndex == -1 )
+        if( outputIndex == -1 || inputIndex == -1 
+        || c->sourceGate == nullptr || c->targetGate == nullptr   )
         {
             toBeDeletedIndices.push_back(i);        
             continue; 
@@ -406,7 +407,7 @@ void UpdateConnection(Component* gate)
         Vector2 pos  = Controls::Generate_straight_lines(posStart , posEnd);
         c->physCon.wires = std::vector<Vector2>{posStart , pos , posEnd};
     }
-    for (int i = toBeDeletedIndices.size(); i > 0; i--)
+    for (int i = toBeDeletedIndices.size()-1; i > 0; i--)
     {
         circuit->removeConnection(circuit->connections[toBeDeletedIndices[i]].get());
     }
