@@ -19,6 +19,11 @@ namespace GUI
         }
 
         std::vector<std::weak_ptr<IInputHandler>> handlers = InputResolver::getSelectedHandler();
+        if( (int)handlers.size() != 1 )
+        {
+            visible = false; 
+            return; 
+        }
         if(handlers.size() == 1 && handlers[0].lock())
         {
             GUITools_BasicLogicDisplay_draw(handlers[0].lock().get());
@@ -284,9 +289,9 @@ namespace GUI
     {
         if (auto comp = dynamic_cast<Component*>(component))
         {
+
             float pos[2] = {comp->bd.x, comp->bd.y};
             ImGui::Begin("Logic Settings", &visible);
-            
             draw_name(comp);
             ImGui::InputFloat2("Position", pos);
 

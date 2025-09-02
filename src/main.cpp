@@ -93,7 +93,7 @@ int main(void) {
     AppSettings::appSettings.screenHeight = GetScreenHeight();
     AppSettings::appSettings.screenWidth = GetScreenWidth();
     // Update
-    Controls::Controls_update(circuitController);
+    //Controls::Controls_update(circuitController);
     circuitController->getCircuit()->evaluate();
     // Draw
     RaylibHelper::BeginFrame();

@@ -2,6 +2,8 @@
 #include "common_types.h"
 
 #include <rlImGui.h>
+static bool isFocused = false;
+static bool isHovered = false;
 namespace GUI
 {
 
@@ -44,6 +46,12 @@ namespace GUI
             m_editor_render.window.borderWidth = ImGui::GetStyle().WindowBorderSize;
             m_editor_render.window.ImageMin = {imageMin.x, imageMin.y};
             m_editor_render.window.ImageMax = {imageMax.x, imageMax.y};
+
+
+            isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+            isHovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+
+            // draw contents here (raylib framebuffer, etc.)
         }
         ImGui::End();
         BeginTextureMode(m_editor_render.renderTexture);
@@ -70,9 +78,12 @@ namespace GUI
                              });
         EndTextureMode();
     }
-    void Editor::Update(std::shared_ptr<CircuitController> circuit)
+    void Editor::Update(std::shared_ptr<CircuitController> controller)
     {
-	(void)circuit;
+        if( isFocused )
+        {
+            Controls::Controls_update(controller);
+        }
     }
     Editor::EditorWindow Editor::getWindow()
     {

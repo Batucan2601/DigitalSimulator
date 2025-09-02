@@ -394,10 +394,14 @@ void UpdateConnection(Component* gate)
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
         CircuitElements::Connection* c = circuit->connections[i].get();
+        if( c->sourceGate == nullptr || c->targetGate == nullptr)
+        {
+            toBeDeletedIndices.push_back(i);        
+            continue; 
+        }
         int outputIndex = c->sourceGate->getOutputByName(c->sourceLogic);
         int inputIndex = c->targetGate->getInputByName(c->targetLogic);
-        if( outputIndex == -1 || inputIndex == -1 
-        || c->sourceGate == nullptr || c->targetGate == nullptr   )
+        if( outputIndex == -1 || inputIndex == -1 )
         {
             toBeDeletedIndices.push_back(i);        
             continue; 
