@@ -389,14 +389,28 @@ void UpdateConnection(Component* gate)
     (void) gate; 
     auto controller = CircuitController::getInstance();
     auto circuit = CircuitController::getInstance()->getCircuit();
+
+    std::vector<int> toBeDeletedIndices; //delete problematic indices
     for (size_t i = 0; i < circuit->connections.size(); i++)
     {
         CircuitElements::Connection* c = circuit->connections[i].get();
-        Vector2 posStart = c->sourceGate->outputs[ c->sourceGate->getOutputByName(c->sourceLogic) ].pos;
-        Vector2 posEnd = c->targetGate->inputs[ c->targetGate->getInputByName(c->targetLogic) ].pos;
+        int outputIndex = c->sourceGate->getOutputByName(c->sourceLogic);
+        int inputIndex = c->targetGate->getInputByName(c->targetLogic);
+        if( outputIndex == -1 || inputIndex == -1 )
+        {
+            toBeDeletedIndices.push_back(i);        
+            continue; 
+        }
+        Vector2 posStart = c->sourceGate->outputs[outputIndex].pos;
+        Vector2 posEnd = c->targetGate->inputs[inputIndex].pos;
         Vector2 pos  = Controls::Generate_straight_lines(posStart , posEnd);
         c->physCon.wires = std::vector<Vector2>{posStart , pos , posEnd};
     }
+    for (int i = toBeDeletedIndices.size(); i > 0; i--)
+    {
+        circuit->removeConnection(circuit->connections[toBeDeletedIndices[i]].get());
+    }
+    
 }
 void ReducePhysicalWires(Component* gate)
 {
