@@ -10,48 +10,63 @@
 
 namespace LogicElementsDraw
 {
-   void DrawSelected()
-{
-    const auto handlers = InputResolver::getSelectedHandler();
-    if (handlers.empty()) return;
-
-    for ( int i = 0; i < (int)handlers.size(); i++)
+    void DrawErrorComponent()
     {
-        if(!handlers[i].lock())
+        std::shared_ptr<CircuitElements::Circuit> circuit = CircuitController::getInstance()->getCircuit(); 
+        for(int i = 0; i < (int)circuit->gates.size() ; i++ )
         {
-            continue;
-        }
-        IInputHandler* h = handlers[i].lock().get();
-        // Components (have a Rectangle bd)
-        if (auto* comp = dynamic_cast<Component*>(h))
-        {
-            // Draw with float-safe API
-            DrawRectangleLinesEx(comp->bd, 1.0f, GREEN);
-            continue;
-        }
-
-        // (Optional) highlight wires too
-        if (auto* con = dynamic_cast<CircuitElements::Connection*>(h))
-        {
-            // Example: draw the connection’s wire segments if you want
-            for (size_t i = 1; i < con->physCon.wires.size(); ++i)
+            bool isUniqueI = Utils::CheckInputUnique(circuit->gates[i].get());
+            bool isUniqueN = Utils::CheckNameUnique(circuit->gates[i].get());
+            bool isUniqueO = Utils::CheckOutputUnique(circuit->gates[i].get());
+            if( !(isUniqueI && isUniqueN && isUniqueO)  )
             {
-                const Vector2 a = con->physCon.wires[i-1];
-                const Vector2 b = con->physCon.wires[i];
-                DrawLineV(a, b, GREEN);
+                DrawRectangleLinesEx(circuit->gates[i]->bd, 1.0f, RED);
             }
-            continue;
-        }
 
-        if (auto* aw = dynamic_cast<CircuitElements::ActiveWire*>(h))
-        {
-            if (aw->is_registered) DrawLineV(aw->start, aw->end, GREEN);
-            continue;
-        }
-
-        // else: unknown handler type; ignore or log
+        } 
     }
-}
+    void DrawSelected()
+    {
+        const auto handlers = InputResolver::getSelectedHandler();
+        if (handlers.empty()) return;
+
+        for ( int i = 0; i < (int)handlers.size(); i++)
+        {
+            if(!handlers[i].lock())
+            {
+                continue;
+            }
+            IInputHandler* h = handlers[i].lock().get();
+            // Components (have a Rectangle bd)
+            if (auto* comp = dynamic_cast<Component*>(h))
+            {
+                // Draw with float-safe API
+                DrawRectangleLinesEx(comp->bd, 1.0f, GREEN);
+                continue;
+            }
+
+            // (Optional) highlight wires too
+            if (auto* con = dynamic_cast<CircuitElements::Connection*>(h))
+            {
+                // Example: draw the connection’s wire segments if you want
+                for (size_t i = 1; i < con->physCon.wires.size(); ++i)
+                {
+                    const Vector2 a = con->physCon.wires[i-1];
+                    const Vector2 b = con->physCon.wires[i];
+                    DrawLineV(a, b, GREEN);
+                }
+                continue;
+            }
+
+            if (auto* aw = dynamic_cast<CircuitElements::ActiveWire*>(h))
+            {
+                if (aw->is_registered) DrawLineV(aw->start, aw->end, GREEN);
+                continue;
+            }
+
+            // else: unknown handler type; ignore or log
+        }
+    }
 
     void DrawGateElement(const std::shared_ptr<Component> gate)
     {
@@ -97,7 +112,7 @@ namespace LogicElementsDraw
         
         DrawSelected();
         circuitController->getMultiSelector()->DrawOverlay();        
-        
+        DrawErrorComponent();
         //SP_Circuit circuit = ; 
         // 1 - Draw gates
         for (size_t i = 0; i < circuit->gates.size(); i++)

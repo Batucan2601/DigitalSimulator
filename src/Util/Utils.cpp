@@ -1,5 +1,6 @@
 #include "Util/Utils.h"
 #include "appSettings.h"
+#include "CircuitController.h"
 namespace Utils
 {
     int SignalValToBit()
@@ -84,6 +85,55 @@ namespace Utils
             std::round(rect.y / AppSettings::appSettings.SPACING_SIZE) * AppSettings::appSettings.SPACING_SIZE;
         // TODO: Highlight the nearest grid point
         return nearest_grid_point;
+    }
+
+    // This function checks if the names of inputs and outputs are unique.
+    // If not, it returns false.
+    // For now, we assume that the names are unique.
+    bool CheckNameUnique(Component* component)
+    {
+        auto controller = CircuitController::getInstance();
+        auto circuit = CircuitController::getInstance()->getCircuit();
+        for (int i = 0; i < (int)circuit->gates.size(); i++)
+        {
+            if (circuit->gates[i]->m_name == component->m_name &&
+                circuit->gates[i].get() != component)
+            {
+                return false;  // Name is not unique
+            }
+        }
+        return true;
+    }
+    
+    bool CheckOutputUnique(Component* component)
+    {
+        for (int i = 0; i < (int)component->outputs.size(); i++)
+        {
+            for (int j = 0; j < (int)component->outputs.size(); j++)
+            {
+                
+                if( i != j && component->outputs[i].name == component->outputs[j].name)  
+                {
+                    return false;  // Name is not unique
+                }
+            }
+        }
+        return true; 
+    }
+
+    bool CheckInputUnique(Component* component)
+    {
+        for (int i = 0; i < (int)component->inputs.size(); i++)
+        {
+            for (int j = 0; j < (int)component->inputs.size(); j++)
+            {
+                if( i != j && component->inputs[i].name == component->inputs[j].name)  
+                {
+                    return false;  // Name is not unique
+                }
+            }
+        }
+        return true; 
     }
 
 

@@ -203,6 +203,7 @@ class Component : public LogicElements::GateObserver ,  public IInputHandler , p
     int getInputByName(std::string name) const;
     int getOutputByName(std::string name) const;
     CircuitElements::ComponentType getType() const;
+    void checkError();
     ClassLogger m_logger; 
     std::vector<Signal> inputs;
     std::vector<Signal> outputs;

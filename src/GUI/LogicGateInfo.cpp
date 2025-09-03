@@ -265,7 +265,7 @@ namespace GUI
         
         return true;
     }
-    static void draw_name(Component* component)
+    static bool draw_name(Component* component)
     {
         static char buf[128] = {0};
         strncpy(buf, component->m_name.c_str(), sizeof(buf));
@@ -282,14 +282,13 @@ namespace GUI
                 buf[sizeof(buf) - 1] = '\0';
             }
         }
-        check_same_name(component);
+        return check_same_name(component);
     }
     // Global or static variables for the UI state and texture.
     void LogicGateInfo::GUITools_BasicLogicDisplay_draw(IInputHandler* component)
     {
         if (auto comp = dynamic_cast<Component*>(component))
         {
-
             float pos[2] = {comp->bd.x, comp->bd.y};
             ImGui::Begin("Logic Settings", &visible);
             draw_name(comp);

@@ -9,6 +9,10 @@ namespace Utils
     Vector2 SnapToNearestGrid(const Rectangle& rect);
     int BitsToDecimal(const std::vector<SignalVal>& bits, bool msbFirst = true);
 
+    bool CheckNameUnique(Component* component);
+    bool CheckOutputUnique(Component* component);
+    bool CheckInputUnique(Component* component);
+    
 }
 
 #endif
