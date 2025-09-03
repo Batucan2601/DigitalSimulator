@@ -59,13 +59,13 @@ namespace GUI
 
         SP_Circuit circuit = circuitController->getCircuit();
         // Activate the camera's 2D mode so that all drawing inside is affected by the camera
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+        Application::Draw2D(Controls::Controls_get_camera(),
                              [circuitController]()
                              {
                                  LogicElementsDraw::DrawCircuit(circuitController);
                                  // You can draw additional world elements here.
                              });
-        RaylibHelper::Draw2D(Controls::Controls_get_camera(),
+        Application::Draw2D(Controls::Controls_get_camera(),
                              []()
                              {
                                  // Draw a grid to visualize the 2D world.

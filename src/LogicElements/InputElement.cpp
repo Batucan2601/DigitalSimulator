@@ -2,7 +2,7 @@
 #include "appSettings.h"
 #include "Util/Utils.h"
 #include "ComponentTextures.h"
-#include "raylibHelper.h"
+#include "Application.h"
 
 static_assert(!std::is_abstract<InputElement>::value, "InputElement is abstract!");
 
@@ -49,7 +49,7 @@ void InputElement::OnLeftClick(const InputEvent& event)
         InputResolver::setSelectedHandler(activeHandlers);
        return;
    }
-   //RaylibHelper::Show(1); // shows logicGateInfo window
+   //Application::Show(1); // shows logicGateInfo window
    // if it is a inputgate
    if (this->m_type == CircuitElements::ComponentType::INPUT_0)
    {

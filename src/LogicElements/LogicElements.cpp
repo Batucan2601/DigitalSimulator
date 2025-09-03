@@ -2,7 +2,7 @@
 
 #include "Controls.h"
 #include <Util/Utils.h>
-#include <raylibHelper.h>
+#include <Application.h>
 #include "Clock.h"
 
 namespace CircuitElements
@@ -200,7 +200,7 @@ namespace CircuitElements
             {
                  std::vector<std::weak_ptr<IInputHandler>> handlers = {shared_from_this()};
                  InputResolver::setSelectedHandler(handlers);
-                 RaylibHelper::Show(GUIWindowType::ContextMenu);
+                 Application::Show(GUIWindowType::ContextMenu);
                  return;
             }
         }

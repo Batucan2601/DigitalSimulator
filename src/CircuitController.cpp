@@ -67,7 +67,10 @@ void CircuitController::moveComponent(std::shared_ptr<Component> component, Vect
     }
 }
 
-
+void CircuitController::setLoadedCircuit(SP_Circuit loadedCircuit) 
+{
+          this->setCircuit(loadedCircuit);
+}
 
 void CircuitController::OnKeyPress(const InputEvent& event)
 {

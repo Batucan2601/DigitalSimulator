@@ -1,7 +1,6 @@
 #include "GUI/SaveLoad.h"
 
 #include "common_types.h"
-#include "main.h"
 #include "SubCircuit.h"
 #include "raylib.h"
 #include "JsonSerializer.h"
@@ -135,7 +134,7 @@ namespace GUI
 
         auto loaded_circuit = jsonparser_loadCircuit(fileName);
 
-        setLoadedCircuit(loaded_circuit);
+        CircuitController::getInstance()->setLoadedCircuit(loaded_circuit);
 
         return true;
     }
@@ -145,7 +144,7 @@ namespace GUI
         
         auto loaded_circuit = jsonparser_loadCircuit(fileName);
         std::shared_ptr<SubcircuitComponent> ptr = std::make_shared<SubcircuitComponent>(loaded_circuit, "new_circuit");
-        addComponent(ptr);
+        CircuitController::getInstance()->addComponent(ptr);
 
         return true;
     }

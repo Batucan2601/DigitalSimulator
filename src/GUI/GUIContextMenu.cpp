@@ -1,7 +1,7 @@
 #include "GUIContextMenu.h"
 #include "common_types.h"
 #include <imgui.h>
-#include <raylibHelper.h>
+#include <Application.h>
 #include <imgui_internal.h>
 
 namespace GUI
@@ -25,7 +25,7 @@ namespace GUI
 
             if (ImGui::MenuItem("Properties")) {
                 
-                RaylibHelper::Show(GUIWindowType::LogicGateInfo);
+                Application::Show(GUIWindowType::LogicGateInfo);
             }
             SP_Circuit circuit = circuitController->getCircuit();
             if (ImGui::MenuItem("Delete")) {

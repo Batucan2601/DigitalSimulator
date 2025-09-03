@@ -10,7 +10,7 @@
 
 #include <Controls.h>
 #include <Util/Utils.h>
-#include "raylibHelper.h"
+#include "Application.h"
 #include "JsonSerializer.h"
 
 namespace LogicElements
@@ -118,7 +118,7 @@ namespace LogicElements
     //    {
     //        return;
     //    }
-    //    RaylibHelper::Show(1); // shows logicGateInfo window
+    //    Application::Show(1); // shows logicGateInfo window
     //    // if it is a inputgate
     //    /*if (this->m_type == CircuitElements::ComponentType::INPUT_0)
     //    {

@@ -5,7 +5,7 @@
 #include "LogicElementsDraw.h"
 #include "appSettings.h"
 #include "raylib.h"
-#include "raylibHelper.h"
+#include "Application.h"
 
 #include <GUI/BaseWindow.h>
 #include <imgui.h>

@@ -4,7 +4,7 @@
 #include "LogicElements.h"
 #include "Util/Utils.h"
 #include "Controls.h"
-#include "raylibHelper.h"
+#include "Application.h"
 // Define static members.
 std::queue<InputEvent> InputResolver::queue;
 std::list<std::weak_ptr<IInputHandler>>
@@ -376,7 +376,7 @@ void Component::OnRightClick(const InputEvent& event)
     }
     std::vector<std::weak_ptr<IInputHandler>> handler = {shared_from_this()}; 
     InputResolver::setSelectedHandler(handler);
-    RaylibHelper::Show(GUIWindowType::ContextMenu);
+    Application::Show(GUIWindowType::ContextMenu);
 
 }
 static Vector2 posBeforeDrag;

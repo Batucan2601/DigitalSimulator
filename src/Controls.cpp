@@ -8,7 +8,7 @@
 #include "LogicElements.h"
 #include "logicElementFactory.h"
 #include "raylib.h"
-#include "raylibHelper.h"
+#include "Application.h"
 #include "CircuitController.h"
 #include <iostream>
 #include <memory>
@@ -22,7 +22,7 @@ namespace Controls
     // since we draw raylib inside a texture and pass it to imgui we need a transform.
     static void ConvertMouseCoord(Vector2& mouse_pos)
     {
-        auto* base_window = RaylibHelper::getGUIWindow("Editor");
+        auto* base_window = Application::getGUIWindow("Editor");
 
         if (!base_window)
         {

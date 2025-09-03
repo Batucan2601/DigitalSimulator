@@ -1,5 +1,5 @@
-#ifndef RAYLIBHELPER_H
-#define RAYLIBHELPER_H
+#ifndef Application_H
+#define Application_H
 
 #include "GUI/GUIManager.h"
 #include "LogicElements.h"
@@ -9,7 +9,7 @@
 #include <functional>
 
 
-class RaylibHelper
+class Application
 {
   public:
     static void Init(int screenWidth, int screenHeight, int targetFps, const char* title);
@@ -21,7 +21,7 @@ class RaylibHelper
     static void Update(std::shared_ptr<CircuitController> circuit);
     static void Show(GUIWindowType index);
     static void Hide(GUIWindowType index);
-
+    static void Run();
 
     static void Close();
 
@@ -39,6 +39,8 @@ class RaylibHelper
 
   private:
     static std::shared_ptr<GUIManager> imguiManager;  // Manages ImGui logic
+    static std::shared_ptr<CircuitController> circuitController;
+    static void SampleCircuit();
 };
 
-#endif  // RAYLIBHELPER_H
+#endif  // Application_H
