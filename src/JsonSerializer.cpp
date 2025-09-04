@@ -31,6 +31,7 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
     {
         std::string logger = "LoggerName";
         auto gate = LogicElements::LogicElementFactory::createGate(gateJson["type"], logger);
+        gate->m_name = gateJson["name"];
         //gate->inputs.clear();
         //gate->outputs.clear();
         int id = gateJson["id"];
@@ -53,12 +54,14 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         } 
         gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
-        circuit.get()->gates.push_back(gate);
+        circuit.get()->addGate(gate);
+        InputResolver::RegisterHandler(gate);
     }
     for (const auto& gateJson : j["inputs"])
     {
         std::string logger = "LoggerName";
         auto gate = std::make_shared<InputElement>(logger);
+        gate->m_name = gateJson["name"];
         int id = gateJson["id"];
         // Load outputs
         if (gateJson.contains("outputs") && gateJson["outputs"].is_array()) {
@@ -77,7 +80,8 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
         }
         gate->setPosition(gateJson["position"]["x"], gateJson["position"]["y"]);
         gateMap[id] = gate;  // Store gate in the map
-        circuit.get()->gates.push_back(gate);
+        circuit.get()->addGate(gate);
+        InputResolver::RegisterHandler(gate);
     }
     // Load connections
     for (const auto& connJson : j["connections"])
@@ -90,11 +94,13 @@ SP_Circuit jsonparser_loadCircuit(const std::string& filePath)
             circuit.get()->addConnection(gateMap[sourceID], connJson["sourceLogic"],
                                             gateMap[targetID], connJson["targetLogic"]);
         }
-
+    
         // Load wire positions
         CircuitElements::Connection& conn = *circuit.get()->connections.back();
         conn.physCon.wires = connJson["wires"].get<std::vector<Vector2>>();
         conn.is_connected = true;
+        InputResolver::RegisterHandler(circuit.get()->connections.back());
+
     }
     controller->setCircuit(circuit);
     return circuit;
@@ -159,6 +165,7 @@ void to_json(json& j, const LogicElements::LogicGate& gate)
 {
     j = json{{"id", gate.getID()},  // Store ID
                 {"type", gate.getType()},
+                {"name", gate.m_name},
                 {"position", {{"x", gate.getPosition().x}, {"y", gate.getPosition().y}}},
                 {"inputs", gate.getInputs()},
                 {"outputs", gate.getOutputs()}};
@@ -166,6 +173,7 @@ void to_json(json& j, const LogicElements::LogicGate& gate)
 void to_json(json& j, const InputElement& gate)
 {
     j = json{{"id", gate.getID()},  // Store ID
+                {"name", gate.m_name},
                 {"type", gate.getType()},
                 {"position", {{"x", gate.getPosition().x}, {"y", gate.getPosition().y}}},
                 {"outputs", gate.getOutputs()}};
